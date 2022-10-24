@@ -21,3 +21,4 @@ XIVLauncher Core is packaged for various Linux distributions.
 | Flathub     | ![Flathub](https://img.shields.io/flathub/v/dev.goats.xivlauncher)       |
 | AUR   | ![AUR version](https://img.shields.io/aur/version/xivlauncher)        |
 | AUR(git) | ![AUR version](https://img.shields.io/aur/version/xivlauncher-git) |
+| RPM | [![COPR version](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Frankynbass%2FXIVLauncher4rpm%2Fmain%2Fbadge.json)](https://copr.fedorainfracloud.org/coprs/rankyn/xivlauncher/ "For Fedora and openSUSE")
