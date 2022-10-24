@@ -21,3 +21,4 @@ XIVLauncher Core is packaged for various Linux distributions.
 | Flathub     | ![Flathub](https://img.shields.io/flathub/v/dev.goats.xivlauncher)       |
 | AUR   | ![AUR version](https://img.shields.io/aur/version/xivlauncher)        |
 | AUR(git) | ![AUR version](https://img.shields.io/aur/version/xivlauncher-git) |
+| MPR   | ![MPR package](https://repology.org/badge/version-for-repo/mpr/xivlauncher.svg?header=MPR) |
