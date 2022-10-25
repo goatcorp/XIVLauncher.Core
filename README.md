@@ -22,4 +22,6 @@ XIVLauncher Core is packaged for various Linux distributions. Please mind that a
 | AUR   | ![AUR version](https://img.shields.io/aur/version/xivlauncher)        |
 | AUR (git) | ![AUR version](https://img.shields.io/aur/version/xivlauncher-git) |
 | MPR (Debian+Ubuntu)   | ![MPR package](https://repology.org/badge/version-for-repo/mpr/xivlauncher.svg?header=MPR) |
+| nixpkgs stable | ![nixpkgs stable version](https://repology.org/badge/version-for-repo/nix_stable_22_05/xivlauncher.svg?header=nixpkgs%2022.05) |
+| nixpkgs unstable | ![nixpkgs unstable version](https://repology.org/badge/version-for-repo/nix_unstable/xivlauncher.svg?header=nixpkgs%20unstable) |
 | RPM | [![COPR version](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Frankynbass%2FXIVLauncher4rpm%2Fmain%2Fbadge.json)](https://copr.fedorainfracloud.org/coprs/rankyn/xivlauncher/ "For Fedora and openSUSE")|
