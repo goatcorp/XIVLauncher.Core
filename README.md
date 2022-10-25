@@ -14,7 +14,7 @@ If you want to use XIVLauncher on your Steam Deck, feel free to [follow our guid
 Common components that are shared with the Windows version of XIVLauncher are linked as a submodule in the "lib" folder. XIVLauncher Core can run on Windows, but is by far not as polished as the original Windows version, as such we are not distributing it.
 
 ## Distribution
-XIVLauncher Core is packaged for various Linux distributions. Please mind that all but the Flathub version are not official **packaged by trusted community members**. We can't take any responsibility for their safety.
+XIVLauncher Core is packaged for various Linux distributions. Please mind that all but the Flathub version are not official, but are **packaged by trusted community members**. We can't take any responsibility for their safety.
 
 | Repo        | Status      |
 | ----------- | ----------- |
