@@ -14,14 +14,14 @@ If you want to use XIVLauncher on your Steam Deck, feel free to [follow our guid
 Common components that are shared with the Windows version of XIVLauncher are linked as a submodule in the "lib" folder. XIVLauncher Core can run on Windows, but is by far not as polished as the original Windows version, as such we are not distributing it.
 
 ## Distribution
-XIVLauncher Core is packaged for various Linux distributions. Please mind that all but the Flathub version are not official, but are **packaged by trusted community members**. We can't take any responsibility for their safety.
+XIVLauncher Core has community packages for various Linux distributions. Please be aware that **only the Flathub version is official**, but the others are **packaged by trusted community members**.  The community packages may not always be up-to-date, or may have versions that are broken or contain features under testing (especially if labeled as unstable or git). We can't take any responsibility for their safety or reliability.
 
 | Repo        | Status      |
 | ----------- | ----------- |
-| **Flathub (official)**     | ![Flathub](https://img.shields.io/flathub/v/dev.goats.xivlauncher)       |
-| AUR   | ![AUR version](https://img.shields.io/aur/version/xivlauncher)        |
-| AUR (git) | ![AUR version](https://img.shields.io/aur/version/xivlauncher-git) |
-| MPR (Debian+Ubuntu)   | ![MPR package](https://repology.org/badge/version-for-repo/mpr/xivlauncher.svg?header=MPR) |
-| nixpkgs stable | ![nixpkgs stable version](https://repology.org/badge/version-for-repo/nix_stable_22_05/xivlauncher.svg?header=nixpkgs%2022.05) |
-| nixpkgs unstable | ![nixpkgs unstable version](https://repology.org/badge/version-for-repo/nix_unstable/xivlauncher.svg?header=nixpkgs%20unstable) |
-| RPM | [![COPR version](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Frankynbass%2FXIVLauncher4rpm%2Fmain%2Fbadge.json)](https://copr.fedorainfracloud.org/coprs/rankyn/xivlauncher/ "For Fedora and openSUSE")|
+| [**Flathub (official)**](https://flathub.org/apps/details/dev.goats.xivlauncher) | ![Flathub](https://img.shields.io/flathub/v/dev.goats.xivlauncher) |
+| [AUR](https://aur.archlinux.org/packages/xivlauncher) | ![AUR version](https://img.shields.io/aur/version/xivlauncher) |
+| [AUR (git)](https://aur.archlinux.org/packages/xivlauncher-git) | ![AUR version](https://img.shields.io/aur/version/xivlauncher-git) |
+| [MPR (Debian+Ubuntu)](https://mpr.makedeb.org/packages/xivlauncher)  | ![MPR package](https://repology.org/badge/version-for-repo/mpr/xivlauncher.svg?header=MPR) |
+| [nixpkgs stable](https://search.nixos.org/packages?channel=22.05&from=0&size=50&sort=relevance&type=packages&query=xivlauncher) | ![nixpkgs stable version](https://repology.org/badge/version-for-repo/nix_stable_22_05/xivlauncher.svg?header=nixpkgs%2022.05) |
+| [nixpkgs unstable](https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=xivlauncher) | ![nixpkgs unstable version](https://repology.org/badge/version-for-repo/nix_unstable/xivlauncher.svg?header=nixpkgs%20unstable) |
+| [Copr (Fedora+openSuse+EL9)](https://copr.fedorainfracloud.org/coprs/rankyn/xivlauncher/) | ![COPR version](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Frankynbass%2FXIVLauncher4rpm%2Fmain%2Fbadge.json)|
