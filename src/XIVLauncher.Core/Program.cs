@@ -121,7 +121,8 @@ class Program
 
     private static void Main(string[] args)
     {
-        storage = new Storage(APP_NAME);
+        string? useAltPath = Environment.GetEnvironmentVariable("XL_PATH");
+        storage = new Storage(APP_NAME, useAltPath);
         SetupLogging(args);
         LoadConfig(storage);
 
