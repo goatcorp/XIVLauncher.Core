@@ -121,18 +121,29 @@ class Program
 
     private static void Main(string[] args)
     {
+        bool badxlpath = false;
+        var badxlpathex = new Exception();
         string? useAltPath = Environment.GetEnvironmentVariable("XL_PATH");
-        try
+        try 
         {
-            Path.GetFullPath(useAltPath);
+            // Try using the XL_PATH environment variable.
+            storage = new Storage(APP_NAME, useAltPath);
         }
         catch (Exception e)
         {
-            useAltPath = null;
+            // If it's somehow bad or we don't have permissions, just ignore it.
+            // Unfortunately, we can't log this easily, so here's a hacky workaround.
+            storage = new Storage(APP_NAME);
+            badxlpath = true;
+            badxlpathex = e;
         }
-        storage = new Storage(APP_NAME, useAltPath);
         SetupLogging(args);
         LoadConfig(storage);
+
+        if (badxlpath)
+        {
+            Log.Error(badxlpathex, $"Bad value for XL_PATH={useAltPath}");
+        }
 
         Secrets = GetSecretProvider(storage);
 
