@@ -126,13 +126,10 @@ class Program
         string? useAltPath = Environment.GetEnvironmentVariable("XL_PATH");
         try 
         {
-            // Try using the XL_PATH environment variable.
             storage = new Storage(APP_NAME, useAltPath);
         }
         catch (Exception e)
         {
-            // If it's somehow bad or we don't have permissions, just ignore it.
-            // Unfortunately, we can't log this easily, so here's a hacky workaround.
             storage = new Storage(APP_NAME);
             badxlpath = true;
             badxlpathex = e;
@@ -142,7 +139,7 @@ class Program
 
         if (badxlpath)
         {
-            Log.Error(badxlpathex, $"Bad value for XL_PATH={useAltPath}");
+            Log.Error(badxlpathex, $"Bad value for XL_PATH: {useAltPath}. Using ~/.xlcore instead.");
         }
 
         Secrets = GetSecretProvider(storage);
