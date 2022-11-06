@@ -124,7 +124,7 @@ class Program
         string? useAltPath = Environment.GetEnvironmentVariable("XL_PATH");
         try
         {
-            useAltPath = Path.GetFullPath("useAltPath");
+            Path.GetFullPath(useAltPath);
         }
         catch (Exception e)
         {
