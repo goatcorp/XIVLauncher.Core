@@ -122,6 +122,14 @@ class Program
     private static void Main(string[] args)
     {
         string? useAltPath = Environment.GetEnvironmentVariable("XL_PATH");
+        try
+        {
+            useAltPath = Path.GetFullPath("useAltPath");
+        }
+        catch (Exception e)
+        {
+            useAltPath = null;
+        }
         storage = new Storage(APP_NAME, useAltPath);
         SetupLogging(args);
         LoadConfig(storage);
