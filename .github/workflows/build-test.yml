@@ -1,0 +1,35 @@
+name: build and test
+
+on: [push, pull_request]
+
+jobs:
+  build-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Initial Setup
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: |
+            cd src/XIVLauncher.Core
+            dotnet restore
+    - name: Test
+      run: |
+            cd src/XIVLauncher.Core
+            dotnet test --no-build --verbosity normal
+    - name: Build
+      run: |
+            cd src/XIVLauncher.Core
+            dotnet publish -r linux-x64 --no-restore --sc -o build --configuration Release -p:DefineConstants=WINE_XIV_ARCH_LINUX
+    - name: Upload Artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: xivcore-artifact
+        path: /home/runner/work/XIVLauncher.Core/XIVLauncher.Core/src/XIVLauncher.Core/build/*
