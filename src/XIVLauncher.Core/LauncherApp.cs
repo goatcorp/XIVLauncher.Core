@@ -131,7 +131,7 @@ public class LauncherApp : Component
 
         this.Accounts = new AccountManager(this.Storage.GetFile("accounts.json"));
         this.UniqueIdCache = new CommonUniqueIdCache(this.Storage.GetFile("uidCache.json"));
-        this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings);
+        this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings, null);
 
         this.mainPage = new MainPage(this);
         this.setPage = new SettingsPage(this);
