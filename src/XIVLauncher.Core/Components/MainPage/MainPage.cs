@@ -691,48 +691,54 @@ public class MainPage : Page
         }
         else if (Environment.OSVersion.Platform == PlatformID.Unix)
         {
-            if (App.Settings.WineStartupType == WineStartupType.Custom && App.Settings.WineBinaryPath == null)
-                throw new Exception("Custom wine binary path wasn't set.");
+            if (App.Settings.WineStartupType == WineStartupType.Custom)
+            { 
+                if (App.Settings.WineBinaryPath == null)
+                    throw new Exception("Custom wine binary path wasn't set.");
+                else if (!Directory.Exists(App.Settings.WineBinaryPath))
+                    throw new Exception("Custom wine binary path is invalid: no such directory.\n" +
+                        "Check path carefully for typos: " + App.Settings.WineBinaryPath);
+                else if (!File.Exists(App.Settings.WineBinaryPath + "/wine64"))
+                    throw new Exception("Custom wine binary path is invalid: no wine64 found at that location.\n" +
+                        "Check path carefully for typos: " + App.Settings.WineBinaryPath);
+            }
 
             var signal = new ManualResetEvent(false);
             var isFailed = false;
 
-            if (App.Settings.WineStartupType == WineStartupType.Managed)
+            var _ = Task.Run(async () =>
             {
-                var _ = Task.Run(async () =>
+                var tempPath = App.Storage.GetFolder("temp");
+
+                await Program.CompatibilityTools.EnsureTool(tempPath).ConfigureAwait(false);
+
+                var gameFixApply = new GameFixApply(App.Settings.GamePath, App.Settings.GameConfigPath, Program.CompatibilityTools.Settings.Prefix, tempPath);
+                gameFixApply.UpdateProgress += (text, hasProgress, progress) =>
                 {
-                    var tempPath = App.Storage.GetFolder("temp");
+                    App.LoadingPage.Line1 = "Applying game-specific fixes...";
+                    App.LoadingPage.Line2 = text;
+                    App.LoadingPage.Line3 = "This may take a little while. Please hold!";
+                    App.LoadingPage.IsIndeterminate = !hasProgress;
+                    App.LoadingPage.Progress = progress;
+                };
 
-                    await Program.CompatibilityTools.EnsureTool(tempPath).ConfigureAwait(false);
-
-                    var gameFixApply = new GameFixApply(App.Settings.GamePath, App.Settings.GameConfigPath, Program.CompatibilityTools.Settings.Prefix, tempPath);
-                    gameFixApply.UpdateProgress += (text, hasProgress, progress) =>
-                    {
-                        App.LoadingPage.Line1 = "Applying game-specific fixes...";
-                        App.LoadingPage.Line2 = text;
-                        App.LoadingPage.Line3 = "This may take a little while. Please hold!";
-                        App.LoadingPage.IsIndeterminate = !hasProgress;
-                        App.LoadingPage.Progress = progress;
-                    };
-
-                    gameFixApply.Run();
-                }).ContinueWith(t =>
-                {
-                    isFailed = t.IsFaulted || t.IsCanceled;
-
-                    if (isFailed)
-                        Log.Error(t.Exception, "Couldn't ensure compatibility tool");
-
-                    signal.Set();
-                });
-
-                App.StartLoading("Ensuring compatibility tool...", "This may take a little while. Please hold!");
-                signal.WaitOne();
-                signal.Dispose();
+                gameFixApply.Run();
+            }).ContinueWith(t =>
+            {
+                isFailed = t.IsFaulted || t.IsCanceled;
 
                 if (isFailed)
-                    return null;
-            }
+                    Log.Error(t.Exception, "Couldn't ensure compatibility tool");
+
+                signal.Set();
+            });
+
+            App.StartLoading("Ensuring compatibility tool...", "This may take a little while. Please hold!");
+            signal.WaitOne();
+            signal.Dispose();
+
+            if (isFailed)
+                return null;
 
             App.StartLoading("Starting game...", "Have fun!");
 
