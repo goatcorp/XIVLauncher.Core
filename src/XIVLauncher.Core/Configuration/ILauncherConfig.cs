@@ -66,13 +66,21 @@ public interface ILauncherConfig
 
     public bool? GameModeEnabled { get; set; }
 
+    public Dxvk.DxvkVersion DxvkVersion { get; set; }
+
     public bool? DxvkAsyncEnabled { get; set; }
+
+    public int? DxvkFrameRate { get; set; }
 
     public bool? ESyncEnabled { get; set; }
 
     public bool? FSyncEnabled { get; set; }
 
     public Dxvk.DxvkHudType DxvkHudType { get; set; }
+
+    public string? DxvkHudCustom { get; set; }
+
+    public string? DxvkMangoCustom { get; set; }
 
     public string? WineDebugVars { get; set; }
 
