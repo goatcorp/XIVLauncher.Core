@@ -20,7 +20,9 @@ public class NumericSettingsEntry : SettingsEntry<int>
     {
         var nativeValue = this.Value;
 
-        if (ImGui.InputInt(this.Name, ref nativeValue, Step))
+        ImGuiHelpers.TextWrapped(this.Name);
+
+        if (ImGui.InputInt(string.Empty, ref nativeValue, Step))
         {
             this.InternalValue = Math.Max(this.MinValue, Math.Min(this.MaxValue, nativeValue));
         }
