@@ -1,3 +1,4 @@
+using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using ImGuiNET;
@@ -42,12 +43,12 @@ public class SettingsTabDXVK : SettingsTab
                 CheckVisibility = () => dxvkHudSetting.Value == Dxvk.DxvkHudType.MangoHudCustom,
                 CheckWarning = s =>
                 {
-                    if(!DxvkSettings.CheckMangoHudPath(s))
+                    if(!File.Exists(s))
                         return "That's not a valid file.";
                     return null;
                 },
             },
-            new NumericSettingsEntry("Frame Rate Limit", "Set a frame rate limit, and DXVK will try not exceed it. Use 0 to leave unset.", () => Program.Config.DxvkFrameRate ?? 0, i => Program.Config.DxvkFrameRate = i, 0, 1000),
+            new NumericSettingsEntry("Frame Rate Limit", "Set a frame rate limit, and DXVK will try not exceed it. Use 0 for unlimited.", () => Program.Config.DxvkFrameRate ?? 0, i => Program.Config.DxvkFrameRate = i, 0, 1000),
         };
     }
 
