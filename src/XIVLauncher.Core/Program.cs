@@ -121,9 +121,26 @@ class Program
 
     private static void Main(string[] args)
     {
-        storage = new Storage(APP_NAME);
+        bool badxlpath = false;
+        var badxlpathex = new Exception();
+        string? useAltPath = Environment.GetEnvironmentVariable("XL_PATH");
+        try 
+        {
+            storage = new Storage(APP_NAME, useAltPath);
+        }
+        catch (Exception e)
+        {
+            storage = new Storage(APP_NAME);
+            badxlpath = true;
+            badxlpathex = e;
+        }
         SetupLogging(args);
         LoadConfig(storage);
+
+        if (badxlpath)
+        {
+            Log.Error(badxlpathex, $"Bad value for XL_PATH: {useAltPath}. Using ~/.xlcore instead.");
+        }
 
         Secrets = GetSecretProvider(storage);
 
