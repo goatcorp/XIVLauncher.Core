@@ -36,7 +36,6 @@ public class SettingsTabWine : SettingsTab
                 }
             },
 
-            new SettingsEntry<bool>("Enable DXVK ASYNC", "Enable DXVK ASYNC patch.", () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b),
             new SettingsEntry<bool>("Enable ESync", "Enable eventfd-based synchronization.", () => Program.Config.ESyncEnabled ?? true, b => Program.Config.ESyncEnabled = b),
             new SettingsEntry<bool>("Enable FSync", "Enable fast user mutex (futex2).", () => Program.Config.FSyncEnabled ?? true, b => Program.Config.FSyncEnabled = b)
             {
@@ -50,8 +49,10 @@ public class SettingsTabWine : SettingsTab
                 }
             },
 
-            new SettingsEntry<Dxvk.DxvkHudType>("DXVK Overlay", "Configure how much of the DXVK overlay is to be shown.", () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type),
-            new SettingsEntry<string>("WINEDEBUG Variables", "Configure debug logging for wine. Useful for troubleshooting.", () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s)
+            new SettingsEntry<string>("WINEDEBUG Variables", "Configure debug logging for wine. Useful for troubleshooting.", () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s),
+            new SettingsEntry<bool>("Use WineD3D (Disable DXVK)",
+                                    "Don't check this unless you know what you're doing.\nIf you check this, XIVLauncher will try to use WineD3D instead of DXVK, and nothing in the DXVK tab will work.\nCustom wine versions may not work (especially proton-based wine). This will also break GShade.",
+                                    () => Program.Config.WineD3DEnabled ?? false, b => Program.Config.WineD3DEnabled = b),        
         };
     }
 
