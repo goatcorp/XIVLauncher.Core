@@ -15,7 +15,7 @@ public class SettingsTabDXVK : SettingsTab
     {
         Entries = new SettingsEntry[]
         {
-            new SettingsEntry<Dxvk.DxvkVersion>("DXVK Version", "Choose which version of DXVK to use.", () => Program.Config.DxvkVersion, type => Program.Config.DxvkVersion = type),
+            new SettingsEntry<Dxvk.DxvkVersion>("DXVK Version", "Choose which version of DXVK to use.", () => Program.Config.DxvkVersion ?? Dxvk.DxvkVersion.v1_10_3, type => Program.Config.DxvkVersion = type),
             new SettingsEntry<bool>("Enable DXVK ASYNC", "Enable DXVK ASYNC patch.", () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b),
             dxvkHudSetting = new SettingsEntry<Dxvk.DxvkHudType>("DXVK Overlay", "DXVK Hud is included. MangoHud must be installed separately.\nFlatpak XIVLauncher needs flatpak MangoHud.", () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type)
             {

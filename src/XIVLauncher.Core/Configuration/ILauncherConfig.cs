@@ -68,7 +68,7 @@ public interface ILauncherConfig
 
     public bool? WineD3DEnabled { get; set; }
 
-    public Dxvk.DxvkVersion DxvkVersion { get; set; }
+    public Dxvk.DxvkVersion? DxvkVersion { get; set; }
 
     public bool? DxvkAsyncEnabled { get; set; }
 
