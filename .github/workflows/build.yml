@@ -1,0 +1,40 @@
+name: "Build XLCore"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.head_ref }}"
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Restore
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet restore
+
+      - name: Build
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: XIVLauncher.Core
+          path: ./src/XIVLauncher.Core/bin/
