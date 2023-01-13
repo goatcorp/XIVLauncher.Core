@@ -9,8 +9,6 @@ jobs:
   Release:
     runs-on: ubuntu-latest
     env:
-      FLATHUB_REPO: https://github.com/flathub/dev.goats.xivlauncher.git
-      FLATHUB_MANIFEST: dev.goats.xivlauncher.yml
       COMMIT_USER: github-actions[bot]
       COMMIT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
     steps:
@@ -47,7 +45,7 @@ jobs:
       - name: Setup Flatpak
         run: |
           sudo apt update -y
-          sudo apt install flatpak flatpak-builder -y
+          sudo apt install flatpak -y
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 
           flatpak install --user org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08 -y
           flatpak install --user org.freedesktop.Sdk/x86_64/21.08 -y
@@ -68,19 +66,20 @@ jobs:
 
       - name: Make PR to Flatpak repository
         run: |
-          git clone $FLATHUB_REPO /tmp/xlcore-flatpak
+          echo ${{ secrets.PUSH_TOKEN }}| gh auth login --with-token
+
+          git clone https://${{ secrets.PUSH_TOKEN }}@github.com/flathub/dev.goats.xivlauncher /tmp/xlcore-flatpak
           mv ./src/XIVLauncher.Core/nuget-dependencies.json /tmp/xlcore-flatpak/
           mv ./.github/scripts/update_flatpak_manifest.py /tmp/xlcore-flatpak/
           cd /tmp/xlcore-flatpak
 
           python3 -m pip install pyyaml
-          python3 update_flatpak_manifest.py $FLATHUB_MANIFEST $(echo ${{ github.ref_name }} | sed -e "s/^v//g") ${{ github.sha }}
+          python3 update_flatpak_manifest.py dev.goats.xivlauncher.yml $(echo ${{ github.ref_name }} | sed -e "s/^v//g") ${{ github.sha }}
           rm update_flatpak_manifest.py
 
           git checkout -b xlcore-${{ github.ref_name }}
           git add .
           git commit -m "Update XIVLauncher.Core to ${{ github.ref_name }}"
-          git push -u origin xlcore-${{ github.ref_name }}
+          git push --set-upstream origin xlcore-${{ github.ref_name }}
 
-          gh login --with-token <<< ${{ secrets.PUSH_TOKEN }}
-          gh pr create --title "Update XIVLauncher.Core to ${{ github.ref_name }}" --body "Update XIVLauncher.Core to ${{ github.ref_name }}" --base main --head xlcore-${{ github.ref_name }} --repo $FLATHUB_REPO
+          gh pr create -t "Update XIVLauncher.Core to ${{ github.ref_name }}" -b "This is an automated pull request" -B master
