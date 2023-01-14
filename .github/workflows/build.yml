@@ -31,36 +31,30 @@ jobs:
 
       - name: Dotnet Build (Default)
         working-directory: ./src/XIVLauncher.Core/
-        run: |
-          rm -rf bin
-          dotnet build --configuration Release --no-restore
-
-      - name: Upload Artifact (Default)
-        uses: actions/upload-artifact@v3
-        with:
-          name: XIVLauncher.Core-default
-          path: ./src/XIVLauncher.Core/bin/
+        run: dotnet build --configuration Release --no-restore -o ./dist/XIVLauncher.Core
 
       - name: Dotnet Build (Arch)
         working-directory: ./src/XIVLauncher.Core/
-        run: |
-          rm -rf bin
-          dotnet build --configuration Release -p:DefineConstants=WINE_XIV_ARCH_LINUX --no-restore
-        
+        run: dotnet build --configuration Release -p:DefineConstants=WINE_XIV_ARCH_LINUX --no-restore -o ./dist/XIVLauncher.Core-arch
+
+      - name: Dotnet Build (Fedora)
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet build --configuration Release -p:DefineConstants=WINE_XIV_FEDORA_LINUX --no-restore -o ./dist/XIVLauncher.Core-fedora
+
+      - name: Upload Artifacts (Default)
+        uses: actions/upload-artifact@v3
+        with:
+          name: XIVLauncher.Core
+          path: ./src/XIVLauncher.Core/dist/XIVLauncher.Core
+
       - name: Upload Artifacts (Arch)
         uses: actions/upload-artifact@v3
         with:
           name: XIVLauncher.Core-arch
-          path: ./src/XIVLauncher.Core/bin/
-
-      - name: Dotnet Build (Fedora)
-        working-directory: ./src/XIVLauncher.Core/
-        run: |
-          rm -rf bin
-          dotnet build --configuration Release -p:DefineConstants=WINE_XIV_FEDORA_LINUX --no-restore
+          path: ./src/XIVLauncher.Core/dist/XIVLauncher.Core-arch
 
       - name: Upload Artifacts (Fedora)
         uses: actions/upload-artifact@v3
         with:
           name: XIVLauncher.Core-fedora
-          path: ./src/XIVLauncher.Core/bin/
+          path: ./src/XIVLauncher.Core/dist/XIVLauncher.Core-fedora
