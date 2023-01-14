@@ -3,7 +3,7 @@ name: "PR XLCore to Flatpak"
 on:
   push:
     tags:
-      - "v*"
+      - "*.*.*"
 
 jobs:
   Release:
