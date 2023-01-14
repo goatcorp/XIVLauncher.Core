@@ -110,20 +110,25 @@ public class SettingsPage : Page
 
             var invalid = this.tabs.Any(x => x.Entries.Any(y => !y.IsValid));
             if (invalid)
-                ImGui.BeginDisabled();
-
-            if (ImGui.Button(FontAwesomeIcon.Check.ToIconString(), new Vector2(40)))
             {
-                foreach (var settingsTab in this.tabs)
-                {
-                    settingsTab.Save();
-                }
-
-                this.App.State = LauncherApp.LauncherState.Main;
-            }
-
-            if (invalid)
+                ImGui.BeginDisabled();
+                ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
+                ImGui.Button(FontAwesomeIcon.Ban.ToIconString(), new Vector2(40));
+                ImGui.PopStyleColor();
                 ImGui.EndDisabled();
+            }
+            else
+            {
+                if (ImGui.Button(FontAwesomeIcon.Check.ToIconString(), new Vector2(40)))
+                {
+                    foreach (var settingsTab in this.tabs)
+                    {
+                        settingsTab.Save();
+                    }
+
+                    this.App.State = LauncherApp.LauncherState.Main;
+                }
+            }
         }
 
         ImGui.EndChild();
