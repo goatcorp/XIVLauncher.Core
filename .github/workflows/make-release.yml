@@ -1,0 +1,89 @@
+name: "PR XLCore to Flatpak"
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+    env:
+      COMMIT_USER: github-actions[bot]
+      COMMIT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Commit Author
+        run: |
+          git config --global user.name $COMMIT_USER
+          git config --global user.email $COMMIT_EMAIL
+          git config --global pull.rebase false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Dotnet Restore
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet restore
+
+      - name: Dotnet Build
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Setup Python3
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+
+      - name: Setup Flatpak
+        run: |
+          sudo apt update -y
+          sudo apt install flatpak -y
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 
+          flatpak install --user org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08 -y
+          flatpak install --user org.freedesktop.Sdk/x86_64/21.08 -y
+
+      - name: Generate nuget-dependencies.json
+        working-directory: ./src/XIVLauncher.Core/
+        run: |
+          curl -LO https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/dotnet/flatpak-dotnet-generator.py
+          python3 flatpak-dotnet-generator.py nuget-dependencies.json XIVLauncher.Core.csproj
+
+      - name: Upload nuget-dependencies.json
+        uses: actions/upload-artifact@v3
+        with:
+          name: nuget-dependencies
+          path: |
+            ./src/XIVLauncher.Core/nuget-dependencies.json
+
+      - name: Make PR to Flatpak repository
+        run: |
+          echo ${{ secrets.PUSH_TOKEN }}| gh auth login --with-token
+
+          git clone https://${{ secrets.PUSH_TOKEN }}@github.com/flathub/dev.goats.xivlauncher /tmp/xlcore-flatpak
+          mv ./src/XIVLauncher.Core/nuget-dependencies.json /tmp/xlcore-flatpak/
+          mv ./.github/scripts/update_flatpak_manifest.py /tmp/xlcore-flatpak/
+          cd /tmp/xlcore-flatpak
+
+          python3 -m pip install pyyaml
+          python3 update_flatpak_manifest.py dev.goats.xivlauncher.yml $(echo ${{ github.ref_name }} | sed -e "s/^v//g") ${{ github.sha }}
+          rm update_flatpak_manifest.py
+
+          git checkout -b xlcore-${{ github.ref_name }}
+          git add .
+          git commit -m "Update XIVLauncher.Core to ${{ github.ref_name }}"
+          git push --set-upstream origin xlcore-${{ github.ref_name }}
+
+          gh pr create -t "Update XIVLauncher.Core to ${{ github.ref_name }}" -b "This is an automated pull request" -B master
+          
+      - name: Release on GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true

@@ -1,0 +1,66 @@
+name: "Build XLCore"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.head_ref }}"
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Dotnet Restore
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet restore
+
+      - name: Dotnet Build (Default)
+        working-directory: ./src/XIVLauncher.Core/
+        run: |
+          rm -rf bin
+          dotnet build --configuration Release --no-restore
+
+      - name: Upload Artifact (Default)
+        uses: actions/upload-artifact@v3
+        with:
+          name: XIVLauncher.Core-default
+          path: ./src/XIVLauncher.Core/bin/
+
+      - name: Dotnet Build (Arch)
+        working-directory: ./src/XIVLauncher.Core/
+        run: |
+          rm -rf bin
+          dotnet build --configuration Release -p:DefineConstants=WINE_XIV_ARCH_LINUX --no-restore
+        
+      - name: Upload Artifacts (Arch)
+        uses: actions/upload-artifact@v3
+        with:
+          name: XIVLauncher.Core-arch
+          path: ./src/XIVLauncher.Core/bin/
+
+      - name: Dotnet Build (Fedora)
+        working-directory: ./src/XIVLauncher.Core/
+        run: |
+          rm -rf bin
+          dotnet build --configuration Release -p:DefineConstants=WINE_XIV_FEDORA_LINUX --no-restore
+
+      - name: Upload Artifacts (Fedora)
+        uses: actions/upload-artifact@v3
+        with:
+          name: XIVLauncher.Core-fedora
+          path: ./src/XIVLauncher.Core/bin/
