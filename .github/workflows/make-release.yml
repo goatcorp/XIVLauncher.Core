@@ -5,6 +5,9 @@ on:
     tags:
       - "*.*.*"
 
+permissions:
+  contents: write
+
 jobs:
   Release:
     runs-on: ubuntu-latest
@@ -33,9 +36,17 @@ jobs:
         working-directory: ./src/XIVLauncher.Core/
         run: dotnet restore
 
-      - name: Dotnet Build
+      - name: Dotnet Build (Default)
         working-directory: ./src/XIVLauncher.Core/
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build --configuration Release --no-restore -o ./dist/XIVLauncher.Core
+
+      - name: Dotnet Build (Arch)
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet build --configuration Release -p:DefineConstants=WINE_XIV_ARCH_LINUX --no-restore -o ./dist/XIVLauncher.Core-arch
+
+      - name: Dotnet Build (Fedora)
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet build --configuration Release -p:DefineConstants=WINE_XIV_FEDORA_LINUX --no-restore -o ./dist/XIVLauncher.Core-fedora
 
       - name: Setup Python3
         uses: actions/setup-python@v4
@@ -82,8 +93,20 @@ jobs:
           git push --set-upstream origin xlcore-${{ github.ref_name }}
 
           gh pr create -t "Update XIVLauncher.Core to ${{ github.ref_name }}" -b "This is an automated pull request" -B master
-          
+
+      - name: Zip Release
+        run: |
+          sudo apt install zip -y
+          mkdir -p ./dist
+          zip -r ./dist/XIVLauncher.Core.zip ./src/XIVLauncher.Core/dist/XIVLauncher.Core/
+          zip -r ./dist/XIVLauncher.Core-arch.zip ./src/XIVLauncher.Core/dist/XIVLauncher.Core-arch/
+          zip -r ./dist/XIVLauncher.Core-fedora.zip ./src/XIVLauncher.Core/dist/XIVLauncher.Core-fedora/
+
       - name: Release on GitHub
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
+          files: |
+            ./dist/XIVLauncher.Core.zip
+            ./dist/XIVLauncher.Core-arch.zip
+            ./dist/XIVLauncher.Core-fedora.zip
