@@ -3,7 +3,7 @@ name: "PR XLCore to Flatpak"
 on:
   push:
     tags:
-      - "v*"
+      - "*.*.*"
 
 jobs:
   Release:
@@ -73,7 +73,7 @@ jobs:
           cd /tmp/xlcore-flatpak
 
           python3 -m pip install pyyaml
-          python3 update_flatpak_manifest.py dev.goats.xivlauncher.yml $(echo ${{ github.ref_name }} | sed -e "s/^v//g") ${{ github.sha }}
+          python3 update_flatpak_manifest.py dev.goats.xivlauncher.yml dev.goats.xivlauncher.appdata.xml $(echo ${{ github.ref_name }} | sed -e "s/^v//g") ${{ github.sha }}
           rm update_flatpak_manifest.py
 
           git checkout -b xlcore-${{ github.ref_name }}
