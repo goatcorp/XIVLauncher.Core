@@ -22,7 +22,7 @@ XIVLauncher Core has community packages for various Linux distributions. Please 
 | [AUR](https://aur.archlinux.org/packages/xivlauncher) | ![AUR version](https://img.shields.io/aur/version/xivlauncher) |
 | [AUR (git)](https://aur.archlinux.org/packages/xivlauncher-git) | ![AUR version](https://img.shields.io/aur/version/xivlauncher-git) |
 | [MPR (Debian+Ubuntu)](https://mpr.makedeb.org/packages/xivlauncher)  | ![MPR package](https://repology.org/badge/version-for-repo/mpr/xivlauncher.svg?header=MPR) |
-| [nixpkgs stable](https://search.nixos.org/packages?channel=22.05&from=0&size=50&sort=relevance&type=packages&query=xivlauncher) | ![nixpkgs stable version](https://repology.org/badge/version-for-repo/nix_stable_22_05/xivlauncher.svg?header=nixpkgs%2022.05) |
+| [nixpkgs stable](https://search.nixos.org/packages?channel=22.11&from=0&size=50&sort=relevance&type=packages&query=xivlauncher) | ![nixpkgs stable version](https://repology.org/badge/version-for-repo/nix_stable_22_11/xivlauncher.svg?header=nixpkgs%2022.11) |
 | [nixpkgs unstable](https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=xivlauncher) | ![nixpkgs unstable version](https://repology.org/badge/version-for-repo/nix_unstable/xivlauncher.svg?header=nixpkgs%20unstable) |
 | [Copr (Fedora+openSuse+EL9)](https://copr.fedorainfracloud.org/coprs/rankyn/xivlauncher/) | ![COPR version](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Frankynbass%2FXIVLauncher4rpm%2Fmain%2Fbadge.json)|
 | [GURU (Gentoo)](https://gitweb.gentoo.org/repo/proj/guru.git/tree/games-util/xivlauncher) | ![GURU version](https://repology.org/badge/version-for-repo/gentoo_ovl_guru/xivlauncher.svg?header=guru) |
