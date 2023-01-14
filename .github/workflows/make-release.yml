@@ -24,7 +24,7 @@ jobs:
           git config --global user.email $COMMIT_EMAIL
           git config --global pull.rebase false
 
-      - name: Setup .NET Core
+      - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.0.x
@@ -56,12 +56,11 @@ jobs:
           curl -LO https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/dotnet/flatpak-dotnet-generator.py
           python3 flatpak-dotnet-generator.py nuget-dependencies.json XIVLauncher.Core.csproj
 
-      - name: Upload Artifacts
+      - name: Upload nuget-dependencies.json
         uses: actions/upload-artifact@v3
         with:
-          name: XIVLauncher.Core
+          name: nuget-dependencies
           path: |
-            ./src/XIVLauncher.Core/bin/
             ./src/XIVLauncher.Core/nuget-dependencies.json
 
       - name: Make PR to Flatpak repository
@@ -83,3 +82,8 @@ jobs:
           git push --set-upstream origin xlcore-${{ github.ref_name }}
 
           gh pr create -t "Update XIVLauncher.Core to ${{ github.ref_name }}" -b "This is an automated pull request" -B master
+          
+      - name: Release on GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
