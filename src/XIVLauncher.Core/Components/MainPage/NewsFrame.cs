@@ -107,7 +107,7 @@ public class NewsFrame : Component
             }
             else
             {
-                ImGui.Text("News are loading...");
+                ImGui.Text("News is loading...");
             }
 
             ImGui.PopStyleVar();

@@ -373,7 +373,7 @@ public class MainPage : Page
 
             try
             {
-                using var process = await StartGameAndAddon(loginResult, isSteam, action == LoginAction.GameNoDalamud, false).ConfigureAwait(false);
+                using var process = await StartGameAndAddon(loginResult, isSteam, action == LoginAction.GameNoDalamud, action == LoginAction.GameNoThirdparty).ConfigureAwait(false);
 
                 if (process is null)
                     throw new Exception("Could not obtain Process Handle");
