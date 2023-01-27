@@ -80,8 +80,10 @@ public class SettingsEntry<T> : SettingsEntry
             if (ImGui.BeginCombo($"###{Id.ToString()}", descriptions[idx].FriendlyName))
             {
                 foreach (int value in values)
-                {
-                    if (ImGui.Selectable(descriptions[value].FriendlyName, idx == value))
+                {   
+                    string desc = descriptions[value].Description;
+                    desc = (desc == string.Empty || desc == "dummy") ? string.Empty : " - " + desc;
+                    if (ImGui.Selectable(descriptions[value].FriendlyName + desc, idx == value))
                     {
                         this.InternalValue = value;
                     }
