@@ -49,8 +49,12 @@ class Program
     public static DirectoryInfo DotnetRuntime => storage.GetFolder("runtime");
 
     // TODO: We don't have the steamworks api for this yet.
-    public static bool IsSteamDeckHardware => Directory.Exists("/home/deck");
-    public static bool IsSteamDeckGamingMode => Steam != null && Steam.IsValid && Steam.IsRunningOnSteamDeck();
+    public static bool IsSteamDeckHardware => CoreEnvironmentSettings.IsDeck.HasValue ?
+        CoreEnvironmentSettings.IsDeck.Value :
+        Directory.Exists("/home/deck") || (CoreEnvironmentSettings.IsDeckGameMode ?? false) || (CoreEnvironmentSettings.IsDeckFirstRun ?? false);
+    public static bool IsSteamDeckGamingMode => CoreEnvironmentSettings.IsDeckGameMode.HasValue ?
+        CoreEnvironmentSettings.IsDeckGameMode.Value :
+        Steam != null && Steam.IsValid && Steam.IsRunningOnSteamDeck();
 
     private const string APP_NAME = "xlcore";
 
@@ -214,6 +218,8 @@ class Program
                 needUpdate = versionCheckResult.NeedUpdate;
         }   
 #endif
+
+        needUpdate = CoreEnvironmentSettings.IsUpgrade ? true : needUpdate;
 
         launcherApp = new LauncherApp(storage, needUpdate);
 
