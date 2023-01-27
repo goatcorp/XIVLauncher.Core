@@ -758,6 +758,30 @@ public class MainPage : Page
         {
             throw new NotImplementedException();
         }
+        
+        if (!string.IsNullOrEmpty(Program.Config.BeforeScript))
+        {
+            Log.Information($"Running pre-game script {Program.Config.BeforeScript}");
+            var scriptProcess = runner.Run(Program.Config.BeforeScript, new FileInfo(Program.Config.BeforeScript).Directory?.FullName, "",
+                new Dictionary<string, string>(), false);
+            if (Program.Config.WaitForBeforeScript ?? false)
+            {
+                App.StartLoading("Running pre-game script...", "Please wait");
+                await (scriptProcess?.WaitForExitAsync()!).ConfigureAwait(false);
+            }
+        }
+
+        if (Environment.OSVersion.Platform == PlatformID.Unix && !string.IsNullOrEmpty(Program.Config.BeforeScriptWine))
+        {
+            Log.Information($"Running pre-game Wine script {Program.Config.BeforeScriptWine}");
+            var scriptProcess = runner.Run(Program.Config.BeforeScriptWine, new FileInfo(Program.Config.BeforeScriptWine).Directory?.FullName, "",
+                new Dictionary<string, string>(), true);
+            if (Program.Config.WaitForBeforeScriptWine ?? false)
+            {
+                App.StartLoading("Running pre-game Wine script...", "Please wait");
+                await (scriptProcess?.WaitForExitAsync()!).ConfigureAwait(false);
+            }
+        }
 
         if (!Program.IsSteamDeckHardware)
         {
@@ -816,6 +840,20 @@ public class MainPage : Page
             throw;
         }
 
+        if (!string.IsNullOrEmpty(Program.Config.AfterScript))
+        {
+            Log.Information($"Running post-game script {Program.Config.AfterScript}");
+            runner.Run(Program.Config.AfterScript, new FileInfo(Program.Config.AfterScript).Directory?.FullName, "",
+                new Dictionary<string, string>(), false);
+        }
+        
+        if (Environment.OSVersion.Platform == PlatformID.Unix && !string.IsNullOrEmpty(Program.Config.AfterScriptWine))
+        {
+            Log.Information($"Running post-game script {Program.Config.AfterScriptWine}");
+            runner.Run(Program.Config.AfterScriptWine, new FileInfo(Program.Config.AfterScriptWine).Directory?.FullName, "",
+                new Dictionary<string, string>(), true);
+        }
+        
         Log.Debug("Waiting for game to exit");
 
         await Task.Run(() => launchedProcess!.WaitForExit()).ConfigureAwait(false);

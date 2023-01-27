@@ -115,6 +115,13 @@ class Program
         Config.WineStartupType ??= WineStartupType.Managed;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
+
+        Config.BeforeScript ??= "";
+        Config.BeforeScriptWine ??= "";
+        Config.WaitForBeforeScript ??= false;
+        Config.WaitForBeforeScriptWine ??= false;
+        Config.AfterScript ??= "";
+        Config.AfterScriptWine ??= "";
     }
 
     public const uint STEAM_APP_ID = 39210;
