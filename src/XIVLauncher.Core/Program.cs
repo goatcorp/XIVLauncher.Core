@@ -373,9 +373,10 @@ class Program
     public static void ClearPrefix()
     {
         storage.GetFolder("wineprefix").Delete(true);
+        storage.GetFolder("wineprefix");
     }
 
-    public static void ClearPlugins()
+    public static void ClearPlugins(bool tsbutton = false)
     {
         storage.GetFolder("dalamud").Delete(true);
         storage.GetFolder("dalamudAssets").Delete(true);
@@ -383,16 +384,32 @@ class Program
         storage.GetFolder("runtime").Delete(true);
         if (storage.GetFile("dalamudUI.ini").Exists) storage.GetFile("dalamudUI.ini").Delete();
         if (storage.GetFile("dalamudConfig.json").Exists) storage.GetFile("dalamudConfig.json").Delete();
+        storage.GetFolder("dalamud");
+        storage.GetFolder("dalamudAssets");
+        storage.GetFolder("installedPlugins");
+        storage.GetFolder("runtime");
+        if (tsbutton)
+        {
+            DalamudLoadInfo = new DalamudOverlayInfoProxy();
+            DalamudUpdater = new DalamudUpdater(storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), storage.Root, null, null)
+            {
+                Overlay = DalamudLoadInfo
+            };
+            DalamudUpdater.Run();
+        }
     }
 
     public static void ClearTools()
     {
         storage.GetFolder("compatibilitytool").Delete(true);
+        storage.GetFolder("compatibilitytool/beta");
+        storage.GetFolder("compatibilitytool/dxvk");
     }
 
     public static void ClearLogs()
     {
         storage.GetFolder("logs").Delete(true);
+        storage.GetFolder("logs");
         string[] logfiles = { "dalamud.boot.log", "dalamud.boot.old.log", "dalamud.log", "dalamud.injector.log"};
         foreach (string logfile in logfiles)
             if (storage.GetFile(logfile).Exists) storage.GetFile(logfile).Delete();
