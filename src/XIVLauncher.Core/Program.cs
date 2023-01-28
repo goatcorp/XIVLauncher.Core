@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.IO;
 using CheapLoc;
 using Config.Net;
 using ImGuiNET;
@@ -127,6 +128,20 @@ class Program
     private static void Main(string[] args)
     {
         storage = new Storage(APP_NAME);
+
+        if (CoreEnvironmentSettings.ClearAll)
+        {
+            ClearAll();
+        }
+        else
+        {
+            if (CoreEnvironmentSettings.ClearSettings) ClearSettings();
+            if (CoreEnvironmentSettings.ClearPrefix) ClearPrefix();
+            if (CoreEnvironmentSettings.ClearPlugins) ClearPlugins();
+            if (CoreEnvironmentSettings.ClearTools) ClearTools();
+            if (CoreEnvironmentSettings.ClearLogs) ClearLogs();
+        }
+        
         SetupLogging(args);
         LoadConfig(storage);
 
@@ -348,5 +363,47 @@ class Program
             default:
                 throw new ArgumentException($"Invalid secret provider: {envVar}");
         }
+    }
+
+    public static void ClearSettings()
+    {
+        if (storage.GetFile("launcher.ini").Exists) storage.GetFile("launcher.ini").Delete();
+    }
+
+    public static void ClearPrefix()
+    {
+        storage.GetFolder("wineprefix").Delete(true);
+    }
+
+    public static void ClearPlugins()
+    {
+        storage.GetFolder("dalamud").Delete(true);
+        storage.GetFolder("dalamudAssets").Delete(true);
+        storage.GetFolder("installedPlugins").Delete(true);
+        storage.GetFolder("runtime").Delete(true);
+        if (storage.GetFile("dalamudUI.ini").Exists) storage.GetFile("dalamudUI.ini").Delete();
+        if (storage.GetFile("dalamudConfig.json").Exists) storage.GetFile("dalamudConfig.json").Delete();
+    }
+
+    public static void ClearTools()
+    {
+        storage.GetFolder("compatibilitytool").Delete(true);
+    }
+
+    public static void ClearLogs()
+    {
+        storage.GetFolder("logs").Delete(true);
+        string[] logfiles = { "dalamud.boot.log", "dalamud.boot.old.log", "dalamud.log", "dalamud.injector.log"};
+        foreach (string logfile in logfiles)
+            if (storage.GetFile(logfile).Exists) storage.GetFile(logfile).Delete();
+    }
+
+    public static void ClearAll()
+    {
+        ClearSettings();
+        ClearPrefix();
+        ClearPlugins();
+        ClearTools();
+        ClearLogs();
     }
 }
