@@ -11,6 +11,7 @@ public static class CoreEnvironmentSettings
     public static bool ClearPlugins => CheckEnvBool("XLC_CLEAR_PLUGINS");
     public static bool ClearTools => CheckEnvBool("XLC_CLEAR_TOOLS");
     public static bool ClearAll => CheckEnvBool("XLC_NUKE");
+    public static bool? UseSteam => CheckEnvBoolOrNull("XLC_USE_STEAM"); // Fix for Steam Deck users who lock themselves out
 
     private static bool CheckEnvBool(string key)
     {
