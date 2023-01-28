@@ -365,9 +365,14 @@ class Program
         }
     }
 
-    public static void ClearSettings()
+    public static void ClearSettings(bool tsbutton = false)
     {
         if (storage.GetFile("launcher.ini").Exists) storage.GetFile("launcher.ini").Delete();
+        if (tsbutton)
+        {
+            LoadConfig(storage);
+            launcherApp.State = LauncherApp.LauncherState.Settings;
+        }
     }
 
     public static void ClearPrefix()
@@ -399,11 +404,12 @@ class Program
         }
     }
 
-    public static void ClearTools()
+    public static void ClearTools(bool tsbutton = false)
     {
         storage.GetFolder("compatibilitytool").Delete(true);
         storage.GetFolder("compatibilitytool/beta");
         storage.GetFolder("compatibilitytool/dxvk");
+        if (tsbutton) CreateCompatToolsInstance();
     }
 
     public static void ClearLogs()
@@ -415,12 +421,12 @@ class Program
             if (storage.GetFile(logfile).Exists) storage.GetFile(logfile).Delete();
     }
 
-    public static void ClearAll()
+    public static void ClearAll(bool tsbutton = false)
     {
-        ClearSettings();
+        ClearSettings(tsbutton);
         ClearPrefix();
-        ClearPlugins();
-        ClearTools();
+        ClearPlugins(tsbutton);
+        ClearTools(tsbutton);
         ClearLogs();
     }
 }
