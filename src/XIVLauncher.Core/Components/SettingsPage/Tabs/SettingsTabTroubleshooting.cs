@@ -44,7 +44,7 @@ public class SettingsTabTroubleshooting : SettingsTab
         ImGui.Text("\nClear all the log files.");
         if (ImGui.Button("Clear Logs"))
         {
-            Program.ClearLogs();
+            Program.ClearLogs(true);
         }
 
         ImGui.Text("\nDo all of the above.");

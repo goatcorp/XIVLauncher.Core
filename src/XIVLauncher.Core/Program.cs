@@ -59,6 +59,8 @@ class Program
 
     private const string APP_NAME = "xlcore";
 
+    private static string[] mainargs;
+
     private static uint invalidationFrames = 0;
     private static Vector2 lastMousePosition;
 
@@ -100,7 +102,7 @@ class Program
 
         Config.IsDx11 ??= true;
         Config.IsEncryptArgs ??= true;
-        Config.IsFt ??= true; // Default should be true, for Steam Deck users following the guide.
+        Config.IsFt ??= false;
         Config.IsOtpServer ??= false;
         Config.IsIgnoringSteam = CoreEnvironmentSettings.UseSteam.HasValue ? !CoreEnvironmentSettings.UseSteam.Value : Config.IsIgnoringSteam ?? false;
 
@@ -127,6 +129,7 @@ class Program
 
     private static void Main(string[] args)
     {
+        mainargs = args;
         storage = new Storage(APP_NAME);
 
         if (CoreEnvironmentSettings.ClearAll)
@@ -142,7 +145,7 @@ class Program
             if (CoreEnvironmentSettings.ClearLogs) ClearLogs();
         }
         
-        SetupLogging(args);
+        SetupLogging(mainargs);
         LoadConfig(storage);
 
         Secrets = GetSecretProvider(storage);
@@ -412,13 +415,16 @@ class Program
         if (tsbutton) CreateCompatToolsInstance();
     }
 
-    public static void ClearLogs()
+    public static void ClearLogs(bool tsbutton = false)
     {
         storage.GetFolder("logs").Delete(true);
         storage.GetFolder("logs");
         string[] logfiles = { "dalamud.boot.log", "dalamud.boot.old.log", "dalamud.log", "dalamud.injector.log"};
         foreach (string logfile in logfiles)
             if (storage.GetFile(logfile).Exists) storage.GetFile(logfile).Delete();
+        if (tsbutton)
+            SetupLogging(mainargs);
+        
     }
 
     public static void ClearAll(bool tsbutton = false)
@@ -427,6 +433,6 @@ class Program
         ClearPrefix();
         ClearPlugins(tsbutton);
         ClearTools(tsbutton);
-        ClearLogs();
+        ClearLogs(true);
     }
 }
