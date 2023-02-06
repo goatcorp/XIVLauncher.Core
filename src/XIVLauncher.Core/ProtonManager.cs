@@ -28,6 +28,19 @@ public static class ProtonManager
 
     public static string GetPath(string name)
     {
-        return Versions[name];
+        if (Versions.ContainsKey(name))
+            return Versions[name];
+        return Versions[GetDefaultVersion()];
+    }
+
+    public static string GetDefaultVersion()
+    {
+        if (CheckVersion("Proton 7.0")) return "Proton 7.0";
+        return Versions.First().Key;
+    }
+
+    public static bool CheckVersion(string name)
+    {
+        return (Versions.ContainsKey(name)) ? true : false;
     }
 }
