@@ -784,7 +784,7 @@ public class MainPage : Page
         var protonProcess = launchedProcess;
         if (Program.CompatibilityTools.useProton)
         {
-            Log.Information("Launching Proton instead of Wine.");
+            Log.Information("Launching Proton runner. Proton's built-in wine will be launched as a child process.");
             var gameName = (App.Settings.IsDx11 ?? true) ? "ffxiv_dx11.exe" : "ffxiv.exe";
             var unixPid = Program.CompatibilityTools.GetUnixProcessIdByName(gameName);
             launchedProcess = Process.GetProcessById(unixPid);

@@ -114,6 +114,8 @@ class Program
 
         Config.WineStartupType ??= WineStartupType.Managed;
         Config.WineBinaryPath ??= "/usr/bin";
+        Config.SteamPath ??= Path.Combine(System.Environment.GetEnvironmentVariable("HOME"), ".steam", "root");
+        Config.ProtonVersion ??= "Proton 7.0";
         Config.WineDebugVars ??= "-all";
     }
 
@@ -125,6 +127,7 @@ class Program
         storage = new Storage(APP_NAME);
         SetupLogging(args);
         LoadConfig(storage);
+        ProtonManager.GetVersions(Config.SteamPath);
 
         Secrets = GetSecretProvider(storage);
 
@@ -276,7 +279,8 @@ class Program
     {
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
-        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
+        var protonPrefix = storage.GetFolder("protonprefix");
+        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, Config.SteamPath, ProtonManager.GetPath(Config.ProtonVersion), Config.WineDebugVars, wineLogFile, winePrefix, protonPrefix, Config.ESyncEnabled, Config.FSyncEnabled);
         var toolsFolder = storage.GetFolder("compatibilitytool");
         CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
     }
