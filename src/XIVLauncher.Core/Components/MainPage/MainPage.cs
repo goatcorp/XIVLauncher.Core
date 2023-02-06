@@ -781,6 +781,15 @@ public class MainPage : Page
             App.Settings.IsEncryptArgs.GetValueOrDefault(true),
             App.Settings.DpiAwareness.GetValueOrDefault(DpiAwareness.Unaware));
 
+        var protonProcess = launchedProcess;
+        if (Program.CompatibilityTools.useProton)
+        {
+            Log.Information("Launching Proton instead of Wine.");
+            var gameName = (App.Settings.IsDx11 ?? true) ? "ffxiv_dx11.exe" : "ffxiv.exe";
+            var unixPid = Program.CompatibilityTools.GetUnixProcessIdByName(gameName);
+            launchedProcess = Process.GetProcessById(unixPid);
+        }
+
         if (launchedProcess == null)
         {
             Log.Information("GameProcess was null...");
@@ -812,15 +821,16 @@ public class MainPage : Page
 
             IsLoggingIn = false;
 
+            Log.Error(ex, "Addons failed for some reason.");
             addonMgr.StopAddons();
             throw;
         }
 
-        Log.Debug("Waiting for game to exit");
+        Log.Information("Waiting for game to exit");
 
         await Task.Run(() => launchedProcess!.WaitForExit()).ConfigureAwait(false);
 
-        Log.Verbose("Game has exited");
+        Log.Information("Game has exited");
 
         if (addonMgr.IsRunning)
             addonMgr.StopAddons();
@@ -836,7 +846,8 @@ public class MainPage : Page
         {
             Log.Error(ex, "Could not shut down Steam");
         }
-
+        if (Program.CompatibilityTools.useProton)
+            return protonProcess!;
         return launchedProcess!;
     }
 
