@@ -128,7 +128,7 @@ class Program
         SetupLogging(args);
         LoadConfig(storage);
         ProtonManager.GetVersions(Config.SteamPath);
-        Config.ProtonVersion = ProtonManager.CheckVersion(Config.ProtonVersion) ? Config.ProtonVersion : ProtonManager.GetDefaultVersion();
+        Config.ProtonVersion = ProtonManager.VersionExists(Config.ProtonVersion) ? Config.ProtonVersion : ProtonManager.GetDefaultVersion();
 
         Secrets = GetSecretProvider(storage);
 

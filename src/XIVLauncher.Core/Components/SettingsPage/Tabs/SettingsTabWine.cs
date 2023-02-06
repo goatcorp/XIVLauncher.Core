@@ -15,7 +15,15 @@ public class SettingsTabWine : SettingsTab
         Entries = new SettingsEntry[]
         {
             startupTypeSetting = new SettingsEntry<WineStartupType>("Installation Type", "Choose how XIVLauncher will start and manage your game installation.",
-                () => Program.Config.WineStartupType ?? WineStartupType.Managed, x => Program.Config.WineStartupType = x),
+                () => Program.Config.WineStartupType ?? WineStartupType.Managed, x => Program.Config.WineStartupType = x)
+                {
+                    CheckValidity = x =>
+                    {
+                        if (x == WineStartupType.Proton && !ProtonManager.IsValid())
+                            return "No proton version found! Check launcher.ini and make sure that SteamPath points your Steam root\nUsually this is /home/username/.steam/root or /home/username/.local/share/Steam";
+                        return null;
+                    }
+                },
 
             new SettingsEntry<string>("Wine Binary Path",
                 "Set the path XIVLauncher will use to run applications via wine.\nIt should be an absolute path to a folder containing wine64 and wineserver binaries.",
@@ -25,7 +33,7 @@ public class SettingsTabWine : SettingsTab
             },
             new DictionarySettingsEntry("Proton Version", "", ProtonManager.Versions, () => Program.Config.ProtonVersion, s => Program.Config.ProtonVersion = s)
             {
-                CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Proton
+                CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Proton,
             },
 
             new SettingsEntry<bool>("Enable Feral's GameMode", "Enable launching with Feral Interactive's GameMode CPU optimizations.", () => Program.Config.GameModeEnabled ?? true, b => Program.Config.GameModeEnabled = b)
