@@ -21,7 +21,6 @@ public abstract class SettingsTab : Component
                 ImGui.Dummy(new Vector2(10) * ImGuiHelpers.GlobalScale);
             }
         }
-        ImGui.Dummy(new Vector2(10) * ImGuiHelpers.GlobalScale);
         base.Draw();
     }
 
