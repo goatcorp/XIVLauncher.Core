@@ -20,7 +20,10 @@ public class SettingsTabWine : SettingsTab
                     CheckValidity = x =>
                     {
                         if (x == WineStartupType.Proton && !ProtonManager.IsValid())
-                            return "No proton version found! Check launcher.ini and make sure that SteamPath points your Steam root\nUsually this is /home/username/.steam/root or /home/username/.local/share/Steam";
+                        {
+                            var userHome = System.Environment.GetEnvironmentVariable("HOME") ?? "/home/username";
+                            return $"No proton version found! Check launcher.ini and make sure that SteamPath points your Steam root\nUsually this is {userHome}/.steam/root or {userHome}/.local/share/Steam";
+                        }
                         return null;
                     }
                 },
@@ -77,10 +80,13 @@ public class SettingsTabWine : SettingsTab
     {
         base.Draw();
 
-        if (!Program.CompatibilityTools.IsToolDownloaded)
+        if (!Program.CompatibilityTools.IsToolDownloaded || startupTypeSetting.Value == WineStartupType.Proton)
         {
             ImGui.BeginDisabled();
-            ImGui.Text("Compatibility tool isn't set up. Please start the game at least once.");
+            if (startupTypeSetting.Value == WineStartupType.Proton)
+                ImGui.Text("These options do not work properly with Proton yet.");
+            else
+                ImGui.Text("Compatibility tool isn't set up. Please start the game at least once.");
 
             ImGui.Dummy(new Vector2(10));
         }
@@ -109,7 +115,7 @@ public class SettingsTabWine : SettingsTab
             Program.CompatibilityTools.Kill();
         }
 
-        if (!Program.CompatibilityTools.IsToolDownloaded)
+        if (!Program.CompatibilityTools.IsToolDownloaded || startupTypeSetting.Value == WineStartupType.Proton)
         {
             ImGui.EndDisabled();
         }

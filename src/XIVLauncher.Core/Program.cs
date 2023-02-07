@@ -114,8 +114,7 @@ class Program
 
         Config.WineStartupType ??= WineStartupType.Managed;
         Config.WineBinaryPath ??= "/usr/bin";
-        Config.SteamPath ??= Path.Combine(System.Environment.GetEnvironmentVariable("HOME"), ".steam", "root");
-        Config.ProtonVersion ??= "Proton 7.0";
+        Config.SteamPath = string.IsNullOrEmpty(Config.SteamPath) ? Path.Combine(System.Environment.GetEnvironmentVariable("HOME"), ".steam", "root") : Config.SteamPath;        Config.ProtonVersion ??= "Proton 7.0";
         Config.WineDebugVars ??= "-all";
     }
 
@@ -134,6 +133,8 @@ class Program
 
         Loc.SetupWithFallbacks();
 
+        uint appId = STEAM_APP_ID_FT;
+        uint altId = STEAM_APP_ID;
         try
         {
             switch (Environment.OSVersion.Platform)
@@ -141,31 +142,44 @@ class Program
                 case PlatformID.Win32NT:
                     Steam = new WindowsSteam();
                     break;
-
                 case PlatformID.Unix:
                     Steam = new UnixSteam();
                     break;
-
                 default:
                     throw new PlatformNotSupportedException();
             }
-            if (!Config.IsIgnoringSteam ?? true)
+
+            if (!Config.IsIgnoringSteam.Value)
             {
+                if (!Config.IsFt.Value)
+                {
+                    appId = STEAM_APP_ID;
+                    altId = STEAM_APP_ID_FT;
+                }
                 try
                 {
-                    var appId = Config.IsFt == true ? STEAM_APP_ID_FT : STEAM_APP_ID;
                     Steam.Initialize(appId);
+                    Log.Information($"Trying to load Steam AppID {appId}... Okay");
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Couldn't init Steam with game AppIds, trying FT");
-                    Steam.Initialize(STEAM_APP_ID_FT);
+                    Log.Error(ex, $"Trying to load Steam AppID {appId}... Failed. Falling back to AppID {altId}.");
+                    Steam.Initialize(altId);
+                    Log.Information($"Trying to load Steam AppID {altId}... Okay");
                 }
             }
+            else
+            {
+                Log.Information("Steam integration disabled. If you have a Steam service account, you might not be able to log in.");
+            }
+        }
+        catch (PlatformNotSupportedException ex)
+        {
+            Log.Error(ex, "Steam integration is not currently supported on this platform.");
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Steam couldn't load");
+            Log.Error(ex, $"Could not load Steam AppID {appId} or {altId}.");
         }
 
         DalamudLoadInfo = new DalamudOverlayInfoProxy();
