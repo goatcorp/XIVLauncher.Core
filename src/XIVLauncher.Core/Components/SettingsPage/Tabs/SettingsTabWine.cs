@@ -80,16 +80,16 @@ public class SettingsTabWine : SettingsTab
     {
         base.Draw();
 
-        if (!Program.CompatibilityTools.IsToolDownloaded || startupTypeSetting.Value == WineStartupType.Proton)
-        {
-            ImGui.BeginDisabled();
-            if (startupTypeSetting.Value == WineStartupType.Proton)
-                ImGui.Text("These options do not work properly with Proton yet.");
-            else
-                ImGui.Text("Compatibility tool isn't set up. Please start the game at least once.");
+        // if (!Program.CompatibilityTools.IsToolDownloaded || startupTypeSetting.Value == WineStartupType.Proton)
+        // {
+        //     ImGui.BeginDisabled();
+        //     if (startupTypeSetting.Value == WineStartupType.Proton)
+        //         ImGui.Text("These options do not work properly with Proton yet.");
+        //     else
+        //         ImGui.Text("Compatibility tool isn't set up. Please start the game at least once.");
 
-            ImGui.Dummy(new Vector2(10));
-        }
+        //     ImGui.Dummy(new Vector2(10));
+        // }
 
         if (ImGui.Button("Open prefix"))
         {
@@ -115,10 +115,10 @@ public class SettingsTabWine : SettingsTab
             Program.CompatibilityTools.Kill();
         }
 
-        if (!Program.CompatibilityTools.IsToolDownloaded || startupTypeSetting.Value == WineStartupType.Proton)
-        {
-            ImGui.EndDisabled();
-        }
+        // if (!Program.CompatibilityTools.IsToolDownloaded || startupTypeSetting.Value == WineStartupType.Proton)
+        // {
+        //     ImGui.EndDisabled();
+        // }
     }
 
     public override void Save()

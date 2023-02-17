@@ -295,7 +295,8 @@ class Program
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
         var protonPrefix = storage.GetFolder("protonprefix");
-        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, Config.SteamPath, ProtonManager.GetPath(Config.ProtonVersion), Config.WineDebugVars, wineLogFile, winePrefix, protonPrefix, Config.ESyncEnabled, Config.FSyncEnabled);
+        var protonSettings = new ProtonSettings(Config.SteamPath, ProtonManager.GetPath(Config.ProtonVersion), Config.GamePath.FullName, Config.GameConfigPath.FullName);
+        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, protonSettings, Config.WineDebugVars, wineLogFile, winePrefix, protonPrefix, Config.ESyncEnabled, Config.FSyncEnabled);
         var toolsFolder = storage.GetFolder("compatibilitytool");
         CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
     }
