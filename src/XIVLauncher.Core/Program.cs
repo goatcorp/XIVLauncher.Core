@@ -114,7 +114,10 @@ class Program
 
         Config.WineStartupType ??= WineStartupType.Managed;
         Config.WineBinaryPath ??= "/usr/bin";
-        Config.SteamPath = string.IsNullOrEmpty(Config.SteamPath) ? Path.Combine(System.Environment.GetEnvironmentVariable("HOME"), ".steam", "root") : Config.SteamPath;        Config.ProtonVersion ??= "Proton 7.0";
+        Config.SteamPath = string.IsNullOrEmpty(Config.SteamPath) ? Path.Combine(System.Environment.GetEnvironmentVariable("HOME"), ".steam", "root") : Config.SteamPath;
+        Config.ProtonVersion ??= "Proton 7.0";
+        Config.UseSoldier ??= true;
+        Config.UseReaper ??= false;
         Config.WineDebugVars ??= "-all";
     }
 
@@ -299,8 +302,8 @@ class Program
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
         var protonPrefix = storage.GetFolder("protonprefix");
-        var protonSettings = new ProtonSettings(Config.SteamPath, ProtonManager.GetPath(Config.ProtonVersion), Config.GamePath.FullName, Config.GameConfigPath.FullName, appId: SteamAppId);
-        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, protonSettings, Config.WineDebugVars, wineLogFile, winePrefix, protonPrefix, Config.ESyncEnabled, Config.FSyncEnabled);
+        var protonSettings = new ProtonSettings(protonPrefix, Config.SteamPath, ProtonManager.GetPath(Config.ProtonVersion), Config.GamePath.FullName, Config.GameConfigPath.FullName, SteamAppId, Config.UseSoldier.Value, Config.UseReaper.Value);
+        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, protonSettings, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
         var toolsFolder = storage.GetFolder("compatibilitytool");
         CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
     }

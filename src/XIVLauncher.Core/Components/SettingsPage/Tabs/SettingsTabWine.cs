@@ -38,6 +38,14 @@ public class SettingsTabWine : SettingsTab
             {
                 CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Proton,
             },
+            new SettingsEntry<bool>("Use Steam Soldier Runtime", "Use Steam's container system. Proton is designed with this in mind, but may run without it.", () => Program.Config.UseSoldier ?? true, b => Program.Config.UseSoldier = b)
+            {
+                CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Proton,
+            },
+            new SettingsEntry<bool>("Use Reaper", "Use Steam's reaper process to launch the game.", () => Program.Config.UseReaper ?? false, b => Program.Config.UseReaper = b)
+            {
+                CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Proton,
+            },
 
             new SettingsEntry<bool>("Enable Feral's GameMode", "Enable launching with Feral Interactive's GameMode CPU optimizations.", () => Program.Config.GameModeEnabled ?? true, b => Program.Config.GameModeEnabled = b)
             {
@@ -107,7 +115,7 @@ public class SettingsTabWine : SettingsTab
 
         if (ImGui.Button("Open Wine explorer (run apps in prefix)"))
         {
-            Program.CompatibilityTools.RunInPrefix("explorer", inject: false);
+            Program.CompatibilityTools.RunInPrefix("explorer", wineD3D: true, inject: true);
         }
 
         if (ImGui.Button("Kill all wine processes"))

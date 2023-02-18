@@ -67,7 +67,12 @@ public interface ILauncherConfig
     public string? WineBinaryPath { get; set; }
 
     public string? SteamPath { get; set; }
+
     public string? ProtonVersion { get; set; }
+
+    public bool? UseSoldier { get; set; }
+
+    public bool? UseReaper { get; set; }
 
     public bool? GameModeEnabled { get; set; }
 
