@@ -303,9 +303,9 @@ class Program
         var winePrefix = storage.GetFolder("wineprefix");
         var protonPrefix = storage.GetFolder("protonprefix");
         var protonSettings = new ProtonSettings(protonPrefix, Config.SteamPath, ProtonManager.GetPath(Config.ProtonVersion), Config.GamePath.FullName, Config.GameConfigPath.FullName, SteamAppId, Config.UseSoldier.Value, Config.UseReaper.Value);
-        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, protonSettings, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
+        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
         var toolsFolder = storage.GetFolder("compatibilitytool");
-        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
+        CompatibilityTools = new CompatibilityTools(wineSettings, protonSettings, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
     }
 
     public static void ShowWindow()
