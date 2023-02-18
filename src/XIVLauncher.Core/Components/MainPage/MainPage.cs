@@ -782,7 +782,7 @@ public class MainPage : Page
             App.Settings.DpiAwareness.GetValueOrDefault(DpiAwareness.Unaware));
 
         var protonProcess = launchedProcess;
-        if (Program.CompatibilityTools.useProton)
+        if (Program.CompatibilityTools.UseProton)
         {
             Log.Information("Launching Proton runner. Proton's built-in wine will be launched as a child process.");
             var gameName = (App.Settings.IsDx11 ?? true) ? "ffxiv_dx11.exe" : "ffxiv.exe";
@@ -828,6 +828,8 @@ public class MainPage : Page
 
         Log.Information("Waiting for game to exit");
 
+        // Auto-launch apps need to go here when using proton. Can't inject Dalamud properly otherwise.
+
         await Task.Run(() => launchedProcess!.WaitForExit()).ConfigureAwait(false);
 
         Log.Information("Game has exited");
@@ -846,7 +848,7 @@ public class MainPage : Page
         {
             Log.Error(ex, "Could not shut down Steam");
         }
-        if (Program.CompatibilityTools.useProton)
+        if (Program.CompatibilityTools.UseProton)
             return protonProcess!;
         return launchedProcess!;
     }

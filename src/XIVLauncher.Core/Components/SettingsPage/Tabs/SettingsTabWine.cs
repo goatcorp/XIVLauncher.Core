@@ -107,7 +107,7 @@ public class SettingsTabWine : SettingsTab
 
         if (ImGui.Button("Open Wine explorer (run apps in prefix)"))
         {
-            Program.CompatibilityTools.RunInPrefix("explorer");
+            Program.CompatibilityTools.RunInPrefix("explorer", inject: false);
         }
 
         if (ImGui.Button("Kill all wine processes"))
