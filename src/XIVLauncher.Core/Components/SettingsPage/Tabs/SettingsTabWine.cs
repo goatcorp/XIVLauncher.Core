@@ -38,10 +38,12 @@ public class SettingsTabWine : SettingsTab
             {
                 CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Proton,
             },
+#if !FLATPAK
             new SettingsEntry<bool>("Use Steam Soldier Runtime", "Use Steam's container system. Proton is designed with this in mind, but may run without it.", () => Program.Config.UseSoldier ?? true, b => Program.Config.UseSoldier = b)
             {
                 CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Proton,
             },
+#endif
             new SettingsEntry<bool>("Use Reaper", "Use Steam's reaper process to launch the game.", () => Program.Config.UseReaper ?? false, b => Program.Config.UseReaper = b)
             {
                 CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Proton,
@@ -88,16 +90,12 @@ public class SettingsTabWine : SettingsTab
     {
         base.Draw();
 
-        // if (!Program.CompatibilityTools.IsToolDownloaded || startupTypeSetting.Value == WineStartupType.Proton)
-        // {
-        //     ImGui.BeginDisabled();
-        //     if (startupTypeSetting.Value == WineStartupType.Proton)
-        //         ImGui.Text("These options do not work properly with Proton yet.");
-        //     else
-        //         ImGui.Text("Compatibility tool isn't set up. Please start the game at least once.");
-
-        //     ImGui.Dummy(new Vector2(10));
-        // }
+        if (!Program.CompatibilityTools.IsToolDownloaded && Program.Config.WineStartupType == WineStartupType.Managed)
+        {
+            ImGui.BeginDisabled();
+            ImGui.Text("Compatibility tool isn't set up. Please start the game at least once.");
+            ImGui.Dummy(new Vector2(10));
+        }
 
         if (ImGui.Button("Open prefix"))
         {
@@ -123,10 +121,10 @@ public class SettingsTabWine : SettingsTab
             Program.CompatibilityTools.Kill();
         }
 
-        // if (!Program.CompatibilityTools.IsToolDownloaded || startupTypeSetting.Value == WineStartupType.Proton)
-        // {
-        //     ImGui.EndDisabled();
-        // }
+        if (!Program.CompatibilityTools.IsToolDownloaded && Program.Config.WineStartupType == WineStartupType.Managed)
+        {
+            ImGui.EndDisabled();
+        }
     }
 
     public override void Save()
