@@ -1,4 +1,4 @@
-name: "PR XLCore to Flatpak"
+name: "Release XLCore"
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 6.0.x # Set this to be the same as the projects required dotnet version.
 
       - name: Dotnet Restore
         working-directory: ./src/XIVLauncher.Core/
@@ -58,8 +58,8 @@ jobs:
           sudo apt update -y
           sudo apt install flatpak -y
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 
-          flatpak install --user org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08 -y
-          flatpak install --user org.freedesktop.Sdk/x86_64/21.08 -y
+          flatpak install --user org.freedesktop.Sdk.Extension.dotnet6/x86_64/22.08 -y # Update this when needed.
+          flatpak install --user org.freedesktop.Sdk/x86_64/22.08 -y # As well as this, if dependency generation is failing.
 
       - name: Generate nuget-dependencies.json
         working-directory: ./src/XIVLauncher.Core/
@@ -106,6 +106,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
+          #body_path: .github/release_notices.md # If you want to add notes to the top of all releases, uncomment this
+          append_body: true # and this to make sure they are appended, not replacing the original.
           files: |
             ./dist/XIVLauncher.Core.zip
             ./dist/XIVLauncher.Core-arch.zip
