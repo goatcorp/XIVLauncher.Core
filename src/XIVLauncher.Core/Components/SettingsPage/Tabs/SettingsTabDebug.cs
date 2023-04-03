@@ -24,7 +24,7 @@ public class SettingsTabDebug : SettingsTab
 #if FLATPAK
             ImGui.Text("Running as a Flatpak");
 #endif
-        
+
         ImGui.Spacing();
 
         ImGui.TextUnformatted("Environment Information");

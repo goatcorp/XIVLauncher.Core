@@ -64,12 +64,12 @@ public class SettingsPage : Page
                 if (ImGui.BeginTabItem("Search Results"))
                 {
                     var any = false;
-                    
+
                     foreach (SettingsTab settingsTab in this.tabs)
                     {
                         if (settingsTab.IsUnixExclusive && Environment.OSVersion.Platform != PlatformID.Unix)
                             continue;
-                    
+
                         var eligible = settingsTab.Entries
                             .Where(x => x.Name.Contains(this.searchInput.Trim(),
                                 StringComparison.InvariantCultureIgnoreCase));
@@ -88,7 +88,7 @@ public class SettingsPage : Page
                             {
                                 if (!settingsTabEntry.IsVisible)
                                     continue;
-                                
+
                                 settingsTabEntry.Draw();
                             }
 
