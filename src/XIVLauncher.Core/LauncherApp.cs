@@ -268,7 +268,7 @@ public class LauncherApp : Component
 
         ImGui.SetNextWindowPos(new Vector2(0, 0));
         ImGui.SetNextWindowSize(ImGuiHelpers.ViewportSize);
-        ImGui.SetNextWindowBgAlpha(0.7f);
+        ImGui.SetNextWindowBgAlpha(0.75f);
 
         if (ImGui.Begin("XIVLauncher", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {

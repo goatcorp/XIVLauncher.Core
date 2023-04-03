@@ -43,6 +43,7 @@ public class MainPage : Page
 
         this.loginFrame.OnLogin += this.ProcessLogin;
         this.actionButtons.OnSettingsButtonClicked += () => this.App.State = LauncherApp.LauncherState.Settings;
+        this.actionButtons.OnStatusButtonClicked += () => AppUtil.OpenBrowser("https://is.xivup.com/");
 
         this.Padding = new Vector2(32f, 32f);
 
@@ -75,8 +76,8 @@ public class MainPage : Page
 
         ImGui.SameLine();
 
-        this.AccountSwitcher.Draw();
         this.loginFrame.Draw();
+        this.AccountSwitcher.Draw();
 
         this.actionButtons.Draw();
     }
