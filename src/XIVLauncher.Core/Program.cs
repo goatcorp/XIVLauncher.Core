@@ -50,7 +50,8 @@ class Program
 
     // TODO: We don't have the steamworks api for this yet.
     public static bool IsSteamDeckHardware => Directory.Exists("/home/deck");
-    public static bool IsSteamDeckGamingMode => Steam != null && Steam.IsValid && Steam.IsRunningOnSteamDeck();
+
+    public static bool IsSteamDeckGamingMode = Steam != null && Steam.IsValid && Steam.IsRunningOnSteamDeck();
 
     private const string APP_NAME = "xlcore";
 
@@ -117,8 +118,8 @@ class Program
         Config.WineDebugVars ??= "-all";
     }
 
-    public const uint STEAM_APP_ID = 39210;
-    public const uint STEAM_APP_ID_FT = 312060;
+    public const uint STEAM_APP_ID = 39210; // FFXIV Retail Steam AppId
+    public const uint STEAM_APP_ID_FT = 312060; // FFXIV Free Trial Steam AppId
 
     private static void Main(string[] args)
     {
@@ -130,6 +131,23 @@ class Program
 
         Loc.SetupWithFallbacks();
 
+        // 
+        uint appId, altId;
+        string appName, altName;
+        if (Config.IsFt.Value)
+        {
+            appId = STEAM_APP_ID_FT;
+            altId = STEAM_APP_ID;
+            appName = "FFXIV Free Trial";
+            altName = "FFXIV Retail";
+        }
+        else
+        {
+            appId = STEAM_APP_ID;
+            altId = STEAM_APP_ID_FT;
+            appName = "FFXIV Retail";
+            altName = "FFXIV Free Trial";
+        }
         try
         {
             switch (Environment.OSVersion.Platform)
@@ -149,19 +167,18 @@ class Program
             {
                 try
                 {
-                    var appId = Config.IsFt == true ? STEAM_APP_ID_FT : STEAM_APP_ID;
                     Steam.Initialize(appId);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Couldn't init Steam with game AppIds, trying FT");
-                    Steam.Initialize(STEAM_APP_ID_FT);
+                    Log.Error($"Couldn't init Steam with AppId={appId} ({appName}), trying AppId={altId} ({altName})");
+                    Steam.Initialize(altId);
                 }
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Steam couldn't load");
+            Log.Error(ex, "Steam couldn't load.");
         }
 
         DalamudLoadInfo = new DalamudOverlayInfoProxy();

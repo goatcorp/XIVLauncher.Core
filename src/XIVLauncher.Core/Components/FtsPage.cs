@@ -27,6 +27,8 @@ public class FtsPage : Page
 
         if (Program.IsSteamDeckHardware && (Program.Steam == null || !Program.Steam.IsValid))
         {
+            // If IsIgnoringSteam == true, skip the error screen. This fixes a bug with Steam Deck always showing the Fts Error screen.
+            if (App.Settings.IsIgnoringSteam ?? false) return;
             App.State = LauncherApp.LauncherState.Fts;
             this.isSteamDeckAppIdError = true;
         }
