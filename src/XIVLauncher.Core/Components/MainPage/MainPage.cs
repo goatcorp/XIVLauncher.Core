@@ -683,7 +683,53 @@ public class MainPage : Page
 
         IGameRunner runner;
 
-        var gameArgs = App.Settings.AdditionalArgs ?? string.Empty;
+        var launchOptions = (App.Settings.AdditionalArgs ?? string.Empty).Split("%command%", 2);
+        var launchEnv = "";
+        var gameArgs = "";
+
+        if (launchOptions.Length == 1)
+        {
+            if(launchOptions[0].StartsWith('-'))
+                gameArgs = launchOptions[0];
+            else
+                launchEnv = launchOptions[0];
+        }
+        else
+        {
+            launchEnv = launchOptions[0] ?? "";
+            gameArgs = launchOptions[1] ?? "";
+        }
+        Log.Information($"Command to launch: {launchEnv} %command% {gameArgs}");
+
+        // var gameArgs = App.Settings.AdditionalArgs ?? string.Empty;
+
+        if (App.Settings.FixLDP.Value)
+        {
+            var ldpreload = CoreEnvironmentSettings.GetCleanEnvironmentVariable("LD_PRELOAD", "gameoverlayrenderer.so");
+            System.Environment.SetEnvironmentVariable("LD_PRELOAD", ldpreload);
+        }
+
+        if (App.Settings.FixIM.Value)
+        {
+            System.Environment.SetEnvironmentVariable("XMODIFIERS", "@im=null");
+        }
+
+        if (!string.IsNullOrEmpty(launchEnv))
+        {
+            foreach (var envvar in launchEnv.Split(null))
+            {
+                if (!envvar.Contains('=')) continue;
+                var kvp = envvar.Split('=', 2);
+                if (kvp[0].EndsWith('+'))
+                {
+                    kvp[0] = kvp[0].TrimEnd('+');
+                    kvp[1] = (System.Environment.GetEnvironmentVariable(kvp[0]) ?? "") + kvp[1];
+                    Log.Information($"Trying to add to Env variable {kvp[0]}");
+                }
+                System.Environment.SetEnvironmentVariable(kvp[0], kvp[1]);
+                Log.Information($"Environment Variable set: {kvp[0]}={kvp[1]}");
+            }
+        }
 
         if (Environment.OSVersion.Platform == PlatformID.Win32NT)
         {

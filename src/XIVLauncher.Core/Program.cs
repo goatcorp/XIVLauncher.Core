@@ -122,6 +122,9 @@ class Program
         Config.WineStartupType ??= WineStartupType.Managed;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
+
+        Config.FixLDP ??= false;
+        Config.FixIM ??= false;
     }
 
     public const uint STEAM_APP_ID = 39210;
