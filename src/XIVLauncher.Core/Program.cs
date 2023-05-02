@@ -170,43 +170,23 @@ class Program
                 default:
                     throw new PlatformNotSupportedException();
             }
-            if (!Config.IsIgnoringSteam.Value)
+            if (!Config.IsIgnoringSteam ?? true)
             {
-                uint appId, altId;
-                string xiv1, xiv2;
-                if (Config.IsFt.Value)
-                {
-                    appId = STEAM_APP_ID_FT;
-                    altId = STEAM_APP_ID;
-                    xiv1 = "free trial";
-                    xiv2 = "full version";
-                }
-                else
-                {
-                    appId = STEAM_APP_ID;
-                    altId = STEAM_APP_ID_FT;
-                    xiv1 = "full version";
-                    xiv2 = "free trial";
-                }
                 try
                 {
-                    Log.Information($"Steam: Trying to load the {xiv1} of FFXIV");
+                    var appId = Config.IsFt == true ? STEAM_APP_ID_FT : STEAM_APP_ID;
                     Steam.Initialize(appId);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, $"Steam: Couldn't load the {xiv1} of FFXIV, now trying the {xiv2}.");
-                    Steam.Initialize(altId);
+                    Log.Error(ex, "Couldn't init Steam with game AppIds, trying FT");
+                    Steam.Initialize(STEAM_APP_ID_FT);
                 }
-            }
-            else
-            {
-                Log.Information("Steam: Checks disabled. If you have a Steam service account, you might not be able to log in.");
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Steam: Couldn't find any version of FFXIV");
+            Log.Error(ex, "Steam couldn't load");
         }
 
         DalamudLoadInfo = new DalamudOverlayInfoProxy();
