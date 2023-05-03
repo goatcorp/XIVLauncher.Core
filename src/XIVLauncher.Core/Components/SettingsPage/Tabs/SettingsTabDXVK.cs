@@ -40,7 +40,7 @@ public class SettingsTabDXVK : SettingsTab
                 CheckValidity = type =>
                 {
                     if ((type == Dxvk.DxvkHudType.MangoHud || type == Dxvk.DxvkHudType.MangoHudCustom || type == Dxvk.DxvkHudType.MangoHudFull)
-                        && (!File.Exists("/usr/lib/mangohud/libMangoHud.so") && !File.Exists("/usr/lib/extensions/vulkan/MangoHud/lib/x86_64-linux-gnu/libMangoHud.so")))
+                        && (!File.Exists("/usr/lib/mangohud/libMangoHud.so") && !File.Exists("/usr/lib64/mangohud/libMangoHud.so") && !File.Exists("/usr/lib/extensions/vulkan/MangoHud/lib/x86_64-linux-gnu/libMangoHud.so")))
                         return "MangoHud not detected.";
 
                     return null;
