@@ -117,8 +117,8 @@ class Program
         Config.WineDebugVars ??= "-all";
     }
 
-    public const uint STEAM_APP_ID = 39210; // FFXIV Retail Steam AppId
-    public const uint STEAM_APP_ID_FT = 312060; // FFXIV Free Trial Steam AppId
+    public const uint STEAM_APP_ID = 39210;
+    public const uint STEAM_APP_ID_FT = 312060;
 
     private static void Main(string[] args)
     {
@@ -130,7 +130,6 @@ class Program
 
         Loc.SetupWithFallbacks();
 
-        // 
         uint appId, altId;
         string appName, altName;
         if (Config.IsFt.Value)
@@ -170,14 +169,14 @@ class Program
                 }
                 catch (Exception ex)
                 {
-                    Log.Error($"Couldn't init Steam with AppId={appId} ({appName}), trying AppId={altId} ({altName})");
+                    Log.Error(ex, $"Couldn't init Steam with AppId={appId} ({appName}), trying AppId={altId} ({altName})");
                     Steam.Initialize(altId);
                 }
             }
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Steam couldn't load.");
+            Log.Error(ex, "Steam couldn't load");
         }
 
         DalamudLoadInfo = new DalamudOverlayInfoProxy();
