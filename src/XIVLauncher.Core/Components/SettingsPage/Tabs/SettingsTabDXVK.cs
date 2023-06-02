@@ -20,17 +20,17 @@ public class SettingsTabDXVK : SettingsTab
             {
                 CheckWarning = type =>
                 {
-                    if(type == Dxvk.DxvkVersion.v2_1)
-                        return "AMD users may need to use env variable RADV_PERFTEST=gpl";
+                    if (new [] {Dxvk.DxvkVersion.v2_1, Dxvk.DxvkVersion.v2_2}.Contains(type))
+                        return "May not work with pre-8.0 or non-proton wine builds. AMD users may need to use env variable RADV_PERFTEST=gpl";
                     return null;
                 },
             },
             new SettingsEntry<bool>("Enable DXVK ASYNC", "Enable DXVK ASYNC patch.", () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
             {
-                CheckVisibility = () => dxvkVersionSetting.Value != Dxvk.DxvkVersion.v2_1,
+                CheckVisibility = () => !(new [] {Dxvk.DxvkVersion.v2_1, Dxvk.DxvkVersion.v2_2}.Contains(dxvkVersionSetting.Value)),
                 CheckWarning = b =>
                 {
-                    if(!b && dxvkVersionSetting.Value == Dxvk.DxvkVersion.v2_0)
+                    if (!b && dxvkVersionSetting.Value == Dxvk.DxvkVersion.v2_0)
                         return "AMD users may need to use env variable RADV_PERFTEST=gpl";
                     return null;
                 },
