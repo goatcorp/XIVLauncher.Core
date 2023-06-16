@@ -684,7 +684,52 @@ public class MainPage : Page
 
         IGameRunner runner;
 
-        var gameArgs = App.Settings.AdditionalArgs ?? string.Empty;
+        // Hack: Strip out gameoverlayrenderer.so entries from LD_PRELOAD
+        if (App.Settings.FixLDP.Value)
+        {
+            var ldpreload = CoreEnvironmentSettings.GetCleanEnvironmentVariable("LD_PRELOAD", "gameoverlayrenderer.so");
+            System.Environment.SetEnvironmentVariable("LD_PRELOAD", ldpreload);
+        }
+
+        // Hack: XMODIFIERS=@im=null
+        if (App.Settings.FixIM.Value)
+        {
+            System.Environment.SetEnvironmentVariable("XMODIFIERS", "@im=null");
+        }
+
+        // Deal with "Additional Arguments". VAR=value %command% -args
+        var launchOptions = (App.Settings.AdditionalArgs ?? string.Empty).Split("%command%", 2);
+        var launchEnv = "";
+        var gameArgs = "";
+
+        // If there's only one launch option (no %command%) figure out whether it's args or env variables.
+        if (launchOptions.Length == 1)
+        {
+            if(launchOptions[0].StartsWith('-'))
+                gameArgs = launchOptions[0];
+            else
+                launchEnv = launchOptions[0];
+        }
+        else
+        {
+            launchEnv = launchOptions[0] ?? "";
+            gameArgs = launchOptions[1] ?? "";
+        }
+
+        if (!string.IsNullOrEmpty(launchEnv))
+        {
+            foreach (var envvar in launchEnv.Split(null))
+            {
+                if (!envvar.Contains('=')) continue;    // ignore entries without an '='
+                var kvp = envvar.Split('=', 2);
+                if (kvp[0].EndsWith('+'))               // if key ends with +, then it's actually key+=value
+                {
+                    kvp[0] = kvp[0].TrimEnd('+');
+                    kvp[1] = (System.Environment.GetEnvironmentVariable(kvp[0]) ?? "") + kvp[1];
+                }
+                System.Environment.SetEnvironmentVariable(kvp[0], kvp[1]);
+            }
+        }
 
         if (Environment.OSVersion.Platform == PlatformID.Win32NT)
         {

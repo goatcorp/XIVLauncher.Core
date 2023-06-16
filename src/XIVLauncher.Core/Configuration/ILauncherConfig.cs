@@ -78,6 +78,10 @@ public interface ILauncherConfig
 
     public string? WineDebugVars { get; set; }
 
+    public bool? FixLDP { get; set; }
+
+    public bool? FixIM { get; set; }
+
     #endregion
 
     #region Dalamud

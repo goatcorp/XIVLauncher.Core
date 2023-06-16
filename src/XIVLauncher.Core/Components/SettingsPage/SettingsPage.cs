@@ -15,6 +15,7 @@ public class SettingsPage : Page
         new SettingsTabAutoStart(),
         new SettingsTabAbout(),
         new SettingsTabDebug(),
+        new SettingsTabTroubleshooting(),
     };
 
     private string searchInput = string.Empty;
