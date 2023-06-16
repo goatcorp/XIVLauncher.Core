@@ -89,4 +89,20 @@ public interface ILauncherConfig
     public int DalamudLoadDelay { get; set; }
 
     #endregion
+
+    #region Auto-Start
+
+    public string? BeforeScript { get; set; }
+    
+    public bool? WaitForBeforeScript { get; set; }
+    
+    public string? BeforeScriptWine { get; set; }
+    
+    public bool? WaitForBeforeScriptWine { get; set; }
+    
+    public string? AfterScript { get; set; }
+    
+    public string? AfterScriptWine { get; set; }
+
+    #endregion
 }
