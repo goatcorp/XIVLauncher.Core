@@ -71,8 +71,6 @@ public class NewsFrame : Component
         {
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(32f, 32f));
 
-            //ImGui.Text("awooga");
-
             if (this.newsLoaded)
             {
                 var banner = this.banners[this.currentBanner];
@@ -84,7 +82,7 @@ public class NewsFrame : Component
                 ImGui.Dummy(new Vector2(15));
 
                 void ShowNewsEntry(News newsEntry)
-                {
+                {  
                     ImGui.Text(newsEntry.Title);
 
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Left) && !string.IsNullOrEmpty(newsEntry.Url))
@@ -93,13 +91,15 @@ public class NewsFrame : Component
                     }
                 }
 
+                ImGui.TextDisabled("News");
                 foreach (News newsEntry in this.headlines.News)
                 {
                     ShowNewsEntry(newsEntry);
                 }
 
-                ImGui.Separator();
+                ImGui.Spacing();
 
+                ImGui.TextDisabled("Topics");
                 foreach (News topic in this.headlines.Topics)
                 {
                     ShowNewsEntry(topic);
@@ -107,7 +107,7 @@ public class NewsFrame : Component
             }
             else
             {
-                ImGui.Text("News are loading...");
+                ImGui.Text("News is loading...");
             }
 
             ImGui.PopStyleVar();

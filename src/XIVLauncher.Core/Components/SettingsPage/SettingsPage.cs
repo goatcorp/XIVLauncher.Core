@@ -70,27 +70,33 @@ public class SettingsPage : Page
                         if (settingsTab.IsUnixExclusive && Environment.OSVersion.Platform != PlatformID.Unix)
                             continue;
 
-                        var eligible = settingsTab.Entries.Where(x => x.Name.ToLower().Contains(this.searchInput.ToLower())).ToArray();
+                        var eligible = settingsTab.Entries
+                            .Where(x => x.Name.Contains(this.searchInput.Trim(),
+                                StringComparison.InvariantCultureIgnoreCase));
 
                         if (!eligible.Any())
                             continue;
 
                         any = true;
 
-                        ImGui.TextColored(ImGuiColors.DalamudGrey, settingsTab.Title);
-                        ImGui.Dummy(new Vector2(5));
-
-                        foreach (SettingsEntry settingsTabEntry in settingsTab.Entries)
+                        if (ImGui.BeginChild("SearchResults"))
                         {
-                            if (!settingsTabEntry.Name.ToLower().Contains(this.searchInput.ToLower()))
-                                continue;
+                            ImGui.TextColored(ImGuiColors.DalamudGrey, settingsTab.Title);
+                            ImGui.Dummy(new Vector2(5));
 
-                            settingsTabEntry.Draw();
+                            foreach (SettingsEntry settingsTabEntry in eligible)
+                            {
+                                if (!settingsTabEntry.IsVisible)
+                                    continue;
+
+                                settingsTabEntry.Draw();
+                            }
+
+                            ImGui.Separator();
+
+                            ImGui.Dummy(new Vector2(10));
                         }
-
-                        ImGui.Separator();
-
-                        ImGui.Dummy(new Vector2(10));
+                        ImGui.EndChild();
                     }
 
                     if (!any)
@@ -137,8 +143,8 @@ public class SettingsPage : Page
         ImGui.PopFont();
 
         var vpSize = ImGuiHelpers.ViewportSize;
-        ImGui.SetCursorPos(new Vector2(vpSize.X - 250, 4));
-        ImGui.SetNextItemWidth(240);
+        ImGui.SetCursorPos(new Vector2(vpSize.X - 260, 4));
+        ImGui.SetNextItemWidth(250);
         ImGui.InputTextWithHint("###searchInput", "Search for settings...", ref this.searchInput, 100);
 
         base.Draw();

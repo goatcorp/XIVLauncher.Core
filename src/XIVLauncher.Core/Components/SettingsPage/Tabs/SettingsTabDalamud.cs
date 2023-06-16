@@ -18,7 +18,7 @@ public class SettingsTabDalamud : SettingsTab
             },
         },
 
-        new NumericSettingsEntry("Injection Delay", "Choose how long to wait after the game has loaded before injecting.", () => Program.Config.DalamudLoadDelay, delay => Program.Config.DalamudLoadDelay = delay, 0, int.MaxValue, 1000),
+        new NumericSettingsEntry("Injection Delay (ms)", "Choose how long to wait after the game has loaded before injecting.", () => Program.Config.DalamudLoadDelay, delay => Program.Config.DalamudLoadDelay = delay, 0, int.MaxValue, 1000),
     };
 
     public override string Title => "Dalamud";
