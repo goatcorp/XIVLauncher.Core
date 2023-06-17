@@ -21,6 +21,7 @@ using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
+using XIVLauncher.Core.Runners;
 
 namespace XIVLauncher.Core;
 
@@ -108,11 +109,16 @@ class Program
         Config.GlobalScale ??= 1.0f;
 
         Config.GameModeEnabled ??= false;
+        Config.ReShadeFix ??= false;
+        Config.DxvkVersion ??= DxvkVersion.v1_10_3;
         Config.DxvkAsyncEnabled ??= true;
+        Config.DxvkFrameRate ??= 0;
         Config.ESyncEnabled ??= true;
         Config.FSyncEnabled ??= false;
+        Config.DxvkHudCustom ??= "fps,frametimes,gpuload,version";
+        Config.DxvkMangoCustom ??= Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "MangoHud", "MangoHud.conf");
 
-        Config.WineStartupType ??= WineStartupType.Managed;
+        Config.WineType ??= WineType.Managed;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
     }
@@ -291,9 +297,24 @@ class Program
     {
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
-        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
         var toolsFolder = storage.GetFolder("compatibilitytool");
-        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
+        Wine.Initialize();
+        Dxvk.Initialize();
+        var wineoverride = "msquic=,mscoree=n,b;";
+        var wineenv = new Dictionary<string, string>();
+        if (Dxvk.Settings is null)
+        {
+            wineoverride += "d3d9,d3d11,d3d10core,dxgi=b";
+            wineenv.Add("PROTON_USE_WINED3D", "1");  // needed for proton-based wine to work with WineD3D.
+        }
+        else
+        {
+            wineoverride = "d3d9,d3d11,d3d10core,dxgi=n,b";
+        }
+        if (Config.ReShadeFix.Value)
+            wineoverride += ";d3dcompiler_47=n";
+        var winepath = (Config.WineType == WineType.Custom) ? Config.WineBinaryPath : "";
+        CompatibilityTools = new CompatibilityTools(winepath, Wine.Settings, Dxvk.Settings, wineenv, wineoverride, winePrefix, toolsFolder, wineLogFile);
     }
 
     public static void ShowWindow()

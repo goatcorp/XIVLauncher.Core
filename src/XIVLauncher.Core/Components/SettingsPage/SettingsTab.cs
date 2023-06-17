@@ -16,9 +16,10 @@ public abstract class SettingsTab : Component
         foreach (SettingsEntry settingsEntry in Entries)
         {
             if (settingsEntry.IsVisible)
+            {
                 settingsEntry.Draw();
-
-            ImGui.Dummy(new Vector2(10) * ImGuiHelpers.GlobalScale);
+                ImGui.Dummy(new Vector2(10) * ImGuiHelpers.GlobalScale);
+            }
         }
 
         base.Draw();

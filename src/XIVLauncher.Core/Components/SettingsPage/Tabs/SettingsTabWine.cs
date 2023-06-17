@@ -3,25 +3,31 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using XIVLauncher.Common.Unix.Compatibility;
 using XIVLauncher.Common.Util;
+using XIVLauncher.Core.Runners;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabWine : SettingsTab
 {
-    private SettingsEntry<WineStartupType> startupTypeSetting;
+    private SettingsEntry<WineType> startupTypeSetting;
 
     public SettingsTabWine()
     {
         Entries = new SettingsEntry[]
         {
-            startupTypeSetting = new SettingsEntry<WineStartupType>("Installation Type", "Choose how XIVLauncher will start and manage your game installation.",
-                () => Program.Config.WineStartupType ?? WineStartupType.Managed, x => Program.Config.WineStartupType = x),
+            startupTypeSetting = new SettingsEntry<WineType>("Installation Type", "Choose how XIVLauncher will start and manage your game installation.",
+                () => Program.Config.WineType ?? WineType.Managed, x => Program.Config.WineType = x),
 
+            new SettingsEntry<WineVersion>("Wine Version", "Choose a patched wine version.", () => Program.Config.WineVersion ?? WineVersion.Wine8_5, x => Program.Config.WineVersion = x)
+            {
+                CheckVisibility = () => startupTypeSetting.Value == WineType.Other
+            },
+            
             new SettingsEntry<string>("Wine Binary Path",
                 "Set the path XIVLauncher will use to run applications via wine.\nIt should be an absolute path to a folder containing wine64 and wineserver binaries.",
                 () => Program.Config.WineBinaryPath, s => Program.Config.WineBinaryPath = s)
             {
-                CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Custom
+                CheckVisibility = () => startupTypeSetting.Value == WineType.Custom
             },
 
             new SettingsEntry<bool>("Enable Feral's GameMode", "Enable launching with Feral Interactive's GameMode CPU optimizations.", () => Program.Config.GameModeEnabled ?? true, b => Program.Config.GameModeEnabled = b)
@@ -49,8 +55,7 @@ public class SettingsTabWine : SettingsTab
                     return null;
                 }
             },
-
-            new SettingsEntry<Dxvk.DxvkHudType>("DXVK Overlay", "Configure how much of the DXVK overlay is to be shown.", () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type),
+            new SettingsEntry<bool>("Enable ReShade Fix", "Passes d3dcompiler_47=n as instructed by the linux ReShade installer.", () => Program.Config.ReShadeFix ?? false, b => Program.Config.ReShadeFix = b),
             new SettingsEntry<string>("WINEDEBUG Variables", "Configure debug logging for wine. Useful for troubleshooting.", () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s)
         };
     }
@@ -75,7 +80,7 @@ public class SettingsTabWine : SettingsTab
 
         if (ImGui.Button("Open prefix"))
         {
-            PlatformHelpers.OpenBrowser(Program.CompatibilityTools.Settings.Prefix.FullName);
+            PlatformHelpers.OpenBrowser(Program.CompatibilityTools.Prefix.FullName);
         }
 
         ImGui.SameLine();
