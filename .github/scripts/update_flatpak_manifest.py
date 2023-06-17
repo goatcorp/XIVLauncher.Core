@@ -3,6 +3,7 @@ import sys
 import xml.etree.ElementTree as ET
 from datetime import date
 
+print("Ran with args: " + str(sys.argv))
 if len(sys.argv) != 5:
     print(f'Usage: python3 {sys.argv[0]} <manifest file> <appstream file> <new tag> <new commit>')
     sys.exit(1)

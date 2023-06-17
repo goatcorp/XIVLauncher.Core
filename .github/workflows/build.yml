@@ -10,6 +10,9 @@ on:
 jobs:
   Build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/XIVLauncher.Core/
     concurrency:
       group: ${{ github.head_ref }}"
       cancel-in-progress: true
@@ -26,35 +29,16 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Dotnet Restore
-        working-directory: ./src/XIVLauncher.Core/
         run: dotnet restore
 
       - name: Dotnet Build (Default)
-        working-directory: ./src/XIVLauncher.Core/
         run: dotnet build --configuration Release --no-restore -o ./dist/XIVLauncher.Core
 
       - name: Dotnet Build (Arch)
-        working-directory: ./src/XIVLauncher.Core/
         run: dotnet build --configuration Release -p:DefineConstants=WINE_XIV_ARCH_LINUX --no-restore -o ./dist/XIVLauncher.Core-arch
 
       - name: Dotnet Build (Fedora)
-        working-directory: ./src/XIVLauncher.Core/
         run: dotnet build --configuration Release -p:DefineConstants=WINE_XIV_FEDORA_LINUX --no-restore -o ./dist/XIVLauncher.Core-fedora
 
-      - name: Upload Artifacts (Default)
-        uses: actions/upload-artifact@v3
-        with:
-          name: XIVLauncher.Core
-          path: ./src/XIVLauncher.Core/dist/XIVLauncher.Core
-
-      - name: Upload Artifacts (Arch)
-        uses: actions/upload-artifact@v3
-        with:
-          name: XIVLauncher.Core-arch
-          path: ./src/XIVLauncher.Core/dist/XIVLauncher.Core-arch
-
-      - name: Upload Artifacts (Fedora)
-        uses: actions/upload-artifact@v3
-        with:
-          name: XIVLauncher.Core-fedora
-          path: ./src/XIVLauncher.Core/dist/XIVLauncher.Core-fedora
+      - name: Dotnet Test
+        run: dotnet test --no-build --verbosity normal
