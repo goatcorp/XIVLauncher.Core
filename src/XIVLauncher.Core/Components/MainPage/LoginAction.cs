@@ -4,6 +4,7 @@ public enum LoginAction
 {
     Game,
     GameNoDalamud,
+    GameNoThirdparty,
     GameNoLaunch,
     Repair,
     Fake,

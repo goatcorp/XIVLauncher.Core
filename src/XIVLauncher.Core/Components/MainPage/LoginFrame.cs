@@ -117,6 +117,13 @@ public class LoginFrame : Component
 
                 ImGui.Separator();
 
+                if (ImGui.MenuItem("Launch without 3rd-party plugins"))
+                {
+                    this.OnLogin?.Invoke(LoginAction.GameNoThirdparty);
+                }
+
+                ImGui.Separator();
+
                 if (ImGui.MenuItem("Patch without launching"))
                 {
                     this.OnLogin?.Invoke(LoginAction.GameNoLaunch);

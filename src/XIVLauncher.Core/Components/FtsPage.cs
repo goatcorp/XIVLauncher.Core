@@ -19,6 +19,17 @@ public class FtsPage : Page
 
     public void OpenFtsIfNeeded()
     {
+        if (CoreEnvironmentSettings.IsDeckFirstRun.HasValue)
+        {
+            if (CoreEnvironmentSettings.IsDeckFirstRun.Value)
+            {
+                App.State = LauncherApp.LauncherState.Fts;
+                return;
+            }
+            else
+                return;
+        }
+        
         if (!(App.Settings.CompletedFts ?? false) && Program.IsSteamDeckHardware)
         {
             App.State = LauncherApp.LauncherState.Fts;

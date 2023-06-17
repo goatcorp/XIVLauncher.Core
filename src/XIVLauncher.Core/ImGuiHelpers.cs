@@ -33,4 +33,14 @@ public static class ImGuiHelpers
         var window = (int)ImGui.GetWindowWidth();
         ImGui.SetCursorPosX(window / 2 - itemWidth / 2);
     }
+    
+    public static void AddTooltip(string text)
+    {
+        if (ImGui.IsItemHovered())
+        {
+            ImGui.BeginTooltip();
+            ImGui.TextUnformatted(text);
+            ImGui.EndTooltip();
+        }
+    }
 }
