@@ -27,13 +27,15 @@ with open(manifestFile, 'r') as f:
                         with open(manifestFile, 'w') as f:
                             yaml.dump(yamlFile, f)
                             manifestUpdateSuccess = True
-                            break;
+                            break
     except KeyError:
         pass
 
     if manifestUpdateSuccess is False:
         print('Error: failed to update XIVLauncher.Core manifest.. exiting')
         sys.exit(1)
+
+    print('Updated XIVLauncher.Core manifest')
 
 # Read the appstream file and update the tag and commit
 with open(appstreamFile, 'r') as f:
@@ -48,8 +50,20 @@ with open(appstreamFile, 'r') as f:
                 tree.write(appstreamFile)
                 appstreamUpdateSuccess = True
                 break
+
     if appstreamUpdateSuccess is False:
         print('Error: failed to update appstream file.. exiting')
         sys.exit(1)
+
+    print('Updated appstream file')
+
+# Python XML parser doesn't add the XML header, so we need to add it manually
+with open(appstreamFile, 'r') as f:
+    lines = f.readlines()
+    lines.insert(0, '<?xml version="1.0" encoding="UTF-8"?>\n')
+    with open(appstreamFile, 'w') as f:
+        f.writelines(lines)
+
+    print('Added XML header to appstream file')
 
 print(f'Updated {manifestFile} and {appstreamFile} to tag {newTag} and commit {newCommit} on {date.today().strftime("%Y-%m-%d")}')
