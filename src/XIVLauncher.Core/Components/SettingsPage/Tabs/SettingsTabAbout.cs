@@ -47,12 +47,6 @@ public class SettingsTabAbout : SettingsTab
             PlatformHelpers.OpenBrowser(Path.Combine(AppContext.BaseDirectory, "license.txt"));
         }
 
-        if (ImGui.Button("Generate Troubleshooting Pack"))
-        {
-            PackGenerator.SavePack(Program.storage);
-            PlatformHelpers.OpenBrowser(Program.storage.GetFolder("logs").FullName);
-        }
-
         base.Draw();
     }
 }
