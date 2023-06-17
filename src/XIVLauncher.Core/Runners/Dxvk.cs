@@ -178,6 +178,8 @@ public static class Dxvk
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        Settings = new Runner(folder, url, env);
     }
 
     public static bool CheckDxvkHudString(string? customHud)
