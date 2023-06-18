@@ -731,6 +731,10 @@ public class MainPage : Page
             }
         }
 
+        var winver = (App.Settings.SetWin7 ?? true) ? "win7" : "win10";
+
+        Program.CompatibilityTools.RunInPrefix($"winecfg /v {winver}");
+
         if (Environment.OSVersion.Platform == PlatformID.Win32NT)
         {
             runner = new WindowsGameRunner(dalamudLauncher, dalamudOk, Program.DalamudUpdater.Runtime);
