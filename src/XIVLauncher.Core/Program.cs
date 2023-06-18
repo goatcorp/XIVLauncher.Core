@@ -341,8 +341,7 @@ class Program
         }
         if (Config.ReShadeFix.Value)
             wineoverride += ";d3dcompiler_47=n";
-        var winepath = (Config.WineType == WineType.Custom) ? Config.WineBinaryPath : "";
-        CompatibilityTools = new CompatibilityTools(winepath, Wine.Settings, Dxvk.Settings, wineenv, wineoverride, winePrefix, toolsFolder, wineLogFile);
+        CompatibilityTools = new CompatibilityTools(Wine.Settings, Dxvk.Settings, wineenv, wineoverride, winePrefix, toolsFolder, wineLogFile);
     }
 
     public static void ShowWindow()

@@ -732,10 +732,6 @@ public class MainPage : Page
             }
         }
 
-        var winver = (App.Settings.SetWin7 ?? true) ? "win7" : "win10";
-
-        Program.CompatibilityTools.RunInPrefix($"winecfg /v {winver}");
-
         if (Environment.OSVersion.Platform == PlatformID.Win32NT)
         {
             runner = new WindowsGameRunner(dalamudLauncher, dalamudOk, Program.DalamudUpdater.Runtime);
@@ -760,8 +756,11 @@ public class MainPage : Page
             var _ = Task.Run(async () =>
             {
                 var tempPath = App.Storage.GetFolder("temp");
+                var winver = (App.Settings.SetWin7 ?? true) ? "win7" : "win10";
 
                 await Program.CompatibilityTools.EnsureTool(tempPath).ConfigureAwait(false);
+
+                Program.CompatibilityTools.RunInPrefix($"winecfg /v {winver}");
 
                 var gameFixApply = new GameFixApply(App.Settings.GamePath, App.Settings.GameConfigPath, Program.CompatibilityTools.Prefix, tempPath);
                 gameFixApply.UpdateProgress += (text, hasProgress, progress) =>

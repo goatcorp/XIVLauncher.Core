@@ -55,7 +55,7 @@ public enum DxvkHudType
 
 public static class Dxvk
 {
-    public static Runner Settings { get; private set; }
+    public static DxvkRunner Settings { get; private set; }
 
     private const string ALLOWED_CHARS = "^[0-9a-zA-Z,=.]+$";
 
@@ -179,7 +179,8 @@ public static class Dxvk
                 throw new ArgumentOutOfRangeException();
         }
 
-        Settings = new Runner(folder, url, env);
+        var prefix = new DirectoryInfo(Path.Combine(Program.storage.Root.FullName, "wineprefix"));
+        Settings = new DxvkRunner(folder, url, prefix, env);
     }
 
     public static bool CheckDxvkHudString(string? customHud)

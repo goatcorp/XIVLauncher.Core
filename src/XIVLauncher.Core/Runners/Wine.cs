@@ -41,13 +41,31 @@ public static class Wine
     private const string DISTRO = "ubuntu";
 #endif
 
-    public static Runner Settings { get; private set; }
+    public static WineRunner Settings { get; private set; }
 
     public static void Initialize()
     {
-        var version = (Program.Config.WineType == WineType.Managed) ? WineVersion.Wine8_5 : Program.Config.WineVersion;
+        var winepath = "";
         var folder = "";
         var url = "";
+        var prefix = new DirectoryInfo(Path.Combine(Program.storage.Root.FullName, "wineprefix"));
+        var version = WineVersion.Wine8_5;
+        switch (Program.Config.WineType ?? WineType.Managed)
+        {
+            case WineType.Custom:
+                winepath = Program.Config.WineBinaryPath ?? "/usr/bin";
+                break;
+
+            case WineType.Managed:
+                break;
+
+            case WineType.Other:
+                version = Program.Config.WineVersion ?? WineVersion.Wine8_5;
+                break;
+            
+            default:
+                throw new ArgumentOutOfRangeException("Bad value for WineVersion");
+        }
 
         switch (version)
         {
@@ -78,7 +96,7 @@ public static class Wine
         if (Program.Config.ESyncEnabled ?? true) env.Add("WINEESYNC", "1");
         if (Program.Config.FSyncEnabled ?? false) env.Add("WINEFSYNC", "1");
         
-        Settings = new Runner(folder, url, env);
+        Settings = new WineRunner(winepath, folder, url, Program.storage.Root, env);
     }
 }
 
