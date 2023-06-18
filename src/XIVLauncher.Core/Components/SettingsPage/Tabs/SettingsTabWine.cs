@@ -50,6 +50,8 @@ public class SettingsTabWine : SettingsTab
                 }
             },
 
+            new SettingsEntry<bool>("Set Windows version to 7", "Default is 10. Setting to 7 may fix some networking issues with plugins.", () => Program.Config.SetWin7 ?? false, b => Program.Config.SetWin7 = b),
+
             new SettingsEntry<Dxvk.DxvkHudType>("DXVK Overlay", "Configure how much of the DXVK overlay is to be shown.", () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type),
             new SettingsEntry<string>("WINEDEBUG Variables", "Configure debug logging for wine. Useful for troubleshooting.", () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s)
         };
