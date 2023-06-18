@@ -731,7 +731,7 @@ public class MainPage : Page
             }
         }
 
-        var winver = (App.Settings.SetWin7 ?? false) ? "win7" : "win10";
+        var winver = (App.Settings.SetWin7 ?? true) ? "win7" : "win10";
 
         Program.CompatibilityTools.RunInPrefix($"winecfg /v {winver}");
 
