@@ -124,6 +124,7 @@ class Program
         Config.FSyncEnabled ??= false;
         Config.DxvkHudCustom ??= "fps,frametimes,gpuload,version";
         Config.DxvkMangoCustom ??= Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "MangoHud", "MangoHud.conf");
+        Config.SetWin7 ??= true;
 
         Config.WineType ??= WineType.Managed;
         Config.WineBinaryPath ??= "/usr/bin";

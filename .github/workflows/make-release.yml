@@ -1,16 +1,26 @@
-name: "PR XLCore to Flatpak"
+name: "Release XLCore"
 
 on:
   push:
     tags:
-      - "v*"
+      - "*.*.*"
+
+permissions:
+  contents: write
 
 jobs:
   Release:
+	if: github.repository == 'goatcorp/XIVLauncher.Core'
     runs-on: ubuntu-latest
     env:
+      # These are the user credentials that will be used to make the PR.
       COMMIT_USER: github-actions[bot]
       COMMIT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+      # Where the changes will be made.
+      HEAD_BRANCH: xlcore-${{ github.ref_name }}
+      # Where the PR will be made to.
+      BASE_REPO: flathub/dev.goats.xivlauncher
+      BASE_BRANCH: master
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -27,15 +37,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 6.0.x
-
-      - name: Dotnet Restore
-        working-directory: ./src/XIVLauncher.Core/
-        run: dotnet restore
-
-      - name: Dotnet Build
-        working-directory: ./src/XIVLauncher.Core/
-        run: dotnet build --configuration Release --no-restore
+          dotnet-version: 6.0.x # Set this to be the same as the projects required dotnet version.
 
       - name: Setup Python3
         uses: actions/setup-python@v4
@@ -47,8 +49,24 @@ jobs:
           sudo apt update -y
           sudo apt install flatpak -y
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 
-          flatpak install --user org.freedesktop.Sdk.Extension.dotnet6/x86_64/21.08 -y
-          flatpak install --user org.freedesktop.Sdk/x86_64/21.08 -y
+          flatpak install --user org.freedesktop.Sdk.Extension.dotnet6/x86_64/22.08 -y # Update this when needed.
+          flatpak install --user org.freedesktop.Sdk/x86_64/22.08 -y # As well as this, if dependency generation is failing.
+
+      - name: Dotnet Restore
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet restore
+
+      - name: Dotnet Build (Default)
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet publish -r linux-x64 --sc --configuration Release --no-restore -o ./dist/XIVLauncher.Core
+
+      - name: Dotnet Build (Arch)
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet publish -r linux-x64 --sc --configuration Release -p:DefineConstants=WINE_XIV_ARCH_LINUX --no-restore -o ./dist/XIVLauncher.Core-arch
+
+      - name: Dotnet Build (Fedora)
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet publish -r linux-x64 --sc --configuration Release -p:DefineConstants=WINE_XIV_FEDORA_LINUX --no-restore -o ./dist/XIVLauncher.Core-fedora
 
       - name: Generate nuget-dependencies.json
         working-directory: ./src/XIVLauncher.Core/
@@ -65,25 +83,57 @@ jobs:
 
       - name: Make PR to Flatpak repository
         run: |
-          echo ${{ secrets.PUSH_TOKEN }}| gh auth login --with-token
+          # Authenticate with GitHub CLI.
+          echo ${{ secrets.PUSH_TOKEN }} | gh auth login --with-token
 
-          git clone https://${{ secrets.PUSH_TOKEN }}@github.com/flathub/dev.goats.xivlauncher /tmp/xlcore-flatpak
-          mv ./src/XIVLauncher.Core/nuget-dependencies.json /tmp/xlcore-flatpak/
-          mv ./.github/scripts/update_flatpak_manifest.py /tmp/xlcore-flatpak/
+          # Clone the repository we want to make the PR to.
+          gh repo fork ${{ env.BASE_REPO }} --clone=true --remote=true /tmp/xlcore-flatpak
+
+          # Create a new branch for the PR.
+          git -C /tmp/xlcore-flatpak checkout -b ${{ env.HEAD_BRANCH }}
+
+          # Copy the files we need to the forked repository.
+          cp ./src/XIVLauncher.Core/nuget-dependencies.json /tmp/xlcore-flatpak/
+          cp ./.github/scripts/update_flatpak_manifest.py /tmp/xlcore-flatpak/
+
+          # Update the manifest.
           cd /tmp/xlcore-flatpak
-
           python3 -m pip install pyyaml
-          python3 update_flatpak_manifest.py dev.goats.xivlauncher.yml $(echo ${{ github.ref_name }} | sed -e "s/^v//g") ${{ github.sha }}
+          python3 update_flatpak_manifest.py dev.goats.xivlauncher.yml dev.goats.xivlauncher.appdata.xml ${{ github.ref_name }} ${{ github.sha }}
           rm update_flatpak_manifest.py
 
-          git checkout -b xlcore-${{ github.ref_name }}
+          # Commit the changes.
           git add .
-          git commit -m "Update XIVLauncher.Core to ${{ github.ref_name }}"
-          git push --set-upstream origin xlcore-${{ github.ref_name }}
+          git commit -m "Update to ${{ github.ref_name }}"
 
-          gh pr create -t "Update XIVLauncher.Core to ${{ github.ref_name }}" -b "This is an automated pull request" -B master
-          
+          # Get the remote url and splice the token into it.
+          REMOTE_URL=$(git remote get-url origin)
+          REMOTE_URL=${REMOTE_URL/https:\/\//https:\/\/${{ secrets.PUSH_TOKEN }}@}
+          git remote set-url origin $REMOTE_URL
+
+          # Push the changes to the fork.
+          git remote -v 
+          git push --set-upstream origin ${{ env.HEAD_BRANCH }}
+
+          # Make a PR from the fork to the upstream repository.
+          gh pr create --repo ${{ env.BASE_REPO }} --title "Update to ${{ github.ref_name }}" --body "This PR was automatically generated by GitHub Actions."
+
+      - name: Compress release files
+        run: |
+          sudo apt install zip -y
+          mkdir -p ./dist
+          # remove leading directories
+          tar -czf ./dist/XIVLauncher.Core.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core .
+          tar -czf ./dist/XIVLauncher.Core-arch.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core-arch .
+          tar -czf ./dist/XIVLauncher.Core-fedora.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core-fedora .
+
       - name: Release on GitHub
         uses: softprops/action-gh-release@v1
         with:
           generate_release_notes: true
+          # body_path: .github/release_notices.md
+          # append_body: true # and this to make sure they are appended, not replacing the original.
+          files: |
+            ./dist/XIVLauncher.Core.tar.gz
+            ./dist/XIVLauncher.Core-arch.tar.gz
+            ./dist/XIVLauncher.Core-fedora.tar.gz
