@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   Release:
-	if: github.repository == 'goatcorp/XIVLauncher.Core'
+    if: github.repository == 'goatcorp/XIVLauncher.Core'
     runs-on: ubuntu-latest
     env:
       # These are the user credentials that will be used to make the PR.
