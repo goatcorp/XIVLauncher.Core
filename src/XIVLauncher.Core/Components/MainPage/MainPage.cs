@@ -760,6 +760,14 @@ public class MainPage : Page
 
                 await Program.CompatibilityTools.EnsureTool(tempPath).ConfigureAwait(false);
 
+                if (Program.Config.DxvkVersion == DxvkVersion.Disabled)
+                {
+                    if (Program.Config.WineD3DUseVK ?? false)
+                        Program.CompatibilityTools.AddRegistryKey("HKEY_CURRENT_USER\\Software\\Wine\\Direct3D", "renderer", "vulkan");
+                    else
+                        Program.CompatibilityTools.AddRegistryKey("HKEY_CURRENT_USER\\Software\\Wine\\Direct3D", "renderer", "gl");
+                }
+
                 Program.CompatibilityTools.RunInPrefix($"winecfg /v {winver}");
 
                 var gameFixApply = new GameFixApply(App.Settings.GamePath, App.Settings.GameConfigPath, Program.CompatibilityTools.Prefix, tempPath);

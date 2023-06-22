@@ -69,6 +69,8 @@ public interface ILauncherConfig
 
     public DxvkVersion? DxvkVersion { get; set; }
 
+    public bool? WineD3DUseVK { get; set; }
+
     public string? WineBinaryPath { get; set; }
 
     public bool? GameModeEnabled { get; set; }
@@ -86,8 +88,6 @@ public interface ILauncherConfig
     public string? DxvkMangoCustom { get; set; }
 
     public int? DxvkFrameRate { get; set; }
-
-    public bool? ReShadeFix { get; set; }
 
     public string? WineDebugVars { get; set; }
 

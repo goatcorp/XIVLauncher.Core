@@ -31,7 +31,7 @@ public enum WineVersion
     Wine7_10,
 }
 
-public static class Wine
+public static class WineManager
 {
 #if WINE_XIV_ARCH_LINUX
     private const string DISTRO = "arch";
@@ -41,11 +41,10 @@ public static class Wine
     private const string DISTRO = "ubuntu";
 #endif
 
-    public static WineRunner Settings { get; private set; }
-
-    public static void Initialize()
+    public static WineRunner Initialize()
     {
         var winepath = "";
+        var wineargs = "";
         var folder = "";
         var url = "";
         var prefix = new DirectoryInfo(Path.Combine(Program.storage.Root.FullName, "wineprefix"));
@@ -96,7 +95,7 @@ public static class Wine
         if (Program.Config.ESyncEnabled ?? true) env.Add("WINEESYNC", "1");
         if (Program.Config.FSyncEnabled ?? false) env.Add("WINEFSYNC", "1");
         
-        Settings = new WineRunner(winepath, folder, url, Program.storage.Root, env);
+        return new WineRunner(winepath, wineargs, folder, url, Program.storage.Root, env);
     }
 }
 

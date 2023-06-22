@@ -53,23 +53,16 @@ public enum DxvkHudType
     MangoHudFull,
 }
 
-public static class Dxvk
+public static class DxvkManager
 {
-    public static DxvkRunner Settings { get; private set; }
-
     private const string ALLOWED_CHARS = "^[0-9a-zA-Z,=.]+$";
 
     private const string ALLOWED_WORDS = "^(?:devinfo|fps|frametimes|submissions|drawcalls|pipelines|descriptors|memory|gpuload|version|api|cs|compiler|samplers|scale=(?:[0-9])*(?:.(?:[0-9])+)?)$";
 
 
-    public static void Initialize()
+    public static DxvkRunner Initialize()
     {
-        if (Program.Config.DxvkVersion == DxvkVersion.Disabled)
-        {
-            Settings = null;
-            return;
-        }
-
+        var runnerType = "Dxvk";
         var folder = "";
         var url = "";
         var rootfolder = Program.storage.Root.FullName;
@@ -108,16 +101,30 @@ public static class Dxvk
                 break;
             
             default:
-                throw new ArgumentOutOfRangeException("Bad Value for DxvkVersion");
+                env.Add("PROTON_USE_WINED3D", "1");
+                runnerType = "WineD3D";
+                env.Add("MANGHUD_DLSYM", "1");
+                break;
         }
 
-        var dxvkCachePath = new DirectoryInfo(Path.Combine(dxvkfolder, "cache"));
-        if (!dxvkCachePath.Exists) dxvkCachePath.Create();
-        env.Add("DXVK_STATE_CACHE_PATH", Path.Combine(dxvkCachePath.FullName, folder));
+        if (runnerType == "Dxvk")
+        {
+            var dxvkCachePath = new DirectoryInfo(Path.Combine(dxvkfolder, "cache"));
+            if (!dxvkCachePath.Exists) dxvkCachePath.Create();
+            env.Add("DXVK_STATE_CACHE_PATH", Path.Combine(dxvkCachePath.FullName, folder));
+        }
 
+        var hudType = Program.Config.DxvkHudType;
+        if (Program.Config.DxvkVersion == DxvkVersion.Disabled)
+        {
+            if (!Program.Config.WineD3DUseVK.Value)
+                hudType = DxvkHudType.None;
+            else if (new [] {DxvkHudType.Custom, DxvkHudType.Fps, DxvkHudType.Full}.Contains(Program.Config.DxvkHudType))
+                hudType = DxvkHudType.None;
+        }
         var dxvkHudCustom = Program.Config.DxvkHudCustom ?? "fps,frametimes,gpuload,version";
         var mangoHudConfig = string.IsNullOrEmpty(Program.Config.DxvkMangoCustom) ? null : new FileInfo(Program.Config.DxvkMangoCustom);
-        switch (Program.Config.DxvkHudType)
+        switch (hudType)
         {
              case DxvkHudType.Fps:
                 env.Add("DXVK_HUD","fps");
@@ -180,7 +187,9 @@ public static class Dxvk
         }
 
         var prefix = new DirectoryInfo(Path.Combine(Program.storage.Root.FullName, "wineprefix"));
-        Settings = new DxvkRunner(folder, url, prefix, env);
+        var settings = new DxvkRunner(folder, url, prefix, env);
+        settings.RunnerType = runnerType;
+        return settings;
     }
 
     public static bool CheckDxvkHudString(string? customHud)

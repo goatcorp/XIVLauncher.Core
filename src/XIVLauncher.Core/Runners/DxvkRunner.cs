@@ -14,7 +14,7 @@ namespace XIVLauncher.Core.Runners;
 
 public class DxvkRunner : Runner
 {
-    public override string RunnerType => "Dxvk";
+    public override string RunnerType { get; set; }
 
     private DirectoryInfo ToolFolder => new DirectoryInfo(Path.Combine(Program.storage.Root.FullName, "compatibilitytool", "dxvk"));
 

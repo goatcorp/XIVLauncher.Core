@@ -116,8 +116,8 @@ class Program
         Config.GlobalScale ??= 1.0f;
 
         Config.GameModeEnabled ??= false;
-        Config.ReShadeFix ??= false;
         Config.DxvkVersion ??= DxvkVersion.v1_10_3;
+        Config.WineD3DUseVK ??= false;
         Config.DxvkAsyncEnabled ??= true;
         Config.DxvkFrameRate ??= 0;
         Config.ESyncEnabled ??= true;
@@ -326,22 +326,19 @@ class Program
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
         var toolsFolder = storage.GetFolder("compatibilitytool");
-        Wine.Initialize();
-        Dxvk.Initialize();
-        var wineoverride = "msquic=,mscoree=n,b;";
+        var wine = WineManager.Initialize();
+        var dxvk = DxvkManager.Initialize();
+        var wineoverride = "msquic,mscoree=n,b;";
         var wineenv = new Dictionary<string, string>();
-        if (Dxvk.Settings is null)
+        if (dxvk.RunnerType == "WineD3D")
         {
             wineoverride += "d3d9,d3d11,d3d10core,dxgi=b";
-            wineenv.Add("PROTON_USE_WINED3D", "1");  // needed for proton-based wine to work with WineD3D.
         }
         else
         {
             wineoverride = "d3d9,d3d11,d3d10core,dxgi=n,b";
         }
-        if (Config.ReShadeFix.Value)
-            wineoverride += ";d3dcompiler_47=n";
-        CompatibilityTools = new CompatibilityTools(Wine.Settings, Dxvk.Settings, wineenv, wineoverride, winePrefix, toolsFolder, wineLogFile);
+        CompatibilityTools = new CompatibilityTools(wine, dxvk, wineenv, wineoverride, winePrefix, toolsFolder, wineLogFile);
     }
 
     public static void ShowWindow()
@@ -429,7 +426,7 @@ class Program
     public static void ClearTools(bool tsbutton = false)
     {
         storage.GetFolder("compatibilitytool").Delete(true);
-        storage.GetFolder("compatibilitytool/beta");
+        storage.GetFolder("compatibilitytool/wine");
         storage.GetFolder("compatibilitytool/dxvk");
         if (tsbutton) CreateCompatToolsInstance();
     }

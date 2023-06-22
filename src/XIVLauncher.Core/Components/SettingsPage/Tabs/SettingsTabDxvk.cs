@@ -11,6 +11,7 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 public class SettingsTabDxvk : SettingsTab
 {
     private SettingsEntry<DxvkVersion> dxvkVersionSetting;
+    private SettingsEntry<bool> wineD3DUseVk;
     private SettingsEntry<DxvkHudType> dxvkHudSetting;
 
     public SettingsTabDxvk()
@@ -26,6 +27,16 @@ public class SettingsTabDxvk : SettingsTab
                     return null;
                 },
             },
+            wineD3DUseVk = new SettingsEntry<bool>("Use WineD3D Vulkan renderer", "Use Vulkan instead of OpenGL for WineD3D. Unstable. May cause system to lock up.", () => Program.Config.WineD3DUseVK ?? false, b => Program.Config.WineD3DUseVK = b)
+            {
+                CheckVisibility = () => dxvkVersionSetting.Value == DxvkVersion.Disabled,
+                CheckWarning = b =>
+                {
+                    if (b)
+                        return "WARNING! This is very experimental, and may cause your system to crash or hang. If you still want to use it, disable Dalamud.";
+                    return null;
+                },
+            },
             new SettingsEntry<bool>("Enable DXVK ASYNC", "Enable DXVK ASYNC patch.", () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
             {
                 CheckVisibility = () => (new [] {DxvkVersion.v1_10_3, DxvkVersion.v2_0}.Contains(dxvkVersionSetting.Value)),
@@ -36,9 +47,9 @@ public class SettingsTabDxvk : SettingsTab
                     return null;
                 },
             },
-            dxvkHudSetting = new SettingsEntry<DxvkHudType>("DXVK Overlay", "DXVK Hud is included. MangoHud must be installed separately.\nFlatpak XIVLauncher needs flatpak MangoHud.", () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type)
+            dxvkHudSetting = new SettingsEntry<DxvkHudType>("DXVK Overlay", "DXVK Hud is included with Dxvk. It doesn't work if Dxvk is disabled.\nMangoHud must be installed separately. Flatpak XIVLauncher needs flatpak MangoHud.", () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type)
             {
-                CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled,
+                CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled || wineD3DUseVk.Value,
                 CheckValidity = type =>
                 {
                     if ((type == DxvkHudType.MangoHud || type == DxvkHudType.MangoHudCustom || type == DxvkHudType.MangoHudFull)
@@ -53,14 +64,14 @@ public class SettingsTabDxvk : SettingsTab
                 CheckVisibility = () => dxvkHudSetting.Value == DxvkHudType.Custom && dxvkVersionSetting.Value != DxvkVersion.Disabled,
                 CheckWarning = s =>
                 {
-                    if(!Dxvk.CheckDxvkHudString(s))
+                    if(!DxvkManager.CheckDxvkHudString(s))
                         return "That's not a valid hud string";
                     return null;
                 },
             },
             new SettingsEntry<string>("MangoHud Custom Path", "Set a custom path for MangoHud config file.", () => Program.Config.DxvkMangoCustom, s => Program.Config.DxvkMangoCustom = s)
             {
-                CheckVisibility = () => dxvkHudSetting.Value == DxvkHudType.MangoHudCustom && dxvkVersionSetting.Value != DxvkVersion.Disabled,
+                CheckVisibility = () => dxvkHudSetting.Value == DxvkHudType.MangoHudCustom  && dxvkVersionSetting.Value != DxvkVersion.Disabled,
                 CheckWarning = s =>
                 {
                     if(!File.Exists(s))

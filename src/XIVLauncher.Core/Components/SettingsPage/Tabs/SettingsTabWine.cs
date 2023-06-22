@@ -55,10 +55,7 @@ public class SettingsTabWine : SettingsTab
                     return null;
                 }
             },
-            new SettingsEntry<bool>("Enable ReShade Fix", "Passes d3dcompiler_47=n as instructed by the linux ReShade installer.", () => Program.Config.ReShadeFix ?? false, b => Program.Config.ReShadeFix = b),
-
-            new SettingsEntry<bool>("Set Windows version to 7", "Default for Wine 8.1+ is Windows 10, but this causes issues with some Dalamud plugins. Windows 7 is recommended for now.", () => Program.Config.SetWin7 ?? true, b => Program.Config.SetWin7 = b),
-
+            new SettingsEntry<bool>("Set Windows version to 7", "Default for Wine 8.1+ is Windows 10, but this can cause issues with some Dalamud plugins. Windows 7 is recommended for now.", () => Program.Config.SetWin7 ?? true, b => Program.Config.SetWin7 = b),
             new SettingsEntry<string>("WINEDEBUG Variables", "Configure debug logging for wine. Useful for troubleshooting.", () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s)
         };
     }
