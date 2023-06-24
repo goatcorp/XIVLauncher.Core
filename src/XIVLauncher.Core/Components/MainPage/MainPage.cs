@@ -622,9 +622,10 @@ public class MainPage : Page
 
         Troubleshooting.LogTroubleshooting();
 
-        var dalamudLauncher = new DalamudLauncher(dalamudRunner, Program.DalamudUpdater, App.Settings.DalamudLoadMethod.GetValueOrDefault(DalamudLoadMethod.DllInject),
-            App.Settings.GamePath, App.Storage.Root, App.Settings.ClientLanguage ?? ClientLanguage.English, App.Settings.DalamudLoadDelay, false, false, noThird,
-            Troubleshooting.GetTroubleshootingJson());
+        var dalamudLauncher = new DalamudLauncher(dalamudRunner, Program.DalamudUpdater,
+            App.Settings.DalamudLoadMethod.GetValueOrDefault(DalamudLoadMethod.DllInject), App.Settings.GamePath,
+            App.Storage.Root, App.Storage.GetFolder("logs"), App.Settings.ClientLanguage ?? ClientLanguage.English,
+            App.Settings.DalamudLoadDelay, false, false, noThird, Troubleshooting.GetTroubleshootingJson());
 
         try
         {
