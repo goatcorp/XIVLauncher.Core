@@ -79,7 +79,7 @@ public static class WineManager
         {
             var ldPreload = Environment.GetEnvironmentVariable("LD_PRELOAD") ?? "";
             if (!ldPreload.Contains("libgamemodeauto.so.0"))
-                ldPreload = (ldPreload.Equals("")) ? "libgamemodeaudo.so" : ldPreload + ":libgamemodeauto.so.0";
+                ldPreload = (ldPreload.Equals("")) ? "libgamemodeauto.so.0" : ldPreload + ":libgamemodeauto.so.0";
             env.Add("LD_PRELOAD", ldPreload);
         }
         if (!string.IsNullOrEmpty(Program.Config.WineDebugVars))

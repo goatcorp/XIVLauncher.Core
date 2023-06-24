@@ -22,7 +22,7 @@ public class SettingsTabDxvk : SettingsTab
                 CheckWarning = type =>
                 {
                     if (new [] {DxvkVersion.v2_1, DxvkVersion.v2_2}.Contains(type))
-                        return "May not work with pre-8.0 or non-proton wine builds. AMD users may need to use env variable RADV_PERFTEST=gpl";
+                        return "May not work with older graphics cards. AMD users may need to use env variable RADV_PERFTEST=gpl";
                     return null;
                 },
             },
