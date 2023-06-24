@@ -3,7 +3,6 @@ using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.Unix.Compatibility;
-using XIVLauncher.Core.Runners;
 
 namespace XIVLauncher.Core.Configuration;
 

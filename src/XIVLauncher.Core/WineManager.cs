@@ -8,15 +8,12 @@ using Serilog;
 using XIVLauncher.Common;
 using XIVLauncher.Common.Unix.Compatibility;
 
-namespace XIVLauncher.Core.Runners;
+namespace XIVLauncher.Core;
 
 public enum WineType
 {
-    [SettingsDescription("Managed by XIVLauncher", "The game installation and wine setup is managed by XIVLauncher - you can leave it up to us.")]
+    [SettingsDescription("Managed by XIVLauncher", "Choose a patched version of wine made specifically for XIVLauncher")]
     Managed,
-
-    [SettingsDescription("User Managed", "Select from a list of patched wine versions. We'll download them for you.")]
-    Other,
 
     [SettingsDescription("Custom", "Point XIVLauncher to a custom location containing wine binaries to run the game with.")]
     Custom,
@@ -47,8 +44,7 @@ public static class WineManager
         var wineargs = "";
         var folder = "";
         var url = "";
-        var prefix = new DirectoryInfo(Path.Combine(Program.storage.Root.FullName, "wineprefix"));
-        var version = WineVersion.Wine8_5;
+        var version = Program.Config.WineVersion ?? WineVersion.Wine8_5;
         switch (Program.Config.WineType ?? WineType.Managed)
         {
             case WineType.Custom:
@@ -58,12 +54,8 @@ public static class WineManager
             case WineType.Managed:
                 break;
 
-            case WineType.Other:
-                version = Program.Config.WineVersion ?? WineVersion.Wine8_5;
-                break;
-            
             default:
-                throw new ArgumentOutOfRangeException("Bad value for WineVersion");
+                throw new ArgumentOutOfRangeException("Bad value for WineType");
         }
 
         switch (version)
@@ -94,8 +86,9 @@ public static class WineManager
             env.Add("WINEDEBUG", Program.Config.WineDebugVars);
         if (Program.Config.ESyncEnabled ?? true) env.Add("WINEESYNC", "1");
         if (Program.Config.FSyncEnabled ?? false) env.Add("WINEFSYNC", "1");
+        env.Add("WINEPREFIX", Path.Combine(Program.storage.Root.FullName, "wineprefix"));
         
-        return new WineRunner(winepath, wineargs, folder, url, Program.storage.Root, env);
+        return new WineRunner(winepath, wineargs, folder, url, Program.storage.Root.FullName, env);
     }
 }
 

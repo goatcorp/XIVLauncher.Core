@@ -22,7 +22,6 @@ using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
-using XIVLauncher.Core.Runners;
 
 namespace XIVLauncher.Core;
 
@@ -330,13 +329,13 @@ class Program
         var dxvk = DxvkManager.Initialize();
         var wineoverride = "msquic,mscoree=n,b;";
         var wineenv = new Dictionary<string, string>();
-        if (dxvk.RunnerType == "WineD3D")
+        if (dxvk.IsDxvk)
         {
-            wineoverride += "d3d9,d3d11,d3d10core,dxgi=b";
+            wineoverride += "d3d9,d3d11,d3d10core,dxgi=n,b";
         }
         else
         {
-            wineoverride = "d3d9,d3d11,d3d10core,dxgi=n,b";
+            wineoverride += "d3d9,d3d11,d3d10core,dxgi=b";
         }
         CompatibilityTools = new CompatibilityTools(wine, dxvk, wineenv, wineoverride, winePrefix, toolsFolder, wineLogFile);
     }
@@ -426,7 +425,7 @@ class Program
     public static void ClearTools(bool tsbutton = false)
     {
         storage.GetFolder("compatibilitytool").Delete(true);
-        storage.GetFolder("compatibilitytool/wine");
+        storage.GetFolder("compatibilitytool/beta");
         storage.GetFolder("compatibilitytool/dxvk");
         if (tsbutton) CreateCompatToolsInstance();
     }

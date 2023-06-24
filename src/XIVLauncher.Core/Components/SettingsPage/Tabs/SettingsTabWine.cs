@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using XIVLauncher.Common.Unix.Compatibility;
 using XIVLauncher.Common.Util;
-using XIVLauncher.Core.Runners;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -20,7 +19,7 @@ public class SettingsTabWine : SettingsTab
 
             new SettingsEntry<WineVersion>("Wine Version", "Choose a patched wine version.", () => Program.Config.WineVersion ?? WineVersion.Wine8_5, x => Program.Config.WineVersion = x)
             {
-                CheckVisibility = () => startupTypeSetting.Value == WineType.Other
+                CheckVisibility = () => startupTypeSetting.Value == WineType.Managed
             },
             
             new SettingsEntry<string>("Wine Binary Path",

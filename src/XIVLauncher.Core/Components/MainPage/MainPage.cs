@@ -19,7 +19,6 @@ using XIVLauncher.Common.Util;
 using XIVLauncher.Core.Accounts;
 using XIVLauncher.Common.Game.Exceptions;
 using XIVLauncher.Core.Support;
-using XIVLauncher.Core.Runners;
 
 namespace XIVLauncher.Core.Components.MainPage;
 
@@ -745,8 +744,8 @@ public class MainPage : Page
                 else if (!Directory.Exists(App.Settings.WineBinaryPath))
                     throw new Exception("Custom wine binary path is invalid: no such directory.\n" +
                         "Check path carefully for typos: " + App.Settings.WineBinaryPath);
-                else if (!File.Exists(Path.Combine(App.Settings.WineBinaryPath,"wine64")))
-                    throw new Exception("Custom wine binary path is invalid: no wine64 found at that location.\n" +
+                else if (!File.Exists(Path.Combine(App.Settings.WineBinaryPath, "wine64")) && !File.Exists(Path.Combine(App.Settings.WineBinaryPath, "wine")))
+                    throw new Exception("Custom wine binary path is invalid: no wine or wine64 found at that location.\n" +
                         "Check path carefully for typos: " + App.Settings.WineBinaryPath);
             }
 

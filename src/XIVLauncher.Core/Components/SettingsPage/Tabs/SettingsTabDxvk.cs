@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using XIVLauncher.Common.Unix.Compatibility;
 using XIVLauncher.Common.Util;
-using XIVLauncher.Core.Runners;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -71,7 +70,7 @@ public class SettingsTabDxvk : SettingsTab
             },
             new SettingsEntry<string>("MangoHud Custom Path", "Set a custom path for MangoHud config file.", () => Program.Config.DxvkMangoCustom, s => Program.Config.DxvkMangoCustom = s)
             {
-                CheckVisibility = () => dxvkHudSetting.Value == DxvkHudType.MangoHudCustom  && dxvkVersionSetting.Value != DxvkVersion.Disabled,
+                CheckVisibility = () => dxvkHudSetting.Value == DxvkHudType.MangoHudCustom  && !(dxvkVersionSetting.Value == DxvkVersion.Disabled && !wineD3DUseVk.Value),
                 CheckWarning = s =>
                 {
                     if(!File.Exists(s))

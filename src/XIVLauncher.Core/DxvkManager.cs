@@ -9,7 +9,7 @@ using Serilog;
 using XIVLauncher.Common;
 using XIVLauncher.Common.Unix.Compatibility;
 
-namespace XIVLauncher.Core.Runners;
+namespace XIVLauncher.Core;
 
 public enum DxvkVersion
 {
@@ -62,7 +62,7 @@ public static class DxvkManager
 
     public static DxvkRunner Initialize()
     {
-        var runnerType = "Dxvk";
+        var isDxvk = true;
         var folder = "";
         var url = "";
         var rootfolder = Program.storage.Root.FullName;
@@ -100,14 +100,18 @@ public static class DxvkManager
                 url = "https://github.com/doitsujin/dxvk/releases/download/v2.2/dxvk-2.2.tar.gz";
                 break;
             
-            default:
+
+            case DxvkVersion.Disabled:
                 env.Add("PROTON_USE_WINED3D", "1");
-                runnerType = "WineD3D";
                 env.Add("MANGHUD_DLSYM", "1");
+                isDxvk = false;
                 break;
+
+            default:
+                throw new ArgumentOutOfRangeException("Bad value for DxvkVersion");
         }
 
-        if (runnerType == "Dxvk")
+        if (isDxvk)
         {
             var dxvkCachePath = new DirectoryInfo(Path.Combine(dxvkfolder, "cache"));
             if (!dxvkCachePath.Exists) dxvkCachePath.Create();
@@ -115,7 +119,7 @@ public static class DxvkManager
         }
 
         var hudType = Program.Config.DxvkHudType;
-        if (Program.Config.DxvkVersion == DxvkVersion.Disabled)
+        if (!isDxvk)
         {
             if (!Program.Config.WineD3DUseVK.Value)
                 hudType = DxvkHudType.None;
@@ -186,9 +190,7 @@ public static class DxvkManager
                 throw new ArgumentOutOfRangeException();
         }
 
-        var prefix = new DirectoryInfo(Path.Combine(Program.storage.Root.FullName, "wineprefix"));
-        var settings = new DxvkRunner(folder, url, prefix, env);
-        settings.RunnerType = runnerType;
+        var settings = new DxvkRunner(folder, url, Program.storage.Root.FullName, env, isDxvk);
         return settings;
     }
 
