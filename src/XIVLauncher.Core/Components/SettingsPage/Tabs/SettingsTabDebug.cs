@@ -12,7 +12,7 @@ public class SettingsTabDebug : SettingsTab
     {
         ImGui.TextUnformatted("Generic Information");
         ImGui.Separator();
-        ImGui.TextUnformatted($"Operating System: {Environment.OSVersion}");
+        ImGui.TextUnformatted($"Operating System: {Program.DistroLong} - {Environment.OSVersion}");
         ImGui.TextUnformatted($"Runtime Version: {Environment.Version}"); 
         
         if (Program.IsSteamDeckHardware)

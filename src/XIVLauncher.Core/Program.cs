@@ -45,7 +45,7 @@ class Program
     private static readonly Vector3 clearColor = new(0.1f, 0.1f, 0.1f);
     private static bool showImGuiDemoWindow = true;
     public static string Distro { get; private set; }
-    private static string DistroLong;
+    public static string DistroLong { get; private set; }
     public static bool IsFlatpak { get; private set; }
     private static LauncherApp launcherApp;
     public static Storage storage;
@@ -262,7 +262,7 @@ class Program
             if (versionCheckResult.Success)
                 needUpdate = versionCheckResult.NeedUpdate;
         }
-        
+
         needUpdate = CoreEnvironmentSettings.IsUpgrade ? true : needUpdate;
 
         launcherApp = new LauncherApp(storage, needUpdate);
@@ -401,33 +401,33 @@ class Program
             var pretty = "";
             var distro = "";
             var flatpak = false;
+            var OSInfo = new Dictionary<string, string>();
             foreach (var line in osRelease)
             {
                 var keyValue = line.Split("=", 2);
-                if (keyValue.Length == 1) continue;
-                if (keyValue[0] == "NAME")
-                    name = keyValue[1];
-                if (keyValue[0] == "PRETTY_NAME")
-                    pretty = keyValue[1];
-                if (keyValue[0] == "ID_LIKE")
-                {
-                    if (keyValue[1].Contains("arch"))
-                        distro = "arch";
-                    if (keyValue[1].Contains("fedora"))
-                        distro = "fedora";
-                    if (keyValue[1].Contains("ubuntu"))
-                        distro = "ubuntu";
-                    if (keyValue[1].Contains("debian"))
-                        distro = "ubuntu";
-                }
-                if (keyValue[0] == "ID")
-                {   
-                    if (keyValue[1].Contains("tumbleweed"))
-                        distro = "fedora";
-                    if (keyValue[1] == "org.freedesktop.platform")
-                        flatpak = true;
-                }
+                if (keyValue.Length == 1)
+                    OSInfo.Add(keyValue[0], "");
+                else
+                    OSInfo.Add(keyValue[0], keyValue[1]);
             }
+
+            name = (OSInfo["NAME"] ?? "").Trim('"');
+            pretty = (OSInfo["PRETTY_NAME"] ?? "").Trim('"');
+
+            var idLike = OSInfo["ID_LIKE"] ?? "";
+            if (idLike.Contains("arch"))
+                distro = "arch";
+            else if (idLike.Contains("fedora"))
+                distro = "fedora";
+            else
+                distro = "ubuntu";
+
+            var id = OSInfo["ID"] ?? "";
+            if (id.Contains("tumbleweed"))
+                distro = "fedora";
+            if (id == "org.freedesktop.platform")
+                flatpak = true;
+
             Distro = (distro == "") ? "ubuntu" : distro;
             DistroLong = pretty == "" ? (name == "" ? "Unknown distribution" : name) : pretty;
             IsFlatpak = flatpak;
@@ -437,6 +437,7 @@ class Program
             // If there's any kind of error opening the file or even finding it, just go with default.
             Distro = "ubuntu";
             DistroLong = "Unknown distribution";
+            IsFlatpak = false;
         }
     }
 
