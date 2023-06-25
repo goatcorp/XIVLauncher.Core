@@ -155,7 +155,7 @@ class Program
             if (CoreEnvironmentSettings.ClearLogs) ClearLogs();
         }
         
-        Distro.GetDistro();
+        Distro.GetInfo();
         SetupLogging(mainargs);
         LoadConfig(storage);
 

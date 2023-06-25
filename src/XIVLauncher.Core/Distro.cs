@@ -21,7 +21,7 @@ public static class Distro
 
     public static bool IsFlatpak { get; private set; }
 
-    public static void GetDistro()
+    public static void GetInfo()
     {
         try
         {
