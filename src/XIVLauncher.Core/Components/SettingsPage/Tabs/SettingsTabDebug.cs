@@ -12,7 +12,7 @@ public class SettingsTabDebug : SettingsTab
     {
         ImGui.TextUnformatted("Generic Information");
         ImGui.Separator();
-        ImGui.TextUnformatted($"Operating System: {Program.DistroLong} - {Environment.OSVersion}");
+        ImGui.TextUnformatted($"Operating System: {Distro.Name} - {Environment.OSVersion}");
         ImGui.TextUnformatted($"Runtime Version: {Environment.Version}"); 
         
         if (Program.IsSteamDeckHardware)
@@ -21,8 +21,10 @@ public class SettingsTabDebug : SettingsTab
         if (Program.IsSteamDeckGamingMode)
             ImGui.Text("Steam Deck Gaming Mode Detected");
 
-        if (Program.IsFlatpak)
+        if (Distro.IsFlatpak)
             ImGui.Text("Running as a Flatpak");
+        else
+            ImGui.Text("Running a native build");
 
         ImGui.Spacing();
 
