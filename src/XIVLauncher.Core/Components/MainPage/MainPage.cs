@@ -19,7 +19,6 @@ using XIVLauncher.Common.Util;
 using XIVLauncher.Core.Accounts;
 using XIVLauncher.Common.Game.Exceptions;
 using XIVLauncher.Core.Support;
-using XIVLauncher.Core.GameFixes;
 
 namespace XIVLauncher.Core.Components.MainPage;
 
@@ -770,9 +769,7 @@ public class MainPage : Page
 
                 Program.CompatibilityTools.RunInPrefix($"winecfg /v {winver}");
 
-                var fixes = new GameFix[] { new MacVideoFix(App.Settings.GamePath, App.Settings.GameConfigPath, Program.CompatibilityTools.Prefix, tempPath), };
-
-                var gameFixApply = new GameFixApply(fixes);
+                var gameFixApply = new GameFixApply(App.Settings.GamePath, App.Settings.GameConfigPath, Program.CompatibilityTools.Prefix, tempPath);
                 gameFixApply.UpdateProgress += (text, hasProgress, progress) =>
                 {
                     App.LoadingPage.Line1 = "Applying game-specific fixes...";
