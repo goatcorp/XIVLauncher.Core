@@ -44,7 +44,9 @@ class Program
 
     private static readonly Vector3 clearColor = new(0.1f, 0.1f, 0.1f);
     private static bool showImGuiDemoWindow = true;
-
+    public static string Distro { get; private set; }
+    private static string DistroLong;
+    public static bool IsFlatpak { get; private set; }
     private static LauncherApp launcherApp;
     public static Storage storage;
     public static DirectoryInfo DotnetRuntime => storage.GetFolder("runtime");
@@ -75,6 +77,7 @@ class Program
 
         Log.Information("========================================================");
         Log.Information("Starting a session(v{Version} - {Hash})", AppUtil.GetAssemblyVersion(), AppUtil.GetGitHash());
+        Log.Information("Running on {DistroName}, wine distro set to {Distro}", DistroLong, Distro);   
     }
 
     private static void LoadConfig(Storage storage)
@@ -154,6 +157,7 @@ class Program
             if (CoreEnvironmentSettings.ClearLogs) ClearLogs();
         }
         
+        GetDistro();
         SetupLogging(mainargs);
         LoadConfig(storage);
 
@@ -251,16 +255,14 @@ class Program
 
         var needUpdate = false;
 
-#if FLATPAK
-        if (Config.DoVersionCheck ?? false)
+        if (Config.DoVersionCheck ?? false && IsFlatpak)
         {
             var versionCheckResult = UpdateCheck.CheckForUpdate().GetAwaiter().GetResult();
 
             if (versionCheckResult.Success)
                 needUpdate = versionCheckResult.NeedUpdate;
-        }   
-#endif
-
+        }
+        
         needUpdate = CoreEnvironmentSettings.IsUpgrade ? true : needUpdate;
 
         launcherApp = new LauncherApp(storage, needUpdate);
@@ -380,6 +382,61 @@ class Program
 
             default:
                 throw new ArgumentException($"Invalid secret provider: {envVar}");
+        }
+    }
+
+    private static void GetDistro()
+    {
+        try
+        {
+            if (!File.Exists("/etc/os-release"))
+            {
+                Distro = "ubuntu";
+                DistroLong = "Unknown distribution";
+                IsFlatpak = false;
+                return;
+            }
+            var osRelease = File.ReadAllLines("/etc/os-release");
+            var name = "";
+            var pretty = "";
+            var distro = "";
+            var flatpak = false;
+            foreach (var line in osRelease)
+            {
+                var keyValue = line.Split("=", 2);
+                if (keyValue.Length == 1) continue;
+                if (keyValue[0] == "NAME")
+                    name = keyValue[1];
+                if (keyValue[0] == "PRETTY_NAME")
+                    pretty = keyValue[1];
+                if (keyValue[0] == "ID_LIKE")
+                {
+                    if (keyValue[1].Contains("arch"))
+                        distro = "arch";
+                    if (keyValue[1].Contains("fedora"))
+                        distro = "fedora";
+                    if (keyValue[1].Contains("ubuntu"))
+                        distro = "ubuntu";
+                    if (keyValue[1].Contains("debian"))
+                        distro = "ubuntu";
+                }
+                if (keyValue[0] == "ID")
+                {   
+                    if (keyValue[1].Contains("tumbleweed"))
+                        distro = "fedora";
+                    if (keyValue[1] == "org.freedesktop.platform")
+                        flatpak = true;
+                }
+            }
+            Distro = (distro == "") ? "ubuntu" : distro;
+            DistroLong = pretty == "" ? (name == "" ? "Unknown distribution" : name) : pretty;
+            IsFlatpak = flatpak;
+        }
+        catch
+        {
+            // If there's any kind of error opening the file or even finding it, just go with default.
+            Distro = "ubuntu";
+            DistroLong = "Unknown distribution";
         }
     }
 
