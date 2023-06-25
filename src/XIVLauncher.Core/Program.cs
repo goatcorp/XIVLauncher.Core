@@ -397,24 +397,21 @@ class Program
                 return;
             }
             var osRelease = File.ReadAllLines("/etc/os-release");
-            var name = "";
-            var pretty = "";
             var distro = "";
             var flatpak = false;
             var OSInfo = new Dictionary<string, string>();
             foreach (var line in osRelease)
             {
-                var keyValue = line.Split("=", 2);
+                var keyValue = line.Split('=', 2);
                 if (keyValue.Length == 1)
                     OSInfo.Add(keyValue[0], "");
                 else
                     OSInfo.Add(keyValue[0], keyValue[1]);
             }
 
-            name = (OSInfo["NAME"] ?? "").Trim('"');
-            pretty = (OSInfo["PRETTY_NAME"] ?? "").Trim('"');
-
-            var idLike = OSInfo["ID_LIKE"] ?? "";
+            var name = (OSInfo.ContainsKey("NAME") ? OSInfo["NAME"] : "").Trim('"');
+            var pretty = (OSInfo.ContainsKey("PRETTY_NAME") ? OSInfo["PRETTY_NAME"] : "").Trim('"');
+            var idLike = OSInfo.ContainsKey("ID_LIKE") ? OSInfo["ID_LIKE"] : "";
             if (idLike.Contains("arch"))
                 distro = "arch";
             else if (idLike.Contains("fedora"))
@@ -422,7 +419,7 @@ class Program
             else
                 distro = "ubuntu";
 
-            var id = OSInfo["ID"] ?? "";
+            var id = OSInfo.ContainsKey("ID") ? OSInfo["ID"] : "";
             if (id.Contains("tumbleweed"))
                 distro = "fedora";
             if (id == "org.freedesktop.platform")
