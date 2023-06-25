@@ -30,14 +30,6 @@ public enum WineVersion
 
 public static class WineManager
 {
-#if WINE_XIV_ARCH_LINUX
-    private const string DISTRO = "arch";
-#elif WINE_XIV_FEDORA_LINUX
-    private const string DISTRO = "fedora";
-#else
-    private const string DISTRO = "ubuntu";
-#endif
-
     public static WineRunner Initialize()
     {
         var winepath = "";
@@ -62,12 +54,12 @@ public static class WineManager
         {
             case WineVersion.Wine8_5:
                 folder = "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7";
-                url = $"https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-{DISTRO}-8.5.r4.g4211bac7.tar.xz";
+                url = $"https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-{GetDistro()}-8.5.r4.g4211bac7.tar.xz";
                 break;
 
             case WineVersion.Wine7_10:
                 folder = "wine-xiv-staging-fsync-git-7.10.r3.g560db77d";
-                url = $"https://github.com/goatcorp/wine-xiv-git/releases/download/7.10.r3.g560db77d/wine-xiv-staging-fsync-git-{DISTRO}-7.10.r3.g560db77d.tar.xz";
+                url = $"https://github.com/goatcorp/wine-xiv-git/releases/download/7.10.r3.g560db77d/wine-xiv-staging-fsync-git-{GetDistro()}-7.10.r3.g560db77d.tar.xz";
                 break;
 
             default:
@@ -89,6 +81,13 @@ public static class WineManager
         env.Add("WINEPREFIX", Path.Combine(Program.storage.Root.FullName, "wineprefix"));
         
         return new WineRunner(winepath, wineargs, folder, url, Program.storage.Root.FullName, env);
+    }
+
+    private static string GetDistro()
+    {
+        if (File.Exists("/etc/arch-release")) return "arch";
+        if (File.Exists("/etc/fedora-release")) return "fedora";
+        return "ubuntu";
     }
 }
 
