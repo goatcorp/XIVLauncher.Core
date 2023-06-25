@@ -622,9 +622,10 @@ public class MainPage : Page
 
         Troubleshooting.LogTroubleshooting();
 
-        var dalamudLauncher = new DalamudLauncher(dalamudRunner, Program.DalamudUpdater, App.Settings.DalamudLoadMethod.GetValueOrDefault(DalamudLoadMethod.DllInject),
-            App.Settings.GamePath, App.Storage.Root, App.Settings.ClientLanguage ?? ClientLanguage.English, App.Settings.DalamudLoadDelay, false, false, noThird,
-            Troubleshooting.GetTroubleshootingJson());
+        var dalamudLauncher = new DalamudLauncher(dalamudRunner, Program.DalamudUpdater,
+            App.Settings.DalamudLoadMethod.GetValueOrDefault(DalamudLoadMethod.DllInject), App.Settings.GamePath,
+            App.Storage.Root, App.Storage.GetFolder("logs"), App.Settings.ClientLanguage ?? ClientLanguage.English,
+            App.Settings.DalamudLoadDelay, false, false, noThird, Troubleshooting.GetTroubleshootingJson());
 
         try
         {
@@ -758,6 +759,7 @@ public class MainPage : Page
                 var winver = (App.Settings.SetWin7 ?? true) ? "win7" : "win10";
 
                 await Program.CompatibilityTools.EnsureTool(tempPath).ConfigureAwait(false);
+                Program.CompatibilityTools.RunInPrefix($"winecfg /v {winver}");
 
                 if (Program.Config.DxvkVersion == DxvkVersion.Disabled)
                 {
