@@ -327,7 +327,7 @@ class Program
         var toolsFolder = storage.GetFolder("compatibilitytool");
         var wine = WineManager.Initialize();
         var dxvk = DxvkManager.Initialize();
-        var wineoverride = "msquic,mscoree=n,b;";
+        var wineoverride = "msquic=,mscoree=n,b;";
         var wineenv = new Dictionary<string, string>();
         if (dxvk.IsDxvk)
         {
