@@ -117,7 +117,6 @@ class Program
 
         Config.GameModeEnabled ??= false;
         Config.DxvkVersion ??= DxvkVersion.v1_10_3;
-        Config.WineD3DUseVK ??= false;
         Config.DxvkAsyncEnabled ??= true;
         Config.DxvkFrameRate ??= 0;
         Config.ESyncEnabled ??= true;

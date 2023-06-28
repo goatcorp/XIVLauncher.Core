@@ -25,7 +25,7 @@ public enum DxvkVersion
         [SettingsDescription("2.2 (No Async)", "Newest version of DXVK, using graphics pipeline library. No Async patch.")]
     v2_2,     
 
-    [SettingsDescription("Disabled", "Disable Dxvk, use WineD3D / OpenGL instead.")]
+    [SettingsDescription("Disabled", "Disable Dxvk, use WineD3D with OpenGL instead.")]
     Disabled,
 }
 
@@ -119,13 +119,6 @@ public static class DxvkManager
         }
 
         var hudType = Program.Config.DxvkHudType;
-        if (!isDxvk)
-        {
-            if (!Program.Config.WineD3DUseVK.Value)
-                hudType = DxvkHudType.None;
-            else if (new [] {DxvkHudType.Custom, DxvkHudType.Fps, DxvkHudType.Full}.Contains(Program.Config.DxvkHudType))
-                hudType = DxvkHudType.None;
-        }
         var dxvkHudCustom = Program.Config.DxvkHudCustom ?? "fps,frametimes,gpuload,version";
         var mangoHudConfig = string.IsNullOrEmpty(Program.Config.DxvkMangoCustom) ? null : new FileInfo(Program.Config.DxvkMangoCustom);
         switch (hudType)

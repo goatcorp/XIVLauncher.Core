@@ -26,16 +26,6 @@ public class SettingsTabDxvk : SettingsTab
                     return null;
                 },
             },
-            wineD3DUseVk = new SettingsEntry<bool>("Use WineD3D Vulkan renderer", "Use Vulkan instead of OpenGL for WineD3D. Unstable. May cause system to lock up.", () => Program.Config.WineD3DUseVK ?? false, b => Program.Config.WineD3DUseVK = b)
-            {
-                CheckVisibility = () => dxvkVersionSetting.Value == DxvkVersion.Disabled,
-                CheckWarning = b =>
-                {
-                    if (b)
-                        return "WARNING! This is very experimental, and may cause your system to crash or hang. If you still want to use it, disable Dalamud.";
-                    return null;
-                },
-            },
             new SettingsEntry<bool>("Enable DXVK ASYNC", "Enable DXVK ASYNC patch.", () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
             {
                 CheckVisibility = () => (new [] {DxvkVersion.v1_10_3, DxvkVersion.v2_0}.Contains(dxvkVersionSetting.Value)),
@@ -48,7 +38,7 @@ public class SettingsTabDxvk : SettingsTab
             },
             dxvkHudSetting = new SettingsEntry<DxvkHudType>("DXVK Overlay", "DXVK Hud is included with Dxvk. It doesn't work if Dxvk is disabled.\nMangoHud must be installed separately. Flatpak XIVLauncher needs flatpak MangoHud.", () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type)
             {
-                CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled || wineD3DUseVk.Value,
+                CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled,
                 CheckValidity = type =>
                 {
                     if ((type == DxvkHudType.MangoHud || type == DxvkHudType.MangoHudCustom || type == DxvkHudType.MangoHudFull)
