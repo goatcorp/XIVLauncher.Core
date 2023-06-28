@@ -60,7 +60,7 @@ public static class DxvkManager
     private const string ALLOWED_WORDS = "^(?:devinfo|fps|frametimes|submissions|drawcalls|pipelines|descriptors|memory|gpuload|version|api|cs|compiler|samplers|scale=(?:[0-9])*(?:.(?:[0-9])+)?)$";
 
 
-    public static DxvkRunner Initialize()
+    public static DxvkSettings Initialize()
     {
         var isDxvk = true;
         var folder = "";
@@ -190,7 +190,7 @@ public static class DxvkManager
                 throw new ArgumentOutOfRangeException();
         }
 
-        var settings = new DxvkRunner(folder, url, Program.storage.Root.FullName, env, isDxvk);
+        var settings = new DxvkSettings(folder, url, Program.storage.Root.FullName, env, isDxvk);
         return settings;
     }
 

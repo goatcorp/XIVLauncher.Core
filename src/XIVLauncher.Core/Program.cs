@@ -327,17 +327,7 @@ class Program
         var toolsFolder = storage.GetFolder("compatibilitytool");
         var wine = WineManager.Initialize();
         var dxvk = DxvkManager.Initialize();
-        var wineoverride = "msquic=,mscoree=n,b;";
-        var wineenv = new Dictionary<string, string>();
-        if (dxvk.IsDxvk)
-        {
-            wineoverride += "d3d9,d3d11,d3d10core,dxgi=n,b";
-        }
-        else
-        {
-            wineoverride += "d3d9,d3d11,d3d10core,dxgi=b";
-        }
-        CompatibilityTools = new CompatibilityTools(wine, dxvk, wineenv, wineoverride, winePrefix, toolsFolder, wineLogFile);
+        CompatibilityTools = new CompatibilityTools(wine, dxvk, winePrefix, toolsFolder, wineLogFile, Distro.IsFlatpak);
     }
 
     public static void ShowWindow()
@@ -425,7 +415,7 @@ class Program
     public static void ClearTools(bool tsbutton = false)
     {
         storage.GetFolder("compatibilitytool").Delete(true);
-        storage.GetFolder("compatibilitytool/beta");
+        storage.GetFolder("compatibilitytool/wine");
         storage.GetFolder("compatibilitytool/dxvk");
         if (tsbutton) CreateCompatToolsInstance();
     }

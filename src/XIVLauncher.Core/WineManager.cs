@@ -30,10 +30,9 @@ public enum WineVersion
 
 public static class WineManager
 {
-    public static WineRunner Initialize()
+    public static WineSettings Initialize()
     {
         var winepath = "";
-        var wineargs = "";
         var folder = "";
         var url = "";
         var version = Program.Config.WineVersion ?? WineVersion.Wine8_5;
@@ -80,14 +79,7 @@ public static class WineManager
         if (Program.Config.FSyncEnabled ?? false) env.Add("WINEFSYNC", "1");
         env.Add("WINEPREFIX", Path.Combine(Program.storage.Root.FullName, "wineprefix"));
         
-        return new WineRunner(winepath, wineargs, folder, url, Program.storage.Root.FullName, env);
-    }
-
-    private static string GetDistro()
-    {
-        if (File.Exists("/etc/arch-release")) return "arch";
-        if (File.Exists("/etc/fedora-release")) return "fedora";
-        return "ubuntu";
+        return new WineSettings(winepath, folder, url, Program.storage.Root.FullName, env);
     }
 }
 
