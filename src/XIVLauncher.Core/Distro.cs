@@ -1,6 +1,7 @@
 using System.Numerics;
 using System.IO;
 using System.Collections.Generic;
+using XIVLauncher.Common;
 
 namespace XIVLauncher.Core.UnixCompatibility;
 
@@ -23,7 +24,7 @@ public static class Distro
 
     public static bool IsFlatpak { get; private set; }
 
-    public static bool IsLinux { get; private set; }
+    public static Platform Platform { get; private set; }
 
     public static void UseWindows()
     {
@@ -31,13 +32,13 @@ public static class Distro
         OperatingSystem os = System.Environment.OSVersion;
         Name = os.VersionString;
         IsFlatpak = false;
-        IsLinux = false;
+        Platform = Platform.Win32;
 
     }
 
-    public static void UseUnix()
+    public static void UseLinux()
     {
-        IsLinux = true;
+        Platform = Platform.Linux;
         try
         {
             if (!File.Exists("/etc/os-release"))

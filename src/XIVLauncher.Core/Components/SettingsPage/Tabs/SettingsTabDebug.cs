@@ -1,5 +1,6 @@
 using System.Collections;
 using ImGuiNET;
+using XIVLauncher.Common;
 using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
@@ -13,7 +14,7 @@ public class SettingsTabDebug : SettingsTab
     {
         ImGui.TextUnformatted("Generic Information");
         ImGui.Separator();
-        if (Distro.IsLinux)
+        if (Distro.Platform == Platform.Linux)
             ImGui.TextUnformatted($"Operating System: {Distro.Name} - {Environment.OSVersion}");
         else
             ImGui.TextUnformatted($"Operating System: {Environment.OSVersion}");

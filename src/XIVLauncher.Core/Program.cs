@@ -187,13 +187,13 @@ class Program
 
                 case PlatformID.Unix:
                     Steam = new UnixSteam();
-                    Distro.UseUnix();
+                    Distro.UseLinux();
                     break;
 
                 default:
                     throw new PlatformNotSupportedException();
             }
-            Log.Information("Running on {DistroName}. {wineInfo}", Distro.Name, (Distro.Package == DistroPackage.none) ? string.Empty : $"Using {Distro.Package} for managed wine downloads.");   
+            Log.Information("Running on {DistroName}. {wineInfo}", Distro.Name, (Distro.Platform == Platform.Linux) ? $"Using {Distro.Package} for managed wine downloads." : string.Empty);   
             if (!Config.IsIgnoringSteam ?? true)
             {
                 try
