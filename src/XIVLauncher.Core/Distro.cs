@@ -23,17 +23,21 @@ public static class Distro
 
     public static bool IsFlatpak { get; private set; }
 
+    public static bool IsLinux { get; private set; }
+
     public static void UseWindows()
     {
         Package = DistroPackage.none;
         OperatingSystem os = System.Environment.OSVersion;
         Name = os.VersionString;
         IsFlatpak = false;
+        IsLinux = false;
 
     }
 
     public static void UseUnix()
     {
+        IsLinux = true;
         try
         {
             if (!File.Exists("/etc/os-release"))
