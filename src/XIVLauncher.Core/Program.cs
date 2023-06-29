@@ -182,17 +182,16 @@ class Program
             {
                 case PlatformID.Win32NT:
                     Steam = new WindowsSteam();
-                    Distro.UseWindows();
                     break;
 
                 case PlatformID.Unix:
                     Steam = new UnixSteam();
-                    Distro.UseLinux();
                     break;
 
                 default:
                     throw new PlatformNotSupportedException();
             }
+            Distro.Initialize();
             Log.Information("Running on {DistroName}. {wineInfo}", Distro.Name, (Distro.Platform == Platform.Linux) ? $"Using {Distro.Package} for managed wine downloads." : string.Empty);   
             if (!Config.IsIgnoringSteam ?? true)
             {

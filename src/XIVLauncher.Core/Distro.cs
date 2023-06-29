@@ -2,6 +2,7 @@ using System.Numerics;
 using System.IO;
 using System.Collections.Generic;
 using XIVLauncher.Common;
+using System.Runtime.InteropServices;
 
 namespace XIVLauncher.Core.UnixCompatibility;
 
@@ -26,18 +27,38 @@ public static class Distro
 
     public static Platform Platform { get; private set; }
 
-    public static void UseWindows()
+    public static void Initialize()
     {
-        Package = DistroPackage.none;
-        OperatingSystem os = System.Environment.OSVersion;
-        Name = os.VersionString;
-        IsFlatpak = false;
-        Platform = Platform.Win32;
+        var os = System.Environment.OSVersion;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            Package = DistroPackage.none;
+            Name = os.VersionString;
+            IsFlatpak = false;
+            Platform = Platform.Win32;
+            return;
+        }
 
-    }
+        // There's no wine releases for MacOS or FreeBSD, and I'm not sure this will even compile on either
+        // platform, but here's some code just in case. Can modify this as needed if it's useful in the future.
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            Platform = Platform.Mac;
+            Name = os.VersionString;
+            IsFlatpak = false;
+            Package = DistroPackage.none;
+            return;
+        }
+        
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+        {
+            Platform = Platform.Linux;  // Don't have an option for this atm.
+            Name = os.VersionString;
+            IsFlatpak = false;
+            Package = DistroPackage.none;
+            return;            
+        }
 
-    public static void UseLinux()
-    {
         Platform = Platform.Linux;
         try
         {
