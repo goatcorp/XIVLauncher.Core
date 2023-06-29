@@ -55,7 +55,6 @@ public class SettingsTabWine : SettingsTab
                     return null;
                 }
             },
-            new SettingsEntry<bool>("Set Windows version to 7", "Default for Wine 8.1+ is Windows 10, but this can cause issues with some Dalamud plugins. Windows 7 is recommended for now.", () => Program.Config.SetWin7 ?? true, b => Program.Config.SetWin7 = b),
             new SettingsEntry<string>("WINEDEBUG Variables", "Configure debug logging for wine. Useful for troubleshooting.", () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s)
         };
     }
@@ -69,6 +68,10 @@ public class SettingsTabWine : SettingsTab
     public override void Draw()
     {
         base.Draw();
+
+        ImGui.Separator();
+
+        ImGui.Dummy(new Vector2(10) * ImGuiHelpers.GlobalScale);
 
         if (!Program.CompatibilityTools.IsToolDownloaded)
         {
@@ -96,6 +99,31 @@ public class SettingsTabWine : SettingsTab
         {
             Program.CompatibilityTools.RunInPrefix("explorer");
         }
+
+        ImGui.SameLine();
+
+        if (ImGui.Button("Open Wine explorer (use WineD3D"))
+        {
+            Program.CompatibilityTools.RunInPrefix("explorer", wineD3D: true);
+
+        }
+
+        ImGui.Dummy(new Vector2(10) * ImGuiHelpers.GlobalScale);
+
+
+        if (ImGui.Button("Set Wine to Windows 7"))
+        {
+            Program.CompatibilityTools.RunInPrefix($"winecfg /v win7", redirectOutput: true, writeLog: true);
+        }
+
+        ImGui.SameLine();
+
+        if (ImGui.Button("Set Wine to Windows 10"))
+        {
+            Program.CompatibilityTools.RunInPrefix($"winecfg /v win10", redirectOutput: true, writeLog: true);
+        }
+
+        ImGui.Dummy(new Vector2(10) * ImGuiHelpers.GlobalScale);
 
         if (ImGui.Button("Kill all wine processes"))
         {
