@@ -9,27 +9,9 @@ using Serilog;
 using XIVLauncher.Common;
 using XIVLauncher.Common.Unix.Compatibility;
 
-namespace XIVLauncher.Core;
+namespace XIVLauncher.Core.UnixCompatibility;
 
-public enum DxvkVersion
-{
-    [SettingsDescription("1.10.3 (default)", "Current version of 1.10 branch of DXVK.")]
-    v1_10_3,
-
-    [SettingsDescription("2.0", "Newer version of DXVK. Last version with Async patch")]
-    v2_0,
-
-    [SettingsDescription("2.1 (No Async)", "Newer version of DXVK, using graphics pipeline library. No Async patch.")]
-    v2_1,
-
-        [SettingsDescription("2.2 (No Async)", "Newest version of DXVK, using graphics pipeline library. No Async patch.")]
-    v2_2,     
-
-    [SettingsDescription("Disabled", "Disable Dxvk, use WineD3D with OpenGL instead.")]
-    Disabled,
-}
-
-public enum DxvkHudType
+public enum HudType
 {
     [SettingsDescription("None", "Show nothing")]
     None,
@@ -53,100 +35,50 @@ public enum DxvkHudType
     MangoHudFull,
 }
 
-public static class DxvkManager
+public static class HudManager
 {
     private const string ALLOWED_CHARS = "^[0-9a-zA-Z,=.]+$";
 
     private const string ALLOWED_WORDS = "^(?:devinfo|fps|frametimes|submissions|drawcalls|pipelines|descriptors|memory|gpuload|version|api|cs|compiler|samplers|scale=(?:[0-9])*(?:.(?:[0-9])+)?)$";
 
-
-    public static DxvkSettings Initialize()
+    public static Dictionary<string, string> GetSettings()
     {
-        var isDxvk = true;
-        var folder = "";
-        var url = "";
         var rootfolder = Program.storage.Root.FullName;
-        var dxvkfolder = Path.Combine(rootfolder, "compatibilitytool", "dxvk");
-        var async = (Program.Config.DxvkAsyncEnabled ?? true) ? "1" : "0";
-        var framerate = Program.Config.DxvkFrameRate ?? 0;
-        var env = new Dictionary<string, string>
+        var env = new Dictionary<string, string>();
+        var hudType = Program.Config.HudType;
+        if (FindMangoHud() is null && new [] {HudType.MangoHud, HudType.MangoHudCustom, HudType.MangoHudFull}.Contains(hudType))
         {
-            { "DXVK_LOG_PATH", Path.Combine(rootfolder, "logs") },
-            { "DXVK_CONFIG_FILE", Path.Combine(dxvkfolder, "dxvk.conf") },
-        };
-        if (framerate != 0)
-            env.Add("DXVK_FRAME_RATE", framerate.ToString());
-        switch (Program.Config.DxvkVersion)
-        {
-            case DxvkVersion.v1_10_3:
-                folder = "dxvk-async-1.10.3";
-                url = "https://github.com/Sporif/dxvk-async/releases/download/1.10.3/dxvk-async-1.10.3.tar.gz";
-                env.Add("DXVK_ASYNC", async);
-                break;
-            
-            case DxvkVersion.v2_0:
-                folder = "dxvk-async-2.0";
-                url = "https://github.com/Sporif/dxvk-async/releases/download/2.0/dxvk-async-2.0.tar.gz";
-                env.Add("DXVK_ASYNC", async);
-                break;
-
-            case DxvkVersion.v2_1:
-                folder = "dxvk-2.1";
-                url = "https://github.com/doitsujin/dxvk/releases/download/v2.1/dxvk-2.1.tar.gz";
-                break;
-
-            case DxvkVersion.v2_2:
-                folder = "dxvk-2.2";
-                url = "https://github.com/doitsujin/dxvk/releases/download/v2.2/dxvk-2.2.tar.gz";
-                break;
-            
-
-            case DxvkVersion.Disabled:
-                env.Add("PROTON_USE_WINED3D", "1");
-                env.Add("MANGHUD_DLSYM", "1");
-                isDxvk = false;
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException("Bad value for DxvkVersion");
+            hudType = HudType.None;
+            Program.Config.HudType = HudType.None;
         }
-
-        if (isDxvk)
-        {
-            var dxvkCachePath = new DirectoryInfo(Path.Combine(dxvkfolder, "cache"));
-            if (!dxvkCachePath.Exists) dxvkCachePath.Create();
-            env.Add("DXVK_STATE_CACHE_PATH", Path.Combine(dxvkCachePath.FullName, folder));
-        }
-
-        var hudType = Program.Config.DxvkHudType;
         var dxvkHudCustom = Program.Config.DxvkHudCustom ?? "fps,frametimes,gpuload,version";
-        var mangoHudConfig = string.IsNullOrEmpty(Program.Config.DxvkMangoCustom) ? null : new FileInfo(Program.Config.DxvkMangoCustom);
+        var mangoHudConfig = string.IsNullOrEmpty(Program.Config.MangoHudCustom) ? null : new FileInfo(Program.Config.MangoHudCustom);
         switch (hudType)
         {
-             case DxvkHudType.Fps:
+             case HudType.Fps:
                 env.Add("DXVK_HUD","fps");
                 env.Add("MANGOHUD","0");
                 break;
 
-            case DxvkHudType.Custom:
+            case HudType.Custom:
                 if (!CheckDxvkHudString(Program.Config.DxvkHudCustom))
                     dxvkHudCustom = "fps,frametimes,gpuload,version";
                 env.Add("DXVK_HUD", Program.Config.DxvkHudCustom);
                 env.Add("MANGOHUD","0");
                 break;
 
-            case DxvkHudType.Full:
+            case HudType.Full:
                 env.Add("DXVK_HUD","full");
                 env.Add("MANGOHUD","0");
                 break;
 
-            case DxvkHudType.MangoHud:
+            case HudType.MangoHud:
                 env.Add("DXVK_HUD","0");
                 env.Add("MANGOHUD","1");
                 env.Add("MANGOHUD_CONFIG", "");
                 break;
 
-            case DxvkHudType.MangoHudCustom:
+            case HudType.MangoHudCustom:
                 env.Add("DXVK_HUD","0");
                 env.Add("MANGOHUD","1");
 
@@ -170,21 +102,20 @@ public static class DxvkManager
                     env.Add("MANGOHUD_CONFIG", "");
                 break;
 
-            case DxvkHudType.MangoHudFull:
+            case HudType.MangoHudFull:
                 env.Add("DXVK_HUD","0");
                 env.Add("MANGOHUD","1");
                 env.Add("MANGOHUD_CONFIG","full");
                 break;
 
-            case DxvkHudType.None:
+            case HudType.None:
                 break;
 
             default:
                 throw new ArgumentOutOfRangeException();
         }
 
-        var settings = new DxvkSettings(folder, url, Program.storage.Root.FullName, env, isDxvk);
-        return settings;
+        return env;
     }
 
     public static bool CheckDxvkHudString(string? customHud)
@@ -197,5 +128,17 @@ public static class DxvkManager
 
         return hudvars.All(hudvar => Regex.IsMatch(hudvar, ALLOWED_WORDS));
     }
-}
 
+    public static string? FindMangoHud()
+    {
+        var usrLib = Path.Combine("/usr", "lib", "mangohud", "libMangoHud.so"); // fedora uses this
+        var usrLib64 = Path.Combine("/usr", "lib64", "mangohud", "libMangoHud.so"); // arch and openSUSE use this
+        var flatpak = Path.Combine(new string[] { "/usr", "lib", "extensions", "vulkan", "lib", "x86_64-linux-gnu", "libMangoHud.so"});
+        var debuntu = Path.Combine(new string[] { "/usr", "lib", "x86_64-linux-gnu", "mangohud", "libMangoHud.so"});
+        if (File.Exists(usrLib64)) return usrLib64;
+        if (File.Exists(usrLib)) return usrLib;
+        if (File.Exists(flatpak)) return flatpak;
+        if (File.Exists(debuntu)) return debuntu;
+        return null;
+    }
+}

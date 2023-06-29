@@ -1,5 +1,6 @@
 using System.Collections;
 using ImGuiNET;
+using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -23,8 +24,6 @@ public class SettingsTabDebug : SettingsTab
 
         if (Distro.IsFlatpak)
             ImGui.Text("Running as a Flatpak");
-        else
-            ImGui.Text("Running a native build");
 
         ImGui.Spacing();
 

@@ -22,6 +22,7 @@ using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
+using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core;
 
@@ -75,7 +76,6 @@ class Program
 
         Log.Information("========================================================");
         Log.Information("Starting a session(v{Version} - {Hash})", AppUtil.GetAssemblyVersion(), AppUtil.GetGitHash());
-        Log.Information("Running on {DistroName}, wine package set to {DistroPackage}", Distro.Name, Distro.Package.ToString());   
     }
 
     private static void LoadConfig(Storage storage)
@@ -122,7 +122,7 @@ class Program
         Config.ESyncEnabled ??= true;
         Config.FSyncEnabled ??= false;
         Config.DxvkHudCustom ??= "fps,frametimes,gpuload,version";
-        Config.DxvkMangoCustom ??= Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "MangoHud", "MangoHud.conf");
+        Config.MangoHudCustom ??= Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "MangoHud", "MangoHud.conf");
         Config.SetWin7 ??= true;
 
         Config.WineType ??= WineType.Managed;
@@ -154,7 +154,6 @@ class Program
             if (CoreEnvironmentSettings.ClearLogs) ClearLogs();
         }
         
-        Distro.GetInfo();
         SetupLogging(mainargs);
         LoadConfig(storage);
 
@@ -184,15 +183,18 @@ class Program
             {
                 case PlatformID.Win32NT:
                     Steam = new WindowsSteam();
+                    Distro.UseWindows();
                     break;
 
                 case PlatformID.Unix:
                     Steam = new UnixSteam();
+                    Distro.UseUnix();
                     break;
 
                 default:
                     throw new PlatformNotSupportedException();
             }
+            Log.Information("Running on {DistroName}. {wineInfo}", Distro.Name, (Distro.Package == DistroPackage.none) ? string.Empty : $"Using {Distro.Package} for managed wine downloads.");   
             if (!Config.IsIgnoringSteam ?? true)
             {
                 try
@@ -324,8 +326,8 @@ class Program
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
         var toolsFolder = storage.GetFolder("compatibilitytool");
-        var wine = WineManager.Initialize();
-        var dxvk = DxvkManager.Initialize();
+        var wine = WineManager.GetSettings();
+        var dxvk = DxvkManager.GetSettings();
         CompatibilityTools = new CompatibilityTools(wine, dxvk, winePrefix, toolsFolder, wineLogFile, Distro.IsFlatpak);
     }
 

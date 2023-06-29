@@ -3,6 +3,7 @@ using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.Unix.Compatibility;
+using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core.Configuration;
 
@@ -78,11 +79,11 @@ public interface ILauncherConfig
 
     public bool? FSyncEnabled { get; set; }
 
-    public DxvkHudType DxvkHudType { get; set; }
+    public HudType HudType { get; set; }
 
     public string? DxvkHudCustom { get; set; }
 
-    public string? DxvkMangoCustom { get; set; }
+    public string? MangoHudCustom { get; set; }
 
     public int? DxvkFrameRate { get; set; }
 

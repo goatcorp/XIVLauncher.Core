@@ -19,6 +19,7 @@ using XIVLauncher.Common.Util;
 using XIVLauncher.Core.Accounts;
 using XIVLauncher.Common.Game.Exceptions;
 using XIVLauncher.Core.Support;
+using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core.Components.MainPage;
 

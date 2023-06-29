@@ -8,7 +8,7 @@ using Serilog;
 using XIVLauncher.Common;
 using XIVLauncher.Common.Unix.Compatibility;
 
-namespace XIVLauncher.Core;
+namespace XIVLauncher.Core.UnixCompatibility;
 
 public enum WineType
 {
@@ -30,12 +30,13 @@ public enum WineVersion
 
 public static class WineManager
 {
-    public static WineSettings Initialize()
+    public static WineSettings GetSettings()
     {
         var winepath = "";
         var folder = "";
         var url = "";
         var version = Program.Config.WineVersion ?? WineVersion.Wine8_5;
+        var package = Distro.Package.ToString();
         switch (Program.Config.WineType ?? WineType.Managed)
         {
             case WineType.Custom:
@@ -53,12 +54,12 @@ public static class WineManager
         {
             case WineVersion.Wine8_5:
                 folder = "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7";
-                url = $"https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-{Distro.Package.ToString()}-8.5.r4.g4211bac7.tar.xz";
+                url = $"https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-{package}-8.5.r4.g4211bac7.tar.xz";
                 break;
 
             case WineVersion.Wine7_10:
                 folder = "wine-xiv-staging-fsync-git-7.10.r3.g560db77d";
-                url = $"https://github.com/goatcorp/wine-xiv-git/releases/download/7.10.r3.g560db77d/wine-xiv-staging-fsync-git-{Distro.Package.ToString()}-7.10.r3.g560db77d.tar.xz";
+                url = $"https://github.com/goatcorp/wine-xiv-git/releases/download/7.10.r3.g560db77d/wine-xiv-staging-fsync-git-{package}-7.10.r3.g560db77d.tar.xz";
                 break;
 
             default:

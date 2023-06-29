@@ -2,38 +2,49 @@ using System.Numerics;
 using System.IO;
 using System.Collections.Generic;
 
-namespace XIVLauncher.Core;
+namespace XIVLauncher.Core.UnixCompatibility;
 
-public enum WinePackage
+public enum DistroPackage
 {
     ubuntu,
 
     fedora,
 
     arch,
+
+    none,
 }
 
 public static class Distro
 {
-    public static WinePackage Package { get; private set; }
+    public static DistroPackage Package { get; private set; }
 
     public static string Name { get; private set; }
 
     public static bool IsFlatpak { get; private set; }
 
-    public static void GetInfo()
+    public static void UseWindows()
+    {
+        Package = DistroPackage.none;
+        OperatingSystem os = System.Environment.OSVersion;
+        Name = os.VersionString;
+        IsFlatpak = false;
+
+    }
+
+    public static void UseUnix()
     {
         try
         {
             if (!File.Exists("/etc/os-release"))
             {
-                Package = WinePackage.ubuntu;
+                Package = DistroPackage.ubuntu;
                 Name = "Unknown distribution";
                 IsFlatpak = false;
                 return;
             }
             var osRelease = File.ReadAllLines("/etc/os-release");
-            var distro = WinePackage.ubuntu;
+            var distro = DistroPackage.ubuntu;
             var flatpak = false;
             var OSInfo = new Dictionary<string, string>();
             foreach (var line in osRelease)
@@ -49,15 +60,15 @@ public static class Distro
             var pretty = (OSInfo.ContainsKey("PRETTY_NAME") ? OSInfo["PRETTY_NAME"] : "").Trim('"');
             var idLike = OSInfo.ContainsKey("ID_LIKE") ? OSInfo["ID_LIKE"] : "";
             if (idLike.Contains("arch"))
-                distro = WinePackage.arch;
+                distro = DistroPackage.arch;
             else if (idLike.Contains("fedora"))
-                distro = WinePackage.fedora;
+                distro = DistroPackage.fedora;
             else
-                distro = WinePackage.ubuntu;
+                distro = DistroPackage.ubuntu;
 
             var id = OSInfo.ContainsKey("ID") ? OSInfo["ID"] : "";
             if (id.Contains("tumbleweed") || id.Contains("fedora"))
-                distro = WinePackage.fedora;
+                distro = DistroPackage.fedora;
             if (id == "org.freedesktop.platform")
                 flatpak = true;
 
@@ -68,7 +79,7 @@ public static class Distro
         catch
         {
             // If there's any kind of error opening the file or even finding it, just go with default.
-            Package = WinePackage.ubuntu;
+            Package = DistroPackage.ubuntu;
             Name = "Unknown distribution";
             IsFlatpak = false;
         }
