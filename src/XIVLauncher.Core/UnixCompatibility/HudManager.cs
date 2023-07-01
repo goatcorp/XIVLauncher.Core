@@ -16,13 +16,13 @@ public enum HudType
     [SettingsDescription("None", "Show nothing")]
     None,
 
-    [SettingsDescription("FPS", "Only show FPS")]
+    [SettingsDescription("DXVK Hud FPS", "Only show FPS")]
     Fps,
 
     [SettingsDescription("DXVK Hud Custom", "Use a custom DXVK_HUD string")]
     Custom,
 
-    [SettingsDescription("Full", "Show everything")]
+    [SettingsDescription("DXVK Hud Full", "Show everything")]
     Full,
 
     [SettingsDescription("MangoHud Default", "Uses no config file.")]

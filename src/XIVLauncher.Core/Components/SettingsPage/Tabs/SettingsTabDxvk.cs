@@ -37,18 +37,25 @@ public class SettingsTabDxvk : SettingsTab
                     return null;
                 },
             },
-            hudSetting = new SettingsEntry<HudType>("DXVK Overlay", "DXVK Hud is included with Dxvk. It doesn't work if Dxvk is disabled.\nMangoHud must be installed separately. Flatpak XIVLauncher needs flatpak MangoHud.", () => Program.Config.HudType, type => Program.Config.HudType = type)
+            hudSetting = new SettingsEntry<HudType>("DXVK Overlay", "DXVK Hud is included with Dxvk. It doesn't work if Dxvk is disabled.\nMangoHud must be installed separately. Flatpak XIVLauncher needs flatpak MangoHud.", () => Program.Config.HudType, x => Program.Config.HudType = x)
             {
                 CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled,
-                CheckValidity = type =>
+                CheckValidity = x =>
                 {
-                    if ((type == HudType.MangoHud || type == HudType.MangoHudCustom || type == HudType.MangoHudFull)
+                    if ((x == HudType.MangoHud || x == HudType.MangoHudCustom || x == HudType.MangoHudFull)
                         && (HudManager.FindMangoHud() is null))
-                        // (!File.Exists("/usr/lib/mangohud/libMangoHud.so") && !File.Exists("/usr/lib64/mangohud/libMangoHud.so") && !File.Exists("/usr/lib/extensions/vulkan/MangoHud/lib/x86_64-linux-gnu/libMangoHud.so")))
                         return "MangoHud not detected.";
 
                     return null;
-                }
+                },
+                CheckWarning = x =>
+                {
+                    if ((x == HudType.MangoHud || x == HudType.MangoHudCustom || x == HudType.MangoHudFull)
+                        && (HudManager.FindMangoHud() is not null))
+                        return "WARNING! Using MangoHud, Dalamud AND ReShade all at the same time may result in crashes. Using any two should be safe.";
+                    
+                    return null;
+                } 
             },
             new SettingsEntry<string>("DXVK Hud Custom String", "Set a custom string for the built in DXVK Hud. Warning: If it's invalid, the game may hang.", () => Program.Config.DxvkHudCustom, s => Program.Config.DxvkHudCustom = s)
             {

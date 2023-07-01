@@ -192,7 +192,7 @@ class Program
                     throw new PlatformNotSupportedException();
             }
             Distro.Initialize();
-            Log.Information("Running on {DistroName}. {wineInfo}", Distro.Name, (Distro.Platform == Platform.Linux) ? $"Using {Distro.Package} for managed wine downloads." : string.Empty);   
+            Log.Information("Running on {DistroName}. {wineInfo}", Distro.Name, (Distro.Platform == Platform.Linux) ? $"Using {Distro.Package} package for managed wine downloads." : string.Empty);   
             if (!Config.IsIgnoringSteam ?? true)
             {
                 try
@@ -414,8 +414,8 @@ class Program
     public static void ClearTools(bool tsbutton = false)
     {
         storage.GetFolder("compatibilitytool").Delete(true);
-        storage.GetFolder("compatibilitytool/wine");
-        storage.GetFolder("compatibilitytool/dxvk");
+        storage.GetFolder(Path.Combine("compatibilitytool", "wine"));
+        storage.GetFolder(Path.Combine("compatibilitytool", "dxvk"));
         if (tsbutton) CreateCompatToolsInstance();
     }
 

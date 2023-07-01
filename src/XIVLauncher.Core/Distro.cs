@@ -52,7 +52,7 @@ public static class Distro
         
         if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
         {
-            Platform = Platform.Linux;  // Don't have an option for this atm.
+            Platform = Platform.Mac;  // Don't have an option for this atm.
             Name = os.VersionString;
             IsFlatpak = false;
             Package = DistroPackage.none;
@@ -70,37 +70,30 @@ public static class Distro
                 return;
             }
             var osRelease = File.ReadAllLines("/etc/os-release");
-            var distro = DistroPackage.ubuntu;
-            var flatpak = false;
-            var OSInfo = new Dictionary<string, string>();
+            var osInfo = new Dictionary<string, string>();
             foreach (var line in osRelease)
             {
                 var keyValue = line.Split('=', 2);
                 if (keyValue.Length == 1)
-                    OSInfo.Add(keyValue[0], "");
+                    osInfo.Add(keyValue[0], "");
                 else
-                    OSInfo.Add(keyValue[0], keyValue[1]);
+                    osInfo.Add(keyValue[0], keyValue[1]);
             }
 
-            var name = (OSInfo.ContainsKey("NAME") ? OSInfo["NAME"] : "").Trim('"');
-            var pretty = (OSInfo.ContainsKey("PRETTY_NAME") ? OSInfo["PRETTY_NAME"] : "").Trim('"');
-            var idLike = OSInfo.ContainsKey("ID_LIKE") ? OSInfo["ID_LIKE"] : "";
-            if (idLike.Contains("arch"))
-                distro = DistroPackage.arch;
-            else if (idLike.Contains("fedora"))
-                distro = DistroPackage.fedora;
-            else
-                distro = DistroPackage.ubuntu;
-
-            var id = OSInfo.ContainsKey("ID") ? OSInfo["ID"] : "";
-            if (id.Contains("tumbleweed") || id.Contains("fedora"))
-                distro = DistroPackage.fedora;
-            if (id == "org.freedesktop.platform")
-                flatpak = true;
-
-            Package = distro;
+            var name = (osInfo.ContainsKey("NAME") ? osInfo["NAME"] : "").Trim('"');
+            var pretty = (osInfo.ContainsKey("PRETTY_NAME") ? osInfo["PRETTY_NAME"] : "").Trim('"');
             Name = pretty == "" ? (name == "" ? "Unknown distribution" : name) : pretty;
-            IsFlatpak = flatpak;
+
+            if (CheckFlatpak(osInfo))
+            {
+                IsFlatpak = true;
+                Package = DistroPackage.ubuntu;
+                return;
+            }
+
+            Package = CheckDistro(osInfo);
+            IsFlatpak = false;
+            return;
         }
         catch
         {
@@ -109,5 +102,31 @@ public static class Distro
             Name = "Unknown distribution";
             IsFlatpak = false;
         }
-    }    
+    }
+
+    private static bool CheckFlatpak(Dictionary<string, string> osInfo)
+    {
+        if (osInfo.ContainsKey("ID"))
+            if (osInfo["ID"] == "org.freedesktop.platform")
+                return true;
+        return false;
+    }
+
+    private static DistroPackage CheckDistro(Dictionary<string, string> osInfo)
+    {
+        foreach (var kvp in osInfo)
+        {
+            if (kvp.Value.ToLower().Contains("fedora"))
+                return DistroPackage.fedora;
+            if (kvp.Value.ToLower().Contains("tumbleweed"))
+                return DistroPackage.fedora;
+            if (kvp.Value.ToLower().Contains("ubuntu"))
+                return DistroPackage.ubuntu;
+            if (kvp.Value.ToLower().Contains("debian"))
+                return DistroPackage.ubuntu;
+            if (kvp.Value.ToLower().Contains("arch"))
+                return DistroPackage.arch;
+        }
+        return DistroPackage.ubuntu;
+    }
 }
