@@ -133,7 +133,7 @@ public static class HudManager
     {
         var usrLib = Path.Combine("/usr", "lib", "mangohud", "libMangoHud.so"); // fedora uses this
         var usrLib64 = Path.Combine("/usr", "lib64", "mangohud", "libMangoHud.so"); // arch and openSUSE use this
-        var flatpak = Path.Combine(new string[] { "/usr", "lib", "extensions", "vulkan", "lib", "x86_64-linux-gnu", "libMangoHud.so"});
+        var flatpak = Path.Combine(new string[] { "/usr", "lib", "extensions", "vulkan", "MangoHud", "lib", "x86_64-linux-gnu", "libMangoHud.so"});
         var debuntu = Path.Combine(new string[] { "/usr", "lib", "x86_64-linux-gnu", "mangohud", "libMangoHud.so"});
         if (File.Exists(usrLib64)) return usrLib64;
         if (File.Exists(usrLib)) return usrLib;
