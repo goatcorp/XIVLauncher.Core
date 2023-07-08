@@ -125,6 +125,7 @@ class Program
         Config.MangoHudCustom ??= Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "MangoHud", "MangoHud.conf");
 
         Config.WineType ??= WineType.Managed;
+        Config.WineVersion ??= WineVersion.Wine7_10;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
 

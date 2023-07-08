@@ -35,7 +35,7 @@ public static class WineManager
         var winepath = "";
         var folder = "";
         var url = "";
-        var version = Program.Config.WineVersion ?? WineVersion.Wine8_5;
+        var version = Program.Config.WineVersion ?? WineVersion.Wine7_10;
         var package = Distro.Package.ToString();
         switch (Program.Config.WineType ?? WineType.Managed)
         {
@@ -68,12 +68,7 @@ public static class WineManager
 
         var env = new Dictionary<string, string>();
         if (Program.Config.GameModeEnabled ?? false)
-        {
-            var ldPreload = Environment.GetEnvironmentVariable("LD_PRELOAD") ?? "";
-            if (!ldPreload.Contains("libgamemodeauto.so.0"))
-                ldPreload = (ldPreload.Equals("")) ? "libgamemodeauto.so.0" : ldPreload + ":libgamemodeauto.so.0";
-            env.Add("LD_PRELOAD", ldPreload);
-        }
+            env.Add("LD_PRELOAD", "libgamemodeauto.so.0");
         if (!string.IsNullOrEmpty(Program.Config.WineDebugVars))
             env.Add("WINEDEBUG", Program.Config.WineDebugVars);
         if (Program.Config.ESyncEnabled ?? true) env.Add("WINEESYNC", "1");

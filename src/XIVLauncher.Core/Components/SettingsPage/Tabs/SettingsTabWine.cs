@@ -18,7 +18,7 @@ public class SettingsTabWine : SettingsTab
             startupTypeSetting = new SettingsEntry<WineType>("Installation Type", "Choose how XIVLauncher will start and manage your game installation.",
                 () => Program.Config.WineType ?? WineType.Managed, x => Program.Config.WineType = x),
 
-            new SettingsEntry<WineVersion>("Wine Version", "Choose a patched wine version.", () => Program.Config.WineVersion ?? WineVersion.Wine8_5, x => Program.Config.WineVersion = x)
+            new SettingsEntry<WineVersion>("Wine Version", "Choose a patched wine version.", () => Program.Config.WineVersion ?? WineVersion.Wine7_10, x => Program.Config.WineVersion = x)
             {
                 CheckVisibility = () => startupTypeSetting.Value == WineType.Managed
             },
