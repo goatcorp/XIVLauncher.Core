@@ -21,11 +21,11 @@ public enum WineType
 
 public enum WineVersion
 {
-    [SettingsDescription("Wine-xiv 8.5", "A patched version of Wine-staging 8.5. The current default.")]
-    Wine8_5,
-
-    [SettingsDescription("Wine-xiv 7.10", "A legacy patched version of Wine, based on 7.10. A previous default")]
+    [SettingsDescription("Wine-xiv 7.10 (Default)", "A patched version of Wine, based on 7.10. The current default.")]
     Wine7_10,
+
+    [SettingsDescription("Wine-xiv 8.5", "A newer patched version of Wine-staging 8.5. May be faster, but less stable.")]
+    Wine8_5,
 }
 
 public static class WineManager
