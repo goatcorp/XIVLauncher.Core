@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using XIVLauncher.Common;
 using System.Runtime.InteropServices;
 
-namespace XIVLauncher.Core.UnixCompatibility;
+namespace XIVLauncher.Core;
 
 public enum DistroPackage
 {
