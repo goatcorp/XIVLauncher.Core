@@ -8,20 +8,20 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabWine : SettingsTab
 {
-    private SettingsEntry<WineStartupType> startupTypeSetting;
+    private SettingsEntry<bool> isManagedSetting;
 
     public SettingsTabWine()
     {
         Entries = new SettingsEntry[]
         {
-            startupTypeSetting = new SettingsEntry<WineStartupType>("Wine Version", "Choose how XIVLauncher will start and manage your wine installation.",
-                () => Program.Config.WineStartupType ?? WineStartupType.Managed, x => Program.Config.WineStartupType = x),
+            isManagedSetting = new SettingsEntry<bool>("Use Managed Wine", "Uncheck to use a custom wine path",
+                () => Program.Config.IsManagedWine ?? true, b => Program.Config.IsManagedWine = b),
 
             new SettingsEntry<string>("Wine Binary Path",
                 "Set the path XIVLauncher will use to run applications via wine.\nIt should be an absolute path to a folder containing wine64 and wineserver binaries.",
                 () => Program.Config.WineBinaryPath, s => Program.Config.WineBinaryPath = s)
             {
-                CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Custom
+                CheckVisibility = () => !isManagedSetting.Value
             },
 
             new SettingsEntry<bool>("Enable Feral's GameMode", "Enable launching with Feral Interactive's GameMode CPU optimizations.", () => Program.Config.GameModeEnabled ?? true, b => Program.Config.GameModeEnabled = b)

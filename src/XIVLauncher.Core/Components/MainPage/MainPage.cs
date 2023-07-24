@@ -738,7 +738,7 @@ public class MainPage : Page
         }
         else if (Environment.OSVersion.Platform == PlatformID.Unix)
         {
-            if (App.Settings.WineStartupType == WineStartupType.Custom)
+            if (!App.Settings.IsManagedWine ?? true)
             {
                 if (App.Settings.WineBinaryPath == null)
                     throw new Exception("Custom wine binary path wasn't set.");

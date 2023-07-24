@@ -62,7 +62,7 @@ public interface ILauncherConfig
 
     #region Linux
 
-    public WineStartupType? WineStartupType { get; set; }
+    public bool? IsManagedWine { get; set; }
 
     public string? WineBinaryPath { get; set; }
 

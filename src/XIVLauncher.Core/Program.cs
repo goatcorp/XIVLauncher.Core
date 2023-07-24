@@ -120,7 +120,7 @@ class Program
         Config.FSyncEnabled ??= false;
         Config.SetWin7 ??= true;
 
-        Config.WineStartupType ??= WineStartupType.Managed;
+        Config.IsManagedWine ??= true;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
 
@@ -317,12 +317,17 @@ class Program
 
     public static void CreateCompatToolsInstance()
     {
+        var managedFolder = "";
+        var downloadUrl = "";
+        if (Config.IsManagedWine ?? true)
+        {
+            managedFolder = "wine-xiv-staging-fsync-git-7.10.r3.g560db77d";
+            downloadUrl = "https://github.com/goatcorp/wine-xiv-git/releases/download/7.10.r3.g560db77d/wine-xiv-staging-fsync-git-ubuntu-7.10.r3.g560db77d.tar.xz";
+        }
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
-        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
+        var wineSettings = new WineSettings(Config.IsManagedWine ?? true, Config.WineBinaryPath, managedFolder, downloadUrl, storage.Root.FullName, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
         var toolsFolder = storage.GetFolder("compatibilitytool");
-        Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "dxvk"));
-        Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "beta"));
         CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
     }
 
@@ -411,7 +416,7 @@ class Program
     public static void ClearTools(bool tsbutton = false)
     {
         storage.GetFolder("compatibilitytool").Delete(true);
-        storage.GetFolder("compatibilitytool/beta");
+        storage.GetFolder("compatibilitytool/wine");
         storage.GetFolder("compatibilitytool/dxvk");
         if (tsbutton) CreateCompatToolsInstance();
     }
