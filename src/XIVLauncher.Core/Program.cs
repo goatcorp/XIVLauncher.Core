@@ -319,9 +319,10 @@ class Program
 
     public static void CreateCompatToolsInstance()
     {
+        var dxvkSettings = new DxvkSettings("dxvk-async-1.10.3", "https://github.com/Sporif/dxvk-async/releases/download/1.10.3/dxvk-async-1.10.3.tar.gz", storage.Root.FullName, Config.DxvkAsyncEnabled, 0, true);
         var wineSettings = WineManager.GetSettings();
         var toolsFolder = storage.GetFolder("compatibilitytool");
-        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
+        CompatibilityTools = new CompatibilityTools(wineSettings, dxvkSettings, Config.DxvkHudType, Config.GameModeEnabled, toolsFolder);
     }
 
     public static void ShowWindow()
