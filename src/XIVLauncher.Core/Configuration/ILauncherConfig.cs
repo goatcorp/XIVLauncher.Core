@@ -3,6 +3,7 @@ using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.Unix.Compatibility;
+using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core.Configuration;
 
@@ -62,7 +63,9 @@ public interface ILauncherConfig
 
     #region Linux
 
-    public bool? IsManagedWine { get; set; }
+    public WineType? WineType { get; set; }
+
+    public WineVersion? WineVersion { get; set; }
 
     public string? WineBinaryPath { get; set; }
 

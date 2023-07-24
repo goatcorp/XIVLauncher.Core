@@ -22,6 +22,7 @@ using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
+using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core;
 
@@ -120,7 +121,8 @@ class Program
         Config.FSyncEnabled ??= false;
         Config.SetWin7 ??= true;
 
-        Config.IsManagedWine ??= true;
+        Config.WineType ??= WineType.Managed;
+        Config.WineVersion ??= WineVersion.Wine7_10;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
 
@@ -317,16 +319,7 @@ class Program
 
     public static void CreateCompatToolsInstance()
     {
-        var managedFolder = "";
-        var downloadUrl = "";
-        if (Config.IsManagedWine ?? true)
-        {
-            managedFolder = "wine-xiv-staging-fsync-git-7.10.r3.g560db77d";
-            downloadUrl = "https://github.com/goatcorp/wine-xiv-git/releases/download/7.10.r3.g560db77d/wine-xiv-staging-fsync-git-ubuntu-7.10.r3.g560db77d.tar.xz";
-        }
-        var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
-        var winePrefix = storage.GetFolder("wineprefix");
-        var wineSettings = new WineSettings(Config.IsManagedWine ?? true, Config.WineBinaryPath, managedFolder, downloadUrl, storage.Root.FullName, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
+        var wineSettings = WineManager.GetSettings();
         var toolsFolder = storage.GetFolder("compatibilitytool");
         CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
     }

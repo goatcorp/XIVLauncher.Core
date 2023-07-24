@@ -19,6 +19,7 @@ using XIVLauncher.Common.Util;
 using XIVLauncher.Core.Accounts;
 using XIVLauncher.Common.Game.Exceptions;
 using XIVLauncher.Core.Support;
+using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core.Components.MainPage;
 
@@ -738,7 +739,7 @@ public class MainPage : Page
         }
         else if (Environment.OSVersion.Platform == PlatformID.Unix)
         {
-            if (!App.Settings.IsManagedWine ?? true)
+            if (App.Settings.WineType.Value == WineType.Custom)
             {
                 if (App.Settings.WineBinaryPath == null)
                     throw new Exception("Custom wine binary path wasn't set.");
