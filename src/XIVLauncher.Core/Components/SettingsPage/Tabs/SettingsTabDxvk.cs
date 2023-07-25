@@ -37,7 +37,7 @@ public class SettingsTabDxvk : SettingsTab
                     return null;
                 },
             },
-            dxvkHudSetting = new SettingsEntry<DxvkHud>("DXVK Overlay", "DXVK Hud is included with Dxvk. It doesn't work if Dxvk is disabled.", () => Program.Config.DxvkHud ?? DxvkHud.None, x => Program.Config.DxvkHud = x)
+            dxvkHudSetting = new SettingsEntry<DxvkHud>("DXVK Overlay", "DXVK Hud is included with Dxvk. MangoHud must be installed separately.\nFlatpak users need the flatpak version of MangoHud.", () => Program.Config.DxvkHud ?? DxvkHud.None, x => Program.Config.DxvkHud = x)
             {
                 CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled,
             },
@@ -51,13 +51,13 @@ public class SettingsTabDxvk : SettingsTab
                     return null;
                 },
             },
-            mangoHudSetting = new SettingsEntry<MangoHud>("MangoHud Overlay", "MangoHud must be installed separately. Flatpak users need the flatpak version of MangoHud.", () => Program.Config.MangoHud ?? MangoHud.None, x => Program.Config.MangoHud = x)
+            mangoHudSetting = new SettingsEntry<MangoHud>("MangoHud Overlay", "MangoHud is installed. It is recommended to set Dxvk Overlay to None if using MangoHud.", () => Program.Config.MangoHud ?? MangoHud.None, x => Program.Config.MangoHud = x)
             {
                 CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled && Dxvk.MangoHudInstalled,
                 CheckWarning = x =>
                 {
                     if (dxvkHudSetting.Value != DxvkHud.None && x != MangoHud.None)
-                        return "You probably shouldn't run MangoHud and DxvkHud at the same time.";
+                        return "Warning! You can run Dxvk Hud and MangoHud at the same time, but you probably shouldn't.\nSet one of them to None.";
                     return null;
                 }
             },
