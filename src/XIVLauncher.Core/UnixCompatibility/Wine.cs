@@ -28,55 +28,50 @@ public enum WineVersion
     Wine8_5,
 }
 
-public static class WineManager
+public static class Wine
 {
     private static string package = "ubuntu";
 
-    public static WineSettings GetSettings()
+    public static bool IsManagedWine => Program.Config.WineType == WineType.Managed;
+
+    public static string CustomWinePath => Program.Config.WineBinaryPath ?? "/usr/bin";
+
+    public static string FolderName => Program.Config.WineVersion switch
     {
-        var isManaged = true;
-        var winepath = "";
-        var folder = "";
-        var url = "";
-        var version = Program.Config.WineVersion ?? WineVersion.Wine7_10;
-        var wineLogFile = new FileInfo(Path.Combine(Program.storage.GetFolder("logs").FullName, "wine.log"));
-        var winePrefix = Program.storage.GetFolder("wineprefix");
+        WineVersion.Wine7_10 => "wine-xiv-staging-fsync-git-7.10.r3.g560db77d",
+        WineVersion.Wine8_5 => "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7",
+        _ => throw new ArgumentOutOfRangeException(),
+    };
 
-        switch (Program.Config.WineType ?? WineType.Managed)
+    public static string DownloadUrl => GetDownloadUrl();
+
+    public static string DebugVars => Program.Config.WineDebugVars ?? "-all";
+
+    public static FileInfo LogFile => new FileInfo(Path.Combine(Program.storage.GetFolder("logs").FullName, "wine.log"));
+
+    public static DirectoryInfo Prefix => Program.storage.GetFolder("wineprefix");
+
+    public static bool ESyncEnabled => Program.Config.ESyncEnabled ?? true;
+
+    public static bool FSyncEnabled => Program.Config.FSyncEnabled ?? false;
+
+    private static bool OSReleaseIsParsed = false;
+
+    private static string GetDownloadUrl()
+    {
+        if (!OSReleaseIsParsed)
+            ParseOSRelease();
+        return Program.Config.WineVersion switch
         {
-            case WineType.Custom:
-                winepath = Program.Config.WineBinaryPath ?? "/usr/bin";
-                isManaged = false;
-                break;
-
-            case WineType.Managed:
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException("Bad value for WineType");
-        }
-
-        switch (version)
-        {
-            case WineVersion.Wine8_5:
-                folder = "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7";
-                url = $"https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-{package}-8.5.r4.g4211bac7.tar.xz";
-                break;
-
-            case WineVersion.Wine7_10:
-                folder = "wine-xiv-staging-fsync-git-7.10.r3.g560db77d";
-                url = $"https://github.com/goatcorp/wine-xiv-git/releases/download/7.10.r3.g560db77d/wine-xiv-staging-fsync-git-{package}-7.10.r3.g560db77d.tar.xz";
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException("Bad value for WineVersion");
-        }
-
-        return new WineSettings(isManaged, winepath, folder, url, Program.storage.Root.FullName, Program.Config.WineDebugVars, wineLogFile, winePrefix, Program.Config.ESyncEnabled, Program.Config.FSyncEnabled);
+            WineVersion.Wine7_10 => $"https://github.com/goatcorp/wine-xiv-git/releases/download/7.10.r3.g560db77d/wine-xiv-staging-fsync-git-{package}-7.10.r3.g560db77d.tar.xz",
+            WineVersion.Wine8_5 => $"https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-{package}-8.5.r4.g4211bac7.tar.xz",
+            _ => throw new ArgumentOutOfRangeException(),
+        };
     }
 
     private static void ParseOSRelease()
     {
+        OSReleaseIsParsed = true;
         try
         {
             if (!File.Exists("/etc/os-release"))

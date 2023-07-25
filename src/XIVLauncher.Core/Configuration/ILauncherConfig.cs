@@ -77,7 +77,19 @@ public interface ILauncherConfig
 
     public bool? FSyncEnabled { get; set; }
 
-    public Dxvk.DxvkHudType DxvkHudType { get; set; }
+    public DxvkVersion? DxvkVersion { get; set; }
+
+    public int? DxvkFrameRateLimit { get; set; }
+
+    public DxvkHud? DxvkHud { get; set; }
+
+    public string? DxvkHudCustom { get; set; }
+
+    public MangoHud? MangoHud { get; set; }
+
+    public string? MangoHudCustomString { get; set; }
+
+    public string? MangoHudCustomFile { get; set; }
 
     public string? WineDebugVars { get; set; }
 

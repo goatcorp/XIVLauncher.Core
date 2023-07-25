@@ -116,7 +116,6 @@ class Program
         Config.GlobalScale ??= 1.0f;
 
         Config.GameModeEnabled ??= false;
-        Config.DxvkAsyncEnabled ??= true;
         Config.ESyncEnabled ??= true;
         Config.FSyncEnabled ??= false;
         Config.SetWin7 ??= true;
@@ -125,6 +124,15 @@ class Program
         Config.WineVersion ??= WineVersion.Wine7_10;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
+
+        Config.DxvkVersion ??= DxvkVersion.v1_10_3;
+        Config.DxvkAsyncEnabled ??= true;
+        Config.DxvkFrameRateLimit ??= 0;
+        Config.DxvkHud ??= DxvkHud.None;
+        Config.DxvkHudCustom ??= "fps,frametimes,gpuload,version";
+        Config.MangoHud ??= MangoHud.None;
+        Config.MangoHudCustomString = "ram,vram,resolution,vulkan_driver,engine_version,wine,frame_timing=0";
+        Config.MangoHudCustomFile = Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "MangoHud", "MangoHud.conf");
 
         Config.FixLDP ??= false;
         Config.FixIM ??= false;
@@ -319,10 +327,10 @@ class Program
 
     public static void CreateCompatToolsInstance()
     {
-        var dxvkSettings = new DxvkSettings("dxvk-async-1.10.3", "https://github.com/Sporif/dxvk-async/releases/download/1.10.3/dxvk-async-1.10.3.tar.gz", storage.Root.FullName, Config.DxvkAsyncEnabled, 0, true);
-        var wineSettings = WineManager.GetSettings();
+        var dxvkSettings = new DxvkSettings(Dxvk.FolderName, Dxvk.DownloadUrl, storage.Root.FullName, Dxvk.AsyncEnabled, Dxvk.FrameRateLimit, Dxvk.DxvkHudEnabled, Dxvk.DxvkHudString, Dxvk.MangoHudEnabled, Dxvk.MangoHudCustomIsFile, Dxvk.MangoHudString, Dxvk.Enabled);
+        var wineSettings = new WineSettings(Wine.IsManagedWine, Wine.CustomWinePath, Wine.FolderName, Wine.DownloadUrl, storage.Root.FullName, Wine.DebugVars, Wine.LogFile, Wine.Prefix, Wine.ESyncEnabled, Wine.FSyncEnabled);
         var toolsFolder = storage.GetFolder("compatibilitytool");
-        CompatibilityTools = new CompatibilityTools(wineSettings, dxvkSettings, Config.DxvkHudType, Config.GameModeEnabled, toolsFolder);
+        CompatibilityTools = new CompatibilityTools(wineSettings, dxvkSettings, Config.GameModeEnabled, toolsFolder);
     }
 
     public static void ShowWindow()
