@@ -97,8 +97,6 @@ public interface ILauncherConfig
 
     public bool? FixIM { get; set; }
 
-    public bool? SetWin7 { get; set; }
-
     #endregion
 
     #region Dalamud

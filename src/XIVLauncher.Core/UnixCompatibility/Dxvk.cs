@@ -51,6 +51,8 @@ public static class Dxvk
         _ => throw new ArgumentOutOfRangeException(),
     };
 
+    public static bool MangoHudInstalled => !string.IsNullOrEmpty(DxvkSettings.GetMangoHudPath());
+
     public static bool MangoHudEnabled => Program.Config.MangoHud != MangoHud.None;
 
     public static bool MangoHudCustomIsFile => Program.Config.MangoHud == MangoHud.CustomFile;
@@ -64,6 +66,12 @@ public static class Dxvk
         MangoHud.CustomFile => Program.Config.MangoHudCustomFile,
         _ => throw new ArgumentOutOfRangeException(),
     };
+
+    public static string DXVK_HUD => "fps,frametimes,gpuload,version";
+
+    public static string MANGOHUD_CONFIG => "ram,vram,resolution,vulkan_driver,engine_version,wine,frame_timing=0";
+
+    public static string MANGOHUD_CONFIGFILE => Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "MangoHud", "MangoHud.conf");
 
 }
 

@@ -118,7 +118,6 @@ class Program
         Config.GameModeEnabled ??= false;
         Config.ESyncEnabled ??= true;
         Config.FSyncEnabled ??= false;
-        Config.SetWin7 ??= true;
 
         Config.WineType ??= WineType.Managed;
         Config.WineVersion ??= WineVersion.Wine7_10;
@@ -129,10 +128,10 @@ class Program
         Config.DxvkAsyncEnabled ??= true;
         Config.DxvkFrameRateLimit ??= 0;
         Config.DxvkHud ??= DxvkHud.None;
-        Config.DxvkHudCustom ??= "fps,frametimes,gpuload,version";
+        Config.DxvkHudCustom ??= Dxvk.DXVK_HUD;
         Config.MangoHud ??= MangoHud.None;
-        Config.MangoHudCustomString = "ram,vram,resolution,vulkan_driver,engine_version,wine,frame_timing=0";
-        Config.MangoHudCustomFile = Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".config", "MangoHud", "MangoHud.conf");
+        Config.MangoHudCustomString ??= Dxvk.MANGOHUD_CONFIG;
+        Config.MangoHudCustomFile ??= Dxvk.MANGOHUD_CONFIGFILE;
 
         Config.FixLDP ??= false;
         Config.FixIM ??= false;
