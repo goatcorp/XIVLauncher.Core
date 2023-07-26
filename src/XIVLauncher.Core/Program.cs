@@ -223,8 +223,6 @@ class Program
 
         CreateCompatToolsInstance();
 
-        Log.Information("Running on {OSName}.{wineInfo}", (OSInfo.IsFlatpak) ? "Linux in a flatpak" : OSInfo.Name, (OSInfo.Platform == Platform.Linux) ? $" Using \"{OSInfo.Package}\" package for managed wine downloads." : string.Empty);
-
         Log.Debug("Creating Veldrid devices...");
 
 #if DEBUG
