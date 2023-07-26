@@ -30,8 +30,6 @@ public enum WineVersion
 
 public static class Wine
 {
-    private static string package = "ubuntu";
-
     public static bool IsManagedWine => Program.Config.WineType == WineType.Managed;
 
     public static string CustomWinePath => Program.Config.WineBinaryPath ?? "/usr/bin";
@@ -59,56 +57,13 @@ public static class Wine
 
     private static string GetDownloadUrl()
     {
-        if (!OSReleaseIsParsed)
-            ParseOSRelease();
+        var package = OSInfo.Package;
+
         return Program.Config.WineVersion switch
         {
             WineVersion.Wine7_10 => $"https://github.com/goatcorp/wine-xiv-git/releases/download/7.10.r3.g560db77d/wine-xiv-staging-fsync-git-{package}-7.10.r3.g560db77d.tar.xz",
             WineVersion.Wine8_5 => $"https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-{package}-8.5.r4.g4211bac7.tar.xz",
             _ => throw new ArgumentOutOfRangeException(),
         };
-    }
-
-    private static void ParseOSRelease()
-    {
-        OSReleaseIsParsed = true;
-        try
-        {
-            if (!File.Exists("/etc/os-release"))
-            {
-                package = "ubuntu";
-                return;
-            }
-            var osRelease = File.ReadAllLines("/etc/os-release");
-            var osInfo = new Dictionary<string, string>();
-            foreach (var line in osRelease)
-            {
-                var keyValue = line.Split('=', 2);
-                if (keyValue.Length == 1)
-                    osInfo.Add(keyValue[0], "");
-                else
-                    osInfo.Add(keyValue[0], keyValue[1]);
-            }
-
-            foreach (var kvp in osInfo)
-            {
-                if (kvp.Value.ToLower().Contains("fedora"))
-                    package = "fedora";
-                if (kvp.Value.ToLower().Contains("tumbleweed"))
-                    package = "fedora";
-                if (kvp.Value.ToLower().Contains("ubuntu"))
-                    package = "ubuntu";
-                if (kvp.Value.ToLower().Contains("debian"))
-                    package = "ubuntu";
-                if (kvp.Value.ToLower().Contains("arch"))
-                    package = "arch";
-            }
-        }
-        catch (Exception ex)
-        {
-            // If there's any kind of error opening the file or even finding it, just go with default.
-            Log.Error(ex, "There was an error while parsing /etc/os-release");
-            package = "ubuntu";
-        }
     }
 }

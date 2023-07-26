@@ -51,7 +51,7 @@ public static class Dxvk
         _ => throw new ArgumentOutOfRangeException(),
     };
 
-    public static bool MangoHudInstalled => DxvkSettings.MangoHudInstalled();
+    public static bool MangoHudInstalled => UnixHelpers.MangoHudIsInstalled();
 
     public static bool MangoHudEnabled => Program.Config.MangoHud != MangoHud.None;
 

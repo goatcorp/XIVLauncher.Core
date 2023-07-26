@@ -223,6 +223,8 @@ class Program
 
         CreateCompatToolsInstance();
 
+        Log.Information("Running on {OSName}.{wineInfo}", (OSInfo.IsFlatpak) ? "Linux in a flatpak" : OSInfo.Name, (OSInfo.Platform == Platform.Linux) ? $" Using \"{OSInfo.Package}\" package for managed wine downloads." : string.Empty);
+
         Log.Debug("Creating Veldrid devices...");
 
 #if DEBUG
@@ -255,15 +257,13 @@ class Program
 
         var needUpdate = false;
 
-#if FLATPAK
-        if (Config.DoVersionCheck ?? false)
+        if (OSInfo.IsFlatpak && (Config.DoVersionCheck ?? false))
         {
             var versionCheckResult = UpdateCheck.CheckForUpdate().GetAwaiter().GetResult();
 
             if (versionCheckResult.Success)
                 needUpdate = versionCheckResult.NeedUpdate;
         }   
-#endif
 
         needUpdate = CoreEnvironmentSettings.IsUpgrade ? true : needUpdate;
 
@@ -329,7 +329,7 @@ class Program
         var dxvkSettings = new DxvkSettings(Dxvk.FolderName, Dxvk.DownloadUrl, storage.Root.FullName, Dxvk.AsyncEnabled, Dxvk.FrameRateLimit, Dxvk.DxvkHudEnabled, Dxvk.DxvkHudString, Dxvk.MangoHudEnabled, Dxvk.MangoHudCustomIsFile, Dxvk.MangoHudString, Dxvk.Enabled);
         var wineSettings = new WineSettings(Wine.IsManagedWine, Wine.CustomWinePath, Wine.FolderName, Wine.DownloadUrl, storage.Root.FullName, Wine.DebugVars, Wine.LogFile, Wine.Prefix, Wine.ESyncEnabled, Wine.FSyncEnabled);
         var toolsFolder = storage.GetFolder("compatibilitytool");
-        CompatibilityTools = new CompatibilityTools(wineSettings, dxvkSettings, Config.GameModeEnabled, toolsFolder);
+        CompatibilityTools = new CompatibilityTools(wineSettings, dxvkSettings, Config.GameModeEnabled, toolsFolder, OSInfo.IsFlatpak);
     }
 
     public static void ShowWindow()
