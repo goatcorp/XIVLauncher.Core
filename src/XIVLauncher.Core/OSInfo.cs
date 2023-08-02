@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace XIVLauncher.Core;
 
-public enum DistroPackage
+public enum LinuxDistroPackage
 {
     ubuntu,
 
@@ -19,7 +19,7 @@ public enum DistroPackage
 
 public static class OSInfo
 {
-    public static DistroPackage Package { get; private set; }
+    public static LinuxDistroPackage Package { get; private set; }
 
     public static string Name { get; private set; }
 
@@ -32,7 +32,7 @@ public static class OSInfo
         var os = System.Environment.OSVersion;
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            Package = DistroPackage.none;
+            Package = LinuxDistroPackage.none;
             Name = os.VersionString;
             IsFlatpak = false;
             Platform = Platform.Win32;
@@ -46,7 +46,7 @@ public static class OSInfo
             Platform = Platform.Mac;
             Name = os.VersionString;
             IsFlatpak = false;
-            Package = DistroPackage.none;
+            Package = LinuxDistroPackage.none;
             return;
         }
         
@@ -55,7 +55,7 @@ public static class OSInfo
             Platform = Platform.Mac;  // Don't have an option for this atm.
             Name = os.VersionString;
             IsFlatpak = false;
-            Package = DistroPackage.none;
+            Package = LinuxDistroPackage.none;
             return;            
         }
 
@@ -64,7 +64,7 @@ public static class OSInfo
         {
             if (!File.Exists("/etc/os-release"))
             {
-                Package = DistroPackage.ubuntu;
+                Package = LinuxDistroPackage.ubuntu;
                 Name = "Unknown distribution";
                 IsFlatpak = false;
                 return;
@@ -87,7 +87,7 @@ public static class OSInfo
             if (CheckFlatpak(osInfo))
             {
                 IsFlatpak = true;
-                Package = DistroPackage.ubuntu;
+                Package = LinuxDistroPackage.ubuntu;
                 return;
             }
 
@@ -98,7 +98,7 @@ public static class OSInfo
         catch
         {
             // If there's any kind of error opening the file or even finding it, just go with default.
-            Package = DistroPackage.ubuntu;
+            Package = LinuxDistroPackage.ubuntu;
             Name = "Unknown distribution";
             IsFlatpak = false;
         }
@@ -112,21 +112,21 @@ public static class OSInfo
         return false;
     }
 
-    private static DistroPackage CheckDistro(Dictionary<string, string> osInfo)
+    private static LinuxDistroPackage CheckDistro(Dictionary<string, string> osInfo)
     {
         foreach (var kvp in osInfo)
         {
             if (kvp.Value.ToLower().Contains("fedora"))
-                return DistroPackage.fedora;
+                return LinuxDistroPackage.fedora;
             if (kvp.Value.ToLower().Contains("tumbleweed"))
-                return DistroPackage.fedora;
+                return LinuxDistroPackage.fedora;
             if (kvp.Value.ToLower().Contains("ubuntu"))
-                return DistroPackage.ubuntu;
+                return LinuxDistroPackage.ubuntu;
             if (kvp.Value.ToLower().Contains("debian"))
-                return DistroPackage.ubuntu;
+                return LinuxDistroPackage.ubuntu;
             if (kvp.Value.ToLower().Contains("arch"))
-                return DistroPackage.arch;
+                return LinuxDistroPackage.arch;
         }
-        return DistroPackage.ubuntu;
+        return LinuxDistroPackage.ubuntu;
     }
 }

@@ -46,7 +46,7 @@ public class SettingsTabDxvk : SettingsTab
                 CheckVisibility = () => dxvkHudSetting.Value == DxvkHud.Custom && dxvkVersionSetting.Value != DxvkVersion.Disabled,
                 CheckWarning = s =>
                 {
-                    if(!UnixHelpers.DxvkHudStringIsValid(s))
+                    if(!DxvkSettings.DxvkHudStringIsValid(s))
                         return "That's not a valid hud string";
                     return null;
                 },
