@@ -39,8 +39,6 @@ public static class Wine
     public static bool ESyncEnabled => Program.Config.ESyncEnabled ?? true;
 
     public static bool FSyncEnabled => Program.Config.FSyncEnabled ?? false;
-
-    private static bool OSReleaseIsParsed = false;
 }
 
 public enum WineType
