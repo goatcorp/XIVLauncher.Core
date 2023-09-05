@@ -22,7 +22,7 @@ public class SettingsTabDxvk : SettingsTab
             {
                 CheckWarning = type =>
                 {
-                    if (new [] {DxvkVersion.v2_1, DxvkVersion.v2_2}.Contains(type))
+                    if (new [] {DxvkVersion.v2_1, DxvkVersion.v2_2, DxvkVersion.v2_3}.Contains(type))
                         return "May not work with older graphics cards. AMD users may need to use env variable RADV_PERFTEST=gpl";
                     return null;
                 },
@@ -33,7 +33,7 @@ public class SettingsTabDxvk : SettingsTab
                 CheckWarning = b =>
                 {
                     if (!b && dxvkVersionSetting.Value == DxvkVersion.v2_0)
-                        return "AMD users may need to use env variable RADV_PERFTEST=gpl";
+                        return "May not work with older graphics cards. AMD users may need to use env variable RADV_PERFTEST=gpl";
                     return null;
                 },
             },
