@@ -23,6 +23,7 @@ public static class Dxvk
         DxvkVersion.v2_1 => "dxvk-2.1",
         DxvkVersion.v2_2 => "dxvk-2.2",
         DxvkVersion.v2_3 => "dxvk-2.3",
+        DxvkVersion.Custom => "custom",
         _ => throw new ArgumentOutOfRangeException(),
     };
 
@@ -34,6 +35,7 @@ public static class Dxvk
         DxvkVersion.v2_1 => "https://github.com/doitsujin/dxvk/releases/download/v2.1/dxvk-2.1.tar.gz",
         DxvkVersion.v2_2 => "https://github.com/doitsujin/dxvk/releases/download/v2.2/dxvk-2.2.tar.gz",
         DxvkVersion.v2_3 => "https://github.com/doitsujin/dxvk/releases/download/v2.3/dxvk-2.3.tar.gz",
+        DxvkVersion.Custom => "",
         _ => throw new ArgumentOutOfRangeException(),        
     };
 
@@ -79,22 +81,25 @@ public static class Dxvk
 
 public enum DxvkVersion
 {
-    [SettingsDescription("Dxvk 1.10.3 (Legacy)", "Dxvk 1.10.3. High compatibility with most graphics cards.")]
-    v1_10_3,
-
-    [SettingsDescription("Dxvk 2.0", "Dxvk 2.0. Equivalent to 1.10.3 if used with Async. Uses GPL without Async.")]
-    v2_0,
-
-    [SettingsDescription("Dxvk 2.1", "A previous version of Dxvk, using GPL. Try this if 2.2 & 2.3 cause problems.")]
-    v2_1,
-
-    [SettingsDescription("Dxvk 2.2", "A previous version of Dxvk, using GPL. Try this if 2.3 causes problems.")]
-    v2_2,
-
-    [SettingsDescription("Dxvk 2.3 (Current)", "Dxvk 2.3, using GPL. May help in CPU-bound situations. No Async patch.")]
+    [SettingsDescription("DXVK 2.3 (Current)", "DXVK 2.3, using GPL. May help in CPU-bound situations. No Async patch.")]
     v2_3,
 
-    [SettingsDescription("Disabled", "Disable Dxvk, use WineD3D with OpenGL instead.")]
+    [SettingsDescription("DXVK 1.10.3 (Legacy)", "DXVK 1.10.3. High compatibility with most graphics cards.")]
+    v1_10_3,
+
+    [SettingsDescription("Custom DXVK", "Put a custom DXVK version in ~/.xlcore/compatibilitytool/dxvk/custom")]
+    Custom,
+
+    [SettingsDescription("DXVK 2.2", "A previous version of DXVK, using GPL. Try this if 2.3 causes problems.")]
+    v2_2,
+
+    [SettingsDescription("DXVK 2.1", "A previous version of DXVK, using GPL. Try this if 2.2 & 2.3 cause problems.")]
+    v2_1,
+
+    [SettingsDescription("DXVK 2.0", "DXVK 2.0. Equivalent to 1.10.3 if used with Async. Uses GPL without Async.")]
+    v2_0,
+
+    [SettingsDescription("Disabled", "Disable DXVK, use WineD3D with OpenGL instead.")]
     Disabled,
 }
 public enum DxvkHud

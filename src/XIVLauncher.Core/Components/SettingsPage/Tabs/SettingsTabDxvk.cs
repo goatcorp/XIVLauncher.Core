@@ -14,11 +14,13 @@ public class SettingsTabDxvk : SettingsTab
     private SettingsEntry<DxvkHud> dxvkHudSetting;
     private SettingsEntry<MangoHud> mangoHudSetting;
 
+    private string customDxvk = Path.Combine(Program.storage.Root.FullName, "compatibilitytool", "dxvk", "custom");
+
     public SettingsTabDxvk()
     {
         Entries = new SettingsEntry[]
         {
-            dxvkVersionSetting = new SettingsEntry<DxvkVersion>("DXVK Version", "Choose which version of DXVK to use.", () => Program.Config.DxvkVersion ?? DxvkVersion.v1_10_3, type => Program.Config.DxvkVersion = type)
+            dxvkVersionSetting = new SettingsEntry<DxvkVersion>("DXVK Version", "Choose which version of DXVK to use. Put your custom DXVK in " + customDxvk, () => Program.Config.DxvkVersion ?? DxvkVersion.v1_10_3, type => Program.Config.DxvkVersion = type)
             {
                 CheckWarning = type =>
                 {
@@ -29,7 +31,7 @@ public class SettingsTabDxvk : SettingsTab
             },
             new SettingsEntry<bool>("Enable DXVK ASYNC", "Enable DXVK ASYNC patch.", () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
             {
-                CheckVisibility = () => (new [] {DxvkVersion.v1_10_3, DxvkVersion.v2_0}.Contains(dxvkVersionSetting.Value)),
+                CheckVisibility = () => (new [] {DxvkVersion.v1_10_3, DxvkVersion.v2_0, DxvkVersion.Custom}.Contains(dxvkVersionSetting.Value)),
                 CheckWarning = b =>
                 {
                     if (!b && dxvkVersionSetting.Value == DxvkVersion.v2_0)
@@ -37,7 +39,7 @@ public class SettingsTabDxvk : SettingsTab
                     return null;
                 },
             },
-            dxvkHudSetting = new SettingsEntry<DxvkHud>("DXVK Overlay", "DXVK Hud is included with Dxvk. MangoHud must be installed separately.\nFlatpak users need the flatpak version of MangoHud.", () => Program.Config.DxvkHud ?? DxvkHud.None, x => Program.Config.DxvkHud = x)
+            dxvkHudSetting = new SettingsEntry<DxvkHud>("DXVK Overlay", "DXVK Hud is included with DXVK. MangoHud must be installed separately.\nFlatpak users need the flatpak version of MangoHud.", () => Program.Config.DxvkHud ?? DxvkHud.None, x => Program.Config.DxvkHud = x)
             {
                 CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled,
             },
