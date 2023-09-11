@@ -65,7 +65,7 @@ public interface ILauncherConfig
 
     public WineType? WineType { get; set; }
 
-    public WineVersion? WineVersion { get; set; }
+    public string? WineVersion { get; set; }
 
     public string? WineBinaryPath { get; set; }
 
@@ -77,7 +77,7 @@ public interface ILauncherConfig
 
     public bool? FSyncEnabled { get; set; }
 
-    public DxvkVersion? DxvkVersion { get; set; }
+    public string? DxvkVersion { get; set; }
 
     public int? DxvkFrameRateLimit { get; set; }
 

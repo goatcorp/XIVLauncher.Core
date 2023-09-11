@@ -1,51 +1,44 @@
-using System.IO;
-using System.Numerics;
 using System.Runtime.InteropServices;
 using ImGuiNET;
 using XIVLauncher.Common.Unix.Compatibility;
-using XIVLauncher.Common.Util;
 using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabDxvk : SettingsTab
 {
-    private SettingsEntry<DxvkVersion> dxvkVersionSetting;
+    private DictionarySettingsEntry dxvkVersionSetting;
     private SettingsEntry<DxvkHud> dxvkHudSetting;
     private SettingsEntry<MangoHud> mangoHudSetting;
 
-    private string customDxvk = Path.Combine(Program.storage.Root.FullName, "compatibilitytool", "dxvk", "custom");
+    private string dxvkPath = Path.Combine(Program.storage.Root.FullName, "compatibilitytool", "dxvk");
 
     public SettingsTabDxvk()
     {
         Entries = new SettingsEntry[]
         {
-            dxvkVersionSetting = new SettingsEntry<DxvkVersion>("DXVK Version", "Choose which version of DXVK to use. Put your custom DXVK in " + customDxvk, () => Program.Config.DxvkVersion ?? DxvkVersion.v1_10_3, type => Program.Config.DxvkVersion = type)
+            dxvkVersionSetting = new DictionarySettingsEntry("DXVK Version", $"Choose which version of DXVK to use. Put your custom DXVK in {dxvkPath}\nEntries marked with *Download* will be downloaded when you log in.", Dxvk.Versions, () => Program.Config.DxvkVersion ?? "dxvk-async-1.10.3", s => Program.Config.DxvkVersion = s, Dxvk.GetDefaultVersion())
             {
-                CheckWarning = type =>
+                CheckWarning = s =>
                 {
-                    if (new [] {DxvkVersion.v2_1, DxvkVersion.v2_2, DxvkVersion.v2_3}.Contains(type))
+                    if (new [] {"dxvk-2.3", "dxvk-2.2", "dxvk-2.1", "dxvk-async-2.0", "dxvk-2.0"}.Contains(s))
                         return "May not work with older graphics cards. AMD users may need to use env variable RADV_PERFTEST=gpl";
                     return null;
                 },
             },
-            new SettingsEntry<bool>("Enable DXVK ASYNC", "Enable DXVK ASYNC patch.", () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
+            new SettingsEntry<bool>("Enable DXVK ASYNC", "Enable DXVK ASYNC patch. May not be available on DXVK >= 2.0", () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
             {
-                CheckVisibility = () => (new [] {DxvkVersion.v1_10_3, DxvkVersion.v2_0, DxvkVersion.Custom}.Contains(dxvkVersionSetting.Value)),
-                CheckWarning = b =>
-                {
-                    if (!b && dxvkVersionSetting.Value == DxvkVersion.v2_0)
-                        return "May not work with older graphics cards. AMD users may need to use env variable RADV_PERFTEST=gpl";
-                    return null;
-                },
+                CheckVisibility = () => dxvkVersionSetting.Value != "DISABLED",
             },
+
             dxvkHudSetting = new SettingsEntry<DxvkHud>("DXVK Overlay", "DXVK Hud is included with DXVK. MangoHud must be installed separately.\nFlatpak users need the flatpak version of MangoHud.", () => Program.Config.DxvkHud ?? DxvkHud.None, x => Program.Config.DxvkHud = x)
             {
-                CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled,
+                CheckVisibility = () => dxvkVersionSetting.Value != "DISABLED",
             },
+
             new SettingsEntry<string>("DXVK Hud Custom String", "Set a custom string for the built in DXVK Hud. Warning: If it's invalid, the game may hang.", () => Program.Config.DxvkHudCustom ?? Dxvk.DXVK_HUD, s => Program.Config.DxvkHudCustom = s)
             {
-                CheckVisibility = () => dxvkHudSetting.Value == DxvkHud.Custom && dxvkVersionSetting.Value != DxvkVersion.Disabled,
+                CheckVisibility = () => dxvkHudSetting.Value == DxvkHud.Custom && dxvkVersionSetting.Value != "DISABLED",
                 CheckWarning = s =>
                 {
                     if(!DxvkSettings.DxvkHudStringIsValid(s))
@@ -55,7 +48,7 @@ public class SettingsTabDxvk : SettingsTab
             },
             mangoHudSetting = new SettingsEntry<MangoHud>("MangoHud Overlay", "MangoHud is installed. It is recommended to set Dxvk Overlay to None if using MangoHud.", () => Program.Config.MangoHud ?? MangoHud.None, x => Program.Config.MangoHud = x)
             {
-                CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled && Dxvk.MangoHudInstalled,
+                CheckVisibility = () => dxvkVersionSetting.Value != "DISABLED" && Dxvk.MangoHudInstalled,
                 CheckWarning = x =>
                 {
                     if (dxvkHudSetting.Value != DxvkHud.None && x != MangoHud.None)
@@ -65,7 +58,7 @@ public class SettingsTabDxvk : SettingsTab
             },
             new SettingsEntry<string>("MangoHud Custom String", "Set a custom string for MangoHud config.", () => Program.Config.MangoHudCustomString ?? Dxvk.MANGOHUD_CONFIG, s => Program.Config.MangoHudCustomString = s)
             {
-                CheckVisibility = () => mangoHudSetting.Value == MangoHud.CustomString && dxvkVersionSetting.Value != DxvkVersion.Disabled && Dxvk.MangoHudInstalled,
+                CheckVisibility = () => mangoHudSetting.Value == MangoHud.CustomString && dxvkVersionSetting.Value != "DISABLED" && Dxvk.MangoHudInstalled,
                 CheckWarning = s =>
                 {
                     if (s.Contains(' '))
@@ -75,7 +68,7 @@ public class SettingsTabDxvk : SettingsTab
             },
             new SettingsEntry<string>("MangoHud Custom Path", "Set a custom path for MangoHud config file.", () => Program.Config.MangoHudCustomFile ?? Dxvk.MANGOHUD_CONFIGFILE, s => Program.Config.MangoHudCustomFile = s)
             {
-                CheckVisibility = () => mangoHudSetting.Value == MangoHud.CustomFile && dxvkVersionSetting.Value != DxvkVersion.Disabled && Dxvk.MangoHudInstalled,
+                CheckVisibility = () => mangoHudSetting.Value == MangoHud.CustomFile && dxvkVersionSetting.Value != "DISABLED" && Dxvk.MangoHudInstalled,
                 CheckWarning = s =>
                 {
                     if(!File.Exists(s))
@@ -85,7 +78,7 @@ public class SettingsTabDxvk : SettingsTab
             },
             new NumericSettingsEntry("Frame Rate Limit", "Set a frame rate limit, and DXVK will try not exceed it. Use 0 for unlimited.", () => Program.Config.DxvkFrameRateLimit ?? 0, i => Program.Config.DxvkFrameRateLimit = i, 0, 1000)
             {
-                CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled,
+                CheckVisibility = () => dxvkVersionSetting.Value != "DISABLED",
             },
         };
     }

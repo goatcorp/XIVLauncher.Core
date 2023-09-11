@@ -16,19 +16,9 @@ public static class Wine
 
     public static string CustomWinePath => Program.Config.WineBinaryPath ?? "/usr/bin";
 
-    public static string FolderName => Program.Config.WineVersion switch
-    {
-        WineVersion.Wine7_10 => "wine-xiv-staging-fsync-git-7.10.r3.g560db77d",
-        WineVersion.Wine8_5 => "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7",
-        _ => throw new ArgumentOutOfRangeException(),
-    };
+    public static string FolderName => Program.Config.WineVersion ?? GetDefaultVersion();
 
-    public static string DownloadUrl =>Program.Config.WineVersion switch
-    {
-                WineVersion.Wine7_10 => $"https://github.com/goatcorp/wine-xiv-git/releases/download/7.10.r3.g560db77d/wine-xiv-staging-fsync-git-{OSInfo.Package.ToString()}-7.10.r3.g560db77d.tar.xz",
-                WineVersion.Wine8_5 => $"https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-{OSInfo.Package.ToString()}-8.5.r4.g4211bac7.tar.xz",
-                _ => throw new ArgumentOutOfRangeException(),
-    };
+    public static string DownloadUrl => GetDownloadUrl(Program.Config.WineVersion);
 
     public static string DebugVars => Program.Config.WineDebugVars ?? "-all";
 
@@ -39,6 +29,65 @@ public static class Wine
     public static bool ESyncEnabled => Program.Config.ESyncEnabled ?? true;
 
     public static bool FSyncEnabled => Program.Config.FSyncEnabled ?? false;
+
+    public static Dictionary<string, Dictionary<string, string>> Versions { get; private set; }
+
+    static Wine()
+    {
+        Versions = new Dictionary<string, Dictionary<string, string>>()
+        {
+            { "wine-xiv-staging-fsync-git-7.10.r3.g560db77d", new Dictionary<string, string>()
+                {   {"name", "Wine-XIV 7.10"}, {"desc","Patched version of Wine Staging 7.10. Default."},
+                    {"label", "Official"}, {"url", $"https://github.com/goatcorp/wine-xiv-git/releases/download/7.10.r3.g560db77d/wine-xiv-staging-fsync-git-{OSInfo.Package.ToString()}-7.10.r3.g560db77d.tar.xz"},
+                    {"mark", "Download"}    }   },
+            { "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7", new Dictionary<string, string>()
+                {   {"name", "Wine-XIV 8.5"}, {"desc", "Patched version of Wine Staging 8.5. Change Windows version to 7 for best results."},
+                    {"label", "Official"}, {"url", $"https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-{OSInfo.Package.ToString()}-8.5.r4.g4211bac7.tar.xz"},
+                    {"mark", "Download"}    }   },
+        };
+    }
+
+    public static void Initialize()
+    {
+        var toolDirectory = new DirectoryInfo(Path.Combine(Program.storage.Root.FullName, "compatibilitytool", "wine"));
+
+        if (!toolDirectory.Exists)
+        {
+            Program.storage.GetFolder("compatibilitytool/wine");
+            return;
+        }
+
+        foreach (var wineDir in toolDirectory.EnumerateDirectories())
+        {
+            if (File.Exists(Path.Combine(wineDir.FullName, "bin", "wine64")) ||
+                File.Exists(Path.Combine(wineDir.FullName, "bin", "wine")))
+            {
+                if (Versions.ContainsKey(wineDir.Name))
+                {
+                    Versions[wineDir.Name].Remove("mark");
+                    continue;
+                }
+                Versions.Add(wineDir.Name, new Dictionary<string, string>() {{"label", "Custom"}});
+            }
+        }
+    }
+
+    private static string GetDownloadUrl(string? name)
+    {
+        name ??= GetDefaultVersion();
+        if (Versions.ContainsKey(name))
+            return Versions[name].ContainsKey("url") ? Versions[name]["url"] : "";
+        return Versions[GetDefaultVersion()]["url"];
+    }
+
+    public static string GetDefaultVersion()
+    {
+        if (Versions.ContainsKey("wine-xiv-staging-fsync-git-7.10.r3.g560db77d"))
+            return "wine-xiv-staging-fsync-git-7.10.r3.g560db77d";
+        if (Versions.ContainsKey("wine-xiv-staging-fsync-git-8.5.r4.g4211bac7"))
+            return "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7";
+        return Versions.First().Key;
+    }
 }
 
 public enum WineType
@@ -48,13 +97,4 @@ public enum WineType
 
     [SettingsDescription("Custom", "Point XIVLauncher to a custom location containing wine binaries to run the game with.")]
     Custom,
-}
-
-public enum WineVersion
-{
-    [SettingsDescription("Wine-xiv 7.10 (Default)", "A patched version of Wine, based on 7.10. The current default.")]
-    Wine7_10,
-
-    [SettingsDescription("Wine-xiv 8.5", "A newer patched version of Wine-staging 8.5. May be faster, but less stable.")]
-    Wine8_5,
 }

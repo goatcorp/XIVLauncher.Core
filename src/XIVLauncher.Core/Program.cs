@@ -120,11 +120,13 @@ class Program
         Config.FSyncEnabled ??= false;
 
         Config.WineType ??= WineType.Managed;
-        Config.WineVersion ??= WineVersion.Wine7_10;
+        if (!Wine.Versions.ContainsKey(Config.WineVersion ?? ""))
+            Config.WineVersion = "wine-xiv-staging-fsync-git-7.10.r3.g560db77d";
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
 
-        Config.DxvkVersion ??= DxvkVersion.v1_10_3;
+        if (!Dxvk.Versions.ContainsKey(Config.DxvkVersion ?? ""))
+            Config.DxvkVersion = "dxvk-async-1.10.3";
         Config.DxvkAsyncEnabled ??= true;
         Config.DxvkFrameRateLimit ??= 0;
         Config.DxvkHud ??= DxvkHud.None;
@@ -144,6 +146,8 @@ class Program
     {
         mainargs = args;
         storage = new Storage(APP_NAME);
+        Wine.Initialize();
+        Dxvk.Initialize();
 
         if (CoreEnvironmentSettings.ClearAll)
         {
