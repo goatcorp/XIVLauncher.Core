@@ -43,7 +43,7 @@ public class SettingsTabTroubleshooting : SettingsTab
             Program.ClearTools(true);
         }
 
-        ImGui.Text("\nClear all the files and folders related to Dalamud. Your settings will not be touched,\nbut all your plugins will be uninstalled, including 3rd-party repos.");
+        ImGui.Text("\nClear all the files and folders related to Dalamud. Your settings will not be touched,\nbut all your plugins will be uninstalled, including custom repos.");
         if (ImGui.Button("Clear Dalamud"))
         {
             Program.ClearPlugins(true);
