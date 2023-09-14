@@ -21,7 +21,8 @@ public class SettingsTabDxvk : SettingsTab
             {
                 CheckWarning = s =>
                 {
-                    if (new [] {"dxvk-2.3", "dxvk-2.2", "dxvk-2.1", "dxvk-async-2.0", "dxvk-2.0"}.Contains(s))
+                    if (s is null) return null;
+                    if (s.StartsWith("dxvk-2") || s.StartsWith("dxvk-async-2") || s.StartsWith("dxvk-gplasync-v2"))
                         return "May not work with older graphics cards. AMD users may need to use env variable RADV_PERFTEST=gpl";
                     return null;
                 },
