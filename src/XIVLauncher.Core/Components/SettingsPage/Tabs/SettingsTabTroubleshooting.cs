@@ -37,7 +37,7 @@ public class SettingsTabTroubleshooting : SettingsTab
             Program.ClearPrefix();
         }
 
-        ImGui.Text("\nClear the managed Wine install and DXVK");
+        ImGui.Text("\nClear the managed Wine and DXVK installs. Custom versions won't be touched.");
         if (ImGui.Button("Clear Wine & DXVK"))
         {
             Program.ClearTools(true);
@@ -59,6 +59,12 @@ public class SettingsTabTroubleshooting : SettingsTab
         if (ImGui.Button("Clear Everything"))
         {
             Program.ClearAll(true);
+        }
+
+        ImGui.Text("\nOpen the .xlcore folder in your file browser.");
+        if (ImGui.Button("Open .xlcore"))
+        {
+            PlatformHelpers.OpenBrowser(Program.storage.Root.FullName);
         }
 
         ImGui.Text("\nGenerate a troubleshooting pack to upload to the official Discord channel");
