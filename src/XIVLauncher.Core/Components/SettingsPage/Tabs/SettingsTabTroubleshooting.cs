@@ -25,12 +25,6 @@ public class SettingsTabTroubleshooting : SettingsTab
 
         ImGui.Separator();
 
-        ImGui.Text("\nReset settings to default.");
-        if (ImGui.Button("Clear Settings"))
-        {
-            Program.ClearSettings(true);
-        }        
-
         ImGui.Text("\nClear the Wine Prefix - delete the ~/.xlcore/wineprefix folder");
         if (ImGui.Button("Clear Prefix"))
         {
@@ -53,6 +47,12 @@ public class SettingsTabTroubleshooting : SettingsTab
         if (ImGui.Button("Clear Logs"))
         {
             Program.ClearLogs(true);
+        }
+
+        ImGui.Text("\nReset settings to default.");
+        if (ImGui.Button("Clear Settings"))
+        {
+            Program.ClearSettings(true);
         }
 
         ImGui.Text("\nDo all of the above.");
