@@ -202,52 +202,6 @@ public class MainPage : Page
 
     private async Task<Launcher.LoginResult> TryLoginToGame(string username, string password, string otp, bool isSteam, LoginAction action)
     {
-        bool? gateStatus = null;
-
-#if !DEBUG
-        try
-        {
-            // TODO: Also apply the login status fix here
-            var gate = await App.Launcher.GetGateStatus(App.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
-            gateStatus = gate.Status;
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Could not obtain gate status");
-        }
-
-        if (gateStatus == null)
-        {
-            /*
-            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateUnreachable", "The login servers could not be reached. This usually indicates that the game is under maintenance, or that your connection to the login servers is unstable.\n\nPlease try again later."))
-                            .WithImage(MessageBoxImage.Asterisk)
-                            .WithButtons(MessageBoxButton.OK)
-                            .WithShowHelpLinks(true)
-                            .WithCaption("XIVLauncher")
-                            .WithParentWindow(_window)
-                            .Show();
-                            */
-
-            App.ShowMessageBlocking("Login servers could not be reached or maintenance is in progress. This might be a problem with your connection.");
-
-            return null;
-        }
-
-        if (gateStatus == false)
-        {
-            /*
-            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateClosed", "FFXIV is currently under maintenance. Please try again later or see official sources for more information."))
-                            .WithImage(MessageBoxImage.Asterisk)
-                            .WithButtons(MessageBoxButton.OK)
-                            .WithCaption("XIVLauncher")
-                            .WithParentWindow(_window)
-                            .Show();*/
-
-            App.ShowMessageBlocking("Maintenance is in progress.");
-
-            //return null;
-        }
-#endif
 
         try
         {
@@ -1239,6 +1193,52 @@ public class MainPage : Page
 
     private void Reactivate()
     {
+        bool? gateStatus = null;
+
+#if !DEBUG
+        try
+        {
+            // TODO: Also apply the login status fix here
+            var gate = await App.Launcher.GetGateStatus(App.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
+            gateStatus = gate.Status;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Could not obtain gate status");
+        }
+
+        if (gateStatus == null)
+        {
+            /*
+            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateUnreachable", "The login servers could not be reached. This usually indicates that the game is under maintenance, or that your connection to the login servers is unstable.\n\nPlease try again later."))
+                            .WithImage(MessageBoxImage.Asterisk)
+                            .WithButtons(MessageBoxButton.OK)
+                            .WithShowHelpLinks(true)
+                            .WithCaption("XIVLauncher")
+                            .WithParentWindow(_window)
+                            .Show();
+                            */
+
+            App.ShowMessageBlocking("Login servers could not be reached or maintenance is in progress. This might be a problem with your connection.");
+
+            return;
+        }
+
+        if (gateStatus == false)
+        {
+            /*
+            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateClosed", "FFXIV is currently under maintenance. Please try again later or see official sources for more information."))
+                            .WithImage(MessageBoxImage.Asterisk)
+                            .WithButtons(MessageBoxButton.OK)
+                            .WithCaption("XIVLauncher")
+                            .WithParentWindow(_window)
+                            .Show();*/
+
+            App.ShowMessageBlocking("Maintenance is in progress.");
+
+            return;
+        }
+#endif
         IsLoggingIn = false;
         this.App.State = LauncherApp.LauncherState.Main;
 
