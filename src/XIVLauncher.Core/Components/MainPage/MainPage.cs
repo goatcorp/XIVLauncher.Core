@@ -120,7 +120,6 @@ public class MainPage : Page
             if (GameHelpers.CheckIsGameOpen() && action == LoginAction.Repair)
             {
                 App.ShowMessageBlocking("The game and/or the official launcher are open. XIVLauncher cannot repair the game if this is the case.\nPlease close them and try again.", "XIVLauncher");
-
                 Reactivate();
                 return;
             }
@@ -150,6 +149,10 @@ public class MainPage : Page
             {
                 Log.Verbose("Reactivated after Login() != true");
                 this.Reactivate();
+            }
+            // Check gate status before continuing
+            if (!await CheckGateStatus()) {
+              this.Reactivate();
             }
         }).ContinueWith(t =>
         {
@@ -1083,7 +1086,56 @@ public class MainPage : Page
 
         Environment.Exit(0);
     }
+    private async Task<bool> CheckGateStatus()
+    {
+        bool? gateStatus = null;
 
+#if !DEBUG
+        try
+        {
+            // TODO: Also apply the login status fix here
+            var gate = await App.Launcher.GetGateStatus(App.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
+            gateStatus = gate.Status;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Could not obtain gate status");
+        }
+
+        if (gateStatus == null)
+        {
+            /*
+            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateUnreachable", "The login servers could not be reached. This usually indicates that the game is under maintenance, or that your connection to the login servers is unstable.\n\nPlease try again later."))
+                            .WithImage(MessageBoxImage.Asterisk)
+                            .WithButtons(MessageBoxButton.OK)
+                            .WithShowHelpLinks(true)
+                            .WithCaption("XIVLauncher")
+                            .WithParentWindow(_window)
+                            .Show();
+                            */
+
+            App.ShowMessageBlocking("Login servers could not be reached or maintenance is in progress. This might be a problem with your connection.");
+
+            return false;
+        }
+
+        if (gateStatus == false)
+        {
+            /*
+            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateClosed", "FFXIV is currently under maintenance. Please try again later or see official sources for more information."))
+                            .WithImage(MessageBoxImage.Asterisk)
+                            .WithButtons(MessageBoxButton.OK)
+                            .WithCaption("XIVLauncher")
+                            .WithParentWindow(_window)
+                            .Show();*/
+
+            App.ShowMessageBlocking("Maintenance is in progress.");
+
+            return false;
+        }
+#endif
+        return true;
+    }
     private async Task<bool> RepairGame(Launcher.LoginResult loginResult)
     {
         var doLogin = false;
@@ -1193,52 +1245,6 @@ public class MainPage : Page
 
     private void Reactivate()
     {
-        bool? gateStatus = null;
-
-#if !DEBUG
-        try
-        {
-            // TODO: Also apply the login status fix here
-            var gate = await App.Launcher.GetGateStatus(App.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
-            gateStatus = gate.Status;
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Could not obtain gate status");
-        }
-
-        if (gateStatus == null)
-        {
-            /*
-            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateUnreachable", "The login servers could not be reached. This usually indicates that the game is under maintenance, or that your connection to the login servers is unstable.\n\nPlease try again later."))
-                            .WithImage(MessageBoxImage.Asterisk)
-                            .WithButtons(MessageBoxButton.OK)
-                            .WithShowHelpLinks(true)
-                            .WithCaption("XIVLauncher")
-                            .WithParentWindow(_window)
-                            .Show();
-                            */
-
-            App.ShowMessageBlocking("Login servers could not be reached or maintenance is in progress. This might be a problem with your connection.");
-
-            return;
-        }
-
-        if (gateStatus == false)
-        {
-            /*
-            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateClosed", "FFXIV is currently under maintenance. Please try again later or see official sources for more information."))
-                            .WithImage(MessageBoxImage.Asterisk)
-                            .WithButtons(MessageBoxButton.OK)
-                            .WithCaption("XIVLauncher")
-                            .WithParentWindow(_window)
-                            .Show();*/
-
-            App.ShowMessageBlocking("Maintenance is in progress.");
-
-            return;
-        }
-#endif
         IsLoggingIn = false;
         this.App.State = LauncherApp.LauncherState.Main;
 
