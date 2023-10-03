@@ -245,7 +245,7 @@ public class MainPage : Page
 
             App.ShowMessageBlocking("Maintenance is in progress.");
 
-            return null;
+            //return null;
         }
 #endif
 
