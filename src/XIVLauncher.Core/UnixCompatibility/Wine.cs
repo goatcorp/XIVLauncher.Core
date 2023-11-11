@@ -61,7 +61,7 @@ public static class Wine
             return;
         }
 
-        foreach (var wineDir in toolDirectory.EnumerateDirectories())
+        foreach (var wineDir in toolDirectory.EnumerateDirectories().OrderBy(x => x.Name))
         {
             if (File.Exists(Path.Combine(wineDir.FullName, "bin", "wine64")) ||
                 File.Exists(Path.Combine(wineDir.FullName, "bin", "wine")))

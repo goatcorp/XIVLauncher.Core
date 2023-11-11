@@ -94,7 +94,7 @@ public static class Dxvk
             return;
         }
 
-        foreach (var dxvkDir in toolDirectory.EnumerateDirectories())
+        foreach (var dxvkDir in toolDirectory.EnumerateDirectories().OrderBy(x => x.Name))
         {
             if (Directory.Exists(Path.Combine(dxvkDir.FullName, "x64")) && Directory.Exists(Path.Combine(dxvkDir.FullName, "x32")))
             {
