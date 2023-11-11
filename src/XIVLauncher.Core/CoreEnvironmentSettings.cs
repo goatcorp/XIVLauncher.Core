@@ -10,6 +10,7 @@ public static class CoreEnvironmentSettings
     public static bool IsUpgrade => CheckEnvBool("XL_SHOW_UPGRADE");
     public static bool ClearSettings => CheckEnvBool("XL_CLEAR_SETTINGS");
     public static bool ClearPrefix => CheckEnvBool("XL_CLEAR_PREFIX");
+    public static bool ClearDalamud => CheckEnvBool("XL_CLEAR_DALAMUD");
     public static bool ClearPlugins => CheckEnvBool("XL_CLEAR_PLUGINS");
     public static bool ClearTools => CheckEnvBool("XL_CLEAR_TOOLS");
     public static bool ClearLogs => CheckEnvBool("XL_CLEAR_LOGS");

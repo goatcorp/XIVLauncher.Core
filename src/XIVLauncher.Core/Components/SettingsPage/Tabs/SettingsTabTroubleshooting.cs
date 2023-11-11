@@ -25,12 +25,6 @@ public class SettingsTabTroubleshooting : SettingsTab
 
         ImGui.Separator();
 
-        ImGui.Text("\nReset settings to default.");
-        if (ImGui.Button("Clear Settings"))
-        {
-            Program.ClearSettings(true);
-        }        
-
         ImGui.Text("\nClear the Wine Prefix - delete the ~/.xlcore/wineprefix folder");
         if (ImGui.Button("Clear Prefix"))
         {
@@ -43,16 +37,28 @@ public class SettingsTabTroubleshooting : SettingsTab
             Program.ClearTools(true);
         }
 
-        ImGui.Text("\nClear all the files and folders related to Dalamud. Your settings will not be touched,\nbut all your plugins will be uninstalled, including 3rd-party repos.");
+        ImGui.Text("\nClear all the files and folders related to Dalamud. This will not uninstall your plugins or their configurations.");
         if (ImGui.Button("Clear Dalamud"))
         {
-            Program.ClearPlugins(true);
+            Program.ClearDalamud(true);
+        }
+
+        ImGui.Text("\nClear the installedPlugins folder. This will uninstall your plugins, but will not remove their configurations.");
+        if (ImGui.Button("Clear Plugins"))
+        {
+            Program.ClearPlugins();
         }
 
         ImGui.Text("\nClear all the log files.");
         if (ImGui.Button("Clear Logs"))
         {
             Program.ClearLogs(true);
+        }
+
+        ImGui.Text("\nReset settings to default.");
+        if (ImGui.Button("Clear Settings"))
+        {
+            Program.ClearSettings(true);
         }
 
         ImGui.Text("\nDo all of the above.");
