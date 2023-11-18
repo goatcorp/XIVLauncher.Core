@@ -125,13 +125,13 @@ public class LauncherApp : Component
 
     private readonly Background background = new();
 
-    public LauncherApp(Storage storage, bool needsUpdateWarning)
+    public LauncherApp(Storage storage, bool needsUpdateWarning, string frontierUrl)
     {
         this.Storage = storage;
 
         this.Accounts = new AccountManager(this.Storage.GetFile("accounts.json"));
         this.UniqueIdCache = new CommonUniqueIdCache(this.Storage.GetFile("uidCache.json"));
-        this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings);
+        this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings, frontierUrl);
 
         this.mainPage = new MainPage(this);
         this.setPage = new SettingsPage(this);
