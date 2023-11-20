@@ -45,6 +45,8 @@ public class NewsFrame : Component
         {
             this.newsLoaded = false;
 
+            if (!this.app.IsLauncherSetup) return;
+
             await Headlines.GetWorlds(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English);
             
             bannerList = await Headlines.GetBanners(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);

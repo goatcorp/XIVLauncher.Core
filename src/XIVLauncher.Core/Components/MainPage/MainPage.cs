@@ -110,13 +110,34 @@ public class MainPage : Page
         if (this.IsLoggingIn)
             return;
 
-        this.App.StartLoading("Logging in...", canDisableAutoLogin: true);
+        this.App.StartLoading("Logging in...", App.IsLauncherSetup ? "Frontier found...": "Waiting for frontier...", UpdateCheck.IsUpdateCheckComplete ? "Update check complete..." : "Waiting for update check...", canDisableAutoLogin: true);
 
         // if (Program.UsesFallbackSteamAppId && this.loginFrame.IsSteam)
         //     throw new Exception("Doesn't own Steam AppId on this account.");
 
         Task.Run(async () =>
         {
+            var startTime = DateTime.UtcNow;
+            var updateCheckCompletePreLoop = UpdateCheck.IsUpdateCheckComplete;
+            while (!App.IsLauncherSetup || !updateCheckCompletePreLoop)
+            {
+                if (DateTime.UtcNow - startTime > TimeSpan.FromSeconds(30))
+                {
+                    App.ShowMessageBlocking(
+                        "The official XIVLauncher server could not be contacted, and the fallback function failed.\nYou should never see this message.\nTry restarting the launcher.",
+                        "Timeout Error");
+
+                    Reactivate();
+                    return;
+                }
+
+                if (!updateCheckCompletePreLoop && UpdateCheck.NeedUpdate)
+                {
+                    Reactivate();
+                    return;
+                }
+            }
+
             if (GameHelpers.CheckIsGameOpen() && action == LoginAction.Repair)
             {
                 App.ShowMessageBlocking("The game and/or the official launcher are open. XIVLauncher cannot repair the game if this is the case.\nPlease close them and try again.", "XIVLauncher");
