@@ -8,22 +8,35 @@ public static class UpdateCheck
 
     public static bool IsUpdateCheckComplete { get; private set; } = false;
 
-    public static bool NeedUpdate { get; private set; } = false;
+    public static bool IsUpdateAvailable { get; private set; } = false;
 
-    public static async Task<VersionCheckResult> CheckForUpdate()
+    public static async Task<VersionCheckResult> CheckForUpdate(bool doVersionCheck)
     {
+        if (!doVersionCheck)
+        {
+            IsUpdateCheckComplete = true;
+            return new VersionCheckResult
+            {
+                Success = true,
+                WantVersion = AppUtil.GetAssemblyVersion(),
+                NeedUpdate = false,
+            };
+        }
+
         try
         {
             using var client = new HttpClient();
-            client.Timeout = TimeSpan.FromSeconds(10);
+            client.Timeout = TimeSpan.FromSeconds(15);
 
             var response = await client.GetStringAsync(UPDATE_URL).ConfigureAwait(false);
             var remoteVersion = Version.Parse(response);
 
             var localVersion = Version.Parse(AppUtil.GetAssemblyVersion());
 
+            // This order is important! If you swap these lines, MainPage.ProcessLogin will
+            // not cancel login attempt when update warning shows.
+            IsUpdateAvailable = remoteVersion > localVersion;
             IsUpdateCheckComplete = true;
-            NeedUpdate = remoteVersion > localVersion;
 
             return new VersionCheckResult
             {

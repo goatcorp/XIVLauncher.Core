@@ -144,7 +144,7 @@ public class LauncherApp : Component
 
         Task.Run(async () =>
         {
-            var versionCheckResult = await UpdateCheck.CheckForUpdate();
+            var versionCheckResult = await UpdateCheck.CheckForUpdate(Program.Config.DoVersionCheck ?? false);
             if (versionCheckResult.Success)
                 if (versionCheckResult.NeedUpdate)
                     this.State = LauncherState.UpdateWarn;
@@ -152,7 +152,10 @@ public class LauncherApp : Component
 
         Task.Run(async () =>
         {
-            await this.CheckLauncher();
+            var frontierUrl = await Frontier.GetFrontierUrl(); 
+            this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings, frontierUrl);
+            this.IsLauncherSetup = true;
+            Log.Verbose($"Frontier URL: {frontierUrl}");
             this.mainPage.ReloadNews();
         });
 
@@ -161,15 +164,6 @@ public class LauncherApp : Component
 #if DEBUG
         IsDebug = true;
 #endif
-    }
-
-    private async Task CheckLauncher()
-    {
-        if (IsLauncherSetup) return;
-        var frontierUrl = await Frontier.GetFrontierUrl(); 
-        this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings, frontierUrl);
-        this.IsLauncherSetup = true;
-        Log.Verbose($"Frontier url: {frontierUrl}");
     }
 
     public void ShowMessage(string text, string title)

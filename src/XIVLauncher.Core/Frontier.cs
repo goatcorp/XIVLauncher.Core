@@ -55,7 +55,7 @@ internal class Frontier
                 UserAgent = { new ProductInfoHeaderValue("XIVLauncher", AppUtil.GetGitHash()) }
             }
         };
-        client.Timeout = TimeSpan.FromSeconds(30);
+        client.Timeout = TimeSpan.FromSeconds(15);
         client.DefaultRequestHeaders.AddWithoutValidation("X-XL-Track", "Release");
         client.DefaultRequestHeaders.AddWithoutValidation("X-XL-LV", "0");
         client.DefaultRequestHeaders.AddWithoutValidation("X-XL-HaveVersion", AppUtil.GetAssemblyVersion());

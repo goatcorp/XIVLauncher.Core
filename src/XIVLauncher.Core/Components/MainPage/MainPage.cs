@@ -110,7 +110,12 @@ public class MainPage : Page
         if (this.IsLoggingIn)
             return;
 
-        this.App.StartLoading("Logging in...", App.IsLauncherSetup ? "Frontier found...": "Waiting for frontier...", UpdateCheck.IsUpdateCheckComplete ? "Update check complete..." : "Waiting for update check...", canDisableAutoLogin: true);
+        var updateCheck = UpdateCheck.IsUpdateCheckComplete;
+        var launcherSetup = App.IsLauncherSetup;
+        var secondLine = updateCheck && launcherSetup ? "" : (!launcherSetup ? "Waiting for frontier check..." : "Waiting for update check...");
+        var thirdLine = !launcherSetup && !updateCheck ? "Waiting for update check..." : "";
+
+        this.App.StartLoading("Logging in...", secondLine, thirdLine, canDisableAutoLogin: true);
 
         // if (Program.UsesFallbackSteamAppId && this.loginFrame.IsSteam)
         //     throw new Exception("Doesn't own Steam AppId on this account.");
@@ -119,23 +124,23 @@ public class MainPage : Page
         {
             var startTime = DateTime.UtcNow;
             var updateCheckCompletePreLoop = UpdateCheck.IsUpdateCheckComplete;
-            while (!App.IsLauncherSetup || !updateCheckCompletePreLoop)
+            while (!(App.IsLauncherSetup && UpdateCheck.IsUpdateCheckComplete))
             {
-                if (DateTime.UtcNow - startTime > TimeSpan.FromSeconds(30))
+                if (DateTime.UtcNow - startTime > TimeSpan.FromSeconds(16))
                 {
                     App.ShowMessageBlocking(
-                        "The official XIVLauncher server could not be contacted, and the fallback function failed.\nYou should never see this message.\nTry restarting the launcher.",
+                        "The official XIVLauncher server could not be contacted, and the fallback function failed.\nYou should never see this message.\nChances are, both checks have succeeded. Try logging in again.",
                         "Timeout Error");
 
                     Reactivate();
                     return;
                 }
+            }
 
-                if (!updateCheckCompletePreLoop && UpdateCheck.NeedUpdate)
-                {
-                    Reactivate();
-                    return;
-                }
+            if (UpdateCheck.IsUpdateAvailable && !updateCheckCompletePreLoop)
+            {
+                Reactivate();
+                return;
             }
 
             if (GameHelpers.CheckIsGameOpen() && action == LoginAction.Repair)
