@@ -48,6 +48,9 @@ internal class Frontier
 
     public static async Task<string> GetFrontierUrl()
     {
+        if (Program.Config.DoFrontierCheck ?? true)
+            return FRONTIER_FALLBACK_URL;
+
         using var client = new HttpClient
         {
             DefaultRequestHeaders =
