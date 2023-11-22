@@ -40,8 +40,7 @@ public class SettingsTabGame : SettingsTab
         new SettingsEntry<bool>("Use XIVLauncher authenticator/OTP macros", "Check this if you want to use the XIVLauncher authenticator app or macros.", () => Program.Config.IsOtpServer ?? false, x => Program.Config.IsOtpServer = x),
         new SettingsEntry<bool>("Ignore Steam", "Check this if you do not want XIVLauncher to communicate with Steam (Requires Restart).", () => Program.Config.IsIgnoringSteam ?? false, x => Program.Config.IsIgnoringSteam = x),
         new SettingsEntry<bool>("Use Experimental UID Cache", "Tries to save your login token for the next start. Can result in launching with expired sessions.\nDisable if receiving FFXIV error 1012 or 500X.", () => Program.Config.IsUidCacheEnabled ?? false, x => Program.Config.IsUidCacheEnabled = x),
-        new SettingsEntry<bool>("Skip XIVLauncher version check", "Don't check for new versions of XIVLauncher. You won't be notified of new updates.\nResults in faster autologin. (Requires restart)", () => !(Program.Config.DoVersionCheck ?? true), b => Program.Config.DoVersionCheck = !b),
-        new SettingsEntry<bool>("Skip Frontier URL check", "Don't check for newer version of Frontier URL; use fallback. May eventually prevent current news from loading, or prevent login.\nResults in faster autologin. (Requires restart)", () => !(Program.Config.DoFrontierCheck ?? false), b => Program.Config.DoFrontierCheck = !b),
+        new SettingsEntry<bool>("Skip XIVLauncher version check", "Don't check for new versions of XIVLauncher. You won't be notified of new updates.\nResults in faster autologin, but may eventually fail to launch. (Requires restart)", () => !(Program.Config.DoVersionCheck ?? true), b => Program.Config.DoVersionCheck = !b),
     };
 
     public override string Title => "Game";

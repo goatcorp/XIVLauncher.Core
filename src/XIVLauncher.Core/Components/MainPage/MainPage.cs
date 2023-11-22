@@ -110,12 +110,7 @@ public class MainPage : Page
         if (this.IsLoggingIn)
             return;
 
-        var updateCheck = UpdateCheck.IsUpdateCheckComplete;
-        var launcherSetup = App.IsLauncherSetup;
-        var secondLine = updateCheck && launcherSetup ? "" : (!launcherSetup ? "Waiting for frontier check..." : "Waiting for update check...");
-        var thirdLine = !launcherSetup && !updateCheck ? "Waiting for update check..." : "";
-
-        this.App.StartLoading("Logging in...", secondLine, thirdLine, canDisableAutoLogin: true);
+        this.App.StartLoading(!(App.IsLauncherSetup && App.IsUpdateCheckComplete) ? "Checking for updates..." : "Logging In...", canDisableAutoLogin: true);
 
         // if (Program.UsesFallbackSteamAppId && this.loginFrame.IsSteam)
         //     throw new Exception("Doesn't own Steam AppId on this account.");
@@ -123,13 +118,13 @@ public class MainPage : Page
         Task.Run(async () =>
         {
             var startTime = DateTime.UtcNow;
-            var updateCheckCompletePreLoop = UpdateCheck.IsUpdateCheckComplete;
-            while (!(App.IsLauncherSetup && UpdateCheck.IsUpdateCheckComplete))
+            var updateCheckCompletePreLoop = App.IsUpdateCheckComplete;
+            while (!(App.IsLauncherSetup && App.IsUpdateCheckComplete))
             {
                 if (DateTime.UtcNow - startTime > TimeSpan.FromSeconds(16))
                 {
                     App.ShowMessageBlocking(
-                        "The official XIVLauncher server could not be contacted, and the fallback function failed.\nYou should never see this message.\nChances are, both checks have succeeded. Try logging in again.",
+                        "The update checks timed out and did not properly return fallback values.\nTry logging in again. If that doesn't work, restart XIVLauncher.",
                         "Timeout Error");
 
                     Reactivate();
@@ -139,7 +134,7 @@ public class MainPage : Page
 
             if (UpdateCheck.IsUpdateAvailable && !updateCheckCompletePreLoop)
             {
-                Reactivate();
+                Reactivate(LauncherApp.LauncherState.UpdateWarn);
                 return;
             }
 
@@ -1263,10 +1258,10 @@ public class MainPage : Page
         Program.HideWindow();
     }
 
-    private void Reactivate()
+    private void Reactivate(LauncherApp.LauncherState state = LauncherApp.LauncherState.Main)
     {
         IsLoggingIn = false;
-        this.App.State = LauncherApp.LauncherState.Main;
+        this.App.State = state;
 
         Program.ShowWindow();
     }

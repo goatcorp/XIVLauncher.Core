@@ -22,6 +22,8 @@ public class LauncherApp : Component
 
     public bool IsLauncherSetup { get; private set; } = false;
 
+    public bool IsUpdateCheckComplete { get; private set; } = false;
+
     #region Modal State
 
     private bool isModalDrawing = false;
@@ -144,18 +146,18 @@ public class LauncherApp : Component
 
         Task.Run(async () =>
         {
-            var versionCheckResult = await UpdateCheck.CheckForUpdate(Program.Config.DoVersionCheck ?? false);
+            var versionCheckResult = await UpdateCheck.CheckForUpdate(Program.Config.DoVersionCheck ?? true);
             if (versionCheckResult.Success)
                 if (versionCheckResult.NeedUpdate)
                     this.State = LauncherState.UpdateWarn;
+            this.IsUpdateCheckComplete = true;
         });
 
         Task.Run(async () =>
         {
-            var frontierUrl = await Frontier.GetFrontierUrl(); 
+            var frontierUrl = await UpdateCheck.GetFrontierUrl(Program.Config.DoVersionCheck ?? true);
             this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings, frontierUrl);
             this.IsLauncherSetup = true;
-            Log.Verbose($"Frontier URL: {frontierUrl}");
             this.mainPage.ReloadNews();
         });
 

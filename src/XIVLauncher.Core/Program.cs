@@ -98,7 +98,6 @@ class Program
         Config.IsAutologin ??= false;
         Config.CompletedFts ??= false;
         Config.DoVersionCheck ??= true;
-        Config.DoFrontierCheck ??= true;
         Config.FontPxSize ??= 22.0f;
 
         Config.IsDx11 ??= true;
