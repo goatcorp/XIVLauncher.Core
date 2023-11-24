@@ -1,0 +1,14 @@
+"compatibilitytools"
+{
+  "compat_tools"
+  {
+	"XLCore-SCT" // Internal name of this tool
+	{
+	  "install_path" "."
+	  "display_name" "XIVLauncher.Core as Compatibility Tool"
+
+	  "from_oslist"  "windows"
+	  "to_oslist"    "linux"
+	}
+  }
+}

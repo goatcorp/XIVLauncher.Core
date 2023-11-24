@@ -128,6 +128,9 @@ class Program
 
         Config.FixLDP ??= false;
         Config.FixIM ??= false;
+
+        Config.SteamPath ??= Path.Combine(CoreEnvironmentSettings.XDG_DATA_HOME, "Steam");
+        Config.SteamFlatpakPath ??= Path.Combine(CoreEnvironmentSettings.HOME, ".var", "app", "com.valvesoftware.Steam", "data", "Steam" );
     }
 
     public const uint STEAM_APP_ID = 39210;

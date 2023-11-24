@@ -1,0 +1,35 @@
+#!/bin/env bash
+
+# Prevent double launch
+if [ $1 == "run" ]; then exit; fi
+
+xlcoreDir=$HOME/.xlcore
+logDir=$xlcoreDir/logs
+mkdir -p $xlcoreDir
+mkdir -p $logDir
+
+# Working directory is actually the steam install location, so we need to find the path of this script
+tooldir="$(realpath "$(dirname "$0")")"
+
+# If aria2c isn't found, add our local copy to the $PATH
+count=$(find /usr -type f -executable -name "aria2c" 2>/dev/null | wc -l)
+if (( $count == 0 )); then
+    PATH="$PATH:$tooldir/bin"
+fi
+
+# Work around a Steam overlay bug. I put some code into XIVLauncher to add the ldpreload variable
+# to the LD_PRELOAD variable before launching proton/wine. This prevents the overlay from corrupting
+# the XIVLauncher UI.
+# Then set LD_PRELOAD to point to the included libsecret library files.
+export XL_PRELOAD="$LD_PRELOAD"
+unset LD_PRELOAD
+
+# If libsecret isn't found, add to $LD_PRELOAD
+count=$(ldconfig -p | grep libsecret-1 | wc -l)
+if (( $count == 0)); then
+    export LD_PRELOAD=$tooldir/lib/libsecret-1.so.0:$tooldir/lib/libsecret-1.so.0.0.0:$LD_PRELOAD
+fi
+
+export OPENSSL_CONF="$tooldir/openssl_fix.cnf"
+export XL_SCT=1
+"$tooldir/XIVLauncher/XIVLauncher.Core" $@ >> $logDir/steamtool_console.log 2>&1

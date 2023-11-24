@@ -15,17 +15,20 @@ public static class CoreEnvironmentSettings
     public static bool ClearLogs => CheckEnvBool("XL_CLEAR_LOGS");
     public static bool ClearAll => CheckEnvBool("XL_CLEAR_ALL");
     public static bool? UseSteam => CheckEnvBoolOrNull("XL_USE_STEAM"); // Fix for Steam Deck users who lock themselves out
+    public static bool IsSteamCompatTool => CheckEnvBool("XL_SCT");
+    public static string HOME => System.Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    public static string XDG_DATA_HOME => string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("XDG_DATA_HOME")) ? Path.Combine(HOME, ".local", "share") : System.Environment.GetEnvironmentVariable("XDG_DATA_HOME");
 
     private static bool CheckEnvBool(string key)
     {
-        string val = (System.Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
+        string val = (Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
         if (val == "1" || val == "true" || val == "yes" || val == "y" || val == "on") return true;
         return false;
     }
 
     private static bool? CheckEnvBoolOrNull(string key)
     {
-        string val = (System.Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
+        string val = (Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
         if (val == "1" || val == "true" || val == "yes" || val == "y" || val == "on") return true;
         if (val == "0" || val == "false" || val == "no" || val == "n" || val == "off") return false;
         return null;
@@ -36,5 +39,13 @@ public static class CoreEnvironmentSettings
         string dirty = Environment.GetEnvironmentVariable(envvar) ?? "";
         if (badstring.Equals("")) return dirty;
         return string.Join(separator, Array.FindAll<string>(dirty.Split(separator, StringSplitOptions.RemoveEmptyEntries), s => !s.Contains(badstring)));
+    }
+
+    static CoreEnvironmentSettings()
+    {
+        var xlpreload = Environment.GetEnvironmentVariable("XL_PRELOAD") ?? "";
+        var ldpreload = GetCleanEnvironmentVariable("LD_PRELOAD");
+        ldpreload = (string.IsNullOrEmpty(xlpreload) ? "" : xlpreload + ":") + (string.IsNullOrEmpty(ldpreload) ? "" : ldpreload);
+        Environment.SetEnvironmentVariable("LD_PRELOAD", ldpreload);
     }
 }

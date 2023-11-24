@@ -93,6 +93,10 @@
     <EmbeddedResource Include="Resources/steamdeck_fterror.png" LogicalName="steamdeck_fterror.png" />
     <EmbeddedResource Include="Resources/steamdeck_switchprompt.png" LogicalName="steamdeck_switchprompt.png" />
     <EmbeddedResource Include="Resources/xlcore_updatewarn.png" LogicalName="xlcore_updatewarn.png" />
+    <EmbeddedResource Include="Resources/compatibilitytool.vdf" LogicalName="compatibilitytool.vdf" />
+    <EmbeddedResource Include="Resources/toolmanifest.vdf" LogicalName="toolmanifest.vdf" />
+    <EmbeddedResource Include="Resources/xlcore" LogicalName="xlcore" />
+    <EmbeddedResource Include="Resources/openssl_fix.cnf" LogicalName="openssl_fix.cnf" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win10-x64'">
