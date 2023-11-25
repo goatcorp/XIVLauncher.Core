@@ -43,8 +43,10 @@ public class SettingsTabSteamTool : SettingsTab
             ImGui.Dummy(new Vector2(10));
             ImGui.Text("You are currently running XIVLauncher.Core as a Steam compatibility tool.");
             ImGui.Dummy(new Vector2(10));
-            ImGui.Text("If you are trying to upgrade, you must first update your local install of XIVLauncher.Core. Then launch the local version," +
-                        "\nnavigate back to this tab, and re-install as a Steam compatibility tool.");
+            ImGui.Text("If you are trying to upgrade, you must first update your local install of XIVLauncher.Core. Then launch the local" +
+                        "\nversion, navigate back to this tab, and re-install as a Steam compatibility tool.");
+            ImGui.Text("\nIf you are trying to uninstall, you should likewise launch the native version of XIVLauncher, and click the appropriate" +
+                        "\nuninstall button.");
             return;
         }
         ImGui.Text("\nUse this tab to install XIVLauncher.Core as a Steam compatibility tool.");
@@ -71,7 +73,7 @@ public class SettingsTabSteamTool : SettingsTab
         {
             ImGui.BeginDisabled();
         }
-        if (ImGui.Button("Uninstall from Steam"))
+        if (ImGui.Button("Uninstall from native Steam"))
         {
             this.Save();
             SteamCompatibilityTool.DeleteTool(Program.Config.SteamPath);

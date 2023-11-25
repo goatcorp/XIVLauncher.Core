@@ -1,7 +1,9 @@
 #!/bin/env bash
 
 # Prevent double launch
-if [ $1 == "run" ]; then exit; fi
+if [ $1 == "run" ]; then
+    exit 0
+fi
 
 xlcoreDir=$HOME/.xlcore
 logDir=$xlcoreDir/logs
