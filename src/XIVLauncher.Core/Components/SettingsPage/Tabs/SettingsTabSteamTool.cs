@@ -66,6 +66,20 @@ public class SettingsTabSteamTool : SettingsTab
             this.Save();
             SteamCompatibilityTool.CreateTool(Program.Config.SteamPath);
         }
+        ImGui.SameLine();
+        if (!steamToolExists)
+        {
+            ImGui.BeginDisabled();
+        }
+        if (ImGui.Button("Uninstall from Steam"))
+        {
+            this.Save();
+            SteamCompatibilityTool.DeleteTool(Program.Config.SteamPath);
+        }
+        if (!steamToolExists)
+        {
+            ImGui.EndDisabled();
+        }
 
         ImGui.Dummy(new Vector2(10));
         ImGui.Separator();
@@ -82,6 +96,20 @@ public class SettingsTabSteamTool : SettingsTab
         {
             this.Save();
             SteamCompatibilityTool.CreateTool(Program.Config.SteamFlatpakPath);
+        }
+        ImGui.SameLine();
+        if (!steamFlatpakToolExists)
+        {
+            ImGui.BeginDisabled();
+        }
+        if (ImGui.Button("Uninstall from Flatpak Steam"))
+        {
+            this.Save();
+            SteamCompatibilityTool.DeleteTool(Program.Config.SteamFlatpakPath);
+        }
+        if (!steamFlatpakToolExists)
+        {
+            ImGui.EndDisabled();
         }
 
         ImGui.Dummy(new Vector2(10));

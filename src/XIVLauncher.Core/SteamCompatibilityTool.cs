@@ -6,7 +6,7 @@ using Serilog;
 
 namespace XIVLauncher.Core;
 
-static class SteamCompatibilityTool
+public static class SteamCompatibilityTool
 {
     public static bool CheckTool(string path)
     {
@@ -103,5 +103,13 @@ static class SteamCompatibilityTool
             File.CreateSymbolicLink(Path.Combine(libPath, "libsecret-1.so"), "libsecret-1.so.0.0.0");
         }
 #endif
+        Log.Verbose($"[SCT] XIVLauncher installed as Steam compatibility tool to folder {destination.FullName}");
+    }
+
+    public static void DeleteTool(string path)
+    {
+        var steamToolFolder = new DirectoryInfo(Path.Combine(path, "compatibilitytools.d", "xlcore"));
+        steamToolFolder.Delete(true);
+        Log.Verbose($"[SCT] Deleted Steam compatibility tool at folder {steamToolFolder.FullName}");
     }
 }
