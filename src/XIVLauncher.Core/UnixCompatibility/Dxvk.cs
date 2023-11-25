@@ -74,6 +74,12 @@ public static class Dxvk
             {"label", "Current"}, {"url", "https://github.com/doitsujin/dxvk/releases/download/v2.3/dxvk-2.3.tar.gz"},
             {"mark", "Download" }
         };
+        Versions["dxvk-2.2"] = new Dictionary<string, string>()
+        {
+            {"name", "DXVK 2.2"}, {"desc", "Previous version, using Graphics Pipeline Libs. Use this if you use ReShade Effects Toggler."},
+            {"label", "Current"}, {"url", "https://github.com/doitsujin/dxvk/releases/download/v2.2/dxvk-2.2.tar.gz"},
+            {"mark", "Download" }
+        };
         Versions["dxvk-async-1.10.3"] = new Dictionary<string, string>()
         {
             {"name", "DXVK 1.10.3"}, {"desc", "Legacy version with high compatibility. Includes async patch."},

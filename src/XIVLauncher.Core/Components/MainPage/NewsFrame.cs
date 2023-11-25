@@ -15,6 +15,8 @@ public class NewsFrame : Component
     private Headlines? headlines;
     private TextureWrap[]? banners;
 
+    private IReadOnlyList<Banner>? bannerList;
+
     private int currentBanner = 0;
 
     private bool newsLoaded = false;
@@ -43,14 +45,21 @@ public class NewsFrame : Component
         {
             this.newsLoaded = false;
 
-            this.headlines = await Headlines.Get(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
-            this.banners = new TextureWrap[this.headlines.Banner.Length];
+            await Headlines.GetWorlds(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English);
+            
+            bannerList = await Headlines.GetBanners(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
+                       
+            await Headlines.GetMessage(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English);
+
+            headlines = await Headlines.GetNews(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
+            
+            this.banners = new TextureWrap[bannerList.Count];
 
             var client = new HttpClient();
 
-            for (var i = 0; i < this.headlines.Banner.Length; i++)
+            for (var i = 0; i < bannerList.Count; i++)
             {
-                var textureBytes = await client.GetByteArrayAsync(this.headlines.Banner[i].LsbBanner).ConfigureAwait(false);
+                var textureBytes = await client.GetByteArrayAsync(this.bannerList[i].LsbBanner).ConfigureAwait(false);
                 this.banners[i] = TextureWrap.Load(textureBytes);
             }
 
@@ -77,7 +86,7 @@ public class NewsFrame : Component
                 ImGui.Image(banner.ImGuiHandle, banner.Size);
 
                 if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
-                    AppUtil.OpenBrowser(this.headlines.Banner[this.currentBanner].Link.ToString());
+                    AppUtil.OpenBrowser(this.bannerList[this.currentBanner].Link.ToString());
 
                 ImGui.Dummy(new Vector2(15));
 

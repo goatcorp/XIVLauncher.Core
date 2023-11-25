@@ -65,6 +65,8 @@ class Program
     private static uint invalidationFrames = 0;
     private static Vector2 lastMousePosition;
 
+    private const string FRONTIER_FALLBACK = "https://launcher.finalfantasyxiv.com/v650/index.html?rc_lang={0}&time={1}";
+
     public static void Invalidate(uint frames = 100)
     {
         invalidationFrames = frames;
@@ -270,7 +272,7 @@ class Program
 
         needUpdate = CoreEnvironmentSettings.IsUpgrade ? true : needUpdate;
 
-        launcherApp = new LauncherApp(storage, needUpdate);
+        launcherApp = new LauncherApp(storage, needUpdate, FRONTIER_FALLBACK);
 
         Invalidate(20);
 
