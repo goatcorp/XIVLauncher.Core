@@ -4,7 +4,7 @@ using System.IO;
 using ImGuiNET;
 using XIVLauncher.Common.Unix.Compatibility;
 using XIVLauncher.Common.Util;
-using XIVLauncher.Core;
+using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -24,9 +24,10 @@ public class SettingsTabSteamTool : SettingsTab
         {
             steamPath = new SettingsEntry<string>("Steam Path (native install)", "Path to the native steam config files. Only change this if you have your steam config stored somewhere else.",
                 () => Program.Config.SteamPath ?? Path.Combine(CoreEnvironmentSettings.XDG_DATA_HOME, "Steam"), s => Program.Config.SteamPath = s),
-
+#if FLATPAK
             steamFlatpakPath = new SettingsEntry<string>("Steam Path (flatpak install)", "Path to the flatpak steam config files. Only change this if you have your steam config stored somewhere else.",
                 () => Program.Config.SteamFlatpakPath ?? Path.Combine(CoreEnvironmentSettings.HOME, ".var", "app", "com.valvesoftware.Steam", "data", "Steam" ), s => Program.Config.SteamFlatpakPath = s),           
+#endif
         };
     }
 
@@ -61,6 +62,13 @@ public class SettingsTabSteamTool : SettingsTab
         ImGui.Separator();
         ImGui.Dummy(new Vector2(10));
 
+        if (!SteamCompatibilityTool.IsSteamInstalled)
+        {
+            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
+            ImGui.Text("\nWARNING! Steam install not detected. If it is installed, make sure you run it at least once.\n");
+            ImGui.PopStyleColor();
+        }
+
         ImGui.Text($"Native Steam Tool status: {(steamToolExists ? "INSTALLED" : "Not Installed")}");
         ImGui.Dummy(new Vector2(10));
         if (ImGui.Button($"{(steamToolExists ? "Re-i" : "I")}nstall to native Steam"))
@@ -83,16 +91,20 @@ public class SettingsTabSteamTool : SettingsTab
             ImGui.EndDisabled();
         }
 
+#if FLATPAK
         ImGui.Dummy(new Vector2(10));
         ImGui.Separator();
         ImGui.Dummy(new Vector2(10));
 
+        if (!SteamCompatibilityTool.IsFlatpakSteamInstalled)
+        {
+            ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
+            ImGui.Text("\nWARNING! Flatpak Steam install not detected. If it is installed, make sure you run it at least once.\n" + 
+                "This may also appear if you have not given your Flatpak XIVLauncher file permissions to ~/.var/app/com.valvesoftware.Steam\n");
+            ImGui.PopStyleColor();
+        }
+
         ImGui.Text($"Flatpak Steam Tool status: {(steamFlatpakToolExists ? "INSTALLED" : "Not Installed")}");
-#if !FLATPAK
-        ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
-        ImGui.Text("You are NOT running flatpak XIVLauncher.Core. You probably shouldn't install to Flatpak Steam. It may cause issues.");
-        ImGui.PopStyleColor();
-#endif
         ImGui.Dummy(new Vector2(10));
         if (ImGui.Button($"{(steamFlatpakToolExists ? "Re-i" : "I")}nstall to flatpak Steam"))
         {
@@ -114,6 +126,7 @@ public class SettingsTabSteamTool : SettingsTab
             ImGui.EndDisabled();
         }
 
+#endif
         ImGui.Dummy(new Vector2(10));
         ImGui.Separator();
         ImGui.Dummy(new Vector2(10));

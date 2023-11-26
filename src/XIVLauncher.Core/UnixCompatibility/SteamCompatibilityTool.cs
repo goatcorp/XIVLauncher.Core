@@ -3,11 +3,21 @@ using System.IO;
 using System.Reflection;
 using System.Diagnostics;
 using Serilog;
+using XIVLauncher.Core;
 
-namespace XIVLauncher.Core;
+namespace XIVLauncher.Core.UnixCompatibility;
 
 public static class SteamCompatibilityTool
 {
+    public static bool IsSteamInstalled { get; } = false;
+
+    public static bool IsFlatpakSteamInstalled { get; } = false;
+
+    static SteamCompatibilityTool()
+    {
+        IsSteamInstalled = Directory.Exists(Path.Combine(CoreEnvironmentSettings.XDG_DATA_HOME, "Steam"));
+        IsFlatpakSteamInstalled = Directory.Exists(Path.Combine(CoreEnvironmentSettings.HOME, ".var/app/com.valvesoftware.Steam"));
+    }
     public static bool CheckTool(string path)
     {
         return Directory.Exists(Path.Combine(path, "xlcore"));
