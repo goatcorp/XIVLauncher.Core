@@ -129,7 +129,11 @@ class Program
         Config.FixLDP ??= false;
         Config.FixIM ??= false;
 
+#if FLATPAK
+        Config.SteamPath ??= Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share");
+#else
         Config.SteamPath ??= Path.Combine(CoreEnvironmentSettings.XDG_DATA_HOME, "Steam");
+#endif
         Config.SteamFlatpakPath ??= Path.Combine(CoreEnvironmentSettings.HOME, ".var", "app", "com.valvesoftware.Steam", "data", "Steam" );
     }
 

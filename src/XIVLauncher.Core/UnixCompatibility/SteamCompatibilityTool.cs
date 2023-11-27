@@ -15,7 +15,11 @@ public static class SteamCompatibilityTool
 
     static SteamCompatibilityTool()
     {
+#if FLATPAK
+        IsSteamInstalled = Directory.Exists(Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam"));
+#else
         IsSteamInstalled = Directory.Exists(Path.Combine(CoreEnvironmentSettings.XDG_DATA_HOME, "Steam"));
+#endif
         IsFlatpakSteamInstalled = Directory.Exists(Path.Combine(CoreEnvironmentSettings.HOME, ".var/app/com.valvesoftware.Steam"));
     }
     public static bool CheckTool(string path)
