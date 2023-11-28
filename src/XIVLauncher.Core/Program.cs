@@ -139,48 +139,6 @@ class Program
 
     private static void Main(string[] args)
     {
-        foreach (var arg in args)
-        {
-            if (arg == "--deck-install")
-            {
-                SteamCompatibilityTool.CreateTool(Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam"));
-                Console.WriteLine($"Installed as Steam compatibility tool to {Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam", "compatibilitytools.d", "xlcore")}");
-                return;
-            }
-            if (arg.StartsWith("--install="))
-            {
-                var path = arg.Split('=', 2)[1];
-                if (Directory.Exists(path) && (path.EndsWith("/Steam") || path.EndsWith("/Steam/")))
-                {
-                    SteamCompatibilityTool.CreateTool(path);
-                    Console.WriteLine($"Installed as Steam compatibility tool to path {Path.Combine(path, "compatibilitytools.d", "xlcore")}");
-                }
-                else
-                    Console.WriteLine($"Invalid path. Path does not exist or is not a Steam folder: {path}");
-                
-                return;
-            }
-            if (arg == "--deck-remove")
-            {
-                SteamCompatibilityTool.DeleteTool(Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam"));
-                Console.WriteLine($"Removed XIVLauncher.Core as a Steam compatibility tool from {Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam", "compatibilitytools.d")}");
-                return;
-            }
-            if (arg.StartsWith("--remove="))
-            {
-                var path = arg.Split('=', 2)[1];
-                if (Directory.Exists(path) && (path.EndsWith("/Steam") || path.EndsWith("/Steam/")))
-                {
-                    SteamCompatibilityTool.DeleteTool(path);
-                    Console.WriteLine($"Removed XIVLauncher.Core as a Steam compatibility tool from {Path.Combine(path, "compatibilitytools.d")}");
-                }
-                else
-                    Console.WriteLine($"Invalid path. Path does not exist or is not a Steam folder: {path}");
-                
-                return;
-            }
-        }
-
         mainargs = args;
         storage = new Storage(APP_NAME);
 
@@ -229,6 +187,8 @@ class Program
                     break;
 
                 case PlatformID.Unix:
+                    // We should only run the script on Linux (maybe Unix) systems.
+                    if (CommandLineInstaller()) return;
                     Steam = new UnixSteam();
                     break;
 
@@ -483,5 +443,55 @@ class Program
         ClearPlugins(tsbutton);
         ClearTools(tsbutton);
         ClearLogs(true);
+    }
+
+    private static bool CommandLineInstaller()
+    {
+        foreach (var arg in mainargs)
+        {
+            if (arg == "--deck-install")
+            {
+                SteamCompatibilityTool.CreateTool(Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam"));
+                Console.WriteLine($"Installed as Steam compatibility tool to {Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam", "compatibilitytools.d", "xlcore")}");
+                return true;
+            }
+            if (arg.StartsWith("--install="))
+            {
+                var path = arg.Split('=', 2)[1];
+                if (path.StartsWith("~/"))
+                    path = CoreEnvironmentSettings.HOME + path.TrimStart('~');
+                if (Directory.Exists(path) && (path.EndsWith("/Steam") || path.EndsWith("/Steam/")))
+                {
+                    SteamCompatibilityTool.CreateTool(path);
+                    Console.WriteLine($"Installed as Steam compatibility tool to path {Path.Combine(path, "compatibilitytools.d", "xlcore")}");
+                }
+                else
+                    Console.WriteLine($"Invalid path. Path does not exist or is not a Steam folder: {path}");
+                
+                return true;
+            }
+            if (arg == "--deck-remove")
+            {
+                SteamCompatibilityTool.DeleteTool(Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam"));
+                Console.WriteLine($"Removed XIVLauncher.Core as a Steam compatibility tool from {Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam", "compatibilitytools.d")}");
+                return true;
+            }
+            if (arg.StartsWith("--remove="))
+            {
+                var path = arg.Split('=', 2)[1];
+                if (path.StartsWith("~/"))
+                    path = CoreEnvironmentSettings.HOME + path.TrimStart('~');
+                if (Directory.Exists(path) && (path.EndsWith("/Steam") || path.EndsWith("/Steam/")))
+                {
+                    SteamCompatibilityTool.DeleteTool(path);
+                    Console.WriteLine($"Removed XIVLauncher.Core as a Steam compatibility tool from {Path.Combine(path, "compatibilitytools.d")}");
+                }
+                else
+                    Console.WriteLine($"Invalid path. Path does not exist or is not a Steam folder: {path}");
+                
+                return true;
+            }
+        }
+        return false;
     }
 }
