@@ -9,23 +9,13 @@ namespace XIVLauncher.Core.UnixCompatibility;
 
 public static class SteamCompatibilityTool
 {
-    public static bool IsSteamInstalled { get; } = false;
+    public static bool IsSteamInstalled => Directory.Exists(Program.Config.SteamPath);
 
-    public static bool IsFlatpakSteamInstalled { get; } = false;
+    public static bool IsSteamFlatpakInstalled => Directory.Exists(Program.Config.SteamFlatpakPath);
 
-    static SteamCompatibilityTool()
-    {
-#if FLATPAK
-        IsSteamInstalled = Directory.Exists(Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam"));
-#else
-        IsSteamInstalled = Directory.Exists(Path.Combine(CoreEnvironmentSettings.XDG_DATA_HOME, "Steam"));
-#endif
-        IsFlatpakSteamInstalled = Directory.Exists(Path.Combine(CoreEnvironmentSettings.HOME, ".var/app/com.valvesoftware.Steam"));
-    }
-    public static bool CheckTool(string path)
-    {
-        return Directory.Exists(Path.Combine(path, "xlcore"));
-    }
+    public static bool IsSteamToolInstalled => Directory.Exists(Path.Combine(Program.Config.SteamPath, "compatibilitytools.d", "xlcore"));
+
+    public static bool IsSteamFlatpakToolInstalled => Directory.Exists(Path.Combine(Program.Config.SteamFlatpakPath, "compatibilitytools.d", "xlcore"));
 
     private static string findXIVLauncherFiles()
     {
@@ -103,7 +93,6 @@ public static class SteamCompatibilityTool
             file.CopyTo(Path.Combine(destination.FullName, "XIVLauncher", file.Name), true);
         }
 
-#if FLATPAK
         var aria2c = new FileInfo("/app/bin/aria2c");
         var libsecret = new FileInfo("/app/lib/libsecret-1.so.0.0.0");
 
@@ -116,13 +105,14 @@ public static class SteamCompatibilityTool
             libsecret.CopyTo(Path.Combine(libPath, "libsecret-1.so.0.0.0"));
             File.CreateSymbolicLink(Path.Combine(libPath, "libsecret-1.so"), "libsecret-1.so.0.0.0");
         }
-#endif
+        
         Log.Verbose($"[SCT] XIVLauncher installed as Steam compatibility tool to folder {destination.FullName}");
     }
 
     public static void DeleteTool(string path)
     {
         var steamToolFolder = new DirectoryInfo(Path.Combine(path, "compatibilitytools.d", "xlcore"));
+        if (!steamToolFolder.Exists) return;
         steamToolFolder.Delete(true);
         Log.Verbose($"[SCT] Deleted Steam compatibility tool at folder {steamToolFolder.FullName}");
     }

@@ -16,7 +16,8 @@ tooldir="$(realpath "$(dirname "$0")")"
 
 # If aria2c isn't found, add our local copy to the $PATH
 count=$(find /usr -type f -executable -name "aria2c" 2>/dev/null | wc -l)
-if (( $count == 0 )); then
+local=$(find $tooldir -type f -executable -name "aria2c" 2>/dev/null | wc -l)
+if (( $count == 0 && $local != 0 )); then
     PATH="$PATH:$tooldir/bin"
 fi
 
@@ -29,7 +30,8 @@ unset LD_PRELOAD
 
 # If libsecret isn't found, add to $LD_PRELOAD
 count=$(ldconfig -p | grep libsecret-1 | wc -l)
-if (( $count == 0)); then
+local=$(find $tooldir -type f -name "libsecret*" 2>/dev/null | wc -l)
+if (( $count == 0 && $local !=0 )); then
     export LD_PRELOAD=$tooldir/lib/libsecret-1.so.0:$tooldir/lib/libsecret-1.so.0.0.0:$LD_PRELOAD
 fi
 
