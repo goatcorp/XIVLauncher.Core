@@ -685,6 +685,11 @@ public class MainPage : Page
 
         IGameRunner runner;
 
+        // Set LD_PRELOAD to value of XL_PRELOAD if we're in Steam Compatibility Tool mode.
+        // We ONLY care about XL_PRELOAD if we're in SCT mode. It's a workaround to prevent a text bug with Steam overlay enabled.
+        if (CoreEnvironmentSettings.IsSteamCompatTool)
+            System.Environment.SetEnvironmentVariable("LD_PRELOAD", CoreEnvironmentSettings.GetCleanEnvironmentVariable("XL_PRELOAD"));
+
         // Hack: Strip out gameoverlayrenderer.so entries from LD_PRELOAD
         if (App.Settings.FixLDP.Value)
         {

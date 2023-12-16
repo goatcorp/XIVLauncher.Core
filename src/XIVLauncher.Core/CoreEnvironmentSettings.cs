@@ -40,12 +40,4 @@ public static class CoreEnvironmentSettings
         if (badstring.Equals("")) return dirty;
         return string.Join(separator, Array.FindAll<string>(dirty.Split(separator, StringSplitOptions.RemoveEmptyEntries), s => !s.Contains(badstring)));
     }
-
-    static CoreEnvironmentSettings()
-    {
-        var xlpreload = Environment.GetEnvironmentVariable("XL_PRELOAD") ?? "";
-        var ldpreload = GetCleanEnvironmentVariable("LD_PRELOAD");
-        ldpreload = (string.IsNullOrEmpty(xlpreload) ? "" : xlpreload + ":") + (string.IsNullOrEmpty(ldpreload) ? "" : ldpreload);
-        Environment.SetEnvironmentVariable("LD_PRELOAD", ldpreload);
-    }
 }
