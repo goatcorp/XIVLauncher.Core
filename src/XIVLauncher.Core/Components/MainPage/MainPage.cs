@@ -685,7 +685,7 @@ public class MainPage : Page
 
         IGameRunner runner;
 
-        // Dalamud Fix: Force C.utf8 to fix incorrect paths
+        // Hack: Force C.utf8 to fix incorrect unicode paths
         if (App.Settings.FixLocale.Value && !System.OperatingSystem.IsWindows())
         {
             System.Environment.SetEnvironmentVariable("LC_ALL", "C.utf8");
