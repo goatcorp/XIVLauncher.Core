@@ -14,6 +14,7 @@ public class SettingsTabTroubleshooting : SettingsTab
     {
         new SettingsEntry<bool>("Hack: Disable gameoverlayrenderer.so", "Fixes some stuttering issues after 40+ minutes, but may affect steam overlay and input.", () => Program.Config.FixLDP ?? false, x => Program.Config.FixLDP = x),
         new SettingsEntry<bool>("Hack: XMODIFIERS=\"@im=null\"", "Fixes some mouse-related issues, some stuttering issues", () => Program.Config.FixIM ?? false, x => Program.Config.FixIM = x),
+        new SettingsEntry<bool>("Hack: Force locale to C.utf8", "Sets LC_ALL and LC_CTYPE to C.utf8. This can fix some issues with non-Latin unicode characters in file paths.", () => Program.Config.FixLocale ?? false, b => Program.Config.FixLocale = b),
     };
     public override string Title => "Troubleshooting";
 
