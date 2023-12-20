@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Globalization;
 
 namespace XIVLauncher.Core;
 
@@ -36,5 +38,18 @@ public static class CoreEnvironmentSettings
         string dirty = Environment.GetEnvironmentVariable(envvar) ?? "";
         if (badstring.Equals("")) return dirty;
         return string.Join(separator, Array.FindAll<string>(dirty.Split(separator, StringSplitOptions.RemoveEmptyEntries), s => !s.Contains(badstring)));
+    }
+
+    public static string GetLocale()
+    {
+        var psi = new ProcessStartInfo("sh");
+        psi.Arguments = "-c \"locale -a 2>/dev/null | grep -i utf\"";
+        psi.RedirectStandardOutput = true;
+
+        var proc = new Process();
+        proc.StartInfo = psi;
+        proc.Start();
+        var output = proc.StandardOutput.ReadToEnd().Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        return Array.Find(output, s => s.ToUpper().StartsWith("C."));
     }
 }
