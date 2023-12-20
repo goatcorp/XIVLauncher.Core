@@ -66,6 +66,8 @@ class Program
 
     private const string FRONTIER_FALLBACK = "https://launcher.finalfantasyxiv.com/v650/index.html?rc_lang={0}&time={1}";
 
+    public static string CType = CoreEnvironmentSettings.GetCType();
+
     public static void Invalidate(uint frames = 100)
     {
         invalidationFrames = frames;

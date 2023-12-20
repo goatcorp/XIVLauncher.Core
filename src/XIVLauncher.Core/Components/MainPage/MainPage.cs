@@ -686,10 +686,10 @@ public class MainPage : Page
         IGameRunner runner;
 
         // Hack: Force C.utf8 to fix incorrect unicode paths
-        if (App.Settings.FixLocale.Value && !System.OperatingSystem.IsWindows())
+        if (App.Settings.FixLocale.Value && !string.IsNullOrEmpty(Program.CType))
         {
-            System.Environment.SetEnvironmentVariable("LC_ALL", "C.utf8");
-            System.Environment.SetEnvironmentVariable("LC_CTYPE", "C.utf8");
+            System.Environment.SetEnvironmentVariable("LC_ALL", Program.CType);
+            System.Environment.SetEnvironmentVariable("LC_CTYPE", Program.CType);
         }
         
         // Hack: Strip out gameoverlayrenderer.so entries from LD_PRELOAD
