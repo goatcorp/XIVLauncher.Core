@@ -40,8 +40,10 @@ public static class CoreEnvironmentSettings
         return string.Join(separator, Array.FindAll<string>(dirty.Split(separator, StringSplitOptions.RemoveEmptyEntries), s => !s.Contains(badstring)));
     }
 
-    public static string GetLocale()
+    public static string GetCType()
     {
+        if (System.OperatingSystem.IsWindows())
+            return "";
         var psi = new ProcessStartInfo("sh");
         psi.Arguments = "-c \"locale -a 2>/dev/null | grep -i utf\"";
         psi.RedirectStandardOutput = true;

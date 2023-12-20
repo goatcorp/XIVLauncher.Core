@@ -14,8 +14,8 @@ public class SettingsTabTroubleshooting : SettingsTab
     {
         new SettingsEntry<bool>("Hack: Disable gameoverlayrenderer.so", "Fixes some stuttering issues after 40+ minutes, but may affect steam overlay and input.", () => Program.Config.FixLDP ?? false, x => Program.Config.FixLDP = x),
         new SettingsEntry<bool>("Hack: XMODIFIERS=\"@im=null\"", "Fixes some mouse-related issues, some stuttering issues", () => Program.Config.FixIM ?? false, x => Program.Config.FixIM = x),
-        new SettingsEntry<bool>($"Hack: Force locale to {(!string.IsNullOrEmpty(Program.Locale) ? Program.Locale : "C.UTF-8 (exact value depends on distro)")}",
-                                !string.IsNullOrEmpty(Program.Locale) ? $"Sets LC_ALL and LC_CTYPE to \"{Program.Locale}\". This can fix some issues with non-Latin unicode characters in file paths." : "Hack Disabled. Could not find a UTF-8 C locale. You may have to set LC_ALL manually if LANG is not a UTF-8 type.",
+        new SettingsEntry<bool>($"Hack: Force locale to {(!string.IsNullOrEmpty(Program.CType) ? Program.CType : "C.UTF-8 (exact value depends on distro)")}",
+                                !string.IsNullOrEmpty(Program.CType) ? $"Sets LC_ALL and LC_CTYPE to \"{Program.CType}\". This can fix some issues with non-Latin unicode characters in file paths." : "Hack Disabled. Could not find a UTF-8 C locale. You may have to set LC_ALL manually if LANG is not a UTF-8 type.",
                                 () => Program.Config.FixLocale ?? false, b => Program.Config.FixLocale = b),
     };
     public override string Title => "Troubleshooting";
