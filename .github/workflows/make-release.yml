@@ -68,6 +68,10 @@ jobs:
         working-directory: ./src/XIVLauncher.Core/
         run: dotnet publish -r linux-x64 --sc --configuration Release -p:DefineConstants=WINE_XIV_FEDORA_LINUX --no-restore -o ./dist/XIVLauncher.Core-fedora
 
+      - name: Dotnet Build (Windows)
+        working-directory: ./src/XIVLauncher.Core/
+        run: dotnet publish -r win-x64 --sc --configuration Release --no-restore -o ./dist/XIVLauncher.Core-winx64
+
       - name: Generate nuget-dependencies.json
         working-directory: ./src/XIVLauncher.Core/
         run: |
@@ -132,6 +136,7 @@ jobs:
           tar -czf ./dist/XIVLauncher.Core.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core .
           tar -czf ./dist/XIVLauncher.Core-arch.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core-arch .
           tar -czf ./dist/XIVLauncher.Core-fedora.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core-fedora .
+		  zip -r ./dist/XIVLauncher.Core-winx64.zip /src/XIVLauncher.Core/dist/XIVLauncher.Core-winx64
 
       - name: Release on GitHub
         uses: softprops/action-gh-release@v1
@@ -143,3 +148,4 @@ jobs:
             ./dist/XIVLauncher.Core.tar.gz
             ./dist/XIVLauncher.Core-arch.tar.gz
             ./dist/XIVLauncher.Core-fedora.tar.gz
+			./dist/XIVLauncher.Core-winx64.zip
