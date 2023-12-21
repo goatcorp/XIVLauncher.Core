@@ -136,7 +136,7 @@ jobs:
           tar -czf ./dist/XIVLauncher.Core.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core .
           tar -czf ./dist/XIVLauncher.Core-arch.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core-arch .
           tar -czf ./dist/XIVLauncher.Core-fedora.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core-fedora .
-		  zip -r ./dist/XIVLauncher.Core-winx64.zip /src/XIVLauncher.Core/dist/XIVLauncher.Core-winx64
+          zip -r ./dist/XIVLauncher.Core-winx64.zip /src/XIVLauncher.Core/dist/XIVLauncher.Core-winx64
 
       - name: Release on GitHub
         uses: softprops/action-gh-release@v1
@@ -148,4 +148,4 @@ jobs:
             ./dist/XIVLauncher.Core.tar.gz
             ./dist/XIVLauncher.Core-arch.tar.gz
             ./dist/XIVLauncher.Core-fedora.tar.gz
-			./dist/XIVLauncher.Core-winx64.zip
+            ./dist/XIVLauncher.Core-winx64.zip
