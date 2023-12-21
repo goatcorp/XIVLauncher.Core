@@ -41,7 +41,7 @@ jobs:
         run: dotnet publish -r linux-x64 --sc --configuration Release -p:DefineConstants=WINE_XIV_FEDORA_LINUX --no-restore -o ./dist/XIVLauncher.Core-fedora
 
       - name: Dotnet Build (Windows)
-        run: dotnet publish -r win-x64 --sc --configuration Release -o ./dist/XIVLauncher.Core-winx64
+        run: dotnet publish -r win10-x64 --sc --configuration Release -o ./dist/XIVLauncher.Core-win10x64
 
       - name: Dotnet Test
         run: dotnet test --no-build --verbosity normal
