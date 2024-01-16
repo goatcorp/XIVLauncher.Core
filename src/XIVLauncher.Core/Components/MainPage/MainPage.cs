@@ -218,33 +218,7 @@ public class MainPage : Page
 
         if (gateStatus == null)
         {
-            /*
-            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateUnreachable", "The login servers could not be reached. This usually indicates that the game is under maintenance, or that your connection to the login servers is unstable.\n\nPlease try again later."))
-                            .WithImage(MessageBoxImage.Asterisk)
-                            .WithButtons(MessageBoxButton.OK)
-                            .WithShowHelpLinks(true)
-                            .WithCaption("XIVLauncher")
-                            .WithParentWindow(_window)
-                            .Show();
-                            */
-
             App.ShowMessageBlocking("Login servers could not be reached or maintenance is in progress. This might be a problem with your connection.");
-
-            return null;
-        }
-
-        if (gateStatus == false)
-        {
-            /*
-            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateClosed", "FFXIV is currently under maintenance. Please try again later or see official sources for more information."))
-                            .WithImage(MessageBoxImage.Asterisk)
-                            .WithButtons(MessageBoxButton.OK)
-                            .WithCaption("XIVLauncher")
-                            .WithParentWindow(_window)
-                            .Show();*/
-
-            App.ShowMessageBlocking("Maintenance is in progress.");
-
             return null;
         }
 #endif
@@ -365,6 +339,30 @@ public class MainPage : Page
 
             return false;
         }
+        
+#if !DEBUG
+        bool? gateStatus = null;
+        try
+        {
+            // TODO: Also apply the login status fix here
+            var gate = await App.Launcher.GetGateStatus(App.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
+            gateStatus = gate.Status;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Could not obtain gate status");
+        }
+
+        switch (gateStatus)
+        {
+            case null:
+                App.ShowMessageBlocking("Login servers could not be reached or maintenance is in progress. This might be a problem with your connection.");
+                return false;
+            case false:
+                App.ShowMessageBlocking("Maintenance is in progress.");
+                return false;
+        }
+#endif
 
         Debug.Assert(loginResult.State == Launcher.LoginState.Ok);
 
