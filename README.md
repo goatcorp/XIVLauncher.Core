@@ -11,7 +11,7 @@ If you want to use XIVLauncher on your Steam Deck, feel free to [follow our guid
 2. Make sure you have a recent(.NET6+) version of the .NET SDK installed
 2. Run `dotnet build` or `dotnet publish`
 
-Common components that are shared with the Windows version of XIVLauncher are linked as a submodule in the "lib" folder. XIVLauncher Core can run on Windows, but is by far not as polished as the original Windows version, as such we are not distributing it.
+Common components that are shared with the Windows version of XIVLauncher are linked as a submodule in the "lib" folder. XIVLauncher Core can run on Windows, but is by far not as polished as the [original Windows version](https://github.com/goatcorp/FFXIVQuickLauncher). Windows users should not use this application unless for troubleshooting purposes or development work.
 
 ## Distribution
 XIVLauncher Core has community packages for various Linux distributions. Please be aware that **only the Flathub version is official**, but the others are **packaged by trusted community members**.  The community packages may not always be up-to-date, or may have versions that are broken or contain features under testing (especially if labeled as unstable or git). We can't take any responsibility for their safety or reliability.
