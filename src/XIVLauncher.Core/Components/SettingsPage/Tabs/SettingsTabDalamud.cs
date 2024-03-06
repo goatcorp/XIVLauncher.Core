@@ -15,16 +15,7 @@ public class SettingsTabDalamud : SettingsTab
 
             new SettingsEntry<bool>("Enable Dalamud", "Enable the Dalamud plugin system", () => Program.Config.DalamudEnabled ?? true, b => Program.Config.DalamudEnabled = b),
 
-            new SettingsEntry<DalamudLoadMethod>("Load Method", "Choose how Dalamud is loaded.", () => Program.Config.DalamudLoadMethod ?? DalamudLoadMethod.DllInject, method => Program.Config.DalamudLoadMethod = method)
-            {
-                CheckValidity = x =>
-                {
-                    if (x == DalamudLoadMethod.EntryPoint && !OperatingSystem.IsWindows())
-                        return "Entry point injection is only supported on Windows.";
-
-                    return null;
-                },
-            },
+            new SettingsEntry<DalamudLoadMethod>("Load Method", "Choose how Dalamud is loaded.", () => Program.Config.DalamudLoadMethod ?? DalamudLoadMethod.DllInject, method => Program.Config.DalamudLoadMethod = method),
 
             new NumericSettingsEntry("Injection Delay (ms)", "Choose how long to wait after the game has loaded before injecting.", () => Program.Config.DalamudLoadDelay, delay => Program.Config.DalamudLoadDelay = delay, 0, int.MaxValue, 1000),
 

@@ -113,7 +113,7 @@ class Program
         Config.PatchAcquisitionMethod ??= AcquisitionMethod.Aria;
 
         Config.DalamudEnabled ??= true;
-        Config.DalamudLoadMethod = !OperatingSystem.IsWindows() ? DalamudLoadMethod.DllInject : DalamudLoadMethod.EntryPoint;
+        Config.DalamudLoadMethod ??= DalamudLoadMethod.EntryPoint;
 
         Config.GlobalScale ??= 1.0f;
 
