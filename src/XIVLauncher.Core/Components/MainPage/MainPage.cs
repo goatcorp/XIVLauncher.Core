@@ -653,7 +653,7 @@ public class MainPage : Page
                 */
         }
 
-        if (App.Settings.DalamudEnabled.GetValueOrDefault(true) && !forceNoDalamud && App.Settings.IsDx11.GetValueOrDefault(true))
+        if (App.Settings.DalamudEnabled.GetValueOrDefault(true) && !forceNoDalamud)
         {
             try
             {
@@ -829,7 +829,7 @@ public class MainPage : Page
             isSteam,
             gameArgs,
             App.Settings.GamePath,
-            App.Settings.IsDx11 ?? true,
+            true,
             App.Settings.ClientLanguage.GetValueOrDefault(ClientLanguage.English),
             App.Settings.IsEncryptArgs.GetValueOrDefault(true),
             App.Settings.DpiAwareness.GetValueOrDefault(DpiAwareness.Unaware));

@@ -29,7 +29,7 @@ namespace XIVLauncher.Core.Support
 
             try
             {
-                var fixedContext = context?.Split(new []{'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                var fixedContext = context?.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
 
                 var payload = new ExceptionPayload
                 {
@@ -65,7 +65,7 @@ namespace XIVLauncher.Core.Support
 
         internal static string GetTroubleshootingJson()
         {
-            
+
             var gamePath = Program.Config.GamePath;
 
             var integrity = TroubleshootingPayload.IndexIntegrityResult.Success;
@@ -93,7 +93,7 @@ namespace XIVLauncher.Core.Support
             {
                 integrity = TroubleshootingPayload.IndexIntegrityResult.Exception;
             }
-            
+
             var ffxivVer = Repository.Ffxiv.GetVer(gamePath);
             var ffxivVerBck = Repository.Ffxiv.GetVer(gamePath, true);
             var ex1Ver = Repository.Ex1.GetVer(gamePath);
@@ -108,7 +108,6 @@ namespace XIVLauncher.Core.Support
             var payload = new TroubleshootingPayload
             {
                 When = DateTime.Now,
-                IsDx11 = Program.Config.IsDx11.GetValueOrDefault(),
                 IsAutoLogin = Program.Config.IsAutologin.GetValueOrDefault(),
                 IsUidCache = Program.Config.IsUidCacheEnabled.GetValueOrDefault(),
                 DalamudEnabled = Program.Config.DalamudEnabled.GetValueOrDefault(),
@@ -148,8 +147,6 @@ namespace XIVLauncher.Core.Support
         private class TroubleshootingPayload
         {
             public DateTime When { get; set; }
-
-            public bool IsDx11 { get; set; }
 
             public bool IsAutoLogin { get; set; }
 
