@@ -39,17 +39,20 @@ public static class CoreEnvironmentSettings
         return string.Join(separator, Array.FindAll<string>(dirty.Split(separator, StringSplitOptions.RemoveEmptyEntries), s => !s.Contains(badstring)));
     }
 
-    static public bool GameModeInstalled { get; }
+    static private bool? gameModeInstalled = null;
 
-    static CoreEnvironmentSettings()
-    {  
+    static public bool IsGameModeInstalled()
+    {
+        if (gameModeInstalled is not null)
+            return gameModeInstalled ?? false;
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
             var handle = IntPtr.Zero;
-            GameModeInstalled = NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle);
+            gameModeInstalled = NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle);
             NativeLibrary.Free(handle);
         }
         else
-            GameModeInstalled = false;
+            gameModeInstalled = false;
+        return gameModeInstalled ?? false;
     }
 }

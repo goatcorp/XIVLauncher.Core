@@ -29,7 +29,7 @@ public class SettingsTabWine : SettingsTab
                 CheckVisibility = () => RuntimeInformation.IsOSPlatform(OSPlatform.Linux),
                 CheckValidity = b =>
                 {
-                    if (b == true && !CoreEnvironmentSettings.GameModeInstalled)
+                    if (b == true && !CoreEnvironmentSettings.IsGameModeInstalled())
                         return "GameMode was not detected on your system.";
                     return null;
                 }
