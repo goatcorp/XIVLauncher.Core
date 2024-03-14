@@ -40,11 +40,7 @@ public class SettingsTabDalamud : SettingsTab
             new SettingsEntry<DirectoryInfo>("Manual Injection Path", "The path to the local version of Dalamud where Dalamud.Injector.exe is located", () => Program.Config.DalamudManualInjectPath, (input) =>
             {
                 Program.Config.DalamudManualInjectPath = input;
-                if (input is null) {
-                    Program.DalamudUpdater.RunnerOverride = null;
-                    return;
-                }
-                Program.DalamudUpdater.RunnerOverride = new FileInfo(Path.Combine(input.FullName, Program.DALAMUD_INJECTOR_NAME));
+                Program.DalamudUpdater.RunnerOverride = input is null ? null : new FileInfo(Path.Combine(input.FullName, Program.DALAMUD_INJECTOR_NAME));
             })
             {
                 CheckVisibility = () => enableManualInjection.Value,
