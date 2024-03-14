@@ -36,10 +36,8 @@ public class SettingsTabWine : SettingsTab
                 CheckVisibility = () => RuntimeInformation.IsOSPlatform(OSPlatform.Linux),
                 CheckValidity = b =>
                 {
-                    var handle = IntPtr.Zero;
-                    if (b == true && !NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle))
+                    if (b == true && !CoreEnvironmentSettings.IsGameModeInstalled())
                         return "GameMode was not detected on your system.";
-                    NativeLibrary.Free(handle);
                     return null;
                 }
             },
