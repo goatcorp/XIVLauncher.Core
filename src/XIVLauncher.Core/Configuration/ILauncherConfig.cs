@@ -78,6 +78,8 @@ public interface ILauncherConfig
 
     public string? WineDebugVars { get; set; }
 
+    public bool? FixLocale { get; set; }
+
     public bool? FixLDP { get; set; }
 
     public bool? FixIM { get; set; }
@@ -91,6 +93,8 @@ public interface ILauncherConfig
     public bool? DalamudEnabled { get; set; }
 
     public DalamudLoadMethod? DalamudLoadMethod { get; set; }
+    public bool? DalamudManualInjectionEnabled { get; set; }
+    public DirectoryInfo? DalamudManualInjectPath { get; set; }
 
     public int DalamudLoadDelay { get; set; }
 
