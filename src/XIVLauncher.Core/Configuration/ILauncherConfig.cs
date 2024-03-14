@@ -94,7 +94,7 @@ public interface ILauncherConfig
 
     public DalamudLoadMethod? DalamudLoadMethod { get; set; }
     public bool? DalamudManualInjectionEnabled { get; set; }
-    public string? DalamudManualInjectPath { get; set; }
+    public DirectoryInfo? DalamudManualInjectPath { get; set; }
 
     public int DalamudLoadDelay { get; set; }
 
