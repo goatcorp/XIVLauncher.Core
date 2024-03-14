@@ -202,9 +202,8 @@ public class MainPage : Page
 
     private async Task<Launcher.LoginResult> TryLoginToGame(string username, string password, string otp, bool isSteam, LoginAction action)
     {
-        bool? gateStatus = null;
-
 #if !DEBUG
+        bool? gateStatus = null;
         try
         {
             // TODO: Also apply the login status fix here
@@ -218,33 +217,7 @@ public class MainPage : Page
 
         if (gateStatus == null)
         {
-            /*
-            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateUnreachable", "The login servers could not be reached. This usually indicates that the game is under maintenance, or that your connection to the login servers is unstable.\n\nPlease try again later."))
-                            .WithImage(MessageBoxImage.Asterisk)
-                            .WithButtons(MessageBoxButton.OK)
-                            .WithShowHelpLinks(true)
-                            .WithCaption("XIVLauncher")
-                            .WithParentWindow(_window)
-                            .Show();
-                            */
-
             App.ShowMessageBlocking("Login servers could not be reached or maintenance is in progress. This might be a problem with your connection.");
-
-            return null;
-        }
-
-        if (gateStatus == false)
-        {
-            /*
-            CustomMessageBox.Builder.NewFrom(Loc.Localize("GateClosed", "FFXIV is currently under maintenance. Please try again later or see official sources for more information."))
-                            .WithImage(MessageBoxImage.Asterisk)
-                            .WithButtons(MessageBoxButton.OK)
-                            .WithCaption("XIVLauncher")
-                            .WithParentWindow(_window)
-                            .Show();*/
-
-            App.ShowMessageBlocking("Maintenance is in progress.");
-
             return null;
         }
 #endif
@@ -365,6 +338,30 @@ public class MainPage : Page
 
             return false;
         }
+
+#if !DEBUG
+        bool? gateStatus = null;
+        try
+        {
+            // TODO: Also apply the login status fix here
+            var gate = await App.Launcher.GetGateStatus(App.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
+            gateStatus = gate.Status;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Could not obtain gate status");
+        }
+
+        switch (gateStatus)
+        {
+            case null:
+                App.ShowMessageBlocking("Login servers could not be reached or maintenance is in progress. This might be a problem with your connection.");
+                return false;
+            case false:
+                App.ShowMessageBlocking("Maintenance is in progress.");
+                return false;
+        }
+#endif
 
         Debug.Assert(loginResult.State == Launcher.LoginState.Ok);
 
@@ -689,6 +686,13 @@ public class MainPage : Page
         // We ONLY care about XL_PRELOAD if we're in SCT mode. It's a workaround to prevent a text bug with Steam overlay enabled.
         if (CoreEnvironmentSettings.IsSteamCompatTool)
             System.Environment.SetEnvironmentVariable("LD_PRELOAD", CoreEnvironmentSettings.GetCleanEnvironmentVariable("XL_PRELOAD"));
+            
+        // Hack: Force C.utf8 to fix incorrect unicode paths
+        if (App.Settings.FixLocale.Value && !string.IsNullOrEmpty(Program.CType))
+        {
+            System.Environment.SetEnvironmentVariable("LC_ALL", Program.CType);
+            System.Environment.SetEnvironmentVariable("LC_CTYPE", Program.CType);
+        }
 
         // Hack: Strip out gameoverlayrenderer.so entries from LD_PRELOAD
         if (App.Settings.FixLDP.Value)
@@ -711,7 +715,7 @@ public class MainPage : Page
         // If there's only one launch option (no %command%) figure out whether it's args or env variables.
         if (launchOptions.Length == 1)
         {
-            if(launchOptions[0].StartsWith('-'))
+            if (launchOptions[0].StartsWith('-'))
                 gameArgs = launchOptions[0];
             else
                 launchEnv = launchOptions[0];
@@ -750,7 +754,7 @@ public class MainPage : Page
                 else if (!Directory.Exists(App.Settings.WineBinaryPath))
                     throw new Exception("Custom wine binary path is invalid: no such directory.\n" +
                         "Check path carefully for typos: " + App.Settings.WineBinaryPath);
-                else if (!File.Exists(Path.Combine(App.Settings.WineBinaryPath,"wine64")))
+                else if (!File.Exists(Path.Combine(App.Settings.WineBinaryPath, "wine64")))
                     throw new Exception("Custom wine binary path is invalid: no wine64 found at that location.\n" +
                         "Check path carefully for typos: " + App.Settings.WineBinaryPath);
             }
@@ -1202,11 +1206,11 @@ public class MainPage : Page
                 case PatchVerifier.VerifyState.Done:
                     // TODO: ask the user if they want to login or rerun after repair
                     App.ShowMessageBlocking(verify.NumBrokenFiles switch
-                        {
-                            0 => Loc.Localize("GameRepairSuccess0", "All game files seem to be valid."),
-                            1 => Loc.Localize("GameRepairSuccess1", "XIVLauncher has successfully repaired 1 game file."),
-                            _ => string.Format(Loc.Localize("GameRepairSuccessPlural", "XIVLauncher has successfully repaired {0} game files."), verify.NumBrokenFiles),
-                        });
+                    {
+                        0 => Loc.Localize("GameRepairSuccess0", "All game files seem to be valid."),
+                        1 => Loc.Localize("GameRepairSuccess1", "XIVLauncher has successfully repaired 1 game file."),
+                        _ => string.Format(Loc.Localize("GameRepairSuccessPlural", "XIVLauncher has successfully repaired {0} game files."), verify.NumBrokenFiles),
+                    });
 
                     doVerify = false;
                     break;

@@ -9,7 +9,7 @@
     <LangVersion>latest</LangVersion>
     <ApplicationIcon>Resources\dalamud_icon.ico</ApplicationIcon>
 
-    <Version>1.0.6.0</Version>
+    <Version>1.0.7.0</Version>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
 
@@ -17,13 +17,20 @@
     <PublishSingleFile>true</PublishSingleFile>
     <!-- <SelfContained>true</SelfContained> -->
 
-    <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
-    <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
-    <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
+    <IsWindows
+      Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
+      true</IsWindows>
+    <IsOSX
+      Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
+      true</IsOSX>
+    <IsLinux
+      Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">
+      true</IsLinux>
   </PropertyGroup>
 
   <PropertyGroup>
-    <DefineConstants Condition=" '$(ExtraDefineConstants)' != '' ">$(DefineConstants);$(ExtraDefineConstants)</DefineConstants>
+    <DefineConstants Condition=" '$(ExtraDefineConstants)' != '' ">
+      $(DefineConstants);$(ExtraDefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsWindows)'=='true'">
@@ -42,10 +49,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../XIVLauncher.VersionGenerator/XIVLauncher.VersionGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common.Unix\XIVLauncher.Common.Unix.csproj" />
-    <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common.Windows\XIVLauncher.Common.Windows.csproj" />
-    <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
+    <ProjectReference Include="../XIVLauncher.VersionGenerator/XIVLauncher.VersionGenerator.csproj"
+      OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference
+      Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common.Unix\XIVLauncher.Common.Unix.csproj" />
+    <ProjectReference
+      Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common.Windows\XIVLauncher.Common.Windows.csproj" />
+    <ProjectReference
+      Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,26 +74,31 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-    <PackageReference Include="goaaats.Veldrid" Version="4.9.0-beta1-g70f642e82e" />
-    <PackageReference Include="goaaats.Veldrid.ImageSharp" Version="4.9.0-beta1-g70f642e82e" />
-    <PackageReference Include="goaaats.Veldrid.SDL2" Version="4.9.0-beta1-g70f642e82e" />
-    <PackageReference Include="goaaats.Veldrid.StartupUtilities" Version="4.9.0-beta1-g70f642e82e" />
+    <PackageReference Include="Veldrid" Version="4.9.0" />
+    <PackageReference Include="Veldrid.ImageSharp" Version="4.9.0" />
+    <PackageReference Include="Veldrid.SDL2" Version="4.9.0" />
+    <PackageReference Include="Veldrid.StartupUtilities" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Shaders/GLSL/imgui-vertex.glsl" LogicalName="imgui-vertex.glsl" />
     <EmbeddedResource Include="Shaders/GLSL/imgui-frag.glsl" LogicalName="imgui-frag.glsl" />
-    <EmbeddedResource Include="Shaders/HLSL/imgui-vertex.hlsl.bytes" LogicalName="imgui-vertex.hlsl.bytes" />
-    <EmbeddedResource Include="Shaders/HLSL/imgui-frag.hlsl.bytes" LogicalName="imgui-frag.hlsl.bytes" />
+    <EmbeddedResource Include="Shaders/HLSL/imgui-vertex.hlsl.bytes"
+      LogicalName="imgui-vertex.hlsl.bytes" />
+    <EmbeddedResource Include="Shaders/HLSL/imgui-frag.hlsl.bytes"
+      LogicalName="imgui-frag.hlsl.bytes" />
     <EmbeddedResource Include="Shaders/SPIR-V/imgui-vertex.spv" LogicalName="imgui-vertex.spv" />
     <EmbeddedResource Include="Shaders/SPIR-V/imgui-frag.spv" LogicalName="imgui-frag.spv" />
-    <EmbeddedResource Include="Shaders/Metal/imgui-vertex.metallib" LogicalName="imgui-vertex.metallib" />
+    <EmbeddedResource Include="Shaders/Metal/imgui-vertex.metallib"
+      LogicalName="imgui-vertex.metallib" />
     <EmbeddedResource Include="Shaders/Metal/imgui-frag.metallib" LogicalName="imgui-frag.metallib" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources/FontAwesome5FreeSolid.otf" LogicalName="FontAwesome5FreeSolid.otf" />
-    <EmbeddedResource Include="Resources/NotoSansCJKjp-Regular.otf" LogicalName="NotoSansCJKjp-Regular.otf" />
+    <EmbeddedResource Include="Resources/FontAwesome5FreeSolid.otf"
+      LogicalName="FontAwesome5FreeSolid.otf" />
+    <EmbeddedResource Include="Resources/NotoSansCJKjp-Regular.otf"
+      LogicalName="NotoSansCJKjp-Regular.otf" />
 
     <EmbeddedResource Include="Resources/logo.png" LogicalName="logo.png" />
 
@@ -91,7 +107,8 @@
 
     <EmbeddedResource Include="Resources/steamdeck_fts.png" LogicalName="steamdeck_fts.png" />
     <EmbeddedResource Include="Resources/steamdeck_fterror.png" LogicalName="steamdeck_fterror.png" />
-    <EmbeddedResource Include="Resources/steamdeck_switchprompt.png" LogicalName="steamdeck_switchprompt.png" />
+    <EmbeddedResource Include="Resources/steamdeck_switchprompt.png"
+      LogicalName="steamdeck_switchprompt.png" />
     <EmbeddedResource Include="Resources/xlcore_updatewarn.png" LogicalName="xlcore_updatewarn.png" />
     <EmbeddedResource Include="Resources/compatibilitytool.vdf" LogicalName="compatibilitytool.vdf" />
     <EmbeddedResource Include="Resources/toolmanifest.vdf" LogicalName="toolmanifest.vdf" />
@@ -113,7 +130,8 @@
       <VerFile>$(IntermediateOutputPath)gitver</VerFile>
     </PropertyGroup>
     <!-- write the hash to the temp file.-->
-    <Exec Command="git -C &quot;$(ProjectDir.Replace('\','\\'))&quot; describe --long --always --dirty &gt; $(VerFile)" />
+    <Exec
+      Command="git -C &quot;$(ProjectDir.Replace('\','\\'))&quot; describe --long --always --dirty &gt; $(VerFile)" />
     <!-- read the version into the GitVersion itemGroup-->
     <ReadLinesFromFile File="$(VerFile)">
       <Output TaskParameter="Lines" ItemName="GitVersion" />
@@ -145,7 +163,8 @@
       </AssemblyAttributes>
     </ItemGroup>
     <!-- writes the attribute to the customAssemblyInfo file -->
-    <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)" AssemblyAttributes="@(AssemblyAttributes)" />
+    <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)"
+      AssemblyAttributes="@(AssemblyAttributes)" />
   </Target>
 
 </Project>
