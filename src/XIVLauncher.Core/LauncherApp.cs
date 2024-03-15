@@ -20,6 +20,10 @@ public class LauncherApp : Component
     public static bool IsDebug { get; private set; } = Debugger.IsAttached;
     private bool isDemoWindow = false;
 
+    public bool IsLauncherSetup { get; private set; } = false;
+
+    public bool IsUpdateCheckComplete { get; private set; } = false;
+
     #region Modal State
 
     private bool isModalDrawing = false;
@@ -107,7 +111,7 @@ public class LauncherApp : Component
     };
 
     public ILauncherConfig Settings => Program.Config;
-    public Launcher Launcher { get; private set; }
+    public Launcher? Launcher { get; private set; }
     public ISteam? Steam => Program.Steam;
     public Storage Storage { get; private set; }
 
@@ -125,13 +129,12 @@ public class LauncherApp : Component
 
     private readonly Background background = new();
 
-    public LauncherApp(Storage storage, bool needsUpdateWarning, string frontierUrl)
+    public LauncherApp(Storage storage)
     {
         this.Storage = storage;
 
         this.Accounts = new AccountManager(this.Storage.GetFile("accounts.json"));
         this.UniqueIdCache = new CommonUniqueIdCache(this.Storage.GetFile("uidCache.json"));
-        this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings, frontierUrl);
 
         this.mainPage = new MainPage(this);
         this.setPage = new SettingsPage(this);
@@ -141,14 +144,24 @@ public class LauncherApp : Component
         this.updateWarnPage = new UpdateWarnPage(this);
         this.steamDeckPromptPage = new SteamDeckPromptPage(this);
 
-        if (needsUpdateWarning)
+        Task.Run(async () =>
         {
-            this.State = LauncherState.UpdateWarn;
-        }
-        else
+            var versionCheckResult = await UpdateCheck.CheckForUpdate(Program.Config.DoVersionCheck ?? true);
+            if (versionCheckResult.Success)
+                if (versionCheckResult.NeedUpdate)
+                    this.State = LauncherState.UpdateWarn;
+            this.IsUpdateCheckComplete = true;
+        });
+
+        Task.Run(async () =>
         {
-            this.RunStartupTasks();
-        }
+            var frontierUrl = await UpdateCheck.GetFrontierUrl(Program.Config.DoVersionCheck ?? true);
+            this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings, frontierUrl);
+            this.IsLauncherSetup = true;
+            this.mainPage.ReloadNews();
+        });
+
+        this.RunStartupTasks();
 
 #if DEBUG
         IsDebug = true;

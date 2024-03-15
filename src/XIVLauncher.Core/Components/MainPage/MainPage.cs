@@ -110,13 +110,34 @@ public class MainPage : Page
         if (this.IsLoggingIn)
             return;
 
-        this.App.StartLoading("Logging in...", canDisableAutoLogin: true);
+        this.App.StartLoading(!(App.IsLauncherSetup && App.IsUpdateCheckComplete) ? "Checking for updates..." : "Logging In...", canDisableAutoLogin: true);
 
         // if (Program.UsesFallbackSteamAppId && this.loginFrame.IsSteam)
         //     throw new Exception("Doesn't own Steam AppId on this account.");
 
         Task.Run(async () =>
         {
+            var startTime = DateTime.UtcNow;
+            var updateCheckCompletePreLoop = App.IsUpdateCheckComplete;
+            while (!(App.IsLauncherSetup && App.IsUpdateCheckComplete))
+            {
+                if (DateTime.UtcNow - startTime > TimeSpan.FromSeconds(16))
+                {
+                    App.ShowMessageBlocking(
+                        "The update checks timed out and did not properly return fallback values.\nTry logging in again. If that doesn't work, restart XIVLauncher.",
+                        "Timeout Error");
+
+                    Reactivate();
+                    return;
+                }
+            }
+
+            if (UpdateCheck.IsUpdateAvailable && !updateCheckCompletePreLoop)
+            {
+                Reactivate(LauncherApp.LauncherState.UpdateWarn);
+                return;
+            }
+
             if (GameHelpers.CheckIsGameOpen() && action == LoginAction.Repair)
             {
                 App.ShowMessageBlocking("The game and/or the official launcher are open. XIVLauncher cannot repair the game if this is the case.\nPlease close them and try again.", "XIVLauncher");
@@ -1241,10 +1262,10 @@ public class MainPage : Page
         Program.HideWindow();
     }
 
-    private void Reactivate()
+    private void Reactivate(LauncherApp.LauncherState state = LauncherApp.LauncherState.Main)
     {
         IsLoggingIn = false;
-        this.App.State = LauncherApp.LauncherState.Main;
+        this.App.State = state;
 
         Program.ShowWindow();
     }
