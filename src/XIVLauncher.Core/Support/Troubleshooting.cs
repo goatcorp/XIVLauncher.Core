@@ -139,10 +139,10 @@ namespace XIVLauncher.Core.Support
         private class ExceptionPayload
         {
             public DateTime When { get; set; }
-
-            public required string Info { get; set; }
-
-            public required string Context { get; set; }
+            
+            public string Info { get; set; } = string.Empty;
+            
+            public string Context { get; set; } = string.Empty;
         }
 
         private class TroubleshootingPayload
@@ -165,9 +165,9 @@ namespace XIVLauncher.Core.Support
 
             public bool EncryptArguments { get; set; }
 
-            public required string LauncherVersion { get; set; }
+            public string LauncherVersion { get; set; } = string.Empty;
 
-            public required string LauncherHash { get; set; }
+            public string LauncherHash { get; set; } = string.Empty;
 
             public bool Official { get; set; }
 
@@ -175,12 +175,12 @@ namespace XIVLauncher.Core.Support
 
             public Platform Platform { get; set; }
 
-            public required string ObservedGameVersion { get; set; }
+            public string ObservedGameVersion { get; set; } = string.Empty;
 
-            public required string ObservedEx1Version { get; set; }
-            public required string ObservedEx2Version { get; set; }
-            public required string ObservedEx3Version { get; set; }
-            public required string ObservedEx4Version { get; set; }
+            public string ObservedEx1Version { get; set; } = string.Empty;
+            public string ObservedEx2Version { get; set; } = string.Empty;
+            public string ObservedEx3Version { get; set; } = string.Empty;
+            public string ObservedEx4Version { get; set; } = string.Empty;
 
             public bool BckMatch { get; set; }
 
