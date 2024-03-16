@@ -6,8 +6,6 @@ namespace XIVLauncher.Core.Components.SettingsPage;
 
 public class SettingsEntry<T> : SettingsEntry
 {
-    private Guid Id { get; } = Guid.NewGuid();
-
     private readonly Func<T?> load;
     private readonly Action<T?> save;
 

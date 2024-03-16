@@ -26,26 +26,25 @@ namespace XIVLauncher.Core;
 
 class Program
 {
-    private static Sdl2Window window;
-    private static CommandList cl;
-    private static GraphicsDevice gd;
-    private static ImGuiBindings bindings;
+    private static Sdl2Window window = null!;
+    private static CommandList cl = null!;
+    private static GraphicsDevice gd = null!;
+    private static ImGuiBindings bindings = null!;
 
     public static GraphicsDevice GraphicsDevice => gd;
     public static ImGuiBindings ImGuiBindings => bindings;
-    public static ILauncherConfig Config { get; private set; }
+    public static ILauncherConfig Config { get; private set; } = null!;
     public static CommonSettings CommonSettings => new(Config);
     public static ISteam? Steam { get; private set; }
-    public static DalamudUpdater DalamudUpdater { get; private set; }
-    public static DalamudOverlayInfoProxy DalamudLoadInfo { get; private set; }
-    public static CompatibilityTools CompatibilityTools { get; private set; }
-    public static ISecretProvider Secrets { get; private set; }
-
+    public static DalamudUpdater DalamudUpdater { get; private set; } = null!;
+    public static DalamudOverlayInfoProxy DalamudLoadInfo { get; private set; } = null!;
+    public static CompatibilityTools CompatibilityTools { get; private set; } = null!;
+    public static ISecretProvider Secrets { get; private set; } = null!;
+    
     private static readonly Vector3 clearColor = new(0.1f, 0.1f, 0.1f);
-    private static bool showImGuiDemoWindow = true;
 
-    private static LauncherApp launcherApp;
-    public static Storage storage;
+    private static LauncherApp launcherApp = null!;
+    public static Storage storage = null!;
     public static DirectoryInfo DotnetRuntime => storage.GetFolder("runtime");
 
     // TODO: We don't have the steamworks api for this yet.
@@ -57,11 +56,11 @@ class Program
         Steam != null && Steam.IsValid && Steam.IsRunningOnSteamDeck();
 
     private const string APP_NAME = "xlcore";
-
-    private static string[] mainArgs;
+    
+    private static string[] mainArgs = { };
 
     private static uint invalidationFrames = 0;
-    private static Vector2 lastMousePosition;
+    private static Vector2 lastMousePosition = Vector2.Zero;
 
     private const string FRONTIER_FALLBACK = "https://launcher.finalfantasyxiv.com/v650/index.html?rc_lang={0}&time={1}";
 
@@ -194,7 +193,7 @@ class Program
 
         uint appId, altId;
         string appName, altName;
-        if (Config.IsFt.Value)
+        if (Config.IsFt == true)
         {
             appId = STEAM_APP_ID_FT;
             altId = STEAM_APP_ID;

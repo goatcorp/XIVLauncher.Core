@@ -27,9 +27,10 @@ namespace XIVLauncher.Core.Support
         {
             LastException = exception;
 
-            try
-            {
-                var fixedContext = context?.Split(new []{'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+            try {
+                var fixedContext =
+                    context?.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ??
+                    string.Empty;
 
                 var payload = new ExceptionPayload
                 {
@@ -63,10 +64,9 @@ namespace XIVLauncher.Core.Support
             }
         }
 
-        internal static string GetTroubleshootingJson()
-        {
+        internal static string GetTroubleshootingJson() {
             
-            var gamePath = Program.Config.GamePath;
+            var gamePath = Program.Config.GamePath!;
 
             var integrity = TroubleshootingPayload.IndexIntegrityResult.Success;
 
@@ -140,9 +140,9 @@ namespace XIVLauncher.Core.Support
         {
             public DateTime When { get; set; }
 
-            public string Info { get; set; }
+            public required string Info { get; set; }
 
-            public string Context { get; set; }
+            public required string Context { get; set; }
         }
 
         private class TroubleshootingPayload
@@ -165,9 +165,9 @@ namespace XIVLauncher.Core.Support
 
             public bool EncryptArguments { get; set; }
 
-            public string LauncherVersion { get; set; }
+            public required string LauncherVersion { get; set; }
 
-            public string LauncherHash { get; set; }
+            public required string LauncherHash { get; set; }
 
             public bool Official { get; set; }
 
@@ -175,12 +175,12 @@ namespace XIVLauncher.Core.Support
 
             public Platform Platform { get; set; }
 
-            public string ObservedGameVersion { get; set; }
+            public required string ObservedGameVersion { get; set; }
 
-            public string ObservedEx1Version { get; set; }
-            public string ObservedEx2Version { get; set; }
-            public string ObservedEx3Version { get; set; }
-            public string ObservedEx4Version { get; set; }
+            public required string ObservedEx1Version { get; set; }
+            public required string ObservedEx2Version { get; set; }
+            public required string ObservedEx3Version { get; set; }
+            public required string ObservedEx4Version { get; set; }
 
             public bool BckMatch { get; set; }
 
