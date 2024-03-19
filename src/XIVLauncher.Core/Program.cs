@@ -62,7 +62,6 @@ class Program
     private static uint invalidationFrames = 0;
     private static Vector2 lastMousePosition = Vector2.Zero;
 
-    private const string FRONTIER_FALLBACK = "https://launcher.finalfantasyxiv.com/v650/index.html?rc_lang={0}&time={1}";
 
     public static string CType = CoreEnvironmentSettings.GetCType();
 
@@ -102,7 +101,6 @@ class Program
         Config.DoVersionCheck ??= true;
         Config.FontPxSize ??= 22.0f;
 
-        Config.IsDx11 ??= true;
         Config.IsEncryptArgs ??= true;
         Config.IsFt ??= false;
         Config.IsOtpServer ??= false;
@@ -291,7 +289,8 @@ class Program
 
         needUpdate = CoreEnvironmentSettings.IsUpgrade ? true : needUpdate;
 
-        launcherApp = new LauncherApp(storage, needUpdate, FRONTIER_FALLBACK);
+        var launcherClientConfig = LauncherClientConfig.Fetch().GetAwaiter().GetResult();
+        launcherApp = new LauncherApp(storage, needUpdate, launcherClientConfig.frontierUrl, launcherClientConfig.cutOffBootver);
 
         Invalidate(20);
 

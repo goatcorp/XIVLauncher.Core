@@ -25,6 +25,8 @@ public class LauncherApp : Component
     private bool modalOnNextFrame = false;
     private string modalText = string.Empty;
     private string modalTitle = string.Empty;
+    private string modalButtonText = string.Empty;
+    private Action modalButtonPressAction;
     private readonly ManualResetEvent modalWaitHandle = new(false);
 
     #endregion
@@ -124,7 +126,7 @@ public class LauncherApp : Component
 
     private readonly Background background = new();
 
-    public LauncherApp(Storage storage, bool needsUpdateWarning, string frontierUrl)
+    public LauncherApp(Storage storage, bool needsUpdateWarning, string frontierUrl, string? cutOffBootver)
     {
         this.Storage = storage;
 
@@ -140,6 +142,21 @@ public class LauncherApp : Component
         this.updateWarnPage = new UpdateWarnPage(this);
         this.steamDeckPromptPage = new SteamDeckPromptPage(this);
 
+        if (!EnvironmentSettings.IsNoKillswitch && !string.IsNullOrEmpty(cutOffBootver))
+        {
+            var bootver = SeVersion.Parse(Repository.Boot.GetVer(Program.Config.GamePath));
+            var cutoff = SeVersion.Parse(cutOffBootver);
+
+            if (bootver > cutoff)
+            {
+                this.ShowMessage("XIVLauncher is unavailable at this time as there were changes to the login process during a recent patch." +
+                                "\n\nnWe need to adjust to these changes and verify that our adjustments are safe before we can re-enable the launcher." +
+                                "\n\nYou can use the Official Launcher instead until XIVLauncher has been updated.",
+                                "XIVLauncher", "Close Launcher", () => Environment.Exit(0));
+                return;
+            }
+        }
+
         if (needsUpdateWarning)
         {
             this.State = LauncherState.UpdateWarn;
@@ -154,18 +171,32 @@ public class LauncherApp : Component
 #endif
     }
 
-    public void ShowMessage(string text, string title)
+    public void ShowMessage(string text, string title = "XIVLauncher", string modalButtonText = "OK", Action? modalPressedAction = default)
     {
         if (this.isModalDrawing)
             throw new InvalidOperationException("Cannot open modal while another modal is open");
 
         this.modalText = text;
         this.modalTitle = title;
+        this.modalButtonText = modalButtonText;
+        if (modalPressedAction is null)
+        {
+            this.modalButtonPressAction = () =>
+            {
+                ImGui.CloseCurrentPopup();
+                this.isModalDrawing = false;
+                this.modalWaitHandle.Set();
+            };
+        }
+        else
+        {
+            this.modalButtonPressAction = modalPressedAction;
+        }
         this.isModalDrawing = true;
         this.modalOnNextFrame = true;
     }
 
-    public void ShowMessageBlocking(string text, string title = "XIVLauncher")
+    public void ShowMessageBlocking(string text, string title = "XIVLauncher", bool canContinue = true)
     {
         if (!this.modalWaitHandle.WaitOne(0) && this.isModalDrawing)
             throw new InvalidOperationException("Cannot open modal while another modal is open");
@@ -298,11 +329,9 @@ public class LauncherApp : Component
             const float BUTTON_WIDTH = 120f;
             ImGui.SetCursorPosX((ImGui.GetWindowWidth() - BUTTON_WIDTH) / 2);
 
-            if (ImGui.Button("OK", new Vector2(BUTTON_WIDTH, 40)))
+            if (ImGui.Button(modalButtonText, new Vector2(BUTTON_WIDTH, 40)))
             {
-                ImGui.CloseCurrentPopup();
-                this.isModalDrawing = false;
-                this.modalWaitHandle.Set();
+                modalButtonPressAction();
             }
 
             ImGui.EndPopup();
