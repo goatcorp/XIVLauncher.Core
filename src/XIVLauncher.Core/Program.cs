@@ -102,7 +102,6 @@ class Program
         Config.DoVersionCheck ??= true;
         Config.FontPxSize ??= 22.0f;
 
-        Config.IsDx11 ??= true;
         Config.IsEncryptArgs ??= true;
         Config.IsFt ??= false;
         Config.IsOtpServer ??= false;

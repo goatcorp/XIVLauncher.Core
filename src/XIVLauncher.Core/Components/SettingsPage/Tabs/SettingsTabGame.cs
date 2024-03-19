@@ -28,11 +28,6 @@ public class SettingsTabGame : SettingsTab
             CheckVisibility = () => Environment.OSVersion.Platform == PlatformID.Unix,
         },
 
-        new SettingsEntry<bool>("Use DirectX11", "Use the modern DirectX11 version of the game.", () => Program.Config.IsDx11 ?? true, x => Program.Config.IsDx11 = x)
-        {
-            CheckWarning = x => !x ? "DirectX 9 is no longer supported by the game or Dalamud. Things may not work." : null
-        },
-
         new SettingsEntry<string>("Additional Game Arguments", "Follows Steam conventions: VAR1=value VAR2=value %command% -arg1 -arg2.\nCan't pass programs (like gamescope -- %command%). Does not accept flatpak args (--parent-pid=1, etc.)", () => Program.Config.AdditionalArgs, x => Program.Config.AdditionalArgs = x),
         new SettingsEntry<ClientLanguage>("Game Language", "Select the game's language.", () => Program.Config.ClientLanguage ?? ClientLanguage.English, x => Program.Config.ClientLanguage = x),
         new SettingsEntry<DpiAwareness>("Game DPI Awareness", "Select the game's DPI Awareness. Change this if the game's scaling looks wrong.", () => Program.Config.DpiAwareness ?? DpiAwareness.Unaware, x => Program.Config.DpiAwareness = x),
