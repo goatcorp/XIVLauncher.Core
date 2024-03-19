@@ -23,7 +23,15 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.x
-     
+
+      - name: Setup Flatpak
+        run: |
+          sudo apt update -y
+          sudo apt install flatpak -y
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 
+          flatpak install --user org.freedesktop.Sdk.Extension.dotnet6/x86_64/22.08 -y
+          flatpak install --user org.freedesktop.Sdk/x86_64/22.08 -y
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
