@@ -127,8 +127,6 @@ public class LauncherApp : Component
 
     private readonly Background background = new();
 
-    private readonly string? cutOffBootver;
-
     public LauncherApp(Storage storage, bool needsUpdateWarning, string frontierUrl, string? cutOffBootver)
     {
         this.Storage = storage;
@@ -136,7 +134,6 @@ public class LauncherApp : Component
         this.Accounts = new AccountManager(this.Storage.GetFile("accounts.json"));
         this.UniqueIdCache = new CommonUniqueIdCache(this.Storage.GetFile("uidCache.json"));
         this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings, frontierUrl);
-        this.cutOffBootver = cutOffBootver;
 
         this.mainPage = new MainPage(this);
         this.setPage = new SettingsPage(this);
@@ -146,7 +143,7 @@ public class LauncherApp : Component
         this.updateWarnPage = new UpdateWarnPage(this);
         this.steamDeckPromptPage = new SteamDeckPromptPage(this);
 
-        if (!string.IsNullOrEmpty(this.cutOffBootver))
+        if (!string.IsNullOrEmpty(cutOffBootver))
         {
             var bootver = SeVersion.Parse(Repository.Boot.GetVer(Program.Config.GamePath));
             var cutoff = SeVersion.Parse(cutOffBootver);
