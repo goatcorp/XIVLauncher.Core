@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace XIVLauncher.Core;
 
@@ -12,6 +13,7 @@ public static class CoreEnvironmentSettings
     public static bool IsUpgrade => CheckEnvBool("XL_SHOW_UPGRADE");
     public static bool ClearSettings => CheckEnvBool("XL_CLEAR_SETTINGS");
     public static bool ClearPrefix => CheckEnvBool("XL_CLEAR_PREFIX");
+    public static bool ClearDalamud => CheckEnvBool("XL_CLEAR_DALAMUD");
     public static bool ClearPlugins => CheckEnvBool("XL_CLEAR_PLUGINS");
     public static bool ClearTools => CheckEnvBool("XL_CLEAR_TOOLS");
     public static bool ClearLogs => CheckEnvBool("XL_CLEAR_LOGS");
@@ -53,5 +55,22 @@ public static class CoreEnvironmentSettings
         proc.Start();
         var output = proc.StandardOutput.ReadToEnd().Split('\n', StringSplitOptions.RemoveEmptyEntries);
         return Array.Find(output, s => s.ToUpper().StartsWith("C."));
+    }
+    
+    static private bool? gameModeInstalled = null;
+
+    static public bool IsGameModeInstalled()
+    {
+        if (gameModeInstalled is not null)
+            return gameModeInstalled ?? false;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            var handle = IntPtr.Zero;
+            gameModeInstalled = NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle);
+            NativeLibrary.Free(handle);
+        }
+        else
+            gameModeInstalled = false;
+        return gameModeInstalled ?? false;
     }
 }

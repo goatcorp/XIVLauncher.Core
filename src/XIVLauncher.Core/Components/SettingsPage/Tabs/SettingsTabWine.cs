@@ -1,27 +1,34 @@
 ﻿using System.Numerics;
 using System.Runtime.InteropServices;
 using ImGuiNET;
-using XIVLauncher.Common.Unix.Compatibility;
 using XIVLauncher.Common.Util;
+using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabWine : SettingsTab
 {
-    private SettingsEntry<WineStartupType> startupTypeSetting;
+    private SettingsEntry<WineType> wineTypeSetting;
+
+    private readonly string toolDirectory = Path.Combine(Program.storage.Root.FullName, "compatibilitytool", "wine");
 
     public SettingsTabWine()
     {
         Entries = new SettingsEntry[]
         {
-            startupTypeSetting = new SettingsEntry<WineStartupType>("Wine Version", "Choose how XIVLauncher will start and manage your wine installation.",
-                () => Program.Config.WineStartupType ?? WineStartupType.Managed, x => Program.Config.WineStartupType = x),
+            wineTypeSetting = new SettingsEntry<WineType>("Installation Type", "Choose how XIVLauncher will start and manage your game installation.",
+                () => Program.Config.WineType ?? WineType.Managed, x => Program.Config.WineType = x),
 
+            new DictionarySettingsEntry("Wine Version", $"Wine versions in {toolDirectory}\nEntries marked with *Download* will be downloaded when you log in.", Wine.Versions, () => Program.Config.WineVersion, s => Program.Config.WineVersion = s, Wine.GetDefaultVersion())
+            {
+                CheckVisibility = () => wineTypeSetting.Value == WineType.Managed
+            },
+            
             new SettingsEntry<string>("Wine Binary Path",
                 "Set the path XIVLauncher will use to run applications via wine.\nIt should be an absolute path to a folder containing wine64 and wineserver binaries.",
                 () => Program.Config.WineBinaryPath, s => Program.Config.WineBinaryPath = s)
             {
-                CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Custom
+                CheckVisibility = () => wineTypeSetting.Value == WineType.Custom
             },
 
             new SettingsEntry<bool>("Enable Feral's GameMode", "Enable launching with Feral Interactive's GameMode CPU optimizations.", () => Program.Config.GameModeEnabled ?? true, b => Program.Config.GameModeEnabled = b)
@@ -29,16 +36,14 @@ public class SettingsTabWine : SettingsTab
                 CheckVisibility = () => RuntimeInformation.IsOSPlatform(OSPlatform.Linux),
                 CheckValidity = b =>
                 {
-                    var handle = IntPtr.Zero;
-                    if (b == true && !NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle))
+                    if (b == true && !CoreEnvironmentSettings.IsGameModeInstalled())
                         return "GameMode was not detected on your system.";
-                    NativeLibrary.Free(handle);
                     return null;
                 }
             },
 
-            new SettingsEntry<bool>("Enable DXVK ASYNC", "Enable DXVK ASYNC patch.", () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b),
             new SettingsEntry<bool>("Enable ESync", "Enable eventfd-based synchronization.", () => Program.Config.ESyncEnabled ?? true, b => Program.Config.ESyncEnabled = b),
+
             new SettingsEntry<bool>("Enable FSync", "Enable fast user mutex (futex2).", () => Program.Config.FSyncEnabled ?? true, b => Program.Config.FSyncEnabled = b)
             {
                 CheckVisibility = () => RuntimeInformation.IsOSPlatform(OSPlatform.Linux),
@@ -51,9 +56,6 @@ public class SettingsTabWine : SettingsTab
                 }
             },
 
-            new SettingsEntry<bool>("Set Windows version to 7", "Default for Wine 8.1+ is Windows 10, but this causes issues with some Dalamud plugins. Windows 7 is recommended for now.", () => Program.Config.SetWin7 ?? true, b => Program.Config.SetWin7 = b),
-
-            new SettingsEntry<Dxvk.DxvkHudType>("DXVK Overlay", "Configure how much of the DXVK overlay is to be shown.", () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type),
             new SettingsEntry<string>("WINEDEBUG Variables", "Configure debug logging for wine. Useful for troubleshooting.", () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s)
         };
     }
@@ -67,6 +69,10 @@ public class SettingsTabWine : SettingsTab
     public override void Draw()
     {
         base.Draw();
+
+        ImGui.Separator();
+
+        ImGui.Dummy(new Vector2(10) * ImGuiHelpers.GlobalScale);
 
         if (!Program.CompatibilityTools.IsToolDownloaded)
         {
@@ -94,6 +100,31 @@ public class SettingsTabWine : SettingsTab
         {
             Program.CompatibilityTools.RunInPrefix("explorer");
         }
+
+        ImGui.SameLine();
+
+        if (ImGui.Button("Open Wine explorer (use WineD3D"))
+        {
+            Program.CompatibilityTools.RunInPrefix("explorer", wineD3D: true);
+
+        }
+
+        ImGui.Dummy(new Vector2(10) * ImGuiHelpers.GlobalScale);
+
+
+        if (ImGui.Button("Set Wine to Windows 7"))
+        {
+            Program.CompatibilityTools.RunInPrefix($"winecfg /v win7", redirectOutput: true, writeLog: true);
+        }
+
+        ImGui.SameLine();
+
+        if (ImGui.Button("Set Wine to Windows 10"))
+        {
+            Program.CompatibilityTools.RunInPrefix($"winecfg /v win10", redirectOutput: true, writeLog: true);
+        }
+
+        ImGui.Dummy(new Vector2(10) * ImGuiHelpers.GlobalScale);
 
         if (ImGui.Button("Kill all wine processes"))
         {
