@@ -19,6 +19,11 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+      - name: Setup Python3
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+     
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
