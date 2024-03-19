@@ -150,18 +150,16 @@ class Program
     /// <returns>A <see cref="DalamudUpdater"/> instance.</returns>
     private static DalamudUpdater CreateDalamudUpdater()
     {
-        if (Config.DalamudManualInjectionEnabled == true &&
-            Directory.Exists(Config.DalamudManualInjectPath) &&
-            Directory.GetFiles(Config.DalamudManualInjectPath).FirstOrDefault(f => f == DALAMUD_INJECTOR_NAME) is not null)
+        if (Config.DalamudManualInjectPath is not null &&
+           Config.DalamudManualInjectPath.Exists &&
+           Config.DalamudManualInjectPath.GetFiles().FirstOrDefault(x => x.Name == DALAMUD_INJECTOR_NAME) is not null)
         {
-            var updater = new DalamudUpdater(new DirectoryInfo(Config.DalamudManualInjectPath), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), storage.Root, null, null)
+            return new DalamudUpdater(Config.DalamudManualInjectPath, storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), storage.Root, null, null)
             {
                 Overlay = DalamudLoadInfo,
+                RunnerOverride = new FileInfo(Path.Combine(Config.DalamudManualInjectPath.FullName, DALAMUD_INJECTOR_NAME))
             };
-            DalamudUpdater.RunnerOverride = new FileInfo(Path.Combine(Config.DalamudManualInjectPath, DALAMUD_INJECTOR_NAME));
-            return updater;
         }
-
         return new DalamudUpdater(storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), storage.Root, null, null)
         {
             Overlay = DalamudLoadInfo,

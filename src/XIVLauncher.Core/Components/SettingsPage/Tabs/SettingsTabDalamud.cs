@@ -29,26 +29,29 @@ public class SettingsTabDalamud : SettingsTab
                      return;
                  }
 
-                 if (Directory.Exists(Program.Config.DalamudManualInjectPath) && Directory.GetFiles(Program.Config.DalamudManualInjectPath).FirstOrDefault(x => x == "Dalamud.Injector.exe") is not null)
+                 if (Program.Config.DalamudManualInjectPath is not null &&
+                    Program.Config.DalamudManualInjectPath.Exists &&
+                    Program.Config.DalamudManualInjectPath.GetFiles().FirstOrDefault(x => x.Name == Program.DALAMUD_INJECTOR_NAME) is not null)
                  {
-                     Program.DalamudUpdater.RunnerOverride = new FileInfo(Path.Combine(Program.Config.DalamudManualInjectPath, Program.DALAMUD_INJECTOR_NAME));
-                 }
-             }),
+                     Program.DalamudUpdater.RunnerOverride = new FileInfo(Path.Combine(Program.Config.DalamudManualInjectPath.FullName, Program.DALAMUD_INJECTOR_NAME));
+                }
+            }),
 
-            new SettingsEntry<string>("Manual Injection Path", "The path to the local version of Dalamud where Dalamud.Injector.exe is located", () => Program.Config.DalamudManualInjectPath, (input) =>
+            new SettingsEntry<DirectoryInfo>("Manual Injection Path", "The path to the local version of Dalamud where Dalamud.Injector.exe is located", () => Program.Config.DalamudManualInjectPath, (input) =>
             {
+                if (enableManualInjection.Value == false) return;
                 Program.Config.DalamudManualInjectPath = input;
-                Program.DalamudUpdater.RunnerOverride = new FileInfo(Path.Combine(input, Program.DALAMUD_INJECTOR_NAME));
+                Program.DalamudUpdater.RunnerOverride = new FileInfo(Path.Combine(input.FullName, Program.DALAMUD_INJECTOR_NAME));
             })
             {
-                CheckVisibility = () => enableManualInjection.Value == true,
+                CheckVisibility = () => enableManualInjection.Value,
                 CheckValidity = input =>
                 {
-                    if (!Directory.Exists(input))
+                    if (input is null || !input.Exists)
                     {
                         return "There is no directory at that path.";
                     }
-                    if (Directory.GetFiles(input).FirstOrDefault(x => x == Program.DALAMUD_INJECTOR_NAME) is not null)
+                    else if (input.GetFiles().FirstOrDefault(x => x.Name == Program.DALAMUD_INJECTOR_NAME) is null)
                     {
                         return "Dalamud.Injector.exe was not found inside of the provided directory.";
                     }
