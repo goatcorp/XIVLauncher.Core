@@ -148,7 +148,8 @@ public class LauncherApp : Component
             var bootver = SeVersion.Parse(Repository.Boot.GetVer(Program.Config.GamePath));
             var cutoff = SeVersion.Parse(cutOffBootver);
 
-            if (bootver > cutoff)
+
+            if (!EnvironmentSettings.IsNoKillswitch && bootver > cutoff)
             {
                 this.ShowMessage("XIVLauncher is unavailable at this time as there were changes to the login process during a recent patch." +
                                 "\n\nnWe need to adjust to these changes and verify that our adjustments are safe before we can re-enable the launcher." +
