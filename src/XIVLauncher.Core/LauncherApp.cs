@@ -143,7 +143,7 @@ public class LauncherApp : Component
         this.updateWarnPage = new UpdateWarnPage(this);
         this.steamDeckPromptPage = new SteamDeckPromptPage(this);
 
-        if (!string.IsNullOrEmpty(cutOffBootver))
+        if (!EnvironmentSettings.IsNoKillswitch && !string.IsNullOrEmpty(cutOffBootver))
         {
             var bootver = SeVersion.Parse(Repository.Boot.GetVer(Program.Config.GamePath));
             var cutoff = SeVersion.Parse(cutOffBootver);
