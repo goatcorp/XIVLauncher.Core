@@ -27,4 +27,4 @@ XIVLauncher Core has community packages for various Linux distributions. Please 
 | [MPR (git) (Debian+Ubuntu)](https://mpr.makedeb.org/packages/xivlauncher-git)  | ![MPR package](https://repology.org/badge/version-for-repo/mpr/xivlauncher.core.svg?header=MPR) |
 | [nixpkgs stable](https://search.nixos.org/packages?channel=23.11&from=0&size=50&sort=relevance&type=packages&query=xivlauncher) | ![nixpkgs stable version](https://repology.org/badge/version-for-repo/nix_stable_23_11/xivlauncher.core.svg?header=nixpkgs%2023.11) |
 | [nixpkgs unstable](https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=xivlauncher) | ![nixpkgs unstable version](https://repology.org/badge/version-for-repo/nix_unstable/xivlauncher.core.svg?header=nixpkgs%20unstable) |
-| [PPA (Ubuntu)](https://launchpad.net/~linneris/+archive/ubuntu/xivlauncher-core-stable) | ![PPA version](https://img.shields.io/static/v1?label=PPA&message=1.0.5&color=brightgreen) |
+| [PPA (Ubuntu)](https://launchpad.net/~linneris/+archive/ubuntu/xivlauncher-core-stable) | ![PPA version](https://img.shields.io/static/v1?label=PPA&message=1.0.8&color=brightgreen) |
