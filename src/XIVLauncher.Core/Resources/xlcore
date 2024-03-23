@@ -37,4 +37,4 @@ fi
 
 export OPENSSL_CONF="$tooldir/openssl_fix.cnf"
 export XL_SCT=1
-"$tooldir/XIVLauncher/XIVLauncher.Core" $@ >> $logDir/steamtool_console.log 2>&1
+"$tooldir/XIVLauncher/XIVLauncher.Core" $@ >> $logDir/steamtool_console.log 2>&1 &
