@@ -1,5 +1,7 @@
-﻿using System.Numerics;
+using System.Numerics;
+
 using ImGuiNET;
+
 using XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 namespace XIVLauncher.Core.Components.SettingsPage;

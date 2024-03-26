@@ -1,6 +1,9 @@
 using System.Text;
+
 using Newtonsoft.Json;
+
 using Serilog;
+
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game;
@@ -27,9 +30,10 @@ namespace XIVLauncher.Core.Support
         {
             LastException = exception;
 
-            try {
+            try
+            {
                 var fixedContext =
-                    context?.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ??
+                    context?.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ??
                     string.Empty;
 
                 var payload = new ExceptionPayload
@@ -64,7 +68,7 @@ namespace XIVLauncher.Core.Support
             }
         }
 
-        internal static string GetTroubleshootingJson() 
+        internal static string GetTroubleshootingJson()
         {
             var gamePath = Program.Config.GamePath!;
 
@@ -138,9 +142,9 @@ namespace XIVLauncher.Core.Support
         private class ExceptionPayload
         {
             public DateTime When { get; set; }
-            
+
             public string Info { get; set; } = string.Empty;
-            
+
             public string Context { get; set; } = string.Empty;
         }
 

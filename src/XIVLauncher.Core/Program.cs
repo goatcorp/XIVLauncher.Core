@@ -1,26 +1,32 @@
-﻿using System.Numerics;
+using System.Numerics;
+
 using CheapLoc;
+
 using Config.Net;
+
 using ImGuiNET;
-using XIVLauncher.Core.Style;
+
 using Serilog;
+
 using Veldrid;
 using Veldrid.Sdl2;
 using Veldrid.StartupUtilities;
+
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Support;
-using XIVLauncher.Common.Windows;
 using XIVLauncher.Common.Unix;
 using XIVLauncher.Common.Unix.Compatibility;
 using XIVLauncher.Common.Util;
+using XIVLauncher.Common.Windows;
 using XIVLauncher.Core.Accounts.Secrets;
 using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
+using XIVLauncher.Core.Style;
 
 namespace XIVLauncher.Core;
 
@@ -40,8 +46,8 @@ class Program
     public static DalamudOverlayInfoProxy DalamudLoadInfo { get; private set; } = null!;
     public static CompatibilityTools CompatibilityTools { get; private set; } = null!;
     public static ISecretProvider Secrets { get; private set; } = null!;
-    
-    private static readonly Vector3 clearColor = new(0.1f, 0.1f, 0.1f);
+
+    private static readonly Vector3 ClearColor = new(0.1f, 0.1f, 0.1f);
 
     private static LauncherApp launcherApp = null!;
     public static Storage storage = null!;
@@ -56,7 +62,7 @@ class Program
         Steam != null && Steam.IsValid && Steam.IsRunningOnSteamDeck();
 
     private const string APP_NAME = "xlcore";
-    
+
     private static string[] mainArgs = { };
 
     private static uint invalidationFrames = 0;
@@ -333,7 +339,7 @@ class Program
 
             cl.Begin();
             cl.SetFramebuffer(gd.MainSwapchain.Framebuffer);
-            cl.ClearColorTarget(0, new RgbaFloat(clearColor.X, clearColor.Y, clearColor.Z, 1f));
+            cl.ClearColorTarget(0, new RgbaFloat(ClearColor.X, ClearColor.Y, ClearColor.Z, 1f));
             bindings.Render(gd, cl);
             cl.End();
             gd.SubmitCommands(cl);

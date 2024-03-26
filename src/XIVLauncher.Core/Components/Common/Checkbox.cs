@@ -1,5 +1,6 @@
-﻿using ImGuiNET;
 using System.Numerics;
+
+using ImGuiNET;
 
 namespace XIVLauncher.Core.Components.Common;
 

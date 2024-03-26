@@ -1,4 +1,5 @@
 using KeySharp;
+
 using Serilog;
 
 namespace XIVLauncher.Core.Accounts.Secrets.Providers;

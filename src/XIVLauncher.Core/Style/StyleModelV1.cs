@@ -1,5 +1,7 @@
 using System.Numerics;
+
 using ImGuiNET;
+
 using Newtonsoft.Json;
 
 namespace XIVLauncher.Core.Style;

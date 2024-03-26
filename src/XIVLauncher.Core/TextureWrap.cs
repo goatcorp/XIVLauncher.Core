@@ -1,6 +1,8 @@
 using System.Numerics;
+
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+
 using Veldrid;
 using Veldrid.ImageSharp;
 

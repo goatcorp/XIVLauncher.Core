@@ -1,9 +1,8 @@
-using System.Diagnostics;
 using System.Numerics;
+
 using ImGuiNET;
-using XIVLauncher.Common.Unix.Compatibility;
+
 using XIVLauncher.Common.Util;
-using XIVLauncher.Core.Support;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -11,7 +10,7 @@ public class SettingsTabAbout : SettingsTab
 {
     private readonly TextureWrap logoTexture;
 
-    public override SettingsEntry[] Entries  => Array.Empty<SettingsEntry>();
+    public override SettingsEntry[] Entries => Array.Empty<SettingsEntry>();
 
     public override string Title => "About";
 

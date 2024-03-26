@@ -1,7 +1,10 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Numerics;
+
 using ImGuiNET;
+
 using Serilog;
+
 using XIVLauncher.Common;
 using XIVLauncher.Common.Game;
 using XIVLauncher.Common.PlatformAbstractions;
