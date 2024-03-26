@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Veldrid;
 using System.Runtime.CompilerServices;
@@ -5,6 +6,9 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 using Serilog;
 using Veldrid.Sdl2;
+
+// Veldrid objects are setup in method called by constructor
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace XIVLauncher.Core;
 
@@ -220,7 +224,7 @@ public class ImGuiBindings : IDisposable
     /// </summary>
     public IntPtr GetOrCreateImGuiBinding(ResourceFactory factory, Texture texture)
     {
-        if (!_autoViewsByTexture.TryGetValue(texture, out TextureView textureView))
+        if (!_autoViewsByTexture.TryGetValue(texture, out var textureView))
         {
             textureView = factory.CreateTextureView(texture);
             _autoViewsByTexture.Add(texture, textureView);

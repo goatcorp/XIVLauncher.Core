@@ -29,8 +29,6 @@ public class SettingsTabTroubleshooting : SettingsTab
     };
     public override string Title => "Troubleshooting";
 
-    private SettingsPage parentPage;
-
     public override void Draw()
     {
         base.Draw();

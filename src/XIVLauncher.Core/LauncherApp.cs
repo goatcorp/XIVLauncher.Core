@@ -18,7 +18,6 @@ namespace XIVLauncher.Core;
 public class LauncherApp : Component
 {
     public static bool IsDebug { get; private set; } = Debugger.IsAttached;
-    private bool isDemoWindow = false;
 
     #region Modal State
 
@@ -307,17 +306,9 @@ public class LauncherApp : Component
             base.Draw();
         }
 
-        if (IsDebug)
-        {
-            this.isDemoWindow = true;
-        }
-
         ImGui.End();
 
         ImGui.PopStyleVar(2);
-
-        //if (this.isDemoWindow)
-        //    ImGui.ShowDemoWindow(ref this.isDemoWindow);
 
         this.DrawModal();
     }

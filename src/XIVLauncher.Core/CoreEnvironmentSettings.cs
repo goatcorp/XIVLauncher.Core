@@ -36,7 +36,7 @@ public static class CoreEnvironmentSettings
     public static string GetCleanEnvironmentVariable(string envvar, string badstring = "", string separator = ":")
     {
         string dirty = Environment.GetEnvironmentVariable(envvar) ?? "";
-        if (badstring.Equals("")) return dirty;
+        if (badstring.Equals("", StringComparison.Ordinal)) return dirty;
         return string.Join(separator, Array.FindAll<string>(dirty.Split(separator, StringSplitOptions.RemoveEmptyEntries), s => !s.Contains(badstring)));
     }
 
@@ -52,6 +52,6 @@ public static class CoreEnvironmentSettings
         proc.StartInfo = psi;
         proc.Start();
         var output = proc.StandardOutput.ReadToEnd().Split('\n', StringSplitOptions.RemoveEmptyEntries);
-        return Array.Find(output, s => s.ToUpper().StartsWith("C."));
+        return Array.Find(output, s => s.ToUpper().StartsWith("C.")) ?? string.Empty;
     }
 }

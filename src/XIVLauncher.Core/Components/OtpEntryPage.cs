@@ -19,14 +19,14 @@ public class OtpEntryPage : Page
     public OtpEntryPage(LauncherApp app)
         : base(app)
     {
-        Program.Steam.OnGamepadTextInputDismissed += this.SteamOnOnGamepadTextInputDismissed;
+        if (Program.Steam is not null) Program.Steam.OnGamepadTextInputDismissed += this.SteamOnOnGamepadTextInputDismissed;
     }
 
     private void SteamOnOnGamepadTextInputDismissed(bool success)
     {
         if (success)
         {
-            Result = Program.Steam.GetEnteredGamepadText();
+            if (Program.Steam is not null) Result = Program.Steam.GetEnteredGamepadText();
         }
     }
 

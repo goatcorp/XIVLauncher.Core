@@ -11,11 +11,11 @@ public class NewsFrame : Component
 
     private readonly LauncherApp app;
     private readonly Timer bannerTimer;
-
+    
     private Headlines? headlines;
-    private TextureWrap[]? banners;
-
-    private IReadOnlyList<Banner>? bannerList;
+    private TextureWrap[] banners = { };
+    
+    private IReadOnlyList<Banner> bannerList = new List<Banner>();
 
     private int currentBanner = 0;
 
@@ -45,11 +45,11 @@ public class NewsFrame : Component
         {
             this.newsLoaded = false;
 
-            await Headlines.GetWorlds(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English);
+            await Headlines.GetWorlds(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
             
             bannerList = await Headlines.GetBanners(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
                        
-            await Headlines.GetMessage(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English);
+            await Headlines.GetMessage(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
 
             headlines = await Headlines.GetNews(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
             
@@ -100,18 +100,19 @@ public class NewsFrame : Component
                     }
                 }
 
-                ImGui.TextDisabled("News");
-                foreach (News newsEntry in this.headlines.News)
-                {
-                    ShowNewsEntry(newsEntry);
-                }
-
-                ImGui.Spacing();
-
-                ImGui.TextDisabled("Topics");
-                foreach (News topic in this.headlines.Topics)
-                {
-                    ShowNewsEntry(topic);
+                if (this.headlines is not null) {
+                    ImGui.TextDisabled("News");
+                    
+                    foreach (News newsEntry in this.headlines.News) {
+                        ShowNewsEntry(newsEntry);
+                    }
+                    
+                    ImGui.Spacing();
+                    
+                    ImGui.TextDisabled("Topics");
+                    foreach (News topic in this.headlines.Topics) {
+                        ShowNewsEntry(topic);
+                    }
                 }
             }
             else

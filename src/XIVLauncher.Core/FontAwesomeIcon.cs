@@ -3,7 +3,7 @@
 namespace XIVLauncher.Core;
 
 /// <summary>
-/// Font Awesome unicode characters for use with the <see cref="UiBuilder.IconFont"/> font.
+/// Font Awesome unicode characters for use with the IconFont font.
 /// </summary>
 public enum FontAwesomeIcon
 {
