@@ -1,5 +1,3 @@
-﻿using System.Net;
-
 namespace XIVLauncher.Core.Accounts;
 
 class AccountSwitcherEntry

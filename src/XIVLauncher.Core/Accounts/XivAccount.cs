@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
-using Serilog;
-using System.Net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpGen.Runtime;
+
+using Serilog;
 
 namespace XIVLauncher.Core.Accounts;
 
@@ -91,7 +90,8 @@ public class XivAccount
 
     public static async Task<dynamic> Get(string endpoint)
     {
-        using (var client = new HttpClient()) {
+        using (var client = new HttpClient())
+        {
             var result = await client.GetStringAsync(URL + endpoint).ConfigureAwait(false);
             var parsedObject = JObject.Parse(result);
             return parsedObject;

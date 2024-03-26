@@ -1,5 +1,6 @@
 
 using System.Net.Http.Json;
+
 using Serilog;
 
 namespace XIVLauncher.Core;

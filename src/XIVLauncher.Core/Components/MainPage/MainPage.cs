@@ -1,23 +1,27 @@
-﻿using System.Diagnostics;
-using ImGuiNET;
+using System.Diagnostics;
 using System.Numerics;
+
 using CheapLoc;
+
+using ImGuiNET;
+
 using Serilog;
+
 using XIVLauncher.Common;
 using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game;
+using XIVLauncher.Common.Game.Exceptions;
 using XIVLauncher.Common.Game.Patch;
 using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.Game.Patch.PatchList;
 using XIVLauncher.Common.PlatformAbstractions;
-using XIVLauncher.Common.Windows;
 using XIVLauncher.Common.Unix;
 using XIVLauncher.Common.Unix.Compatibility;
 using XIVLauncher.Common.Unix.Compatibility.GameFixes;
 using XIVLauncher.Common.Util;
+using XIVLauncher.Common.Windows;
 using XIVLauncher.Core.Accounts;
-using XIVLauncher.Common.Game.Exceptions;
 using XIVLauncher.Core.Support;
 
 namespace XIVLauncher.Core.Components.MainPage;
@@ -779,7 +783,7 @@ public class MainPage : Page
             App.StartLoading("Ensuring compatibility tool...", "This may take a little while. Please hold!");
             signal.WaitOne();
             signal.Dispose();
-            
+
             if (isFailed)
                 return null!;
 

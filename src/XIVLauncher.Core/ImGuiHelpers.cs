@@ -1,4 +1,5 @@
 using System.Numerics;
+
 using ImGuiNET;
 
 namespace XIVLauncher.Core;
@@ -33,7 +34,7 @@ public static class ImGuiHelpers
         var window = (int)ImGui.GetWindowWidth();
         ImGui.SetCursorPosX(window / 2 - itemWidth / 2);
     }
-    
+
     public static void AddTooltip(string text)
     {
         if (ImGui.IsItemHovered())

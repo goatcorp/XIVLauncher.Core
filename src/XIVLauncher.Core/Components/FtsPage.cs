@@ -1,4 +1,5 @@
 using System.Numerics;
+
 using ImGuiNET;
 
 namespace XIVLauncher.Core.Components;
@@ -29,7 +30,7 @@ public class FtsPage : Page
             else
                 return;
         }
-        
+
         if (!(App.Settings.CompletedFts ?? false) && Program.IsSteamDeckHardware)
         {
             App.State = LauncherApp.LauncherState.Fts;

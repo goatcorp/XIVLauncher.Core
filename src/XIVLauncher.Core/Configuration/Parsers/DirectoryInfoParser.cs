@@ -1,4 +1,4 @@
-﻿using Config.Net;
+using Config.Net;
 
 namespace XIVLauncher.Core.Configuration.Parsers;
 

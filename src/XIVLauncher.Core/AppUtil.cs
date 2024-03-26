@@ -1,4 +1,5 @@
 using System.Reflection;
+
 using XIVLauncher.Common.Util;
 
 namespace XIVLauncher.Core;

@@ -1,4 +1,4 @@
-﻿using XIVLauncher.Common.Dalamud;
+using XIVLauncher.Common.Dalamud;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 

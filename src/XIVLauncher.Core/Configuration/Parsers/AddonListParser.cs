@@ -1,5 +1,7 @@
-﻿using Config.Net;
+using Config.Net;
+
 using Newtonsoft.Json;
+
 using XIVLauncher.Common.Addon;
 
 namespace XIVLauncher.Core.Configuration.Parsers;

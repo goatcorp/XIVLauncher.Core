@@ -1,4 +1,5 @@
 using ImGuiNET;
+
 using XIVLauncher.Common;
 using XIVLauncher.Common.Util;
 
@@ -78,7 +79,7 @@ public class SettingsEntry<T> : SettingsEntry
             if (ImGui.BeginCombo($"###{Id.ToString()}", descriptions[idx].FriendlyName))
             {
                 foreach (int value in values)
-                {   
+                {
                     string desc = descriptions[value].Description;
                     desc = (desc == string.Empty || desc == "dummy") ? string.Empty : " - " + desc;
                     if (ImGui.Selectable(descriptions[value].FriendlyName + desc, idx == value))
