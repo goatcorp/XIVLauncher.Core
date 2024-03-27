@@ -1,4 +1,5 @@
 using System.Numerics;
+
 using ImGuiNET;
 
 namespace XIVLauncher.Core.Components.MainPage;
@@ -14,7 +15,7 @@ public class ActionButtons : Component
         var btnSize = new Vector2(80) * ImGuiHelpers.GlobalScale;
 
         ImGui.PushFont(FontManager.IconFont);
-        
+
         ImGui.BeginDisabled(this.OnQueueButtonClicked == null);
         if (ImGui.Button(FontAwesomeIcon.Clock.ToIconString(), btnSize))
         {
@@ -26,7 +27,7 @@ public class ActionButtons : Component
         ImGui.EndDisabled();
 
         ImGui.SameLine();
-        
+
         ImGui.BeginDisabled(this.OnStatusButtonClicked == null);
         if (ImGui.Button(FontAwesomeIcon.Globe.ToIconString(), btnSize))
         {

@@ -1,6 +1,9 @@
 using System.Text;
+
 using Newtonsoft.Json;
+
 using Serilog;
+
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game;
@@ -29,7 +32,9 @@ namespace XIVLauncher.Core.Support
 
             try
             {
-                var fixedContext = context?.Split(new []{'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                var fixedContext =
+                    context?.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ??
+                    string.Empty;
 
                 var payload = new ExceptionPayload
                 {
@@ -65,8 +70,7 @@ namespace XIVLauncher.Core.Support
 
         internal static string GetTroubleshootingJson()
         {
-            
-            var gamePath = Program.Config.GamePath;
+            var gamePath = Program.Config.GamePath!;
 
             var integrity = TroubleshootingPayload.IndexIntegrityResult.Success;
 
@@ -93,7 +97,7 @@ namespace XIVLauncher.Core.Support
             {
                 integrity = TroubleshootingPayload.IndexIntegrityResult.Exception;
             }
-            
+
             var ffxivVer = Repository.Ffxiv.GetVer(gamePath);
             var ffxivVerBck = Repository.Ffxiv.GetVer(gamePath, true);
             var ex1Ver = Repository.Ex1.GetVer(gamePath);
@@ -108,7 +112,6 @@ namespace XIVLauncher.Core.Support
             var payload = new TroubleshootingPayload
             {
                 When = DateTime.Now,
-                IsDx11 = Program.Config.IsDx11.GetValueOrDefault(),
                 IsAutoLogin = Program.Config.IsAutologin.GetValueOrDefault(),
                 IsUidCache = Program.Config.IsUidCacheEnabled.GetValueOrDefault(),
                 DalamudEnabled = Program.Config.DalamudEnabled.GetValueOrDefault(),
@@ -140,16 +143,14 @@ namespace XIVLauncher.Core.Support
         {
             public DateTime When { get; set; }
 
-            public string Info { get; set; }
+            public string Info { get; set; } = string.Empty;
 
-            public string Context { get; set; }
+            public string Context { get; set; } = string.Empty;
         }
 
         private class TroubleshootingPayload
         {
             public DateTime When { get; set; }
-
-            public bool IsDx11 { get; set; }
 
             public bool IsAutoLogin { get; set; }
 
@@ -165,9 +166,9 @@ namespace XIVLauncher.Core.Support
 
             public bool EncryptArguments { get; set; }
 
-            public string LauncherVersion { get; set; }
+            public string LauncherVersion { get; set; } = string.Empty;
 
-            public string LauncherHash { get; set; }
+            public string LauncherHash { get; set; } = string.Empty;
 
             public bool Official { get; set; }
 
@@ -175,12 +176,12 @@ namespace XIVLauncher.Core.Support
 
             public Platform Platform { get; set; }
 
-            public string ObservedGameVersion { get; set; }
+            public string ObservedGameVersion { get; set; } = string.Empty;
 
-            public string ObservedEx1Version { get; set; }
-            public string ObservedEx2Version { get; set; }
-            public string ObservedEx3Version { get; set; }
-            public string ObservedEx4Version { get; set; }
+            public string ObservedEx1Version { get; set; } = string.Empty;
+            public string ObservedEx2Version { get; set; } = string.Empty;
+            public string ObservedEx3Version { get; set; } = string.Empty;
+            public string ObservedEx4Version { get; set; } = string.Empty;
 
             public bool BckMatch { get; set; }
 

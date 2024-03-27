@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using Serilog;
-using System.Net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
+using Serilog;
 
 namespace XIVLauncher.Core.Accounts;
 
@@ -38,12 +38,11 @@ public class XivAccount
     public bool UseSteamServiceAccount { get; set; }
     public bool UseOtp { get; set; }
 
-    public string ChosenCharacterName;
-    public string ChosenCharacterWorld;
+    public string ChosenCharacterName = string.Empty;
+    public string ChosenCharacterWorld = string.Empty;
+    public string ThumbnailUrl = string.Empty;
 
-    public string ThumbnailUrl;
-
-    public string LastSuccessfulOtp;
+    public string LastSuccessfulOtp = string.Empty;
 
     public XivAccount(string userName)
     {
@@ -86,17 +85,15 @@ public class XivAccount
 
     public static async Task<JObject> GetCharacterSearch(string name, string world)
     {
-        return await Get("character/search" + $"?name={name}&server={world}");
+        return await Get("character/search" + $"?name={name}&server={world}").ConfigureAwait(false);
     }
 
     public static async Task<dynamic> Get(string endpoint)
     {
-        using (var client = new WebClient())
+        using (var client = new HttpClient())
         {
-            var result = client.DownloadString(URL + endpoint);
-
+            var result = await client.GetStringAsync(URL + endpoint).ConfigureAwait(false);
             var parsedObject = JObject.Parse(result);
-
             return parsedObject;
         }
     }

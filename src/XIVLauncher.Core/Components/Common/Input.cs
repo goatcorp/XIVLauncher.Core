@@ -1,5 +1,7 @@
-﻿using ImGuiNET;
 using System.Numerics;
+
+using ImGuiNET;
+
 using Serilog;
 
 namespace XIVLauncher.Core.Components.Common;

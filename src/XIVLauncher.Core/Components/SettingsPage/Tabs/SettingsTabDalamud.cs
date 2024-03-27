@@ -1,4 +1,4 @@
-﻿using XIVLauncher.Common.Dalamud;
+using XIVLauncher.Common.Dalamud;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -40,6 +40,7 @@ public class SettingsTabDalamud : SettingsTab
             new SettingsEntry<DirectoryInfo>("Manual Injection Path", "The path to the local version of Dalamud where Dalamud.Injector.exe is located", () => Program.Config.DalamudManualInjectPath, (input) =>
             {
                 if (enableManualInjection.Value == false) return;
+                if (input is null) return;
                 Program.Config.DalamudManualInjectPath = input;
                 Program.DalamudUpdater.RunnerOverride = new FileInfo(Path.Combine(input.FullName, Program.DALAMUD_INJECTOR_NAME));
             })

@@ -1,6 +1,9 @@
 using System.Numerics;
+
 using ImGuiNET;
+
 using Serilog;
+
 using XIVLauncher.Common.Http;
 
 namespace XIVLauncher.Core.Components;
@@ -19,14 +22,14 @@ public class OtpEntryPage : Page
     public OtpEntryPage(LauncherApp app)
         : base(app)
     {
-        Program.Steam.OnGamepadTextInputDismissed += this.SteamOnOnGamepadTextInputDismissed;
+        if (Program.Steam is not null) Program.Steam.OnGamepadTextInputDismissed += this.SteamOnOnGamepadTextInputDismissed;
     }
 
     private void SteamOnOnGamepadTextInputDismissed(bool success)
     {
         if (success)
         {
-            Result = Program.Steam.GetEnteredGamepadText();
+            if (Program.Steam is not null) Result = Program.Steam.GetEnteredGamepadText();
         }
     }
 
@@ -104,7 +107,7 @@ public class OtpEntryPage : Page
 
             var doEnter = ImGui.InputText("###otpInput", ref this.otp, 6, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.EnterReturnsTrue);
 
-            var buttonSize = new Vector2(INPUT_WIDTH/2-4, 30);
+            var buttonSize = new Vector2(INPUT_WIDTH / 2 - 4, 30);
             ImGuiHelpers.CenterCursorFor(INPUT_WIDTH);
 
             if (ImGui.Button("OK", buttonSize) || doEnter)

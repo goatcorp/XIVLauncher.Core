@@ -1,52 +1,57 @@
-﻿using System.Numerics;
+using System.Numerics;
+
 using CheapLoc;
+
 using Config.Net;
+
 using ImGuiNET;
-using XIVLauncher.Core.Style;
+
 using Serilog;
+
 using Veldrid;
 using Veldrid.Sdl2;
 using Veldrid.StartupUtilities;
+
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Support;
-using XIVLauncher.Common.Windows;
 using XIVLauncher.Common.Unix;
 using XIVLauncher.Common.Unix.Compatibility;
 using XIVLauncher.Common.Util;
+using XIVLauncher.Common.Windows;
 using XIVLauncher.Core.Accounts.Secrets;
 using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
 using XIVLauncher.Core.UnixCompatibility;
+using XIVLauncher.Core.Style;
 
 namespace XIVLauncher.Core;
 
 class Program
 {
-    private static Sdl2Window window;
-    private static CommandList cl;
-    private static GraphicsDevice gd;
-    private static ImGuiBindings bindings;
+    private static Sdl2Window window = null!;
+    private static CommandList cl = null!;
+    private static GraphicsDevice gd = null!;
+    private static ImGuiBindings bindings = null!;
 
     public static GraphicsDevice GraphicsDevice => gd;
     public static ImGuiBindings ImGuiBindings => bindings;
-    public static ILauncherConfig Config { get; private set; }
+    public static ILauncherConfig Config { get; private set; } = null!;
     public static CommonSettings CommonSettings => new(Config);
     public static ISteam? Steam { get; private set; }
-    public static DalamudUpdater DalamudUpdater { get; private set; }
-    public static DalamudOverlayInfoProxy DalamudLoadInfo { get; private set; }
-    public static CompatibilityTools CompatibilityTools { get; private set; }
-    public static ISecretProvider Secrets { get; private set; }
+    public static DalamudUpdater DalamudUpdater { get; private set; } = null!;
+    public static DalamudOverlayInfoProxy DalamudLoadInfo { get; private set; } = null!;
+    public static CompatibilityTools CompatibilityTools { get; private set; } = null!;
+    public static ISecretProvider Secrets { get; private set; } = null!;
 
-    private static readonly Vector3 clearColor = new(0.1f, 0.1f, 0.1f);
-    private static bool showImGuiDemoWindow = true;
+    private static readonly Vector3 ClearColor = new(0.1f, 0.1f, 0.1f);
 
-    private static LauncherApp launcherApp;
-    public static Storage storage;
+    private static LauncherApp launcherApp = null!;
+    public static Storage storage = null!;
     public static DirectoryInfo DotnetRuntime => storage.GetFolder("runtime");
 
     // TODO: We don't have the steamworks api for this yet.
@@ -59,12 +64,11 @@ class Program
 
     private const string APP_NAME = "xlcore";
 
-    private static string[] mainArgs;
+    private static string[] mainArgs = { };
 
     private static uint invalidationFrames = 0;
-    private static Vector2 lastMousePosition;
+    private static Vector2 lastMousePosition = Vector2.Zero;
 
-    private const string FRONTIER_FALLBACK = "https://launcher.finalfantasyxiv.com/v650/index.html?rc_lang={0}&time={1}";
 
     public static string CType = CoreEnvironmentSettings.GetCType();
 
@@ -104,7 +108,6 @@ class Program
         Config.DoVersionCheck ??= true;
         Config.FontPxSize ??= 22.0f;
 
-        Config.IsDx11 ??= true;
         Config.IsEncryptArgs ??= true;
         Config.IsFt ??= false;
         Config.IsOtpServer ??= false;
@@ -198,7 +201,7 @@ class Program
 
         uint appId, altId;
         string appName, altName;
-        if (Config.IsFt.Value)
+        if (Config.IsFt == true)
         {
             appId = STEAM_APP_ID_FT;
             altId = STEAM_APP_ID;
@@ -298,7 +301,8 @@ class Program
 
         needUpdate = CoreEnvironmentSettings.IsUpgrade ? true : needUpdate;
 
-        launcherApp = new LauncherApp(storage, needUpdate, FRONTIER_FALLBACK);
+        var launcherClientConfig = LauncherClientConfig.Fetch().GetAwaiter().GetResult();
+        launcherApp = new LauncherApp(storage, needUpdate, launcherClientConfig.frontierUrl, launcherClientConfig.cutOffBootver);
 
         Invalidate(20);
 
@@ -341,7 +345,7 @@ class Program
 
             cl.Begin();
             cl.SetFramebuffer(gd.MainSwapchain.Framebuffer);
-            cl.ClearColorTarget(0, new RgbaFloat(clearColor.X, clearColor.Y, clearColor.Z, 1f));
+            cl.ClearColorTarget(0, new RgbaFloat(ClearColor.X, ClearColor.Y, ClearColor.Z, 1f));
             bindings.Render(gd, cl);
             cl.End();
             gd.SubmitCommands(cl);

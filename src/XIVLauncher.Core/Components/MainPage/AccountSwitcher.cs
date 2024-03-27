@@ -1,5 +1,7 @@
 using System.Numerics;
+
 using ImGuiNET;
+
 using XIVLauncher.Core.Accounts;
 
 namespace XIVLauncher.Core.Components.MainPage;

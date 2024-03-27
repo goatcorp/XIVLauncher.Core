@@ -1,12 +1,14 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
+
 using Newtonsoft.Json;
+
 using Serilog;
 
 namespace XIVLauncher.Core.Accounts;
 
 public class AccountManager
 {
-    public ObservableCollection<XivAccount> Accounts;
+    public ObservableCollection<XivAccount> Accounts = new();
 
     public XivAccount? CurrentAccount
     {
@@ -22,7 +24,7 @@ public class AccountManager
         Accounts.CollectionChanged += Accounts_CollectionChanged;
     }
 
-    private void Accounts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private void Accounts_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         Save();
     }
@@ -31,13 +33,13 @@ public class AccountManager
     {
         Log.Information("UpdatePassword() called");
         var existingAccount = Accounts.FirstOrDefault(a => a.Id == account.Id);
-        existingAccount.Password = password;
+        if (existingAccount is not null) existingAccount.Password = password;
     }
 
     public void UpdateLastSuccessfulOtp(XivAccount account, string lastOtp)
     {
         var existingAccount = Accounts.FirstOrDefault(a => a.Id == account.Id);
-        existingAccount.LastSuccessfulOtp = lastOtp;
+        if (existingAccount is not null) existingAccount.LastSuccessfulOtp = lastOtp;
         Save();
     }
 
@@ -78,8 +80,6 @@ public class AccountManager
     {
         if (!this.configFile.Exists)
         {
-            Accounts = new ObservableCollection<XivAccount>();
-
             Save();
             return;
         }

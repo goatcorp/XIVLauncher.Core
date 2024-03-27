@@ -1,4 +1,4 @@
-﻿using XIVLauncher.Common;
+using XIVLauncher.Common;
 using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch.Acquisition;
@@ -37,8 +37,6 @@ public interface ILauncherConfig
     public bool? TreatNonZeroExitCodeAsFailure { get; set; }
 
     public List<AddonEntry>? Addons { get; set; }
-
-    public bool? IsDx11 { get; set; }
 
     public bool? IsEncryptArgs { get; set; }
 

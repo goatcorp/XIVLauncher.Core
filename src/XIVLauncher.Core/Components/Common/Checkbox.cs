@@ -1,5 +1,6 @@
-﻿using ImGuiNET;
 using System.Numerics;
+
+using ImGuiNET;
 
 namespace XIVLauncher.Core.Components.Common;
 
@@ -17,7 +18,7 @@ public class Checkbox : Component
         set => inputBacking = value;
     }
 
-    public event Action<bool> OnChange;
+    public event Action<bool>? OnChange;
 
     public Checkbox(string label, bool value = false, bool isEnabled = true)
     {

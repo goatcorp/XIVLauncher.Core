@@ -1,15 +1,12 @@
-using System.Diagnostics;
-using System.Numerics;
 using ImGuiNET;
-using XIVLauncher.Common.Unix.Compatibility;
+
 using XIVLauncher.Common.Util;
 using XIVLauncher.Core.Support;
-using XIVLauncher.Core;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabTroubleshooting : SettingsTab
-{   
+{
     public override SettingsEntry[] Entries { get; } =
     {
         new SettingsEntry<bool>("Hack: Disable gameoverlayrenderer.so", "Fixes some stuttering issues after 40+ minutes, but may affect steam overlay and input.", () => Program.Config.FixLDP ?? false, x => Program.Config.FixLDP = x),
@@ -28,8 +25,6 @@ public class SettingsTabTroubleshooting : SettingsTab
         },
     };
     public override string Title => "Troubleshooting";
-
-    private SettingsPage parentPage;
 
     public override void Draw()
     {
