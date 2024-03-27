@@ -57,11 +57,10 @@ public class NewsFrame : Component
 
             this.banners = new TextureWrap[bannerList.Count];
 
-            var client = new HttpClient();
 
             for (var i = 0; i < bannerList.Count; i++)
             {
-                var textureBytes = await client.GetByteArrayAsync(this.bannerList[i].LsbBanner).ConfigureAwait(false);
+                var textureBytes = await Program.HttpClient.GetByteArrayAsync(this.bannerList[i].LsbBanner).ConfigureAwait(false);
                 this.banners[i] = TextureWrap.Load(textureBytes);
             }
 

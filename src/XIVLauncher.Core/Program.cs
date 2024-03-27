@@ -30,7 +30,7 @@ using XIVLauncher.Core.Style;
 
 namespace XIVLauncher.Core;
 
-class Program
+sealed class Program
 {
     private static Sdl2Window window = null!;
     private static CommandList cl = null!;
@@ -46,6 +46,10 @@ class Program
     public static DalamudOverlayInfoProxy DalamudLoadInfo { get; private set; } = null!;
     public static CompatibilityTools CompatibilityTools { get; private set; } = null!;
     public static ISecretProvider Secrets { get; private set; } = null!;
+    public static HttpClient HttpClient { get; private set; } = new()
+    {
+        Timeout = TimeSpan.FromSeconds(5)
+    };
 
     private static readonly Vector3 ClearColor = new(0.1f, 0.1f, 0.1f);
 
@@ -295,7 +299,7 @@ class Program
 
         needUpdate = CoreEnvironmentSettings.IsUpgrade ? true : needUpdate;
 
-        var launcherClientConfig = LauncherClientConfig.Fetch().GetAwaiter().GetResult();
+        var launcherClientConfig = LauncherClientConfig.GetAsync().GetAwaiter().GetResult();
         launcherApp = new LauncherApp(storage, needUpdate, launcherClientConfig.frontierUrl, launcherClientConfig.cutOffBootver);
 
         Invalidate(20);
@@ -347,6 +351,7 @@ class Program
         }
 
         // Clean up Veldrid resources
+        HttpClient.Dispose();
         gd.WaitForIdle();
         bindings.Dispose();
         cl.Dispose();
