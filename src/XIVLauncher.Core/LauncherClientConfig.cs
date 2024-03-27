@@ -18,15 +18,11 @@ public readonly struct LauncherClientConfig
     public string? cutOffBootver { get; init; }
     public uint flags { get; init; }
 
-    public static async Task<LauncherClientConfig> Fetch()
+    public static async Task<LauncherClientConfig> GetAsync()
     {
         try
         {
-            using var client = new HttpClient()
-            {
-                Timeout = TimeSpan.FromSeconds(5),
-            };
-            return await client.GetFromJsonAsync<LauncherClientConfig>(LAUNCHER_CONFIG_URL).ConfigureAwait(false);
+            return await Program.HttpClient.GetFromJsonAsync<LauncherClientConfig>(LAUNCHER_CONFIG_URL).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

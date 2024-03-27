@@ -6,7 +6,6 @@ namespace XIVLauncher.Core.Components.MainPage;
 
 public class ActionButtons : Component
 {
-    public event Action? OnQueueButtonClicked;
     public event Action? OnStatusButtonClicked;
     public event Action? OnSettingsButtonClicked;
 
@@ -15,19 +14,6 @@ public class ActionButtons : Component
         var btnSize = new Vector2(80) * ImGuiHelpers.GlobalScale;
 
         ImGui.PushFont(FontManager.IconFont);
-
-        ImGui.BeginDisabled(this.OnQueueButtonClicked == null);
-        if (ImGui.Button(FontAwesomeIcon.Clock.ToIconString(), btnSize))
-        {
-            this.OnQueueButtonClicked?.Invoke();
-        }
-        ImGui.PushFont(FontManager.TextFont);
-        ImGuiHelpers.AddTooltip("Queue");
-        ImGui.PopFont();
-        ImGui.EndDisabled();
-
-        ImGui.SameLine();
-
         ImGui.BeginDisabled(this.OnStatusButtonClicked == null);
         if (ImGui.Button(FontAwesomeIcon.Globe.ToIconString(), btnSize))
         {

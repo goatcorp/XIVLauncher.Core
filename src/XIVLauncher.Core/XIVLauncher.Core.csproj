@@ -95,14 +95,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources/FontAwesome5FreeSolid.otf"
+    <EmbeddedResource Include="Resources/fonts/FontAwesome5FreeSolid.otf"
       LogicalName="FontAwesome5FreeSolid.otf" />
-    <EmbeddedResource Include="Resources/NotoSansCJKjp-Regular.otf"
+    <EmbeddedResource Include="Resources/fonts/NotoSansCJKjp-Regular.otf"
       LogicalName="NotoSansCJKjp-Regular.otf" />
 
     <EmbeddedResource Include="Resources/logo.png" LogicalName="logo.png" />
 
-    <EmbeddedResource Include="Resources/bg1.jpg" LogicalName="bg1.jpg" />
     <EmbeddedResource Include="Resources/bg_logo.png" LogicalName="bg_logo.png" />
 
     <EmbeddedResource Include="Resources/steamdeck_fts.png" LogicalName="steamdeck_fts.png" />

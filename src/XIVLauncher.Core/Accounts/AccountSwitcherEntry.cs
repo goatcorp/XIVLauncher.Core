@@ -30,11 +30,7 @@ class AccountSwitcherEntry
         }
         else
         {
-            using (var client = new HttpClient())
-            {
-                imageBytes = client.GetByteArrayAsync(uri).Result;
-            }
-
+            imageBytes = Program.HttpClient.GetByteArrayAsync(uri).Result;
             File.WriteAllBytes(cacheFile, imageBytes);
         }
 
