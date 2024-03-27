@@ -26,12 +26,12 @@ public class SettingsTabSteamTool : SettingsTab
     {
         Entries = new SettingsEntry[]
         {
-            steamPath = new SettingsEntry<string>("Steam Path (native install)", "Path to the native steam config files. Only change this if you have your steam config stored somewhere else.",
+            steamPath = new SettingsEntry<string>("Steam Path (native)", "Path to the native steam install. Only change this if you have Steam installed in a non-default location.",
                 () => Program.Config.SteamPath ?? Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam"), s => Program.Config.SteamPath = s),
-            steamFlatpakPath = new SettingsEntry<string>("Steam Path (flatpak install)", "Path to the flatpak steam config files. Only change this if you have your steam config stored somewhere else.",
+            steamFlatpakPath = new SettingsEntry<string>("Steam Path (flatpak)", "Path to the flatpak Steam installation. Only change this if you have your flatpak Steam installed to a non-default location.",
                 () => Program.Config.SteamFlatpakPath ?? Path.Combine(CoreEnvironmentSettings.HOME, ".var", "app", "com.valvesoftware.Steam", "data", "Steam" ), s => Program.Config.SteamFlatpakPath = s)
             {    
-                CheckVisibility = () => CoreEnvironmentSettings.IsDeck != true && SteamCompatibilityTool.IsSteamFlatpakInstalled,
+                CheckVisibility = () => Program.IsSteamDeckHardware != true && SteamCompatibilityTool.IsSteamFlatpakInstalled,
             },
         };
     }
@@ -56,13 +56,13 @@ public class SettingsTabSteamTool : SettingsTab
             return;
         }
         ImGui.Text("\nUse this tab to install XIVLauncher.Core as a Steam compatibility tool.");
-        ImGui.Text("\nAfter you have installed XIVLauncher as a Steam tool, close this program, and launch Steam. Select Final Fantasy XIV from the library,");
-        ImGui.Text("and go to Compatibility. Force the use of a specific Steam Play compatibility tool, and choose XIVLauncher.Core as Compatibility Tool.");
-        ImGui.Text("XIVLauncher.Core will now be used to launch Final Fantasy XIV.");
-        if (CoreEnvironmentSettings.IsDeck != true && steamFlatpakInstalled)
+        ImGui.Text("\nAfter you have installed XIVLauncher as a Steam compatibility tool please close XIVLauncher and launch or restart Steam. Find 'Final Fantasy XIV Online' in your steam library");
+        ImGui.Text("and open the 'Properties' menu and navigate to the 'Compatibility' tab. Enable 'Force the use of a specific Steam Play compatibility tool' and from the dropdown menu select 'XIVLauncher.Core'. If this option does not show up then restart Steam and try again.");
+        ImGui.Text("After finishing these steps, XIVLauncher will now be used when launching FINAL FANTASY XIV from steam.");
+        if (Program.IsSteamDeckHardware != true && steamFlatpakInstalled)
         {
-            ImGui.Text("\nIf you wish to install into Flatpak Steam, you must use Flatseal to give XIVLauncher access to Steam's flatpak path. This is probably something like:");
-            ImGui.Text($"{CoreEnvironmentSettings.HOME}/.var/app/com.valvesoftware.Steam. If you do not give this permission, installation will fail. You will probably also want to");
+            ImGui.Text("\nIf you wish to install into Flatpak Steam, you must use Flatseal to give XIVLauncher access to Steam's flatpak path. This is commonly found at:");
+            ImGui.Text($"{CoreEnvironmentSettings.HOME}/.var/app/com.valvesoftware.Steam. If you do not give this permission, installation will fail. You will also want to");
             ImGui.Text($"give Steam permission to {CoreEnvironmentSettings.HOME}/.xlcore, so that you can continue to use your current xlcore folder.");
             ImGui.Text("\nIt is NOT recommended to use native XIVLauncher to install to flatpak Steam. Use flatpak XIVLauncher instead.");
         }
@@ -91,7 +91,7 @@ public class SettingsTabSteamTool : SettingsTab
         }
         if (!steamToolInstalled) ImGui.EndDisabled();
 
-        if (CoreEnvironmentSettings.IsDeck != true && steamFlatpakInstalled)
+        if (!Program.IsSteamDeckHardware && steamFlatpakInstalled)
         {
             ImGui.Dummy(new Vector2(10));
             ImGui.Separator();

@@ -54,7 +54,7 @@ public static class SteamCompatibilityTool
             fs.Close();
         }
 
-        // File.SetUnixFileMode() doesn't exist, for some reason, so just run chmod
+        // File.SetUnixFileMode() doesn't exist in .NET 6, so just run chmod
         var psi = new ProcessStartInfo("/bin/chmod");
         psi.ArgumentList.Add("+x");
         psi.ArgumentList.Add(xlcore.FullName);
