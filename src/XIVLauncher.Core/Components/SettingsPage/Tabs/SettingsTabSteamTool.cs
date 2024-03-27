@@ -56,15 +56,16 @@ public class SettingsTabSteamTool : SettingsTab
             return;
         }
         ImGui.Text("\nUse this tab to install XIVLauncher.Core as a Steam compatibility tool.");
-        ImGui.Text("\nAfter you have installed XIVLauncher as a Steam compatibility tool please close XIVLauncher and launch or restart Steam. Find 'Final Fantasy XIV Online' in your steam library");
-        ImGui.Text("and open the 'Properties' menu and navigate to the 'Compatibility' tab. Enable 'Force the use of a specific Steam Play compatibility tool' and from the dropdown menu select 'XIVLauncher.Core'. If this option does not show up then restart Steam and try again.");
-        ImGui.Text("After finishing these steps, XIVLauncher will now be used when launching FINAL FANTASY XIV from steam.");
+        ImGui.Text("\nAfter you have installed XIVLauncher as a Steam compatibility tool please close XIVLauncher and launch or restart Steam. Find 'Final Fantasy XIV Online'");
+        ImGui.Text("in your steam library and open the 'Properties' menu and navigate to the 'Compatibility' tab. Enable 'Force the use of a specific Steam Play compatibility tool'");
+        ImGui.Text("and from the dropdown menu select 'XIVLauncher.Core'. If this option does not show up then restart Steam and try again. After finishing these steps,");
+        ImGui.Text("XIVLauncher will now be used when launching FINAL FANTASY XIV from steam.");
         if (Program.IsSteamDeckHardware != true && steamFlatpakInstalled)
         {
             ImGui.Text("\nIf you wish to install into Flatpak Steam, you must use Flatseal to give XIVLauncher access to Steam's flatpak path. This is commonly found at:");
             ImGui.Text($"{CoreEnvironmentSettings.HOME}/.var/app/com.valvesoftware.Steam. If you do not give this permission, installation will fail. You will also want to");
             ImGui.Text($"give Steam permission to {CoreEnvironmentSettings.HOME}/.xlcore, so that you can continue to use your current xlcore folder.");
-            ImGui.Text("\nIt is NOT recommended to use native XIVLauncher to install to flatpak Steam. Use flatpak XIVLauncher instead.");
+            ImGui.Text("\nDO NOT use native XIVLauncher to install to flatpak Steam. Use flatpak XIVLauncher instead.");
         }
 
         ImGui.Dummy(new Vector2(10));        
