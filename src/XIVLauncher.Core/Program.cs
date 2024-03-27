@@ -350,8 +350,8 @@ sealed class Program
             gd.SwapBuffers(gd.MainSwapchain);
         }
 
-        // Clean up Veldrid resources
         HttpClient.Dispose();
+        // Clean up Veldrid resources
         gd.WaitForIdle();
         bindings.Dispose();
         cl.Dispose();
