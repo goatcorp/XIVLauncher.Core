@@ -153,7 +153,7 @@ public class LauncherApp : Component
             if (bootver > cutoff)
             {
                 this.ShowMessage("XIVLauncher is unavailable at this time as there were changes to the login process during a recent patch." +
-                                "\n\nnWe need to adjust to these changes and verify that our adjustments are safe before we can re-enable the launcher." +
+                                "\n\nWe need to adjust to these changes and verify that our adjustments are safe before we can re-enable the launcher." +
                                 "\n\nYou can use the Official Launcher instead until XIVLauncher has been updated.",
                                 "XIVLauncher", "Close Launcher", () => Environment.Exit(0));
                 return;
