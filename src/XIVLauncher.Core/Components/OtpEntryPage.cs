@@ -46,13 +46,14 @@ public class OtpEntryPage : Page
             this.Cancelled = true;
         }
 
-        if (Program.Steam is not null) Program.Steam.OnGamepadTextInputDismissed += this.SteamOnOnGamepadTextInputDismissed;
+        // if (Program.Steam is not null) Program.Steam.OnGamepadTextInputDismissed += this.SteamOnOnGamepadTextInputDismissed;
         
         this.otpInput = new Input("", "", new Vector2(12f, 0f), 6, 150, flags: ImGuiInputTextFlags.CharsDecimal)
         {
             TakeKeyboardFocus = true
         };
         this.otpInput.Enter += getOtp;
+        this.otpInput.Escape += cancelOtp;
 
         this.otpOKButton = new Button("OK");
         this.otpOKButton.Click += getOtp;
@@ -61,13 +62,13 @@ public class OtpEntryPage : Page
         this.otpCancelButton.Click += cancelOtp;
     }
 
-    private void SteamOnOnGamepadTextInputDismissed(bool success)
-    {
-        if (success)
-        {
-            if (Program.Steam is not null) Result = Program.Steam.GetEnteredGamepadText();
-        }
-    }
+    // private void SteamOnOnGamepadTextInputDismissed(bool success)
+    // {
+    //     if (success)
+    //     {
+    //         if (Program.Steam is not null) Result = Program.Steam.GetEnteredGamepadText();
+    //     }
+    // }
 
     public void Reset()
     {
@@ -78,11 +79,11 @@ public class OtpEntryPage : Page
 
         // TODO(goat): This doesn't work if you call it right after starting the app... Steam probably takes a little while to initialize. Might be annoying for autologin.
         // BUG: We have to turn this off when using OTP server, because there's no way to dismiss open keyboards
-        if (Program.Steam != null && Program.Steam.IsValid && Program.IsSteamDeckHardware && App.Settings.IsOtpServer is false)
-        {
-            var success = Program.Steam.ShowGamepadTextInput(false, false, "Please enter your OTP", 6, string.Empty);
-            Log.Verbose("ShowGamepadTextInput: {Success}", success);
-        }
+        // if (Program.Steam != null && Program.Steam.IsValid && Program.IsSteamDeckHardware && App.Settings.IsOtpServer is false)
+        // {
+        //     var success = Program.Steam.ShowGamepadTextInput(false, false, "Please enter your OTP", 6, string.Empty);
+        //     Log.Verbose("ShowGamepadTextInput: {Success}", success);
+        // }
 
         if (App.Settings.IsOtpServer ?? false)
         {

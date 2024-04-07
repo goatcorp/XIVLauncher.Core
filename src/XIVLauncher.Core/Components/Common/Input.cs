@@ -34,6 +34,8 @@ public class Input : Component
     /** Executed on detection of the enter key **/
     public event Action? Enter;
 
+    public event Action? Escape;
+
     public string Value
     {
         get => inputBacking;
@@ -116,6 +118,11 @@ public class Input : Component
         if (ImGui.IsItemFocused() && (ImGui.IsKeyPressed(ImGuiKey.Enter) || ImGui.IsKeyPressed(ImGuiKey.KeypadEnter)))
         {
             Enter?.Invoke();
+        }
+
+        if (ImGui.IsItemFocused() && ImGui.IsKeyPressed(ImGuiKey.Escape))
+        {
+            Escape?.Invoke();
         }
 
         if (ImGui.IsItemActivated() && HasSteamDeckInput && Program.Steam != null && Program.Steam.IsValid)
