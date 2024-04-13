@@ -33,6 +33,12 @@ if [ "$count" -eq 0 ] && [ -e "$tooldir/lib/libsecret-1.so.0.0.0" ]; then
     export LD_PRELOAD=$tooldir/lib/libsecret-1.so.0:$tooldir/lib/libsecret-1.so.0.0.0:$LD_PRELOAD
 fi
 
+# Steam Deck can be detected by checking SteamDeck=1 and SteamGamepadUI=1 (for gaming mode/big picture)
+# Unsetting SteamDeck will then disable Steam gamepad input, allowing keyboard to enter info on the launcher
+if [ "$SteamDeck" = "1" ] && [ "$SteamGamepadUI" != "1" ]; then
+    unset SteamDeck
+fi
+
 export OPENSSL_CONF="$tooldir/openssl_fix.cnf"
 export XL_SCT=1
 "$tooldir/XIVLauncher/XIVLauncher.Core" $@ >> $logDir/steamtool_console.log 2>&1

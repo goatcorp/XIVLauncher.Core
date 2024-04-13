@@ -5,7 +5,9 @@ namespace XIVLauncher.Core;
 public static class CoreEnvironmentSettings
 {
     public static bool? IsDeck => CheckEnvBoolOrNull("XL_DECK");
+    public static bool IsSteamDeckVar => CheckEnvBool("SteamDeck");
     public static bool? IsDeckGameMode => CheckEnvBoolOrNull("XL_GAMEMODE");
+    public static bool IsSteamGamepadUIVar => CheckEnvBool("SteamGamepadUI");
     public static bool? IsDeckFirstRun => CheckEnvBoolOrNull("XL_FIRSTRUN");
     public static bool IsUpgrade => CheckEnvBool("XL_SHOW_UPGRADE");
     public static bool ClearSettings => CheckEnvBool("XL_CLEAR_SETTINGS");

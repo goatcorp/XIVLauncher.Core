@@ -64,7 +64,7 @@ public class Input : Component
         if (Program.Steam != null)
         {
             Program.Steam.OnGamepadTextInputDismissed += this.SteamOnOnGamepadTextInputDismissed;
-            HasSteamDeckInput = Program.IsSteamDeckHardware;
+            HasSteamDeckInput = Program.IsSteamDeckGamingMode;
         }
     }
 
