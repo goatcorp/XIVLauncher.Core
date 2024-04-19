@@ -73,6 +73,10 @@ class Program
 
     public static string CType = CoreEnvironmentSettings.GetCType();
 
+    public static Version CoreVersion = Version.Parse(AppUtil.GetAssemblyVersion());
+
+    public static string CoreHash = AppUtil.GetGitHash() ?? "";
+
     public static void Invalidate(uint frames = 100)
     {
         invalidationFrames = frames;
@@ -138,6 +142,8 @@ class Program
 
         Config.SteamPath ??= Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share");
         Config.SteamFlatpakPath ??= Path.Combine(CoreEnvironmentSettings.HOME, ".var", "app", "com.valvesoftware.Steam", "data", "Steam" );
+        Config.SteamToolInstalled ??= false;
+        Config.SteamFlatpakToolInstalled ??= false;
     }
 
     public const uint STEAM_APP_ID = 39210;
@@ -200,6 +206,19 @@ class Program
 
         Loc.SetupWithFallbacks();
 
+        if (System.OperatingSystem.IsLinux())
+        {
+            if (mainArgs.Length > 0)
+                Log.Information("Command Line option selected: {args}", string.Join(' ', mainArgs));
+            var exitValue = LinuxCommandLineOptions();
+            if (exitValue)
+            {
+                Log.Information("Exiting...");
+                return;
+            }
+            SteamCompatibilityTool.UpdateSteamTools();
+        }
+
         uint appId, altId;
         string appName, altName;
         if (Config.IsFt == true)
@@ -225,8 +244,6 @@ class Program
                     break;
 
                 case PlatformID.Unix:
-                    // We should only run the script on Linux (maybe Unix) systems.
-                    if (CommandLineInstaller()) return;
                     Steam = new UnixSteam();
                     break;
 
@@ -261,9 +278,9 @@ class Program
         Log.Debug("Creating Veldrid devices...");
 
 #if DEBUG
-        var version = AppUtil.GetGitHash();
+        var version = CoreHash;
 #else
-        var version = $"{AppUtil.GetAssemblyVersion()} ({AppUtil.GetGitHash()})";
+        var version = $"{CoreVersion} ({CoreHash})";
 #endif
 
         // Create window, GraphicsDevice, and all resources necessary for the demo.
@@ -478,53 +495,106 @@ class Program
         ClearLogs(true);
     }
 
-    private static bool CommandLineInstaller()
+    private static bool LinuxCommandLineOptions()
     {
-        foreach (var arg in mainArgs)
+        bool exit = false;
+
+        if (mainArgs.Contains("-v"))
         {
-            if (arg == "--deck-install")
-            {
-                SteamCompatibilityTool.CreateTool(Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam"));
-                Console.WriteLine($"Installed as Steam compatibility tool to {Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam", "compatibilitytools.d", "xlcore")}");
-                return true;
-            }
-            if (arg.StartsWith("--install="))
-            {
-                var path = arg.Split('=', 2)[1];
-                if (path.StartsWith("~/"))
-                    path = CoreEnvironmentSettings.HOME + path.TrimStart('~');
-                if (Directory.Exists(path) && (path.EndsWith("/Steam") || path.EndsWith("/Steam/")))
-                {
-                    SteamCompatibilityTool.CreateTool(path);
-                    Console.WriteLine($"Installed as Steam compatibility tool to path {Path.Combine(path, "compatibilitytools.d", "xlcore")}");
-                }
-                else
-                    Console.WriteLine($"Invalid path. Path does not exist or is not a Steam folder: {path}");
-                
-                return true;
-            }
-            if (arg == "--deck-remove")
-            {
-                SteamCompatibilityTool.DeleteTool(Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam"));
-                Console.WriteLine($"Removed XIVLauncher.Core as a Steam compatibility tool from {Path.Combine(CoreEnvironmentSettings.HOME, ".local", "share", "Steam", "compatibilitytools.d")}");
-                return true;
-            }
-            if (arg.StartsWith("--remove="))
-            {
-                var path = arg.Split('=', 2)[1];
-                if (path.StartsWith("~/"))
-                    path = CoreEnvironmentSettings.HOME + path.TrimStart('~');
-                if (Directory.Exists(path) && (path.EndsWith("/Steam") || path.EndsWith("/Steam/")))
-                {
-                    SteamCompatibilityTool.DeleteTool(path);
-                    Console.WriteLine($"Removed XIVLauncher.Core as a Steam compatibility tool from {Path.Combine(path, "compatibilitytools.d")}");
-                }
-                else
-                    Console.WriteLine($"Invalid path. Path does not exist or is not a Steam folder: {path}");
-                
-                return true;
-            }
+            Console.WriteLine("Verbose Logging enabled...");
         }
-        return false;
+
+        if (mainArgs.Contains("--update-tools") || mainArgs.Contains("-u"))
+        {
+            SteamCompatibilityTool.UpdateSteamTools(true);
+            exit = true;
+        }
+
+        if (mainArgs.Contains("--info"))
+        {
+            Console.WriteLine($"Steam compatibility tool {(SteamCompatibilityTool.IsSteamToolInstalled ? "is installed: " + SteamCompatibilityTool.CheckVersion(isFlatpak: false).Replace(",", " ") : "is not installed.")}");
+            Console.WriteLine($"Steam (flatpak) compatibility tool {(SteamCompatibilityTool.IsSteamFlatpakToolInstalled ? "is installed: " + SteamCompatibilityTool.CheckVersion(isFlatpak: true).Replace(",", " ") : "is not installed.")}");
+            exit = true;
+        }
+
+        if (mainArgs.Contains("--deck-install") && mainArgs.Contains("--deck-remove"))
+        {
+            SteamCompatibilityTool.DeleteTool(isFlatpak: false);
+            Console.WriteLine("Using both --deck-install and --deck-remove. Doing --deck-remove first");
+            Console.WriteLine($"Removed XIVLauncher.Core as a Steam compatibility tool from {Program.Config.SteamPath ?? ""}");
+            SteamCompatibilityTool.CreateTool(isFlatpak: false);
+            Console.WriteLine($"Installed as Steam compatibility tool to {Program.Config.SteamPath ?? ""}");
+            exit = true;
+        }
+        else if (mainArgs.Contains("--deck-install"))
+        {
+            SteamCompatibilityTool.CreateTool(isFlatpak: false);
+            Console.WriteLine($"Installed as Steam compatibility tool to {Program.Config.SteamPath ?? ""}");
+            exit = true;
+        }
+        else if (mainArgs.Contains("--deck-remove"))
+        {
+            SteamCompatibilityTool.DeleteTool(isFlatpak: false);
+            Console.WriteLine($"Removed XIVLauncher.Core as a Steam compatibility tool from {Program.Config.SteamPath ?? ""}");
+            exit = true;
+        }
+
+        if (mainArgs.Contains("--flatpak-install") && mainArgs.Contains("--flatpak-remove"))
+        {
+            Console.WriteLine("Using both --flatpak-install and --flatpak-remove. Doing --deck-remove first");
+            SteamCompatibilityTool.DeleteTool(isFlatpak: true);
+            Console.WriteLine($"Removed XIVLauncher.Core as a Steam compatibility tool from {Program.Config.SteamFlatpakPath ?? ""}");
+            SteamCompatibilityTool.CreateTool(isFlatpak: true);
+            Console.WriteLine($"Installed as Steam compatibility tool to {Program.Config.SteamFlatpakPath ?? ""}");
+            exit = true;
+        }
+        else if (mainArgs.Contains("--flatpak-install"))
+        {
+            SteamCompatibilityTool.CreateTool(isFlatpak: true);
+            Console.WriteLine($"Installed as Steam compatibility tool to {Program.Config.SteamFlatpakPath ?? ""}");
+            exit = true;
+        }
+        else if (mainArgs.Contains("--flatpak-remove"))
+        {
+            SteamCompatibilityTool.DeleteTool(isFlatpak: true);
+            Console.WriteLine($"Removed XIVLauncher.Core as a Steam compatibility tool from {Program.Config.SteamFlatpakPath ?? ""}");
+            exit = true;
+        }
+
+        if (mainArgs.Contains("--version"))
+        {
+            Console.WriteLine($"XIVLauncher.Core {CoreVersion.ToString()}");
+            Console.WriteLine("Copyright (C) 2024 goatcorp.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.");
+            exit = true;
+        }
+
+        if (mainArgs.Contains("-V"))
+        {
+            Console.WriteLine(CoreVersion.ToString());
+            exit = true;
+        }
+
+        if (mainArgs.Contains("--help") || mainArgs.Contains("-h"))
+        {
+            Console.WriteLine($"XIVLaunher.Core {CoreVersion.ToString()}\nA third-party launcher for Final Fantasy XIV.\n\nOptions (use only one):");
+            Console.WriteLine("  -v                 Turn on verbose logging, then run the launcher.");
+            Console.WriteLine("  -h, --help         Display this message.");
+            Console.WriteLine("  -V                 Display brief version info.");
+            Console.WriteLine("  --version          Display version and copywrite info.");
+            Console.WriteLine("  --info             Display Steam compatibility tool install status");
+            Console.WriteLine("  -u, --update-tools Try to update any installed xlcore steam compatibility tools.");
+            Console.WriteLine("\nFor Steam Deck and native Steam");
+            Console.WriteLine("  --deck-install     Install as a compatibility tool in the default location.");
+            Console.WriteLine($"                     Path: {Program.Config.SteamPath ?? ""}");
+            Console.WriteLine("  --deck-remove      Remove compatibility tool install from the defualt location.");
+            Console.WriteLine("\nFor Flatpak Steam");
+            Console.WriteLine("  --flatpak-install  Install as a compatibility tool to flatpak Steam.");
+            Console.WriteLine($"                     Path: {Program.Config.SteamFlatpakPath ?? ""}");
+            Console.WriteLine("  --flatpak-remove   Remove compatibility tool from flatpak Steam.");
+            Console.WriteLine("");
+            exit = true;
+        }
+        
+        return exit;
     }
 }

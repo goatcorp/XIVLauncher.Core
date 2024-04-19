@@ -78,7 +78,7 @@ public class SettingsTabSteamTool : SettingsTab
         if (ImGui.Button($"{(steamToolInstalled ? "Re-i" : "I")}nstall to native Steam"))
         {
             this.Save();
-            SteamCompatibilityTool.CreateTool(Program.Config.SteamPath ?? "");
+            SteamCompatibilityTool.CreateTool(isFlatpak: false);
             steamToolInstalled = SteamCompatibilityTool.IsSteamToolInstalled;
         }
         if (!steamInstalled) ImGui.EndDisabled();
@@ -87,7 +87,7 @@ public class SettingsTabSteamTool : SettingsTab
         if (ImGui.Button("Uninstall from native Steam"))
         {
             this.Save();
-            SteamCompatibilityTool.DeleteTool(Program.Config.SteamPath ?? "");
+            SteamCompatibilityTool.DeleteTool(isFlatpak: false);
             steamToolInstalled = SteamCompatibilityTool.IsSteamToolInstalled;
         }
         if (!steamToolInstalled) ImGui.EndDisabled();
@@ -104,7 +104,7 @@ public class SettingsTabSteamTool : SettingsTab
             if (ImGui.Button($"{(steamFlatpakToolInstalled ? "Re-i" : "I")}nstall to flatpak Steam"))
             {
                 this.Save();
-                SteamCompatibilityTool.CreateTool(Program.Config.SteamFlatpakPath ?? "");
+                SteamCompatibilityTool.CreateTool(isFlatpak: true);
                 steamFlatpakToolInstalled = SteamCompatibilityTool.IsSteamFlatpakToolInstalled;
             }
             if (!steamFlatpakInstalled) ImGui.EndDisabled();
@@ -116,7 +116,7 @@ public class SettingsTabSteamTool : SettingsTab
             if (ImGui.Button("Uninstall from Flatpak Steam"))
             {
                 this.Save();
-                SteamCompatibilityTool.DeleteTool(Program.Config.SteamFlatpakPath ?? "");
+                SteamCompatibilityTool.DeleteTool(isFlatpak: true);
                 steamFlatpakToolInstalled = SteamCompatibilityTool.IsSteamFlatpakToolInstalled;
             }
             if (!steamFlatpakToolInstalled)

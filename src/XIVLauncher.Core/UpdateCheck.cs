@@ -16,7 +16,7 @@ public static class UpdateCheck
             var response = await client.GetStringAsync(UPDATE_URL).ConfigureAwait(false);
             var remoteVersion = Version.Parse(response);
 
-            var localVersion = Version.Parse(AppUtil.GetAssemblyVersion());
+            var localVersion = Program.CoreVersion;
 
             return new VersionCheckResult
             {

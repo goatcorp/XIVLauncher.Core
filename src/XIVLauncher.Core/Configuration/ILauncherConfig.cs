@@ -88,6 +88,10 @@ public interface ILauncherConfig
 
     public string? SteamFlatpakPath { get; set; }
 
+    public bool? SteamToolInstalled { get; set; }
+
+    public bool? SteamFlatpakToolInstalled { get; set; }
+
     #endregion
 
     #region Dalamud

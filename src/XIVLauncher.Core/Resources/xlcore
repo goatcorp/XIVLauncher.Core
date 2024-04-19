@@ -1,7 +1,13 @@
 #!/bin/env sh
 
+# Working directory is actually the steam install location, so we need to find the path of this script
+tooldir="$(realpath "$(dirname "$0")")"
+
 # Prevent double launch
 if [ "$1" = "run" ]; then
+    if [ ! -f "$tooldir/version" ]; then
+        "$tooldir/XIVLauncher/XIVLauncher.Core" -V > "$tooldir/version"
+    fi
     sleep 1
     exit 0
 fi
@@ -10,9 +16,6 @@ xlcoreDir=$HOME/.xlcore
 logDir=$xlcoreDir/logs
 mkdir -p $xlcoreDir
 mkdir -p $logDir
-
-# Working directory is actually the steam install location, so we need to find the path of this script
-tooldir="$(realpath "$(dirname "$0")")"
 
 # If aria2c isn't found, add our local copy to the $PATH
 count=$(find /usr -type f -executable -name "aria2c" 2>/dev/null | wc -l)
