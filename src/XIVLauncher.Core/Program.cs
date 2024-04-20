@@ -154,19 +154,18 @@ class Program
     /// <returns>A <see cref="DalamudUpdater"/> instance.</returns>
     private static DalamudUpdater CreateDalamudUpdater()
     {
+        FileInfo runnerOverride = null;
         if (Config.DalamudManualInjectPath is not null &&
-           Config.DalamudManualInjectPath.Exists &&
-           Config.DalamudManualInjectPath.GetFiles().FirstOrDefault(x => x.Name == DALAMUD_INJECTOR_NAME) is not null)
+            Config.DalamudManualInjectionEnabled == true &&
+            Config.DalamudManualInjectPath.Exists &&
+            Config.DalamudManualInjectPath.GetFiles().FirstOrDefault(x => x.Name == DALAMUD_INJECTOR_NAME) is not null)
         {
-            return new DalamudUpdater(Config.DalamudManualInjectPath, storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), storage.Root, null, null)
-            {
-                Overlay = DalamudLoadInfo,
-                RunnerOverride = new FileInfo(Path.Combine(Config.DalamudManualInjectPath.FullName, DALAMUD_INJECTOR_NAME))
-            };
+            runnerOverride = new FileInfo(Path.Combine(Config.DalamudManualInjectPath.FullName, DALAMUD_INJECTOR_NAME));
         }
         return new DalamudUpdater(storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), storage.Root, null, null)
         {
             Overlay = DalamudLoadInfo,
+            RunnerOverride = runnerOverride
         };
     }
 

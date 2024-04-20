@@ -20,20 +20,20 @@ public class SettingsTabDalamud : SettingsTab
             new NumericSettingsEntry("Injection Delay (ms)", "Choose how long to wait after the game has loaded before injecting.", () => Program.Config.DalamudLoadDelay, delay => Program.Config.DalamudLoadDelay = delay, 0, int.MaxValue, 1000),
 
             enableManualInjection = new SettingsEntry<bool>("Enable Manual Injection", "Use a local build of Dalamud instead of the automatically provided one (For developers only!)", () => Program.Config.DalamudManualInjectionEnabled ?? false, (enabled) =>
-             {
-                 Program.Config.DalamudManualInjectionEnabled = enabled;
+            {
+                Program.Config.DalamudManualInjectionEnabled = enabled;
 
-                 if (!enabled)
-                 {
-                     Program.DalamudUpdater.RunnerOverride = null;
-                     return;
-                 }
+                if (!enabled)
+                {
+                    Program.DalamudUpdater.RunnerOverride = null;
+                    return;
+                }
 
-                 if (Program.Config.DalamudManualInjectPath is not null &&
+                if (Program.Config.DalamudManualInjectPath is not null &&
                     Program.Config.DalamudManualInjectPath.Exists &&
                     Program.Config.DalamudManualInjectPath.GetFiles().FirstOrDefault(x => x.Name == Program.DALAMUD_INJECTOR_NAME) is not null)
-                 {
-                     Program.DalamudUpdater.RunnerOverride = new FileInfo(Path.Combine(Program.Config.DalamudManualInjectPath.FullName, Program.DALAMUD_INJECTOR_NAME));
+                {
+                    Program.DalamudUpdater.RunnerOverride = new FileInfo(Path.Combine(Program.Config.DalamudManualInjectPath.FullName, Program.DALAMUD_INJECTOR_NAME));
                 }
             }),
 
