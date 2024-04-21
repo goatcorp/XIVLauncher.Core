@@ -260,8 +260,21 @@ class Program
 #endif
 
         // Create window, GraphicsDevice, and all resources necessary for the demo.
+        Sdl2Native.SDL_Init(SDLInitFlags.Video);
+
+        float dpiScale = 1f;
+
+        if (Environment.GetEnvironmentVariable("XDG_SESSION_TYPE") == "wayland"
+            && SdlHelpers.GetCurrentVideoDriver() == "x11")
+        {
+            dpiScale = SdlHelpers.GetDisplayDpiScale().Y;
+        }
+
+        var windowWidth = (int) Math.Round(1280 * dpiScale);
+        var windowHeight = (int) Math.Round(800 * dpiScale);
+
         VeldridStartup.CreateWindowAndGraphicsDevice(
-            new WindowCreateInfo(50, 50, 1280, 800, WindowState.Normal, $"XIVLauncher {version}"),
+            new WindowCreateInfo(50, 50, windowWidth, windowHeight, WindowState.Normal, $"XIVLauncher {version}"),
             new GraphicsDeviceOptions(false, null, true, ResourceBindingModel.Improved, true, true),
             out window,
             out gd);
@@ -275,7 +288,7 @@ class Program
         cl = gd.ResourceFactory.CreateCommandList();
         Log.Debug("Veldrid OK!");
 
-        bindings = new ImGuiBindings(gd, gd.MainSwapchain.Framebuffer.OutputDescription, window.Width, window.Height, storage.GetFile("launcherUI.ini"), Config.FontPxSize ?? 21.0f);
+        bindings = new ImGuiBindings(gd, gd.MainSwapchain.Framebuffer.OutputDescription, window.Width, window.Height, storage.GetFile("launcherUI.ini"), (Config.FontPxSize ?? 21.0f) * dpiScale);
         Log.Debug("ImGui OK!");
 
         StyleModelV1.DalamudStandard.Apply();
