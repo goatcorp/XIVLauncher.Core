@@ -163,8 +163,6 @@ public partial class DesktopHelpers
 
             while ((line = process.StandardOutput.ReadLine()) != null)
             {
-                Console.WriteLine("L {0}", line);
-
                 var match = XrdbRegex().Match(line);
                 
                 if (match != null && match.Success)
