@@ -28,7 +28,7 @@ public class AccountSwitcher : Component
 
     public override void Draw()
     {
-        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, ImGuiHelpers.GetScaledVector2(new Vector2(5)));
+        ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, ImGuiHelpers.GetScaled(new Vector2(5)));
 
         if (ImGui.BeginPopupContextItem(ACCOUNT_SWITCHER_POPUP_ID))
         {

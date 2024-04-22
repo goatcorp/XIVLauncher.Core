@@ -268,8 +268,8 @@ class Program
             ImGuiHelpers.GlobalScale = SdlHelpers.GetDisplayDpiScale().Y;
         }
 
-        var windowWidth = ImGuiHelpers.GetScaledInt(1280);
-        var windowHeight = ImGuiHelpers.GetScaledInt(800);
+        var windowWidth = (int)ImGuiHelpers.GetScaled(1280);
+        var windowHeight = (int)ImGuiHelpers.GetScaled(800);
 
         VeldridStartup.CreateWindowAndGraphicsDevice(
             new WindowCreateInfo(50, 50, windowWidth, windowHeight, WindowState.Normal, $"XIVLauncher {version}"),

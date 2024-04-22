@@ -8,7 +8,7 @@ namespace XIVLauncher.Core.Components.LoadingPage;
 
 public class LoadingPage : Page
 {
-    private int SPINNER_RADIUS = ImGuiHelpers.GetScaledInt(15);
+    private int SPINNER_RADIUS = (int)ImGuiHelpers.GetScaled(15);
 
     public bool IsIndeterminate { get; set; }
     public bool CanCancel { get; set; } = true;
@@ -32,7 +32,7 @@ public class LoadingPage : Page
     public LoadingPage(LauncherApp app)
         : base(app)
     {
-        this.spinner = new Spinner(SPINNER_RADIUS, ImGuiHelpers.GetScaledInt(5), ImGui.GetColorU32(ImGuiCol.ButtonActive));
+        this.spinner = new Spinner(SPINNER_RADIUS, (int)ImGuiHelpers.GetScaled(5), ImGui.GetColorU32(ImGuiCol.ButtonActive));
         this.cancelButton.Click += () => this.Cancelled?.Invoke();
 
         this.disableAutoLoginButton.Click += () =>
@@ -58,13 +58,13 @@ public class LoadingPage : Page
 
         if (!string.IsNullOrEmpty(Line2))
         {
-            ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(2)));
+            ImGui.Dummy(ImGuiHelpers.GetScaled(new Vector2(2)));
             ImGuiHelpers.CenteredText(Line2);
         }
 
         if (!string.IsNullOrEmpty(Line3))
         {
-            ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(2)));
+            ImGui.Dummy(ImGuiHelpers.GetScaled(new Vector2(2)));
             ImGuiHelpers.CenteredText(Line3);
         }
 
@@ -72,7 +72,7 @@ public class LoadingPage : Page
 
         if (CanCancel || isDrawDisableAutoLogin)
         {
-            ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(20)));;
+            ImGui.Dummy(ImGuiHelpers.GetScaled(new Vector2(20)));;
         }
 
         if (CanCancel)
@@ -93,7 +93,7 @@ public class LoadingPage : Page
             ImGuiHelpers.CenteredText("Auto login disabled on next start!");
         }
 
-        ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(20)));
+        ImGui.Dummy(ImGuiHelpers.GetScaled(new Vector2(20)));
 
         if (IsIndeterminate)
         {

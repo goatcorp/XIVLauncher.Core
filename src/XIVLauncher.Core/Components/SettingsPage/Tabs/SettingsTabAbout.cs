@@ -21,7 +21,7 @@ public class SettingsTabAbout : SettingsTab
 
     public override void Draw()
     {
-        ImGui.Image(this.logoTexture.ImGuiHandle, ImGuiHelpers.GetScaledVector2(new Vector2(256)));
+        ImGui.Image(this.logoTexture.ImGuiHandle, ImGuiHelpers.GetScaled(new Vector2(256)));
 
         ImGui.Text($"XIVLauncher Core v{AppUtil.GetAssemblyVersion()}({AppUtil.GetGitHash()})");
         ImGui.Text("By goaaats");
@@ -29,7 +29,7 @@ public class SettingsTabAbout : SettingsTab
         if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             AppUtil.OpenBrowser("https://github.com/goaaats");
 
-        ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(20)));
+        ImGui.Dummy(ImGuiHelpers.GetScaled(new Vector2(20)));
 
         if (ImGui.Button("Open Repository"))
         {

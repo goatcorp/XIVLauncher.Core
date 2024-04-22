@@ -318,11 +318,11 @@ public class LauncherApp : Component
 
     private void DrawModal()
     {
-        ImGui.SetNextWindowSize(ImGuiHelpers.GetScaledVector2(new Vector2(450, 300)));
+        ImGui.SetNextWindowSize(ImGuiHelpers.GetScaled(new Vector2(450, 300)));
 
         if (ImGui.BeginPopupModal(this.modalTitle + "###xl_modal", ref this.isModalDrawing, ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoTitleBar))
         {
-            if (ImGui.BeginChild("###xl_modal_scrolling", ImGuiHelpers.GetScaledVector2(new Vector2(0, -ImGui.GetTextLineHeightWithSpacing() * 2))))
+            if (ImGui.BeginChild("###xl_modal_scrolling", ImGuiHelpers.GetScaled(new Vector2(0, -ImGui.GetTextLineHeightWithSpacing() * 2))))
             {
                 ImGui.TextWrapped(this.modalText);
             }

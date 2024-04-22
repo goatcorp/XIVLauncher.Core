@@ -20,17 +20,7 @@ public static class ImGuiHelpers
         return GlobalScale * size;
     }
 
-    public static int GetScaledInt(int size)
-    {
-        return (int)(GlobalScale * (float)size);
-    }
-
-    public static int GetScaledInt(float size)
-    {
-        return (int)(GlobalScale * size);
-    }
-
-    public static Vector2 GetScaledVector2(Vector2 size)
+    public static Vector2 GetScaled(Vector2 size)
     {
         return size * GlobalScale;
     }

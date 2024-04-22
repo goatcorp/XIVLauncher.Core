@@ -19,7 +19,7 @@ public abstract class SettingsTab : Component
             if (settingsEntry.IsVisible)
                 settingsEntry.Draw();
 
-            ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(10)));
+            ImGui.Dummy(ImGuiHelpers.GetScaled(new Vector2(10)));
         }
 
         base.Draw();

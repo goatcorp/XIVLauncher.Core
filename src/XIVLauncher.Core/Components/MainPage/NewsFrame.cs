@@ -80,7 +80,7 @@ public class NewsFrame : Component
     {
         if (ImGui.BeginChild("###newsFrame", this.GetSize()))
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, ImGuiHelpers.GetScaledVector2(new Vector2(32f, 32f)));
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, ImGuiHelpers.GetScaled(new Vector2(32f, 32f)));
 
             if (this.newsLoaded)
             {
@@ -90,7 +90,7 @@ public class NewsFrame : Component
                 if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                     AppUtil.OpenBrowser(this.bannerList[this.currentBanner].Link.ToString());
 
-                ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(15)));
+                ImGui.Dummy(ImGuiHelpers.GetScaled(new Vector2(15)));
 
                 void ShowNewsEntry(News newsEntry)
                 {

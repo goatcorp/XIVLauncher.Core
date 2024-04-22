@@ -85,7 +85,7 @@ public class SettingsPage : Page
                         if (ImGui.BeginChild("SearchResults"))
                         {
                             ImGui.TextColored(ImGuiColors.DalamudGrey, settingsTab.Title);
-                            ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(5)));
+                            ImGui.Dummy(ImGuiHelpers.GetScaled(new Vector2(5)));
 
                             foreach (SettingsEntry settingsTabEntry in eligible)
                             {
@@ -97,7 +97,7 @@ public class SettingsPage : Page
 
                             ImGui.Separator();
 
-                            ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(10)));
+                            ImGui.Dummy(ImGuiHelpers.GetScaled(new Vector2(10)));
                         }
                         ImGui.EndChild();
                     }
@@ -110,7 +110,7 @@ public class SettingsPage : Page
             }
         }
 
-        ImGui.SetCursorPos(ImGuiHelpers.ViewportSize - ImGuiHelpers.GetScaledVector2(new Vector2(60)));
+        ImGui.SetCursorPos(ImGuiHelpers.ViewportSize - ImGuiHelpers.GetScaled(new Vector2(60)));
 
         if (ImGui.BeginChild("###settingsFinishButton"))
         {
@@ -122,13 +122,13 @@ public class SettingsPage : Page
             {
                 ImGui.BeginDisabled();
                 ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
-                ImGui.Button(FontAwesomeIcon.Ban.ToIconString(), ImGuiHelpers.GetScaledVector2(new Vector2(40)));
+                ImGui.Button(FontAwesomeIcon.Ban.ToIconString(), ImGuiHelpers.GetScaled(new Vector2(40)));
                 ImGui.PopStyleColor();
                 ImGui.EndDisabled();
             }
             else
             {
-                if (ImGui.Button(FontAwesomeIcon.Check.ToIconString(), ImGuiHelpers.GetScaledVector2(new Vector2(40))))
+                if (ImGui.Button(FontAwesomeIcon.Check.ToIconString(), ImGuiHelpers.GetScaled(new Vector2(40))))
                 {
                     foreach (var settingsTab in this.tabs)
                     {
