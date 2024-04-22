@@ -85,7 +85,7 @@ public class NewsFrame : Component
             if (this.newsLoaded)
             {
                 var banner = this.banners[this.currentBanner];
-                ImGui.Image(banner.ImGuiHandle, banner.Size);
+                ImGui.Image(banner.ImGuiHandle, ImGuiHelpers.GetScaled(banner.Size));
 
                 if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                     AppUtil.OpenBrowser(this.bannerList[this.currentBanner].Link.ToString());
