@@ -64,9 +64,9 @@ public class FtsPage : Page
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, Vector4.Zero);
         ImGui.PushStyleColor(ImGuiCol.ButtonActive, Vector4.Zero);
 
-        ImGui.SetCursorPos(new Vector2(316, 481));
+        ImGui.SetCursorPos(ImGuiHelpers.GetScaledVector2(new Vector2(316, 481)));
 
-        if (ImGui.Button("###openGuideButton", new Vector2(649, 101)))
+        if (ImGui.Button("###openGuideButton", ImGuiHelpers.GetScaledVector2(new Vector2(649, 101))))
         {
             if (!this.isSteamDeckAppIdError)
             {
@@ -78,9 +78,9 @@ public class FtsPage : Page
             }
         }
 
-        ImGui.SetCursorPos(new Vector2(316, 598));
+        ImGui.SetCursorPos(ImGuiHelpers.GetScaledVector2(new Vector2(316, 598)));
 
-        if (ImGui.Button("###finishFtsButton", new Vector2(649, 101)) && !this.isSteamDeckAppIdError)
+        if (ImGui.Button("###finishFtsButton", ImGuiHelpers.GetScaledVector2(new Vector2(649, 101))) && !this.isSteamDeckAppIdError)
         {
             this.FinishFts(true);
         }

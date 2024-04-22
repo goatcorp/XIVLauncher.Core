@@ -8,7 +8,7 @@ namespace XIVLauncher.Core.Components.LoadingPage;
 
 public class LoadingPage : Page
 {
-    private const int SPINNER_RADIUS = 15;
+    private int SPINNER_RADIUS = ImGuiHelpers.GetScaledInt(15);
 
     public bool IsIndeterminate { get; set; }
     public bool CanCancel { get; set; } = true;
@@ -32,7 +32,7 @@ public class LoadingPage : Page
     public LoadingPage(LauncherApp app)
         : base(app)
     {
-        this.spinner = new Spinner(SPINNER_RADIUS, 5, ImGui.GetColorU32(ImGuiCol.ButtonActive));
+        this.spinner = new Spinner(SPINNER_RADIUS, ImGuiHelpers.GetScaledInt(5), ImGui.GetColorU32(ImGuiCol.ButtonActive));
         this.cancelButton.Click += () => this.Cancelled?.Invoke();
 
         this.disableAutoLoginButton.Click += () =>
@@ -51,20 +51,20 @@ public class LoadingPage : Page
     {
         var vp = ImGuiHelpers.ViewportSize;
 
-        ImGui.SetCursorPosY(vp.Y / 2 - 100);
+        ImGui.SetCursorPosY(vp.Y / 2 - ImGuiHelpers.GetScaled(100));
 
         // center text in window
         ImGuiHelpers.CenteredText(Line1);
 
         if (!string.IsNullOrEmpty(Line2))
         {
-            ImGui.Dummy(new Vector2(2));
+            ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(2)));
             ImGuiHelpers.CenteredText(Line2);
         }
 
         if (!string.IsNullOrEmpty(Line3))
         {
-            ImGui.Dummy(new Vector2(2));
+            ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(2)));
             ImGuiHelpers.CenteredText(Line3);
         }
 
@@ -72,7 +72,7 @@ public class LoadingPage : Page
 
         if (CanCancel || isDrawDisableAutoLogin)
         {
-            ImGui.Dummy(new Vector2(20));
+            ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(20)));;
         }
 
         if (CanCancel)
@@ -93,7 +93,7 @@ public class LoadingPage : Page
             ImGuiHelpers.CenteredText("Auto login disabled on next start!");
         }
 
-        ImGui.Dummy(new Vector2(20));
+        ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(20)));
 
         if (IsIndeterminate)
         {
@@ -104,7 +104,7 @@ public class LoadingPage : Page
         {
             var width = vp.X / 3;
             ImGuiHelpers.CenterCursorFor((int)width);
-            ImGui.ProgressBar(Progress, new Vector2(width, 20), ProgressText);
+            ImGui.ProgressBar(Progress, new Vector2(width, ImGuiHelpers.GetScaled(20)), ProgressText);
         }
 
         Program.Invalidate(10);

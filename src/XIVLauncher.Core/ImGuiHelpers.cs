@@ -8,7 +8,32 @@ public static class ImGuiHelpers
 {
     public static Vector2 ViewportSize => ImGui.GetIO().DisplaySize;
 
-    public static float GlobalScale => ImGui.GetIO().FontGlobalScale;
+    public static float GlobalScale {get; set; } = 1.0f;
+
+    public static float GetScaled(int size)
+    {
+        return GlobalScale * (float)size;
+    }
+
+    public static float GetScaled(float size)
+    {
+        return GlobalScale * size;
+    }
+
+    public static int GetScaledInt(int size)
+    {
+        return (int)(GlobalScale * (float)size);
+    }
+
+    public static int GetScaledInt(float size)
+    {
+        return (int)(GlobalScale * size);
+    }
+
+    public static Vector2 GetScaledVector2(Vector2 size)
+    {
+        return size * GlobalScale;
+    }
 
     public static void TextWrapped(string text)
     {

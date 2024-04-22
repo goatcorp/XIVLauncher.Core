@@ -75,7 +75,7 @@ public class SettingsTabWine : SettingsTab
             ImGui.BeginDisabled();
             ImGui.Text("Compatibility tool isn't set up. Please start the game at least once.");
 
-            ImGui.Dummy(new Vector2(10));
+            ImGui.Dummy(ImGuiHelpers.GetScaledVector2(new Vector2(10)));
         }
 
         if (ImGui.Button("Open prefix"))

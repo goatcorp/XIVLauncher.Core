@@ -29,7 +29,7 @@ public class Checkbox : Component
 
     public override void Draw()
     {
-        ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(0.5f, 0.5f));
+        ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, ImGuiHelpers.GetScaledVector2(new Vector2(0.5f, 0.5f)));
         ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 0);
         ImGui.PushStyleColor(ImGuiCol.FrameBg, ImGuiColors.BlueShade1);
         ImGui.PushStyleColor(ImGuiCol.FrameBgActive, ImGuiColors.BlueShade2);

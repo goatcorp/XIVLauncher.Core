@@ -318,21 +318,21 @@ public class LauncherApp : Component
 
     private void DrawModal()
     {
-        ImGui.SetNextWindowSize(new Vector2(450, 300));
+        ImGui.SetNextWindowSize(ImGuiHelpers.GetScaledVector2(new Vector2(450, 300)));
 
         if (ImGui.BeginPopupModal(this.modalTitle + "###xl_modal", ref this.isModalDrawing, ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoTitleBar))
         {
-            if (ImGui.BeginChild("###xl_modal_scrolling", new Vector2(0, -ImGui.GetTextLineHeightWithSpacing() * 2)))
+            if (ImGui.BeginChild("###xl_modal_scrolling", ImGuiHelpers.GetScaledVector2(new Vector2(0, -ImGui.GetTextLineHeightWithSpacing() * 2))))
             {
                 ImGui.TextWrapped(this.modalText);
             }
 
             ImGui.EndChild();
 
-            const float BUTTON_WIDTH = 120f;
+            float BUTTON_WIDTH = ImGuiHelpers.GetScaled(120f);
             ImGui.SetCursorPosX((ImGui.GetWindowWidth() - BUTTON_WIDTH) / 2);
 
-            if (ImGui.Button(modalButtonText, new Vector2(BUTTON_WIDTH, 40)))
+            if (ImGui.Button(modalButtonText, new Vector2(BUTTON_WIDTH, ImGuiHelpers.GetScaled(40))))
             {
                 modalButtonPressAction();
             }
