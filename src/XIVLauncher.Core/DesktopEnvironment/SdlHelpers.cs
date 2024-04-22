@@ -4,9 +4,9 @@ using System.Text;
 using Serilog;
 using Veldrid.Sdl2;
 
-namespace XIVLauncher.Core;
+namespace XIVLauncher.Core.DesktopEnvironment;
 
-public static unsafe partial class SdlHelpers
+internal static unsafe partial class SdlHelpers
 {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     private delegate byte* SDL_GetCurrentVideoDriver_t();

@@ -4,8 +4,6 @@ using CheapLoc;
 
 using Config.Net;
 
-using ImGuiNET;
-
 using Serilog;
 
 using Veldrid;
@@ -26,6 +24,7 @@ using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
+using XIVLauncher.Core.DesktopEnvironment;
 using XIVLauncher.Core.Style;
 
 namespace XIVLauncher.Core;
@@ -261,12 +260,7 @@ class Program
 
         // Create window, GraphicsDevice, and all resources necessary for the demo.
         Sdl2Native.SDL_Init(SDLInitFlags.Video);
-
-        if (Environment.GetEnvironmentVariable("XDG_SESSION_TYPE") == "wayland"
-            && SdlHelpers.GetCurrentVideoDriver() == "x11")
-        {
-            ImGuiHelpers.GlobalScale = SdlHelpers.GetDisplayDpiScale().Y;
-        }
+        ImGuiHelpers.GlobalScale = DesktopHelpers.GetDesktopScaleFactor();
 
         var windowWidth = (int)ImGuiHelpers.GetScaled(1280);
         var windowHeight = (int)ImGuiHelpers.GetScaled(800);
