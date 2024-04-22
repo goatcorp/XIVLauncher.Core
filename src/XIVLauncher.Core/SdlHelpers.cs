@@ -48,6 +48,7 @@ public static unsafe partial class SdlHelpers
             return new Vector2(1.0f, 1.0f);
         }
 
+        Log.Verbose("SDL reports {0}x{1} DPI", hdpi, vdpi);
         return new Vector2(hdpi / 96, vdpi / 96);
     }
 }
