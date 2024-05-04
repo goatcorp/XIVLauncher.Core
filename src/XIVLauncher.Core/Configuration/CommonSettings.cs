@@ -13,11 +13,11 @@ internal class CommonSettings : ISettings
         this.config = config;
     }
 
-    public string AcceptLanguage => this.config.AcceptLanguage;
+    public string AcceptLanguage => this.config.AcceptLanguage!;
     public ClientLanguage? ClientLanguage => this.config.ClientLanguage;
     public bool? KeepPatches => false;
-    public DirectoryInfo PatchPath => this.config.PatchPath;
-    public DirectoryInfo GamePath => this.config.GamePath;
+    public DirectoryInfo PatchPath => this.config.PatchPath!;
+    public DirectoryInfo GamePath => this.config.GamePath!;
     public AcquisitionMethod? PatchAcquisitionMethod => AcquisitionMethod.Aria;
     public long SpeedLimitBytes => 0;
     public int DalamudInjectionDelayMs => 0;

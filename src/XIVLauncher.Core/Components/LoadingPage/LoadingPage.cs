@@ -1,5 +1,7 @@
 using System.Numerics;
+
 using ImGuiNET;
+
 using XIVLauncher.Core.Components.Common;
 
 namespace XIVLauncher.Core.Components.LoadingPage;
@@ -10,7 +12,7 @@ public class LoadingPage : Page
 
     public bool IsIndeterminate { get; set; }
     public bool CanCancel { get; set; } = true;
-    public bool CanDisableAutoLogin { get; set; }= false;
+    public bool CanDisableAutoLogin { get; set; } = false;
     public float Progress { get; set; }
 
     public string Line1 { get; set; } = "Loading text line 1";
