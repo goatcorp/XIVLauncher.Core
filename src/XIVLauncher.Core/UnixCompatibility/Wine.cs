@@ -86,10 +86,10 @@ public static class Wine
 
     public static string GetDefaultVersion()
     {
-        if (Versions.ContainsKey("wine-xiv-staging-fsync-git-7.10.r3.g560db77d"))
-            return "wine-xiv-staging-fsync-git-7.10.r3.g560db77d";
         if (Versions.ContainsKey("wine-xiv-staging-fsync-git-8.5.r4.g4211bac7"))
             return "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7";
+        if (Versions.ContainsKey("wine-xiv-staging-fsync-git-7.10.r3.g560db77d"))
+            return "wine-xiv-staging-fsync-git-7.10.r3.g560db77d";
         return Versions.First().Key;
     }
 }

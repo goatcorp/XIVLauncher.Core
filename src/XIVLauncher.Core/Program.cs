@@ -127,7 +127,7 @@ class Program
 
         Config.WineType ??= WineType.Managed;
         if (!Wine.Versions.ContainsKey(Config.WineVersion ?? ""))
-            Config.WineVersion = "wine-xiv-staging-fsync-git-7.10.r3.g560db77d";
+            Config.WineVersion = "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7";
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
 
