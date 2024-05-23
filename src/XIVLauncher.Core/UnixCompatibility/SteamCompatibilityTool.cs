@@ -10,7 +10,6 @@ namespace XIVLauncher.Core.UnixCompatibility;
 public static class SteamCompatibilityTool
 {
     // This is here to prevent auto-updating with different releases of XLCore. So XIVLauncher-RB will not overwrite official, vice versa. 
-    private const string RELEASE = "Official";
     public static bool IsSteamInstalled => Directory.Exists(Program.Config.SteamPath);
 
     public static bool IsSteamFlatpakInstalled => Directory.Exists(Program.Config.SteamFlatpakPath);
@@ -100,7 +99,7 @@ public static class SteamCompatibilityTool
         }
         using (var fs = version.Create())
         {
-            byte[] resource = new System.Text.UTF8Encoding(true).GetBytes(Program.CoreVersion.ToString() + "\n" + RELEASE);
+            byte[] resource = new System.Text.UTF8Encoding(true).GetBytes(Program.CoreVersion.ToString() + "\n" + Program.CoreRelease);
             fs.Write(resource, 0, resource.Length);
             fs.Close();
         }
@@ -211,9 +210,9 @@ public static class SteamCompatibilityTool
 
         try
         {
-            if (release != RELEASE)
+            if (release != Program.CoreRelease)
             {
-                message = $"Steam {(isFlatpak ? "(flatpak) " : "")}compatibility Tool mismatch! \"{release}\" release is installed, but this is \"{RELEASE}\" release. Not installing update.";
+                message = $"Steam {(isFlatpak ? "(flatpak) " : "")}compatibility Tool mismatch! \"{release}\" release is installed, but this is \"{Program.CoreRelease}\" release. Not installing update.";
                 Log.Warning(message);
                 return message;
             }
