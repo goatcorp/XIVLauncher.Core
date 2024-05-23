@@ -73,7 +73,9 @@ class Program
 
     public static string CType = CoreEnvironmentSettings.GetCType();
 
-    public static Version CoreVersion = Version.Parse(AppUtil.GetAssemblyVersion());
+    public static Version CoreVersion { get; } = Version.Parse(AppUtil.GetAssemblyVersion());
+
+    public const string CoreRelease = "Official";
 
     public static string CoreHash = AppUtil.GetGitHash() ?? "";
 
@@ -512,6 +514,7 @@ class Program
 
         if (mainArgs.Contains("--info"))
         {
+            Console.WriteLine($"This program: XIVLauncher.Core {CoreVersion.ToString()} - {CoreRelease}");
             Console.WriteLine($"Steam compatibility tool {(SteamCompatibilityTool.IsSteamToolInstalled ? "is installed: " + SteamCompatibilityTool.CheckVersion(isFlatpak: false).Replace(",", " ") : "is not installed.")}");
             Console.WriteLine($"Steam (flatpak) compatibility tool {(SteamCompatibilityTool.IsSteamFlatpakToolInstalled ? "is installed: " + SteamCompatibilityTool.CheckVersion(isFlatpak: true).Replace(",", " ") : "is not installed.")}");
             exit = true;
@@ -563,7 +566,7 @@ class Program
 
         if (mainArgs.Contains("--version"))
         {
-            Console.WriteLine($"XIVLauncher.Core {CoreVersion.ToString()}");
+            Console.WriteLine($"XIVLauncher.Core {CoreVersion.ToString()} - {CoreRelease}");
             Console.WriteLine("Copyright (C) 2024 goatcorp.\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.");
             exit = true;
         }
@@ -571,6 +574,7 @@ class Program
         if (mainArgs.Contains("-V"))
         {
             Console.WriteLine(CoreVersion.ToString());
+            Console.WriteLine(CoreRelease);
             exit = true;
         }
 

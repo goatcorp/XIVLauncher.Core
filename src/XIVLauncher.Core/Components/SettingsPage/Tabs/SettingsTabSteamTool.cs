@@ -31,7 +31,7 @@ public class SettingsTabSteamTool : SettingsTab
             steamFlatpakPath = new SettingsEntry<string>("Steam Path (flatpak)", "Path to the flatpak Steam installation. Only change this if you have your flatpak Steam installed to a non-default location.",
                 () => Program.Config.SteamFlatpakPath ?? Path.Combine(CoreEnvironmentSettings.HOME, ".var", "app", "com.valvesoftware.Steam", "data", "Steam" ), s => Program.Config.SteamFlatpakPath = s)
             {    
-                CheckVisibility = () => Program.IsSteamDeckHardware != true && SteamCompatibilityTool.IsSteamFlatpakInstalled,
+                CheckVisibility = () => Program.IsSteamDeckHardware != true,
             },
         };
     }
@@ -49,8 +49,9 @@ public class SettingsTabSteamTool : SettingsTab
             ImGui.Dummy(new Vector2(10));
             ImGui.Text("You are currently running XIVLauncher.Core as a Steam compatibility tool.");
             ImGui.Dummy(new Vector2(10));
-            ImGui.Text("If you are trying to upgrade, you must first update your flatpak install of XIVLauncher.Core. Then launch the flatpak" +
-                        "\nversion, navigate back to this tab, and re-install as a Steam compatibility tool.");
+            ImGui.Text("If you are trying to upgrade, you must first update your install of XIVLauncher.Core. Then launch the flatpak or native" +
+                        "\nversion once, and then close it. This should automatically update the steam compatibility tool. Alternately, you" +
+                        "\ncould run \"flatpak run dev.goats.xivlauncher --update-tools\" after updating your native or flatpak install.");
             ImGui.Text("\nIf you are trying to uninstall, you should likewise launch the flatpak version of XIVLauncher, and click the appropriate" +
                         "\nuninstall button.");
             return;
