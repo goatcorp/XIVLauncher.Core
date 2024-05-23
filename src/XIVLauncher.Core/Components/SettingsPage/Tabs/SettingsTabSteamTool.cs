@@ -49,9 +49,9 @@ public class SettingsTabSteamTool : SettingsTab
             ImGui.Dummy(new Vector2(10));
             ImGui.Text("You are currently running XIVLauncher.Core as a Steam compatibility tool.");
             ImGui.Dummy(new Vector2(10));
-            ImGui.Text("If you are trying to upgrade, you must first update your local install of XIVLauncher.Core. Then launch the local" +
+            ImGui.Text("If you are trying to upgrade, you must first update your flatpak install of XIVLauncher.Core. Then launch the flatpak" +
                         "\nversion, navigate back to this tab, and re-install as a Steam compatibility tool.");
-            ImGui.Text("\nIf you are trying to uninstall, you should likewise launch the native version of XIVLauncher, and click the appropriate" +
+            ImGui.Text("\nIf you are trying to uninstall, you should likewise launch the flatpak version of XIVLauncher, and click the appropriate" +
                         "\nuninstall button.");
             return;
         }
@@ -60,11 +60,12 @@ public class SettingsTabSteamTool : SettingsTab
         ImGui.Text("in your steam library and open the 'Properties' menu and navigate to the 'Compatibility' tab. Enable 'Force the use of a specific Steam Play compatibility tool'");
         ImGui.Text("and from the dropdown menu select 'XIVLauncher.Core'. If this option does not show up then restart Steam and try again. After finishing these steps,");
         ImGui.Text("XIVLauncher will now be used when launching FINAL FANTASY XIV from steam.");
-        if (Program.IsSteamDeckHardware != true && steamFlatpakInstalled)
+        // Steam deck should never have flatpak steam
+        if (Program.IsSteamDeckHardware != true)
         {
             ImGui.Text("\nIf you wish to install into Flatpak Steam, you must use Flatseal to give XIVLauncher access to Steam's flatpak path. This is commonly found at:");
-            ImGui.Text($"{CoreEnvironmentSettings.HOME}/.var/app/com.valvesoftware.Steam. If you do not give this permission, installation will fail. You will also want to");
-            ImGui.Text($"give Steam permission to {CoreEnvironmentSettings.HOME}/.xlcore, so that you can continue to use your current xlcore folder.");
+            ImGui.Text($"~/.var/app/com.valvesoftware.Steam. If you do not give this permission, the install option will not even appear. You will also need to give Steam");
+            ImGui.Text($"access to ~/.xlcore, so that you can continue to use your current xlcore folder.");
             ImGui.Text("\nDO NOT use native XIVLauncher to install to flatpak Steam. Use flatpak XIVLauncher instead.");
         }
 
