@@ -1096,24 +1096,12 @@ public class MainPage : Page
         return false;
     }
 
-    private void PatcherOnFail(PatchManager.FailReason reason, string versionId)
+    private void PatcherOnFail(PatchListEntry patch, string context)
     {
         var dlFailureLoc = Loc.Localize("PatchManDlFailure",
             "XIVLauncher could not verify the downloaded game files. Please restart and try again.\n\nThis usually indicates a problem with your internet connection.\nIf this error persists, try using a VPN set to Japan.\n\nContext: {0}\n{1}");
 
-        switch (reason)
-        {
-            case PatchManager.FailReason.DownloadProblem:
-                App.ShowMessageBlocking(string.Format(dlFailureLoc, "Problem", versionId), "XIVLauncher Error");
-                break;
-
-            case PatchManager.FailReason.HashCheck:
-                App.ShowMessageBlocking(string.Format(dlFailureLoc, "IsHashCheckPass", versionId), "XIVLauncher Error");
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException(nameof(reason), reason, null);
-        }
+        App.ShowMessageBlocking(string.Format(dlFailureLoc, context, patch.VersionId), "XIVLauncher Error");
 
         Environment.Exit(0);
     }
