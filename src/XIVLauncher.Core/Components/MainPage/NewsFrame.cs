@@ -94,7 +94,7 @@ public class NewsFrame : Component
 
                 void ShowNewsEntry(News newsEntry)
                 {
-                    ImGui.Text(newsEntry.Title);
+                    ImGui.TextUnformatted(newsEntry.Title);
 
                     if (ImGui.IsItemClicked(ImGuiMouseButton.Left) && !string.IsNullOrEmpty(newsEntry.Url))
                     {
