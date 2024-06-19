@@ -5,7 +5,9 @@ namespace XIVLauncher.Core;
 public static class CoreEnvironmentSettings
 {
     public static bool? IsDeck => CheckEnvBoolOrNull("XL_DECK");
+    public static bool IsSteamDeckVar => CheckEnvBool("SteamDeck");
     public static bool? IsDeckGameMode => CheckEnvBoolOrNull("XL_GAMEMODE");
+    public static bool IsSteamGamepadUIVar => CheckEnvBool("SteamGamepadUI");
     public static bool? IsDeckFirstRun => CheckEnvBoolOrNull("XL_FIRSTRUN");
     public static bool IsUpgrade => CheckEnvBool("XL_SHOW_UPGRADE");
     public static bool ClearSettings => CheckEnvBool("XL_CLEAR_SETTINGS");
@@ -15,17 +17,20 @@ public static class CoreEnvironmentSettings
     public static bool ClearLogs => CheckEnvBool("XL_CLEAR_LOGS");
     public static bool ClearAll => CheckEnvBool("XL_CLEAR_ALL");
     public static bool? UseSteam => CheckEnvBoolOrNull("XL_USE_STEAM"); // Fix for Steam Deck users who lock themselves out
+    public static bool IsSteamCompatTool => CheckEnvBool("XL_SCT");
+    public static string HOME => System.Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    public static string XDG_DATA_HOME => string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("XDG_DATA_HOME")) ? Path.Combine(HOME, ".local", "share") : System.Environment.GetEnvironmentVariable("XDG_DATA_HOME");
 
     private static bool CheckEnvBool(string key)
     {
-        string val = (System.Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
+        string val = (Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
         if (val == "1" || val == "true" || val == "yes" || val == "y" || val == "on") return true;
         return false;
     }
 
     private static bool? CheckEnvBoolOrNull(string key)
     {
-        string val = (System.Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
+        string val = (Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
         if (val == "1" || val == "true" || val == "yes" || val == "y" || val == "on") return true;
         if (val == "0" || val == "false" || val == "no" || val == "n" || val == "off") return false;
         return null;

@@ -18,6 +18,8 @@ public class Input : Component
 
     public uint MaxLength { get; }
 
+    public int Width { get; set; }
+
     public ImGuiInputTextFlags Flags { get; }
 
     public bool IsEnabled { get; set; } = true;
@@ -32,6 +34,8 @@ public class Input : Component
     /** Executed on detection of the enter key **/
     public event Action? Enter;
 
+    public event Action? Escape;
+
     public string Value
     {
         get => inputBacking;
@@ -43,12 +47,14 @@ public class Input : Component
         string hint,
         Vector2? spacing,
         uint maxLength = 255,
+        int width = 0,
         bool isEnabled = true,
         ImGuiInputTextFlags flags = ImGuiInputTextFlags.None)
     {
         Label = label;
         Hint = hint;
         MaxLength = maxLength;
+        Width = width;
         Flags = flags;
         IsEnabled = isEnabled;
         Spacing = spacing ?? Vector2.Zero;
@@ -58,7 +64,7 @@ public class Input : Component
         if (Program.Steam != null)
         {
             Program.Steam.OnGamepadTextInputDismissed += this.SteamOnOnGamepadTextInputDismissed;
-            HasSteamDeckInput = Program.IsSteamDeckHardware;
+            HasSteamDeckInput = Program.IsSteamDeckGamingMode;
         }
     }
 
@@ -83,21 +89,40 @@ public class Input : Component
         if (TakeKeyboardFocus && ImGui.IsWindowAppearing())
             ImGui.SetKeyboardFocusHere();
 
-        ImGui.Text(Label);
+        if (!string.IsNullOrEmpty(Label))
+        {
+            if (Width != 0)
+                ImGuiHelpers.CenteredText(Label);
+            else
+                ImGui.Text(Label);
+        }
 
         if (!this.IsEnabled || this.isSteamDeckInputActive)
             ImGui.BeginDisabled();
 
         var ww = ImGui.GetWindowWidth();
-        ImGui.SetNextItemWidth(ww);
+        if (Width != 0 && Width <= ww)
+        {
+            ImGui.SetNextItemWidth(Width);
+            ImGuiHelpers.CenterCursorFor(Width);
+        }
+        else
+        {
+            ImGui.SetNextItemWidth(ww);
+        }
 
         ImGui.PopStyleColor();
 
         ImGui.InputTextWithHint($"###{Id}", Hint, ref inputBacking, MaxLength, Flags);
 
-        if (ImGui.IsItemFocused() && ImGui.IsKeyPressed(ImGuiKey.Enter))
+        if (ImGui.IsItemFocused() && (ImGui.IsKeyPressed(ImGuiKey.Enter) || ImGui.IsKeyPressed(ImGuiKey.KeypadEnter)))
         {
             Enter?.Invoke();
+        }
+
+        if (ImGui.IsItemFocused() && ImGui.IsKeyPressed(ImGuiKey.Escape))
+        {
+            Escape?.Invoke();
         }
 
         if (ImGui.IsItemActivated() && HasSteamDeckInput && Program.Steam != null && Program.Steam.IsValid)

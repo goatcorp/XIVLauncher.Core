@@ -84,6 +84,14 @@ public interface ILauncherConfig
 
     public bool? SetWin7 { get; set; }
 
+    public string? SteamPath { get; set; }
+
+    public string? SteamFlatpakPath { get; set; }
+
+    public bool? SteamToolInstalled { get; set; }
+
+    public bool? SteamFlatpakToolInstalled { get; set; }
+
     #endregion
 
     #region Dalamud
