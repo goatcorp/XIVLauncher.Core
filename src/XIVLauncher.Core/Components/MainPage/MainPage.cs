@@ -937,7 +937,7 @@ public class MainPage : Page
                 return false;
             }
 
-            if (bootPatches == null)
+            if (bootPatches.Length == 0)
                 return true;
 
             return await TryHandlePatchAsync(Repository.Boot, bootPatches, "").ConfigureAwait(false);
