@@ -76,7 +76,7 @@ public static class Dxvk
         };
         Versions["dxvk-2.2"] = new Dictionary<string, string>()
         {
-            {"name", "DXVK 2.2"}, {"desc", "Previous version, using Graphics Pipeline Libs. Use this if you use ReShade Effects Toggler."},
+            {"name", "DXVK 2.2"}, {"desc", "Previous version, using Graphics Pipeline Libs. Use this if you have problems with ReShade Effects Toggler."},
             {"label", "Current"}, {"url", "https://github.com/doitsujin/dxvk/releases/download/v2.2/dxvk-2.2.tar.gz"},
             {"mark", "Download" }
         };
