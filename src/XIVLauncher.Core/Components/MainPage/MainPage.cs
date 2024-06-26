@@ -676,6 +676,17 @@ public class MainPage : Page
 
         IGameRunner runner;
 
+        // Set LD_PRELOAD to value of XL_PRELOAD if we're running as a steam compatibility tool.
+        // This check must be done before the FixLDP check so that it will still work.
+        if (CoreEnvironmentSettings.IsSteamCompatTool)
+        {
+            var ldpreload = System.Environment.GetEnvironmentVariable("LD_PRELOAD") ?? "";
+            var xlpreload = System.Environment.GetEnvironmentVariable("XL_PRELOAD") ?? "";
+            ldpreload = (ldpreload + ":" + xlpreload).Trim(':');
+            if (!string.IsNullOrEmpty(ldpreload))
+                System.Environment.SetEnvironmentVariable("LD_PRELOAD", ldpreload);
+        }
+
         // Hack: Force C.utf8 to fix incorrect unicode paths
         if (App.Settings.FixLocale == true && !string.IsNullOrEmpty(Program.CType))
         {
