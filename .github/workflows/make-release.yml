@@ -61,7 +61,7 @@ jobs:
         working-directory: ./src/XIVLauncher.Core/
         run: |
           curl -LO https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/dotnet/flatpak-dotnet-generator.py
-          python3 flatpak-dotnet-generator.py --dotnet 8 --freedesktop 23.08 --runtime linux-x64 nuget-dependencies.json XIVLauncher.Core.csproj
+          python3 flatpak-dotnet-generator.py --dotnet 8 --freedesktop 23.08 nuget-dependencies.json XIVLauncher.Core.csproj
 
       - name: Upload nuget-dependencies.json
         uses: actions/upload-artifact@v3
