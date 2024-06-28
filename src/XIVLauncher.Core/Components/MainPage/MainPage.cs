@@ -1049,7 +1049,7 @@ public class MainPage : Page
             finally
             {
                 token.Cancel();
-                statusThread.Join(3000);
+                statusThread.Join(TimeSpan.FromMilliseconds(1000));
             }
 
             return true;
@@ -1149,7 +1149,7 @@ public class MainPage : Page
         Log.Information("STARTING REPAIR");
 
         // TODO: bundle the PatchInstaller with xl-core on Windows and run this remotely
-        using var verify = new PatchVerifier(Program.CommonSettings, loginResult, 20, loginResult.OauthLogin.MaxExpansion, false);
+        using var verify = new PatchVerifier(Program.CommonSettings, loginResult, TimeSpan.FromMilliseconds(100), loginResult.OauthLogin.MaxExpansion, false);
 
         for (bool doVerify = true; doVerify;)
         {
