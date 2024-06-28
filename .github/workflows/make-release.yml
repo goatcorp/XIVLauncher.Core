@@ -30,7 +30,7 @@ jobs:
           sudo apt install flatpak -y
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 
           flatpak install --user org.freedesktop.Sdk.Extension.dotnet8/x86_64/23.08 org.freedesktop.Sdk.Extension.dotnet6/x86_64/22.08 -y
-          flatpak install --user org.freedesktop.Sdk/x86_64/23.08 -y
+          flatpak install --user org.freedesktop.Sdk/x86_64/23.08 org.freedesktop.Sdk/x86_64/22.08 -y
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
