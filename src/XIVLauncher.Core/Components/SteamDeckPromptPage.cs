@@ -18,7 +18,7 @@ public class SteamDeckPromptPage : Page
     {
         ImGui.SetCursorPos(new Vector2(0));
 
-        ImGui.Image(this.updateWarnTexture.ImGuiHandle, new Vector2(1280, 800));
+        ImGui.Image(this.updateWarnTexture.ImGuiHandle, ImGuiHelpers.GetScaled(new Vector2(1280, 800)));
 
         base.Draw();
     }

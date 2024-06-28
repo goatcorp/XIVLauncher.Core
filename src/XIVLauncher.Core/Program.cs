@@ -4,8 +4,6 @@ using CheapLoc;
 
 using Config.Net;
 
-using ImGuiNET;
-
 using Serilog;
 
 using Veldrid;
@@ -26,6 +24,7 @@ using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
+using XIVLauncher.Core.DesktopEnvironment;
 using XIVLauncher.Core.Style;
 
 namespace XIVLauncher.Core;
@@ -259,8 +258,14 @@ class Program
 #endif
 
         // Create window, GraphicsDevice, and all resources necessary for the demo.
+        Sdl2Native.SDL_Init(SDLInitFlags.Video);
+        ImGuiHelpers.GlobalScale = DesktopHelpers.GetDesktopScaleFactor();
+
+        var windowWidth = (int)ImGuiHelpers.GetScaled(1280);
+        var windowHeight = (int)ImGuiHelpers.GetScaled(800);
+
         VeldridStartup.CreateWindowAndGraphicsDevice(
-            new WindowCreateInfo(50, 50, 1280, 800, WindowState.Normal, $"XIVLauncher {version}"),
+            new WindowCreateInfo(50, 50, windowWidth, windowHeight, WindowState.Normal, $"XIVLauncher {version}"),
             new GraphicsDeviceOptions(false, null, true, ResourceBindingModel.Improved, true, true),
             out window,
             out gd);
@@ -274,11 +279,10 @@ class Program
         cl = gd.ResourceFactory.CreateCommandList();
         Log.Debug("Veldrid OK!");
 
-        bindings = new ImGuiBindings(gd, gd.MainSwapchain.Framebuffer.OutputDescription, window.Width, window.Height, storage.GetFile("launcherUI.ini"), Config.FontPxSize ?? 21.0f);
+        bindings = new ImGuiBindings(gd, gd.MainSwapchain.Framebuffer.OutputDescription, window.Width, window.Height, storage.GetFile("launcherUI.ini"), ImGuiHelpers.GetScaled(Config.FontPxSize ?? 21.0f));
         Log.Debug("ImGui OK!");
 
         StyleModelV1.DalamudStandard.Apply();
-        ImGui.GetIO().FontGlobalScale = Config.GlobalScale ?? 1.0f;
 
         var needUpdate = false;
 
