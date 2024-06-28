@@ -29,8 +29,8 @@ jobs:
           sudo apt update -y
           sudo apt install flatpak -y
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 
-          flatpak install --user org.freedesktop.Sdk.Extension.dotnet8/x86_64/23.08 org.freedesktop.Sdk.Extension.dotnet6/x86_64/22.08 -y
-          flatpak install --user org.freedesktop.Sdk/x86_64/23.08 org.freedesktop.Sdk/x86_64/22.08 -y
+          flatpak install --user org.freedesktop.Sdk.Extension.dotnet8/x86_64/23.08 -y
+          flatpak install --user org.freedesktop.Sdk/x86_64/23.08 -y
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -61,7 +61,7 @@ jobs:
         working-directory: ./src/XIVLauncher.Core/
         run: |
           curl -LO https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/dotnet/flatpak-dotnet-generator.py
-          python3 flatpak-dotnet-generator.py nuget-dependencies.json XIVLauncher.Core.csproj
+          python3 flatpak-dotnet-generator.py --dotnet 8 --freedesktop 23.08 --runtime linux-x64 nuget-dependencies.json XIVLauncher.Core.csproj
 
       - name: Upload nuget-dependencies.json
         uses: actions/upload-artifact@v3
