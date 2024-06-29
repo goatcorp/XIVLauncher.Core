@@ -677,6 +677,17 @@ public class MainPage : Page
 
         IGameRunner runner;
 
+        // Set LD_PRELOAD to value of XL_PRELOAD if we're running as a steam compatibility tool.
+        // This check must be done before the FixLDP check so that it will still work.
+        if (CoreEnvironmentSettings.IsSteamCompatTool)
+        {
+            var ldpreload = System.Environment.GetEnvironmentVariable("LD_PRELOAD") ?? "";
+            var xlpreload = System.Environment.GetEnvironmentVariable("XL_PRELOAD") ?? "";
+            ldpreload = (ldpreload + ":" + xlpreload).Trim(':');
+            if (!string.IsNullOrEmpty(ldpreload))
+                System.Environment.SetEnvironmentVariable("LD_PRELOAD", ldpreload);
+        }
+
         // Hack: Force C.utf8 to fix incorrect unicode paths
         if (App.Settings.FixLocale == true && !string.IsNullOrEmpty(Program.CType))
         {
@@ -1037,7 +1048,7 @@ public class MainPage : Page
             finally
             {
                 token.Cancel();
-                statusThread.Join(3000);
+                statusThread.Join(TimeSpan.FromMilliseconds(1000));
             }
 
             return true;
@@ -1137,7 +1148,7 @@ public class MainPage : Page
         Log.Information("STARTING REPAIR");
 
         // TODO: bundle the PatchInstaller with xl-core on Windows and run this remotely
-        using var verify = new PatchVerifier(Program.CommonSettings, loginResult, 20, loginResult.OauthLogin.MaxExpansion, false);
+        using var verify = new PatchVerifier(Program.CommonSettings, loginResult, TimeSpan.FromMilliseconds(100), loginResult.OauthLogin.MaxExpansion, false);
 
         for (bool doVerify = true; doVerify;)
         {
