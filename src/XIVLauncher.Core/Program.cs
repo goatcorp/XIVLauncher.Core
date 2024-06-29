@@ -26,6 +26,7 @@ using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
+using XIVLauncher.Core.UnixCompatibility;
 using XIVLauncher.Core.Style;
 
 namespace XIVLauncher.Core;
@@ -121,14 +122,24 @@ class Program
         Config.GlobalScale ??= 1.0f;
 
         Config.GameModeEnabled ??= false;
-        Config.DxvkAsyncEnabled ??= true;
         Config.ESyncEnabled ??= true;
         Config.FSyncEnabled ??= false;
-        Config.SetWin7 ??= true;
 
-        Config.WineStartupType ??= WineStartupType.Managed;
+        Config.WineType ??= WineType.Managed;
+        if (!Wine.Versions.ContainsKey(Config.WineVersion ?? ""))
+            Config.WineVersion = "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7";
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
+
+        if (!Dxvk.Versions.ContainsKey(Config.DxvkVersion ?? ""))
+            Config.DxvkVersion = "dxvk-async-1.10.3";
+        Config.DxvkAsyncEnabled ??= true;
+        Config.DxvkFrameRateLimit ??= 0;
+        Config.DxvkHud ??= DxvkHud.None;
+        Config.DxvkHudCustom ??= Dxvk.DXVK_HUD;
+        Config.MangoHud ??= MangoHud.None;
+        Config.MangoHudCustomString ??= Dxvk.MANGOHUD_CONFIG;
+        Config.MangoHudCustomFile ??= Dxvk.MANGOHUD_CONFIGFILE;
 
         Config.FixLDP ??= false;
         Config.FixIM ??= false;
@@ -173,6 +184,8 @@ class Program
     {
         mainArgs = args;
         storage = new Storage(APP_NAME);
+        Wine.Initialize();
+        Dxvk.Initialize();
 
         if (CoreEnvironmentSettings.ClearAll)
         {
@@ -182,6 +195,7 @@ class Program
         {
             if (CoreEnvironmentSettings.ClearSettings) ClearSettings();
             if (CoreEnvironmentSettings.ClearPrefix) ClearPrefix();
+            if (CoreEnvironmentSettings.ClearDalamud) ClearDalamud();
             if (CoreEnvironmentSettings.ClearPlugins) ClearPlugins();
             if (CoreEnvironmentSettings.ClearTools) ClearTools();
             if (CoreEnvironmentSettings.ClearLogs) ClearLogs();
@@ -282,15 +296,13 @@ class Program
 
         var needUpdate = false;
 
-#if FLATPAK
-        if (Config.DoVersionCheck ?? false)
+        if (OSInfo.IsFlatpak && (Config.DoVersionCheck ?? false))
         {
             var versionCheckResult = UpdateCheck.CheckForUpdate().GetAwaiter().GetResult();
 
             if (versionCheckResult.Success)
                 needUpdate = versionCheckResult.NeedUpdate;
         }   
-#endif
 
         needUpdate = CoreEnvironmentSettings.IsUpgrade ? true : needUpdate;
 
@@ -354,13 +366,10 @@ class Program
 
     public static void CreateCompatToolsInstance()
     {
-        var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
-        var winePrefix = storage.GetFolder("wineprefix");
-        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
+        var dxvkSettings = new DxvkSettings(Dxvk.FolderName, Dxvk.DownloadUrl, storage.Root.FullName, Dxvk.AsyncEnabled, Dxvk.FrameRateLimit, Dxvk.DxvkHudEnabled, Dxvk.DxvkHudString, Dxvk.MangoHudEnabled, Dxvk.MangoHudCustomIsFile, Dxvk.MangoHudString, Dxvk.Enabled);
+        var wineSettings = new WineSettings(Wine.IsManagedWine, Wine.CustomWinePath, Wine.FolderName, Wine.DownloadUrl, storage.Root, Wine.DebugVars, Wine.LogFile, Wine.Prefix, Wine.ESyncEnabled, Wine.FSyncEnabled);
         var toolsFolder = storage.GetFolder("compatibilitytool");
-        Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "dxvk"));
-        Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "beta"));
-        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
+        CompatibilityTools = new CompatibilityTools(wineSettings, dxvkSettings, Config.GameModeEnabled, toolsFolder, OSInfo.IsFlatpak);
     }
 
     public static void ShowWindow()
@@ -422,17 +431,14 @@ class Program
         storage.GetFolder("wineprefix");
     }
 
-    public static void ClearPlugins(bool tsbutton = false)
+    public static void ClearDalamud(bool tsbutton = false)
     {
         storage.GetFolder("dalamud").Delete(true);
         storage.GetFolder("dalamudAssets").Delete(true);
-        storage.GetFolder("installedPlugins").Delete(true);
         storage.GetFolder("runtime").Delete(true);
         if (storage.GetFile("dalamudUI.ini").Exists) storage.GetFile("dalamudUI.ini").Delete();
-        if (storage.GetFile("dalamudConfig.json").Exists) storage.GetFile("dalamudConfig.json").Delete();
         storage.GetFolder("dalamud");
         storage.GetFolder("dalamudAssets");
-        storage.GetFolder("installedPlugins");
         storage.GetFolder("runtime");
         if (tsbutton)
         {
@@ -442,11 +448,31 @@ class Program
         }
     }
 
+    public static void ClearPlugins()
+    {
+        storage.GetFolder("installedPlugins").Delete(true);
+        storage.GetFolder("installedPlugins");
+        if (storage.GetFile("dalamudConfig.json").Exists) storage.GetFile("dalamudConfig.json").Delete();
+    }
+
     public static void ClearTools(bool tsbutton = false)
     {
-        storage.GetFolder("compatibilitytool").Delete(true);
-        storage.GetFolder("compatibilitytool/beta");
-        storage.GetFolder("compatibilitytool/dxvk");
+        foreach (var winetool in Wine.Versions)
+        {
+            if (winetool.Value.ContainsKey("url"))
+                if (!string.IsNullOrEmpty(winetool.Value["url"]))
+                    storage.GetFolder($"compatibilitytool/wine/{winetool.Key}").Delete(true);
+        }
+        foreach (var dxvktool in Dxvk.Versions)
+        {
+            if (dxvktool.Value.ContainsKey("url"))
+                if (!string.IsNullOrEmpty(dxvktool.Value["url"]))
+                    storage.GetFolder($"compatibilitytool/dxvk/{dxvktool.Key}").Delete(true);
+        }
+        // Re-initialize Versions so they get *Download* marks back.
+        Wine.Initialize();
+        Dxvk.Initialize();
+
         if (tsbutton) CreateCompatToolsInstance();
     }
 
@@ -465,7 +491,8 @@ class Program
     {
         ClearSettings(tsbutton);
         ClearPrefix();
-        ClearPlugins(tsbutton);
+        ClearDalamud(tsbutton);
+        ClearPlugins();
         ClearTools(tsbutton);
         ClearLogs(true);
     }
