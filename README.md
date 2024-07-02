@@ -20,7 +20,7 @@ XIVLauncher Core has community packages for various Linux distributions. Please 
 | ----------- | ----------- |
 | [**Flathub (official)**](https://flathub.org/apps/details/dev.goats.xivlauncher) | ![Flathub](https://img.shields.io/flathub/v/dev.goats.xivlauncher) |
 | [AUR](https://aur.archlinux.org/packages/xivlauncher) | ![AUR version](https://img.shields.io/aur/version/xivlauncher) |
-| [AUR (bin)](https://aur.archlinux.org/packages/xivlauncher-bit) | ![AUR version](https://img.shields.io/aur/version/xivlauncher-bin) |
+| [AUR (bin)](https://aur.archlinux.org/packages/xivlauncher-bin) | ![AUR version](https://img.shields.io/aur/version/xivlauncher-bin) |
 | [AUR (git)](https://aur.archlinux.org/packages/xivlauncher-git) | ![AUR version](https://img.shields.io/aur/version/xivlauncher-git) |
 | [Copr (Fedora+openSuse+EL9)](https://copr.fedorainfracloud.org/coprs/rankyn/xivlauncher/) | ![COPR version](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Frankynbass%2FXIVLauncher4rpm%2Fmain%2Fbadge.json)|
 | [GURU (Gentoo)](https://gitweb.gentoo.org/repo/proj/guru.git/tree/games-util/xivlauncher) | ![GURU version](https://repology.org/badge/version-for-repo/gentoo_ovl_guru/xivlauncher.core.svg?header=guru) |
