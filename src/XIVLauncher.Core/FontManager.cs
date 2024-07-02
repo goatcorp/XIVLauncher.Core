@@ -7,9 +7,10 @@ namespace XIVLauncher.Core;
 public class FontManager
 {
     private const float FONT_GAMMA = 1.4f;
+    private const string TEXT_FONT_NAME = "NotoSansCJKjp-Regular.otf";
+    private const string ICON_FONT_NAME = "FontAwesome5FreeSolid.otf";
 
     public static ImFontPtr TextFont { get; private set; }
-
     public static ImFontPtr IconFont { get; private set; }
 
     public unsafe void SetupFonts(float pxSize)
@@ -21,8 +22,8 @@ public class FontManager
         ImFontConfigPtr fontConfig = ImGuiNative.ImFontConfig_ImFontConfig();
         fontConfig.PixelSnapH = true;
 
-        var fontDataText = AppUtil.GetEmbeddedResourceBytes("NotoSansCJKjp-Regular.otf");
-        var fontDataIcons = AppUtil.GetEmbeddedResourceBytes("FontAwesome5FreeSolid.otf");
+        var fontDataText = AppUtil.GetEmbeddedResourceBytes(TEXT_FONT_NAME);
+        var fontDataIcons = AppUtil.GetEmbeddedResourceBytes(ICON_FONT_NAME);
 
         var fontDataTextPtr = Marshal.AllocHGlobal(fontDataText.Length);
         Marshal.Copy(fontDataText, 0, fontDataTextPtr, fontDataText.Length);
