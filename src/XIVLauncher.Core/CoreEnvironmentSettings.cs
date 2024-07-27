@@ -42,8 +42,7 @@ public static class CoreEnvironmentSettings
 
     public static uint GetAltAppId(string? appid)
     {
-        uint result;
-        uint.TryParse(appid, out result);
+        uint.TryParse(appid, out var result);
         
         // Will return 0 if appid is invalid (or zero).
         return result;
