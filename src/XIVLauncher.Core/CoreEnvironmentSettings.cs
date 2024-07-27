@@ -16,6 +16,7 @@ public static class CoreEnvironmentSettings
     public static bool ClearAll => CheckEnvBool("XL_CLEAR_ALL");
     public static bool? UseSteam => CheckEnvBoolOrNull("XL_USE_STEAM"); // Fix for Steam Deck users who lock themselves out
     public static bool IsSteamCompatTool => CheckEnvBool("XL_SCT");
+    public static int AltAppID => GetAltAppId(System.Environment.GetEnvironmentVariable("XL_APPID"));
 
     private static bool CheckEnvBool(string key)
     {
@@ -37,6 +38,15 @@ public static class CoreEnvironmentSettings
         string dirty = Environment.GetEnvironmentVariable(envvar) ?? "";
         if (badstring.Equals("", StringComparison.Ordinal)) return dirty;
         return string.Join(separator, Array.FindAll<string>(dirty.Split(separator, StringSplitOptions.RemoveEmptyEntries), s => !s.Contains(badstring)));
+    }
+
+    public static int GetAltAppId(string? appid)
+    {
+        int result;
+        if (int.TryParse(appid, out result))
+            return result;
+        else
+            return -1;
     }
 
     public static string GetCType()
