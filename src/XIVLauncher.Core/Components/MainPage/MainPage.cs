@@ -245,14 +245,18 @@ public class MainPage : Page
 
     private async Task<bool> TryProcessLoginResult(Launcher.LoginResult loginResult, bool isSteam, LoginAction action)
     {
-        if (loginResult.State == Launcher.LoginState.NoService)
+        // Format error message in the way OauthLoginException expects.
+        var preErrorMsg = "window.external.user(\"login=auth,ng,err,";
+        var postErrorMsg = "\");";
+
+        if (loginResult.State == Launcher.LoginState.NoService || Environment.GetEnvironmentVariable("XL_LOGIN_TEST") == "sub")
         {
-            throw new OauthLoginException("No service account or subscription");
+            throw new OauthLoginException(preErrorMsg + "No service account or subscription" + postErrorMsg);
         }
 
-        if (loginResult.State == Launcher.LoginState.NoTerms)
+        if (loginResult.State == Launcher.LoginState.NoTerms || Environment.GetEnvironmentVariable("XL_LOGIN_TEST") == "terms")
         {
-            throw new OauthLoginException("Need to accept terms of use");
+            throw new OauthLoginException(preErrorMsg + "Need to accept terms of use" + postErrorMsg);
         }
 
         /*
@@ -267,7 +271,7 @@ public class MainPage : Page
          * In the future we may be able to just delete /boot and run boot patches again, but this doesn't happen often enough to warrant the
          * complexity and if boot is fucked game probably is too.
          */
-        if (loginResult.State == Launcher.LoginState.NeedsPatchBoot)
+        if (loginResult.State == Launcher.LoginState.NeedsPatchBoot || Environment.GetEnvironmentVariable("XL_LOGIN_TEST") == "boot")
         {
             /*
             CustomMessageBox.Show(
@@ -276,7 +280,7 @@ public class MainPage : Page
                 "Error", MessageBoxButton.OK, MessageBoxImage.Error, parentWindow: _window);
                 */
 
-            throw new OauthLoginException("Boot conflict, need reinstall");
+            throw new OauthLoginException(preErrorMsg + "Boot conflict, need reinstall" + postErrorMsg);
         }
 
         if (action == LoginAction.Repair)
@@ -298,7 +302,7 @@ public class MainPage : Page
                             "The server sent an incorrect response - the repair cannot proceed."),
                         "Error", MessageBoxButton.OK, MessageBoxImage.Error, parentWindow: _window);
                         */
-                    throw new OauthLoginException("Repair login state not NeedsPatchGame");
+                    throw new OauthLoginException(preErrorMsg + "Repair login state not NeedsPatchGame" + postErrorMsg);
                 }
             }
             catch (Exception)
