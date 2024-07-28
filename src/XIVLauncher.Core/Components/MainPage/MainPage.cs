@@ -249,12 +249,12 @@ public class MainPage : Page
         var preErrorMsg = "window.external.user(\"login=auth,ng,err,";
         var postErrorMsg = "\");";
 
-        if (loginResult.State == Launcher.LoginState.NoService || Environment.GetEnvironmentVariable("XL_LOGIN_TEST") == "sub")
+        if (loginResult.State == Launcher.LoginState.NoService)
         {
             throw new OauthLoginException(preErrorMsg + "No service account or subscription" + postErrorMsg);
         }
 
-        if (loginResult.State == Launcher.LoginState.NoTerms || Environment.GetEnvironmentVariable("XL_LOGIN_TEST") == "terms")
+        if (loginResult.State == Launcher.LoginState.NoTerms)
         {
             throw new OauthLoginException(preErrorMsg + "Need to accept terms of use" + postErrorMsg);
         }
@@ -271,7 +271,7 @@ public class MainPage : Page
          * In the future we may be able to just delete /boot and run boot patches again, but this doesn't happen often enough to warrant the
          * complexity and if boot is fucked game probably is too.
          */
-        if (loginResult.State == Launcher.LoginState.NeedsPatchBoot || Environment.GetEnvironmentVariable("XL_LOGIN_TEST") == "boot")
+        if (loginResult.State == Launcher.LoginState.NeedsPatchBoot)
         {
             /*
             CustomMessageBox.Show(
