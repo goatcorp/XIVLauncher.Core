@@ -72,25 +72,25 @@ public class NewsFrame : Component
     private Vector2 GetSize()
     {
         var vp = ImGuiHelpers.ViewportSize;
-        var calculatedSize = vp.X >= 1280 ? vp.X * 0.7f : vp.X * 0.5f;
-        return new Vector2(calculatedSize, vp.Y - 128f);
+        var calculatedSize = vp.X >= ImGuiHelpers.GetScaled(1280) ? vp.X * 0.7f : vp.X * 0.5f;
+        return new Vector2(calculatedSize, vp.Y - ImGuiHelpers.GetScaled(128f));
     }
 
     public override void Draw()
     {
         if (ImGui.BeginChild("###newsFrame", this.GetSize()))
         {
-            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, new Vector2(32f, 32f));
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding, ImGuiHelpers.GetScaled(new Vector2(32f, 32f)));
 
             if (this.newsLoaded)
             {
                 var banner = this.banners[this.currentBanner];
-                ImGui.Image(banner.ImGuiHandle, banner.Size);
+                ImGui.Image(banner.ImGuiHandle, ImGuiHelpers.GetScaled(banner.Size));
 
                 if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                     AppUtil.OpenBrowser(this.bannerList[this.currentBanner].Link.ToString());
 
-                ImGui.Dummy(new Vector2(15));
+                ImGui.Dummy(ImGuiHelpers.GetScaled(new Vector2(15)));
 
                 void ShowNewsEntry(News newsEntry)
                 {
