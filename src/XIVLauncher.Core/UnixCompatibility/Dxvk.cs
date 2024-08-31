@@ -68,16 +68,16 @@ public static class Dxvk
     public static void Initialize()
     {
         // Add default versions.
-        Versions["dxvk-2.3.1"] = new Dictionary<string, string>()
+        Versions["dxvk-2.4"] = new Dictionary<string, string>()
         {
-            {"name", "DXVK 2.3.1"}, {"desc", "Latest version, using Graphics Pipeline Libs. Async no longer needed."},
-            {"label", "Current"}, {"url", "https://github.com/doitsujin/dxvk/releases/download/v2.3.1/dxvk-2.3.1.tar.gz"},
+            {"name", "DXVK 2.4"}, {"desc", "Latest version, using Graphics Pipeline Libs. Async no longer needed."},
+            {"label", "Current"}, {"url", "https://github.com/doitsujin/dxvk/releases/download/v2.4/dxvk-2.4.tar.gz"},
             {"mark", "Download" }
         };
         Versions["dxvk-2.2"] = new Dictionary<string, string>()
         {
-            {"name", "DXVK 2.2"}, {"desc", "Previous version, using Graphics Pipeline Libs. Use this if you have problems with ReShade Effects Toggler."},
-            {"label", "Current"}, {"url", "https://github.com/doitsujin/dxvk/releases/download/v2.2/dxvk-2.2.tar.gz"},
+            {"name", "DXVK 2.2"}, {"desc", "Previous version, using Graphics Pipeline Libs. Use this if you have problems with ReShade Effects Toggler (REST)."},
+            {"label", "Previous"}, {"url", "https://github.com/doitsujin/dxvk/releases/download/v2.2/dxvk-2.2.tar.gz"},
             {"mark", "Download" }
         };
         Versions["dxvk-async-1.10.3"] = new Dictionary<string, string>()
@@ -129,8 +129,8 @@ public static class Dxvk
     {
         if (Versions.ContainsKey("dxvk-async-1.10.3"))
             return "dxvk-async-1.10.3";
-        if (Versions.ContainsKey("dxvk-2.3"))
-            return "dxvk-2.3";
+        if (Versions.ContainsKey("dxvk-2.4"))
+            return "dxvk-2.4";
         return Versions.First().Key;
     }
 
