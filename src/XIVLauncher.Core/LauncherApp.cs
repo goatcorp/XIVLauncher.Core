@@ -29,7 +29,7 @@ public class LauncherApp : Component
     private string modalText = string.Empty;
     private string modalTitle = string.Empty;
     private string modalButtonText = string.Empty;
-    private Action modalButtonPressAction;
+    private Action modalButtonPressAction = null!;
     private readonly ManualResetEvent modalWaitHandle = new(false);
 
     #endregion
@@ -53,11 +53,9 @@ public class LauncherApp : Component
         set
         {
             // If we are coming from the settings, we should reload the news, as the client language might have changed
-            switch (this.state)
+            if (this.state == LauncherState.Settings)
             {
-                case LauncherState.Settings:
-                    this.mainPage.ReloadNews();
-                    break;
+                this.mainPage.ReloadNews();
             }
 
             this.state = value;

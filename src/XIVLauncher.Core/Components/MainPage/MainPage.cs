@@ -246,14 +246,18 @@ public class MainPage : Page
 
     private async Task<bool> TryProcessLoginResult(Launcher.LoginResult loginResult, bool isSteam, LoginAction action)
     {
+        // Format error message in the way OauthLoginException expects.
+        var preErrorMsg = "window.external.user(\"login=auth,ng,err,";
+        var postErrorMsg = "\");";
+
         if (loginResult.State == Launcher.LoginState.NoService)
         {
-            throw new OauthLoginException("No service account or subscription");
+            throw new OauthLoginException(preErrorMsg + "No service account or subscription" + postErrorMsg);
         }
 
         if (loginResult.State == Launcher.LoginState.NoTerms)
         {
-            throw new OauthLoginException("Need to accept terms of use");
+            throw new OauthLoginException(preErrorMsg + "Need to accept terms of use" + postErrorMsg);
         }
 
         /*
@@ -277,7 +281,7 @@ public class MainPage : Page
                 "Error", MessageBoxButton.OK, MessageBoxImage.Error, parentWindow: _window);
                 */
 
-            throw new OauthLoginException("Boot conflict, need reinstall");
+            throw new OauthLoginException(preErrorMsg + "Boot conflict, need reinstall" + postErrorMsg);
         }
 
         if (action == LoginAction.Repair)
@@ -299,7 +303,7 @@ public class MainPage : Page
                             "The server sent an incorrect response - the repair cannot proceed."),
                         "Error", MessageBoxButton.OK, MessageBoxImage.Error, parentWindow: _window);
                         */
-                    throw new OauthLoginException("Repair login state not NeedsPatchGame");
+                    throw new OauthLoginException(preErrorMsg + "Repair login state not NeedsPatchGame" + postErrorMsg);
                 }
             }
             catch (Exception)

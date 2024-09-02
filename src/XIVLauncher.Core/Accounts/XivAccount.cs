@@ -90,11 +90,8 @@ public class XivAccount
 
     public static async Task<dynamic> Get(string endpoint)
     {
-        using (var client = new HttpClient())
-        {
-            var result = await client.GetStringAsync(URL + endpoint).ConfigureAwait(false);
-            var parsedObject = JObject.Parse(result);
-            return parsedObject;
-        }
+        var result = await Program.HttpClient.GetStringAsync(URL + endpoint).ConfigureAwait(false);
+        var parsedObject = JObject.Parse(result);
+        return parsedObject;
     }
 }

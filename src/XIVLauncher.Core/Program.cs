@@ -31,7 +31,7 @@ using XIVLauncher.Core.Style;
 
 namespace XIVLauncher.Core;
 
-class Program
+sealed class Program
 {
     private static Sdl2Window window = null!;
     private static CommandList cl = null!;
@@ -47,6 +47,10 @@ class Program
     public static DalamudOverlayInfoProxy DalamudLoadInfo { get; private set; } = null!;
     public static CompatibilityTools CompatibilityTools { get; private set; } = null!;
     public static ISecretProvider Secrets { get; private set; } = null!;
+    public static HttpClient HttpClient { get; private set; } = new()
+    {
+        Timeout = TimeSpan.FromSeconds(5)
+    };
 
     private static readonly Vector3 ClearColor = new(0.1f, 0.1f, 0.1f);
 
@@ -210,7 +214,15 @@ class Program
 
         uint appId, altId;
         string appName, altName;
-        if (Config.IsFt == true)
+        // AppId of 0 is invalid (though still a valid uint)
+        if (CoreEnvironmentSettings.AltAppID > 0)
+        {
+            appId = CoreEnvironmentSettings.AltAppID;
+            altId = STEAM_APP_ID_FT;
+            appName = $"Override AppId={appId.ToString()}";
+            altName = "FFXIV Free Trial";
+        }
+        else if (Config.IsFt == true)
         {
             appId = STEAM_APP_ID_FT;
             altId = STEAM_APP_ID;
@@ -306,7 +318,7 @@ class Program
 
         needUpdate = CoreEnvironmentSettings.IsUpgrade ? true : needUpdate;
 
-        var launcherClientConfig = LauncherClientConfig.Fetch().GetAwaiter().GetResult();
+        var launcherClientConfig = LauncherClientConfig.GetAsync().GetAwaiter().GetResult();
         launcherApp = new LauncherApp(storage, needUpdate, launcherClientConfig.frontierUrl, launcherClientConfig.cutOffBootver);
 
         Invalidate(20);
@@ -357,6 +369,7 @@ class Program
             gd.SwapBuffers(gd.MainSwapchain);
         }
 
+        HttpClient.Dispose();
         // Clean up Veldrid resources
         gd.WaitForIdle();
         bindings.Dispose();
