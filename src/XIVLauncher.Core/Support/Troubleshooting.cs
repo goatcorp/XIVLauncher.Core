@@ -108,6 +108,9 @@ namespace XIVLauncher.Core.Support
             var ex3VerBck = Repository.Ex3.GetVer(gamePath, true);
             var ex4Ver = Repository.Ex4.GetVer(gamePath);
             var ex4VerBck = Repository.Ex4.GetVer(gamePath, true);
+            var ex5Ver = Repository.Ex5.GetVer(gamePath);
+            var ex5VerBck = Repository.Ex5.GetVer(gamePath, true);
+
 
             var payload = new TroubleshootingPayload
             {
@@ -129,9 +132,10 @@ namespace XIVLauncher.Core.Support
                 ObservedEx2Version = ex2Ver,
                 ObservedEx3Version = ex3Ver,
                 ObservedEx4Version = ex4Ver,
+                ObservedEx5Version = ex5Ver,
 
                 BckMatch = ffxivVer == ffxivVerBck && ex1Ver == ex1VerBck && ex2Ver == ex2VerBck &&
-                           ex3Ver == ex3VerBck && ex4Ver == ex4VerBck,
+                           ex3Ver == ex3VerBck && ex4Ver == ex4VerBck && ex5Ver == ex5VerBck,
 
                 IndexIntegrity = integrity
             };
@@ -182,6 +186,7 @@ namespace XIVLauncher.Core.Support
             public string ObservedEx2Version { get; set; } = string.Empty;
             public string ObservedEx3Version { get; set; } = string.Empty;
             public string ObservedEx4Version { get; set; } = string.Empty;
+            public string ObservedEx5Version { get; set; } = string.Empty;
 
             public bool BckMatch { get; set; }
 
