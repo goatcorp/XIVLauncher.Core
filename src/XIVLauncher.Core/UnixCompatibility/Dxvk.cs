@@ -70,8 +70,8 @@ public static class Dxvk
         // Add default versions.
         Versions["dxvk-2.4"] = new Dictionary<string, string>()
         {
-            {"name", "DXVK 2.4"}, {"desc", "Latest version, using Graphics Pipeline Libs. Async no longer needed."},
-            {"label", "Current"}, {"url", "https://github.com/doitsujin/dxvk/releases/download/v2.4/dxvk-2.4.tar.gz"},
+            {"name", "DXVK 2.4.1"}, {"desc", "Latest version, using Graphics Pipeline Libs. Async no longer needed."},
+            {"label", "Current"}, {"url", "https://github.com/doitsujin/dxvk/releases/download/v2.4.1/dxvk-2.4.1.tar.gz"},
             {"mark", "Download" }
         };
         Versions["dxvk-2.2"] = new Dictionary<string, string>()
