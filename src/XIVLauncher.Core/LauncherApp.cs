@@ -269,7 +269,9 @@ public class LauncherApp : Component
 
     public void RunStartupTasks()
     {
+#if FLATPAK
         this.ftsPage.OpenFtsIfNeeded();
+#endif
         this.mainPage.DoAutoLoginIfApplicable();
     }
 
