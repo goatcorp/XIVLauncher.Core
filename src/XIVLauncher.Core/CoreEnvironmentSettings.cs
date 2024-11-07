@@ -7,7 +7,9 @@ namespace XIVLauncher.Core;
 public static class CoreEnvironmentSettings
 {
     public static bool? IsDeck => CheckEnvBoolOrNull("XL_DECK");
+    public static bool IsSteamDeckVar => CheckEnvBool("SteamDeck");
     public static bool? IsDeckGameMode => CheckEnvBoolOrNull("XL_GAMEMODE");
+    public static bool IsSteamGamepadUIVar => CheckEnvBool("SteamGamepadUI");
     public static bool? IsDeckFirstRun => CheckEnvBoolOrNull("XL_FIRSTRUN");
     public static bool IsUpgrade => CheckEnvBool("XL_SHOW_UPGRADE");
     public static bool ClearSettings => CheckEnvBool("XL_CLEAR_SETTINGS");
@@ -21,6 +23,10 @@ public static class CoreEnvironmentSettings
     public static bool IsSteamCompatTool => CheckEnvBool("XL_SCT");
     public static uint SteamAppId => GetAppId(System.Environment.GetEnvironmentVariable("SteamAppId"));
     public static uint AltAppID => GetAppId(System.Environment.GetEnvironmentVariable("XL_APPID"));
+    public static string HOME => System.Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    public static string XDG_CONFIG_HOME => string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("XDG_CONFIG_HOME")) ? Path.Combine(HOME, ".config") : System.Environment.GetEnvironmentVariable("XDG_CONFIG_HOME") ?? "";
+    public static string XDG_DATA_HOME => string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("XDG_DATA_HOME")) ? Path.Combine(HOME, ".local", "share") : System.Environment.GetEnvironmentVariable("XDG_DATA_HOME") ?? "";
+
 
     private static bool CheckEnvBool(string key)
     {

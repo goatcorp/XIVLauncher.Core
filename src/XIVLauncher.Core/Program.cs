@@ -59,12 +59,13 @@ sealed class Program
     public static DirectoryInfo DotnetRuntime => storage.GetFolder("runtime");
 
     // TODO: We don't have the steamworks api for this yet.
+    // SteamDeck=1 on Steam Deck by default. SteamGamepadUI=1 in Big Picture / Gaming Mode.
     public static bool IsSteamDeckHardware => CoreEnvironmentSettings.IsDeck.HasValue ?
         CoreEnvironmentSettings.IsDeck.Value :
-        Directory.Exists("/home/deck") || (CoreEnvironmentSettings.IsDeckGameMode ?? false) || (CoreEnvironmentSettings.IsDeckFirstRun ?? false);
+        CoreEnvironmentSettings.IsSteamDeckVar || (CoreEnvironmentSettings.IsDeckGameMode ?? false) || (CoreEnvironmentSettings.IsDeckFirstRun ?? false);
     public static bool IsSteamDeckGamingMode => CoreEnvironmentSettings.IsDeckGameMode.HasValue ?
         CoreEnvironmentSettings.IsDeckGameMode.Value :
-        Steam != null && Steam.IsValid && Steam.IsRunningOnSteamDeck();
+        Steam != null && Steam.IsValid && Steam.IsRunningOnSteamDeck() && CoreEnvironmentSettings.IsSteamGamepadUIVar;
 
     private const string APP_NAME = "xlcore";
 
