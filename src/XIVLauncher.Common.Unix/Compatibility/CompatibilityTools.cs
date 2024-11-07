@@ -8,10 +8,6 @@ using System.Net.Http;
 using XIVLauncher.Common.Util;
 using Serilog;
 
-#if FLATPAK
-#warning THIS IS A FLATPAK BUILD!!!
-#endif
-
 namespace XIVLauncher.Common.Unix.Compatibility;
 
 public class CompatibilityTools
@@ -29,21 +25,17 @@ public class CompatibilityTools
     public DxvkSettings DxvkSettings { get; private set; }
 
     public bool IsToolDownloaded => File.Exists(Settings.WinePath) && Settings.Prefix.Exists;
-
-    public bool IsFlatpak { get; }
-    
+   
     private readonly bool gamemodeOn;
 
     private Dictionary<string, string> extraEnvironmentVars;
 
-    public CompatibilityTools(WineSettings wineSettings, DxvkSettings dxvkSettings, bool? gamemodeOn, DirectoryInfo toolsFolder, bool isFlatpak, Dictionary<string, string> extraEnvVars = null)
+    public CompatibilityTools(WineSettings wineSettings, DxvkSettings dxvkSettings, bool? gamemodeOn, DirectoryInfo toolsFolder, Dictionary<string, string> extraEnvVars = null)
     {
         this.Settings = wineSettings;
         this.DxvkSettings = dxvkSettings;
         this.gamemodeOn = gamemodeOn ?? false;
 
-        // These are currently unused. Here for future use. 
-        this.IsFlatpak = isFlatpak;
         this.extraEnvironmentVars = extraEnvVars ?? new Dictionary<string, string>();
 
         this.wineDirectory = new DirectoryInfo(Path.Combine(toolsFolder.FullName, "wine"));

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 using Serilog;
+using XIVLauncher.Common.Unix;
 
 namespace XIVLauncher.Common.Unix.Compatibility;
 
@@ -15,6 +16,8 @@ public class DxvkSettings
     public string DownloadUrl { get; }
 
     public Dictionary<string, string> Environment { get; }
+    
+    private static bool? mangoHudFound = null;
 
     public DxvkSettings(string folder, string url, string storageFolder, bool async, int maxFrameRate, bool dxvkHudEnabled, string dxvkHudString, bool mangoHudEnabled = false, bool mangoHudCustomIsFile = false, string customMangoHud = "", bool enabled = true)
     {
@@ -74,12 +77,10 @@ public class DxvkSettings
 
     public static bool MangoHudIsInstalled()
     {
-        var usrLib = Path.Combine("/", "usr", "lib", "mangohud", "libMangoHud.so"); // fedora uses this
-        var usrLib64 = Path.Combine("/", "usr", "lib64", "mangohud", "libMangoHud.so"); // arch and openSUSE use this
-        var flatpak = Path.Combine("/", "usr", "lib", "extensions", "vulkan", "MangoHud", "lib", "x86_64-linux-gnu", "libMangoHud.so");
-        var debuntu = Path.Combine("/", "usr", "lib", "x86_64-linux-gnu", "mangohud", "libMangoHud.so");
-        if (File.Exists(usrLib64) || File.Exists(usrLib) || File.Exists(flatpak) || File.Exists(debuntu))
-            return true;
-        return false;
+        if (mangoHudFound is null)
+        {
+            mangoHudFound = LinuxInfo.IsFileFound(LinuxInfo.LibraryPaths, "libMangoHud.so");
+        }
+        return mangoHudFound ?? false;
     }
 }

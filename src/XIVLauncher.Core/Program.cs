@@ -21,6 +21,7 @@ using XIVLauncher.Common.Unix;
 using XIVLauncher.Common.Unix.Compatibility;
 using XIVLauncher.Common.Util;
 using XIVLauncher.Common.Windows;
+using XIVLauncher.Common.Unix;
 using XIVLauncher.Core.Accounts.Secrets;
 using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
@@ -309,7 +310,7 @@ sealed class Program
 
         var needUpdate = false;
 
-        if (OSInfo.IsFlatpak && (Config.DoVersionCheck ?? false))
+        if (LinuxInfo.Container == LinuxContainer.flatpak && (Config.DoVersionCheck ?? false))
         {
             var versionCheckResult = UpdateCheck.CheckForUpdate().GetAwaiter().GetResult();
 
@@ -383,7 +384,7 @@ sealed class Program
         var dxvkSettings = new DxvkSettings(Dxvk.FolderName, Dxvk.DownloadUrl, storage.Root.FullName, Dxvk.AsyncEnabled, Dxvk.FrameRateLimit, Dxvk.DxvkHudEnabled, Dxvk.DxvkHudString, Dxvk.MangoHudEnabled, Dxvk.MangoHudCustomIsFile, Dxvk.MangoHudString, Dxvk.Enabled);
         var wineSettings = new WineSettings(Wine.IsManagedWine, Wine.CustomWinePath, Wine.FolderName, Wine.DownloadUrl, storage.Root, Wine.DebugVars, Wine.LogFile, Wine.Prefix, Wine.ESyncEnabled, Wine.FSyncEnabled);
         var toolsFolder = storage.GetFolder("compatibilitytool");
-        CompatibilityTools = new CompatibilityTools(wineSettings, dxvkSettings, Config.GameModeEnabled, toolsFolder, OSInfo.IsFlatpak);
+        CompatibilityTools = new CompatibilityTools(wineSettings, dxvkSettings, Config.GameModeEnabled, toolsFolder);
     }
 
     public static void ShowWindow()
