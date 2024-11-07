@@ -212,29 +212,25 @@ sealed class Program
 
         Loc.SetupWithFallbacks();
 
-        uint appId, altId;
-        string appName, altName;
-        // AppId of 0 is invalid (though still a valid uint)
-        if (CoreEnvironmentSettings.AltAppID > 0)
+        Dictionary<uint, string> apps = new Dictionary<uint, string>();
+        uint[] ignoredIds = { 0, STEAM_APP_ID, STEAM_APP_ID_FT};
+        if (!ignoredIds.Contains(CoreEnvironmentSettings.SteamAppId))
         {
-            appId = CoreEnvironmentSettings.AltAppID;
-            altId = STEAM_APP_ID_FT;
-            appName = $"Override AppId={appId.ToString()}";
-            altName = "FFXIV Free Trial";
+            apps.Add(CoreEnvironmentSettings.SteamAppId, "XLM");
         }
-        else if (Config.IsFt == true)
+        if (!ignoredIds.Contains(CoreEnvironmentSettings.AltAppID))
         {
-            appId = STEAM_APP_ID_FT;
-            altId = STEAM_APP_ID;
-            appName = "FFXIV Free Trial";
-            altName = "FFXIV Retail";
+            apps.Add(CoreEnvironmentSettings.AltAppID, "XL_APPID");
+        }
+        if (Config.IsFt == true)
+        {
+            apps.Add(STEAM_APP_ID_FT, "FFXIV Free Trial");
+            apps.Add(STEAM_APP_ID, "FFXIV Retail");
         }
         else
         {
-            appId = STEAM_APP_ID;
-            altId = STEAM_APP_ID_FT;
-            appName = "FFXIV Retail";
-            altName = "FFXIV Free Trial";
+            apps.Add(STEAM_APP_ID, "FFXIV Retail");
+            apps.Add(STEAM_APP_ID_FT, "FFXIV Free Trial");
         }
         try
         {
@@ -253,14 +249,18 @@ sealed class Program
             }
             if (Config.IsIgnoringSteam != true || CoreEnvironmentSettings.IsSteamCompatTool)
             {
-                try
+                foreach (var app in apps)
                 {
-                    Steam.Initialize(appId);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, $"Couldn't init Steam with AppId={appId} ({appName}), trying AppId={altId} ({altName})");
-                    Steam.Initialize(altId);
+                    try
+                    {
+                        Steam.Initialize(app.Key);
+                        Log.Information($"Successfully initialized Steam entry {app.Key} - {app.Value}");
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, $"Failed to initialize Steam Steam entry {app.Key} - {app.Value}");
+                    }
                 }
             }
         }

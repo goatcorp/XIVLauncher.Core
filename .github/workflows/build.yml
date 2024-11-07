@@ -14,8 +14,10 @@ jobs:
       run:
         working-directory: ./src/XIVLauncher.Core/
     concurrency:
-      group: ${{ github.head_ref }}"
+      group: "${{ github.ref }}"
       cancel-in-progress: true
+    env:
+      GITHUB_REPOSITORY: ${{ github.repository }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
