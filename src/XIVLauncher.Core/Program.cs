@@ -371,12 +371,13 @@ sealed class Program
             gd.SwapBuffers(gd.MainSwapchain);
         }
 
-        HttpClient.Dispose();
         // Clean up Veldrid resources
         gd.WaitForIdle();
         bindings.Dispose();
         cl.Dispose();
         gd.Dispose();
+        
+        HttpClient.Dispose();
     }
 
     public static void CreateCompatToolsInstance()

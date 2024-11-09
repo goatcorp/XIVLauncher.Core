@@ -32,7 +32,7 @@ public static class LinuxInfo
         }
 
         IsLinux = true;
-        Package = LinuxDistro.ubuntu;
+        Package = LinuxDistro.none;
         Container = LinuxContainer.none;
         try
         {
@@ -41,12 +41,7 @@ public static class LinuxInfo
                 Package = LinuxDistro.ubuntu;
                 Container = LinuxContainer.none;
                 Name = "Unknown distribution";
-                LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x86_64-linux-gnu"));
-                LibraryPaths.Add(Path.Combine("/", "usr", "lib64"));
-                LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
-                LibraryPaths.Add(Path.Combine("/", "lib64"));
-                LibraryPaths.Add(Path.Combine("/", "lib"));
-                Console.WriteLine($"Distro = {Package}, Container = {Container}");
+                addLibraryPaths();
                 return;
             }
             var osRelease = File.ReadAllLines("/etc/os-release");
@@ -69,23 +64,15 @@ public static class LinuxInfo
             {
                 if (osInfo["ID"] == "org.freedesktop.platform")
                 {
-                    LibraryPaths.Add(Path.Combine("/", "app", "lib"));
-                    LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x84_64-linux-gnu"));
-                    LibraryPaths.Add(Path.Combine("/", "usr", "lib", "extensions"));
                     Container = LinuxContainer.flatpak;
+                    Package = LinuxDistro.ubuntu;
                 }
                 else if (osInfo.ContainsKey("HOME_URL"))
                 {
                     if (osInfo["ID"] == "ubuntu-core" && osInfo["HOME_URL"] == "https://snapcraft.io")
                     {
-                        Console.WriteLine("Running snap container check");
-                        LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x86_64-linux-gnu"));
-                        LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
-                        // nvidia host path, needed for dlss on steam snap. These paths look on the host distro.
-                        LibraryPaths.Add(Path.Combine("/", "var", "lib", "snapd", "hostfs", "usr", "lib", "x86_64-linux-gnu", "nvidia"));
-                        LibraryPaths.Add(Path.Combine("/", "var", "lib", "snapd", "hostfs", "usr", "lib64", "nvidia"));
-                        LibraryPaths.Add(Path.Combine("/", "var", "lib", "snapd", "hostfs", "usr", "lib", "nvidia"));
                         Container = LinuxContainer.snap;
+                        Package = LinuxDistro.ubuntu;
                     }
                 }
             }
@@ -97,49 +84,88 @@ public static class LinuxInfo
                 {
                     if (kvp.Value.ToLower().Contains("fedora"))
                     {
-                        LibraryPaths.Add(Path.Combine("/", "usr", "lib64"));
                         Package = LinuxDistro.fedora;
                         break;
                     }
                     else if (kvp.Value.ToLower().Contains("tumbleweed"))
                     {
-                        LibraryPaths.Add(Path.Combine("/", "usr", "lib64"));
                         Package = LinuxDistro.fedora;
                         break;
                     }
                     else if (kvp.Value.ToLower().Contains("arch"))
                     {
-                        LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
                         Package = LinuxDistro.arch;
                         break;
                     }
                     else if (kvp.Value.ToLower().Contains("ubuntu") || kvp.Value.ToLower().Contains("debian"))
                     {
-                        LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x86_64-linux-gnu"));
+                        Package = LinuxDistro.ubuntu;
                         break;
                     }
                 }
-                if (LibraryPaths.Count == 0)
+                if (Package == LinuxDistro.none)
                 {
-                    // Unknown distro, add extra library search paths
-                    LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x86_64-linux-gnu"));
-                    LibraryPaths.Add(Path.Combine("/", "usr", "lib64"));
-                    LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
-                    LibraryPaths.Add(Path.Combine("/", "lib64"));
-                    LibraryPaths.Add(Path.Combine("/", "lib"));
+                    Package = LinuxDistro.ubuntu;
                 }
             }
+            addLibraryPaths();
+            foreach (var path in LibraryPaths)
+                Console.Write(path + ":");
         }
         catch
         {
             // If there's any kind of error opening the file or even finding it, just go with default.
             Package = LinuxDistro.ubuntu;
             Name = "Unknown distribution";
-            LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x86_64-linux-gnu"));
-            LibraryPaths.Add(Path.Combine("/", "usr", "lib64"));
-            LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
-            LibraryPaths.Add(Path.Combine("/", "lib64"));
-            LibraryPaths.Add(Path.Combine("/", "lib"));
+            addLibraryPaths();
         }
+    }
+
+    private static void addLibraryPaths()
+    {
+        switch (Container)
+        {
+            case LinuxContainer.flatpak:
+                LibraryPaths.Add(Path.Combine("/", "app", "lib"));
+                LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x84_64-linux-gnu"));
+                LibraryPaths.Add(Path.Combine("/", "usr", "lib", "extensions"));
+                break;
+
+            case LinuxContainer.snap:
+                LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x86_64-linux-gnu"));
+                LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
+                // nvidia host path, needed for dlss on steam snap. These paths look on the host distro.
+                LibraryPaths.Add(Path.Combine("/", "var", "lib", "snapd", "hostfs", "usr", "lib", "x86_64-linux-gnu", "nvidia"));
+                LibraryPaths.Add(Path.Combine("/", "var", "lib", "snapd", "hostfs", "usr", "lib64", "nvidia"));
+                LibraryPaths.Add(Path.Combine("/", "var", "lib", "snapd", "hostfs", "usr", "lib", "nvidia"));
+                break;
+
+            case LinuxContainer.none:
+                if (Package == LinuxDistro.none && IsLinux)
+                    Package = LinuxDistro.ubuntu;
+                switch (Package)
+                {
+                    case LinuxDistro.arch:
+                        LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
+                        break;
+
+                    case LinuxDistro.fedora:
+                        LibraryPaths.Add(Path.Combine("/", "usr", "lib64"));
+                        break;
+
+                    case LinuxDistro.ubuntu:
+                        LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x86_64-linux-gnu"));
+                        LibraryPaths.Add(Path.Combine("/", "usr", "lib64"));
+                        LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
+                        LibraryPaths.Add(Path.Combine("/", "lib64"));
+                        LibraryPaths.Add(Path.Combine("/", "lib"));
+                        break;
+
+                    case LinuxDistro.none:
+                        break;
+                }
+                break;
+        }
+
     }
 }
