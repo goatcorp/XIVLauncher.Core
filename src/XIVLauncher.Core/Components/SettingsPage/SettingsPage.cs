@@ -13,6 +13,7 @@ public class SettingsPage : Page
         new SettingsTabGame(),
         new SettingsTabPatching(),
         new SettingsTabWine(),
+        new SettingsTabDxvk(),
         new SettingsTabDalamud(),
         new SettingsTabAbout(),
         new SettingsTabDebug(),

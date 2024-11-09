@@ -1,15 +1,20 @@
 using System.Diagnostics;
+using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace XIVLauncher.Core;
 
 public static class CoreEnvironmentSettings
 {
     public static bool? IsDeck => CheckEnvBoolOrNull("XL_DECK");
+    public static bool IsSteamDeckVar => CheckEnvBool("SteamDeck");
     public static bool? IsDeckGameMode => CheckEnvBoolOrNull("XL_GAMEMODE");
+    public static bool IsSteamGamepadUIVar => CheckEnvBool("SteamGamepadUI");
     public static bool? IsDeckFirstRun => CheckEnvBoolOrNull("XL_FIRSTRUN");
     public static bool IsUpgrade => CheckEnvBool("XL_SHOW_UPGRADE");
     public static bool ClearSettings => CheckEnvBool("XL_CLEAR_SETTINGS");
     public static bool ClearPrefix => CheckEnvBool("XL_CLEAR_PREFIX");
+    public static bool ClearDalamud => CheckEnvBool("XL_CLEAR_DALAMUD");
     public static bool ClearPlugins => CheckEnvBool("XL_CLEAR_PLUGINS");
     public static bool ClearTools => CheckEnvBool("XL_CLEAR_TOOLS");
     public static bool ClearLogs => CheckEnvBool("XL_CLEAR_LOGS");
@@ -18,6 +23,10 @@ public static class CoreEnvironmentSettings
     public static bool IsSteamCompatTool => CheckEnvBool("XL_SCT");
     public static uint SteamAppId => GetAppId(System.Environment.GetEnvironmentVariable("SteamAppId"));
     public static uint AltAppID => GetAppId(System.Environment.GetEnvironmentVariable("XL_APPID"));
+    public static string HOME => System.Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    public static string XDG_CONFIG_HOME => string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("XDG_CONFIG_HOME")) ? Path.Combine(HOME, ".config") : System.Environment.GetEnvironmentVariable("XDG_CONFIG_HOME") ?? "";
+    public static string XDG_DATA_HOME => string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("XDG_DATA_HOME")) ? Path.Combine(HOME, ".local", "share") : System.Environment.GetEnvironmentVariable("XDG_DATA_HOME") ?? "";
+
 
     private static bool CheckEnvBool(string key)
     {
@@ -62,5 +71,22 @@ public static class CoreEnvironmentSettings
         proc.Start();
         var output = proc.StandardOutput.ReadToEnd().Split('\n', StringSplitOptions.RemoveEmptyEntries);
         return Array.Find(output, s => s.ToUpper().StartsWith("C.")) ?? string.Empty;
+    }
+    
+    static private bool? gameModeInstalled = null;
+
+    static public bool IsGameModeInstalled()
+    {
+        if (gameModeInstalled is not null)
+            return gameModeInstalled ?? false;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            var handle = IntPtr.Zero;
+            gameModeInstalled = NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle);
+            NativeLibrary.Free(handle);
+        }
+        else
+            gameModeInstalled = false;
+        return gameModeInstalled ?? false;
     }
 }
