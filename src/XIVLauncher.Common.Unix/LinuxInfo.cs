@@ -46,6 +46,7 @@ public static class LinuxInfo
                 LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
                 LibraryPaths.Add(Path.Combine("/", "lib64"));
                 LibraryPaths.Add(Path.Combine("/", "lib"));
+                Console.WriteLine($"Distro = {Package}, Container = {Container}");
                 return;
             }
             var osRelease = File.ReadAllLines("/etc/os-release");
@@ -77,6 +78,7 @@ public static class LinuxInfo
                 {
                     if (osInfo["ID"] == "ubuntu-core" && osInfo["HOME_URL"] == "https://snapcraft.io")
                     {
+                        Console.WriteLine("Running snap container check");
                         LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x86_64-linux-gnu"));
                         LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
                         // nvidia host path, needed for dlss on steam snap. These paths look on the host distro.
@@ -99,24 +101,28 @@ public static class LinuxInfo
                         Package = LinuxDistro.fedora;
                         break;
                     }
-                    if (kvp.Value.ToLower().Contains("tumbleweed"))
+                    else if (kvp.Value.ToLower().Contains("tumbleweed"))
                     {
                         LibraryPaths.Add(Path.Combine("/", "usr", "lib64"));
                         Package = LinuxDistro.fedora;
                         break;
                     }
-                    if (kvp.Value.ToLower().Contains("arch"))
+                    else if (kvp.Value.ToLower().Contains("arch"))
                     {
                         LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
                         Package = LinuxDistro.arch;
                         break;
                     }
-                    if (kvp.Value.ToLower().Contains("ubuntu") || kvp.Value.ToLower().Contains("debian"))
+                    else if (kvp.Value.ToLower().Contains("ubuntu") || kvp.Value.ToLower().Contains("debian"))
                     {
                         LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x86_64-linux-gnu"));
                         break;
                     }
+                }
+                if (LibraryPaths.Count == 0)
+                {
                     // Unknown distro, add extra library search paths
+                    LibraryPaths.Add(Path.Combine("/", "usr", "lib", "x86_64-linux-gnu"));
                     LibraryPaths.Add(Path.Combine("/", "usr", "lib64"));
                     LibraryPaths.Add(Path.Combine("/", "usr", "lib"));
                     LibraryPaths.Add(Path.Combine("/", "lib64"));
@@ -135,76 +141,5 @@ public static class LinuxInfo
             LibraryPaths.Add(Path.Combine("/", "lib64"));
             LibraryPaths.Add(Path.Combine("/", "lib"));
         }
-    }
-
-    public static List<string> FileFind(string searchPath, string file, bool followSymlinks = false)
-    {
-        if (!IsLinux)
-            return new List<string>();
-        
-        var found = new List<string>();
-        var psi = new ProcessStartInfo("find");
-        psi.Arguments = $"{(followSymlinks ? "-L " : "")}{searchPath} -name \"{file}\"";
-        psi.RedirectStandardOutput = true;
-        psi.RedirectStandardError = true;
-        var findCmd = new Process();
-        findCmd.StartInfo = psi;
-        try
-        {
-            findCmd.Start();
-            var output = findCmd.StandardOutput.ReadToEnd();
-            if (!string.IsNullOrWhiteSpace(output))
-            {
-                var outputArray = output.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-                foreach (string foundfile in outputArray)
-                    found.Add(foundfile);
-            }
-        }
-        catch (System.ComponentModel.Win32Exception ex)
-        {
-            Console.WriteLine("Error: could not execute \"find\" command. Is it installed?");
-            Console.WriteLine(ex.Message);
-        }
-        finally
-        {
-            findCmd.Dispose();
-        }
-        return found;
-    }
-
-    public static List<string> FileFind(IEnumerable<string> searchPaths, string file, bool followSymlinks = false)
-    {
-        if (!IsLinux)
-            return new List<string>();
-
-        var found = new List<string>();
-        foreach (string searchPath in searchPaths)
-        {
-            found.AddRange(FileFind(searchPath, file, followSymlinks));
-        }
-        return found;
-    }
-
-    public static bool IsFileFound(string searchPath, string file, bool followSymlinks = false)
-    {
-        if (!IsLinux)
-            return false;
-
-        if (FileFind(searchPath, file, followSymlinks).Count > 0)
-            return true;
-        return false;
-    }
-
-    public static bool IsFileFound(IEnumerable<string> searchPaths, string file, bool followSymlinks = false)
-    {
-        if (!IsLinux)
-            return false;
-
-        foreach (string searchPath in searchPaths)
-        {
-            if (IsFileFound(searchPath, file, followSymlinks))
-                return true;
-        }
-        return false;
     }
 }

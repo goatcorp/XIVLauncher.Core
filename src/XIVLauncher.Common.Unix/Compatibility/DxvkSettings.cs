@@ -79,7 +79,21 @@ public class DxvkSettings
     {
         if (mangoHudFound is null)
         {
-            mangoHudFound = LinuxInfo.IsFileFound(LinuxInfo.LibraryPaths, "libMangoHud.so");
+            mangoHudFound = false;
+            var options = new EnumerationOptions();
+            options.RecurseSubdirectories = true;
+            options.MaxRecursionDepth = 5;
+            foreach (var path in LinuxInfo.LibraryPaths)
+            {
+                if (!Directory.Exists(path))
+                    continue;
+
+                if (Directory.GetFiles(path, "libMangoHud.so", options).Length > 0)
+                {
+                    mangoHudFound = true;
+                    break;
+                }
+            }
         }
         return mangoHudFound ?? false;
     }
