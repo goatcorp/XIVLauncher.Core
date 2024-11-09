@@ -109,8 +109,6 @@ public static class LinuxInfo
                 }
             }
             addLibraryPaths();
-            foreach (var path in LibraryPaths)
-                Console.Write(path + ":");
         }
         catch
         {
