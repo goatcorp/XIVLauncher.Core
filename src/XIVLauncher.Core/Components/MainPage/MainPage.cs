@@ -1005,9 +1005,9 @@ public class MainPage : Page
         }
 
         using var installer = new PatchInstaller(App.Settings.KeepPatches ?? false);
-        var patcher = new PatchManager(App.Settings.PatchAcquisitionMethod ?? AcquisitionMethod.Aria, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
+        Program.Patcher = new PatchManager(App.Settings.PatchAcquisitionMethod ?? AcquisitionMethod.Aria, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
             App.Settings.PatchPath, installer, App.Launcher, sid);
-        patcher.OnFail += PatcherOnFail;
+        Program.Patcher.OnFail += PatcherOnFail;
         installer.OnFail += this.InstallerOnFail;
 
         /*
@@ -1039,18 +1039,18 @@ public class MainPage : Page
                 {
                     Thread.Sleep(30);
 
-                    App.LoadingPage.Line2 = string.Format("Working on {0}/{1}", patcher.CurrentInstallIndex, patcher.Downloads.Count);
-                    App.LoadingPage.Line3 = string.Format("{0} left to download at {1}/s", ApiHelpers.BytesToString(patcher.AllDownloadsLength < 0 ? 0 : patcher.AllDownloadsLength),
-                        ApiHelpers.BytesToString(patcher.Speeds.Sum()));
+                    App.LoadingPage.Line2 = string.Format("Working on {0}/{1}", Program.Patcher.CurrentInstallIndex, Program.Patcher.Downloads.Count);
+                    App.LoadingPage.Line3 = string.Format("{0} left to download at {1}/s", ApiHelpers.BytesToString(Program.Patcher.AllDownloadsLength < 0 ? 0 : Program.Patcher.AllDownloadsLength),
+                        ApiHelpers.BytesToString(Program.Patcher.Speeds.Sum()));
 
-                    App.LoadingPage.Progress = patcher.CurrentInstallIndex / (float)patcher.Downloads.Count;
+                    App.LoadingPage.Progress = Program.Patcher.CurrentInstallIndex / (float)Program.Patcher.Downloads.Count;
                 }
             }
 
             try
             {
                 var aria2LogFile = new FileInfo(Path.Combine(App.Storage.GetFolder("logs").FullName, "launcher.log"));
-                await patcher.PatchAsync(aria2LogFile, false).ConfigureAwait(false);
+                await Program.Patcher.PatchAsync(aria2LogFile, false).ConfigureAwait(false);
             }
             finally
             {
