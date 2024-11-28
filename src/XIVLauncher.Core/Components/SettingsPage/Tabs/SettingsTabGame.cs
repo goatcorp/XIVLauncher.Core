@@ -5,7 +5,7 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 public class SettingsTabGame : SettingsTab
 {
     public override SettingsEntry[] Entries { get; } =
-    {
+    [
         new SettingsEntry<DirectoryInfo>("Game Path", "Where the game is or will be installed.", () => Program.Config.GamePath, x => Program.Config.GamePath = x)
         {
             CheckValidity = x =>
@@ -38,7 +38,7 @@ public class SettingsTabGame : SettingsTab
             CheckVisibility = () => !CoreEnvironmentSettings.IsSteamCompatTool,
         },
         new SettingsEntry<bool>("Use Experimental UID Cache", "Tries to save your login token for the next start. Can result in launching with expired sessions.\nDisable if receiving FFXIV error 1012 or 500X.", () => Program.Config.IsUidCacheEnabled ?? false, x => Program.Config.IsUidCacheEnabled = x),
-    };
+    ];
 
     public override string Title => "Game";
 

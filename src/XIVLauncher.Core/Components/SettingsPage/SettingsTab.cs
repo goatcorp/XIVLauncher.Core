@@ -14,7 +14,7 @@ public abstract class SettingsTab : Component
 
     public override void Draw()
     {
-        foreach (SettingsEntry settingsEntry in Entries)
+        foreach (SettingsEntry settingsEntry in this.Entries)
         {
             if (settingsEntry.IsVisible)
                 settingsEntry.Draw();
@@ -27,7 +27,7 @@ public abstract class SettingsTab : Component
 
     public void Load()
     {
-        foreach (SettingsEntry settingsEntry in Entries)
+        foreach (SettingsEntry settingsEntry in this.Entries)
         {
             settingsEntry.Load();
         }
@@ -35,7 +35,7 @@ public abstract class SettingsTab : Component
 
     public virtual void Save()
     {
-        foreach (SettingsEntry settingsEntry in Entries)
+        foreach (SettingsEntry settingsEntry in this.Entries)
         {
             settingsEntry.Save();
         }

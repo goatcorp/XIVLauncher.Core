@@ -15,7 +15,7 @@ public class NewsFrame : Component
     private readonly Timer bannerTimer;
 
     private Headlines? headlines;
-    private TextureWrap[] banners = { };
+    private TextureWrap[] banners = [];
 
     private IReadOnlyList<Banner> bannerList = new List<Banner>();
 
@@ -28,8 +28,8 @@ public class NewsFrame : Component
         this.app = app;
         this.ReloadNews();
 
-        this.bannerTimer = new Timer(TimerElapsed);
-        bannerTimer.Change(0, BANNER_TIME);
+        this.bannerTimer = new Timer(this.TimerElapsed);
+        this.bannerTimer.Change(0, BANNER_TIME);
     }
 
     private void TimerElapsed(object? state)
@@ -49,16 +49,16 @@ public class NewsFrame : Component
 
             await Headlines.GetWorlds(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
 
-            bannerList = await Headlines.GetBanners(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
+            this.bannerList = await Headlines.GetBanners(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
 
             await Headlines.GetMessage(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
 
-            headlines = await Headlines.GetNews(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
+            this.headlines = await Headlines.GetNews(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
 
-            this.banners = new TextureWrap[bannerList.Count];
+            this.banners = new TextureWrap[this.bannerList.Count];
 
 
-            for (var i = 0; i < bannerList.Count; i++)
+            for (var i = 0; i < this.bannerList.Count; i++)
             {
                 var textureBytes = await Program.HttpClient.GetByteArrayAsync(this.bannerList[i].LsbBanner).ConfigureAwait(false);
                 this.banners[i] = TextureWrap.Load(textureBytes);

@@ -38,7 +38,7 @@ public class LoadingPage : Page
         this.disableAutoLoginButton.Click += () =>
         {
             this.hasDisabledAutoLogin = true;
-            App.Settings.IsAutologin = false;
+            this.App.Settings.IsAutologin = false;
         };
     }
 
@@ -54,28 +54,28 @@ public class LoadingPage : Page
         ImGui.SetCursorPosY(vp.Y / 2 - 100);
 
         // center text in window
-        ImGuiHelpers.CenteredText(Line1);
+        ImGuiHelpers.CenteredText(this.Line1);
 
-        if (!string.IsNullOrEmpty(Line2))
+        if (!string.IsNullOrEmpty(this.Line2))
         {
             ImGui.Dummy(new Vector2(2));
-            ImGuiHelpers.CenteredText(Line2);
+            ImGuiHelpers.CenteredText(this.Line2);
         }
 
-        if (!string.IsNullOrEmpty(Line3))
+        if (!string.IsNullOrEmpty(this.Line3))
         {
             ImGui.Dummy(new Vector2(2));
-            ImGuiHelpers.CenteredText(Line3);
+            ImGuiHelpers.CenteredText(this.Line3);
         }
 
-        var isDrawDisableAutoLogin = CanDisableAutoLogin && (App.Settings.IsAutologin ?? false);
+        var isDrawDisableAutoLogin = this.CanDisableAutoLogin && (this.App.Settings.IsAutologin ?? false);
 
-        if (CanCancel || isDrawDisableAutoLogin)
+        if (this.CanCancel || isDrawDisableAutoLogin)
         {
             ImGui.Dummy(new Vector2(20));
         }
 
-        if (CanCancel)
+        if (this.CanCancel)
         {
             this.cancelButton.Width = (int)vp.X / 4;
             ImGuiHelpers.CenterCursorFor(this.cancelButton.Width.Value);
@@ -95,7 +95,7 @@ public class LoadingPage : Page
 
         ImGui.Dummy(new Vector2(20));
 
-        if (IsIndeterminate)
+        if (this.IsIndeterminate)
         {
             ImGuiHelpers.CenterCursorFor(SPINNER_RADIUS * 2);
             this.spinner.Draw();
@@ -104,7 +104,7 @@ public class LoadingPage : Page
         {
             var width = vp.X / 3;
             ImGuiHelpers.CenterCursorFor((int)width);
-            ImGui.ProgressBar(Progress, new Vector2(width, 20), ProgressText);
+            ImGui.ProgressBar(this.Progress, new Vector2(width, 20), this.ProgressText);
         }
 
         Program.Invalidate(10);

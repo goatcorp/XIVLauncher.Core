@@ -19,22 +19,22 @@ public class Button : Component
 
     public Button(string label, bool isEnabled = true, Vector4? color = null, Vector4? hoverColor = null, Vector4? textColor = null)
     {
-        Label = label;
-        IsEnabled = isEnabled;
-        Color = color ?? ImGuiColors.Blue;
-        HoverColor = hoverColor ?? ImGuiColors.BlueShade3;
-        TextColor = textColor ?? ImGuiColors.DalamudWhite;
+        this.Label = label;
+        this.IsEnabled = isEnabled;
+        this.Color = color ?? ImGuiColors.Blue;
+        this.HoverColor = hoverColor ?? ImGuiColors.BlueShade3;
+        this.TextColor = textColor ?? ImGuiColors.DalamudWhite;
     }
 
     public override void Draw()
     {
         ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, new Vector2(16f, 16f));
         ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 0);
-        ImGui.PushStyleColor(ImGuiCol.Button, Color);
-        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, HoverColor);
-        ImGui.PushStyleColor(ImGuiCol.Text, TextColor);
+        ImGui.PushStyleColor(ImGuiCol.Button, this.Color);
+        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, this.HoverColor);
+        ImGui.PushStyleColor(ImGuiCol.Text, this.TextColor);
 
-        if (ImGui.Button(Label, new Vector2(Width ?? -1, 0)) || (ImGui.IsItemFocused() && ImGui.IsKeyPressed(ImGuiKey.Enter)))
+        if (ImGui.Button(this.Label, new Vector2(this.Width ?? -1, 0)) || (ImGui.IsItemFocused() && ImGui.IsKeyPressed(ImGuiKey.Enter)))
         {
             this.Click?.Invoke();
         }

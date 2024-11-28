@@ -31,18 +31,18 @@ public class Spinner : Component
         var aMin = Math.PI * 2.0f * ((float)start) / (float)NUM_SEGMENTS;
         var aMax = Math.PI * 2.0f * ((float)NUM_SEGMENTS - 3) / (float)NUM_SEGMENTS;
 
-        var centre = new Vector2(pos.X + radius, pos.Y + radius + framePadding.Y);
+        var centre = new Vector2(pos.X + this.radius, pos.Y + this.radius + framePadding.Y);
 
         var drawList = ImGui.GetWindowDrawList();
 
         for (var i = 0; i < NUM_SEGMENTS; i++)
         {
             var a = aMin + (i / (float)NUM_SEGMENTS) * (aMax - aMin);
-            drawList.PathLineTo(new Vector2((float)(centre.X + Math.Cos(a + time * 8) * radius),
-                (float)(centre.Y + Math.Sin(a + time * 8) * radius)));
+            drawList.PathLineTo(new Vector2((float)(centre.X + Math.Cos(a + time * 8) * this.radius),
+                (float)(centre.Y + Math.Sin(a + time * 8) * this.radius)));
         }
 
-        drawList.PathStroke(this.color, ImDrawFlags.RoundCornersAll, thickness);
+        drawList.PathStroke(this.color, ImDrawFlags.RoundCornersAll, this.thickness);
 
         base.Draw();
     }

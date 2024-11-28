@@ -22,7 +22,7 @@ public class NumericSettingsEntry : SettingsEntry<int>
 
         ImGuiHelpers.TextWrapped(this.Name);
 
-        if (ImGui.InputInt(string.Empty, ref nativeValue, Step))
+        if (ImGui.InputInt(string.Empty, ref nativeValue, this.Step))
         {
             this.InternalValue = Math.Max(this.MinValue, Math.Min(this.MaxValue, nativeValue));
         }

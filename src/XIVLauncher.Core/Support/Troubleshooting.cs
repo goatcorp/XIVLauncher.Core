@@ -33,7 +33,7 @@ namespace XIVLauncher.Core.Support
             try
             {
                 var fixedContext =
-                    context?.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ??
+                    context?.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ??
                     string.Empty;
 
                 var payload = new ExceptionPayload

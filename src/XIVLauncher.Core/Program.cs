@@ -69,7 +69,7 @@ sealed class Program
 
     private const string APP_NAME = "xlcore";
 
-    private static string[] mainArgs = { };
+    private static string[] mainArgs = [];
 
     private static uint invalidationFrames = 0;
     private static Vector2 lastMousePosition = Vector2.Zero;
@@ -160,7 +160,7 @@ sealed class Program
     /// <returns>A <see cref="DalamudUpdater"/> instance.</returns>
     private static DalamudUpdater CreateDalamudUpdater()
     {
-        FileInfo runnerOverride = null;
+        FileInfo? runnerOverride = null;
         if (Config.DalamudManualInjectPath is not null &&
             Config.DalamudManualInjectionEnabled == true &&
             Config.DalamudManualInjectPath.Exists &&
@@ -200,8 +200,8 @@ sealed class Program
 
         Loc.SetupWithFallbacks();
 
-        Dictionary<uint, string> apps = new Dictionary<uint, string>();
-        uint[] ignoredIds = { 0, STEAM_APP_ID, STEAM_APP_ID_FT};
+        Dictionary<uint, string> apps = [];
+        uint[] ignoredIds = [0, STEAM_APP_ID, STEAM_APP_ID_FT];
         if (!ignoredIds.Contains(CoreEnvironmentSettings.SteamAppId))
         {
             apps.Add(CoreEnvironmentSettings.SteamAppId, "XLM");
@@ -370,7 +370,7 @@ sealed class Program
         if (Patcher is not null)
         {
             Patcher.CancelAllDownloads();
-            Task.Run(async() =>
+            Task.Run(async () =>
             {
                 await PatchManager.UnInitializeAcquisition().ConfigureAwait(false);
                 Environment.Exit(0);
@@ -480,7 +480,7 @@ sealed class Program
     {
         storage.GetFolder("logs").Delete(true);
         storage.GetFolder("logs");
-        string[] logfiles = { "dalamud.boot.log", "dalamud.boot.old.log", "dalamud.log", "dalamud.injector.log" };
+        string[] logfiles = ["dalamud.boot.log", "dalamud.boot.old.log", "dalamud.log", "dalamud.injector.log"];
         foreach (string logfile in logfiles)
             if (storage.GetFile(logfile).Exists) storage.GetFile(logfile).Delete();
         if (tsbutton)

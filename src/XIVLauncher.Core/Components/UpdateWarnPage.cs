@@ -35,7 +35,7 @@ public class UpdateWarnPage : Page
 
         if (ImGui.Button("###finishFtsButton", new Vector2(649, 101)))
         {
-            App.FinishFromUpdateWarn();
+            this.App.FinishFromUpdateWarn();
         }
 
         ImGui.PopStyleColor(3);

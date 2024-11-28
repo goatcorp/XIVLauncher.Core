@@ -13,7 +13,7 @@ public class KeychainSecretProvider : ISecretProvider
 
     public KeychainSecretProvider()
     {
-        this.IsAvailable = SetDummyAndCheck();
+        this.IsAvailable = this.SetDummyAndCheck();
     }
 
     public bool SetDummyAndCheck()

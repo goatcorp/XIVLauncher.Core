@@ -24,34 +24,34 @@ public class FtsPage : Page
         {
             if (CoreEnvironmentSettings.IsDeckFirstRun.Value)
             {
-                App.State = LauncherApp.LauncherState.Fts;
+                this.App.State = LauncherApp.LauncherState.Fts;
                 return;
             }
             else
                 return;
         }
 
-        if (!(App.Settings.CompletedFts ?? false) && Program.IsSteamDeckHardware)
+        if (!(this.App.Settings.CompletedFts ?? false) && Program.IsSteamDeckHardware)
         {
-            App.State = LauncherApp.LauncherState.Fts;
+            this.App.State = LauncherApp.LauncherState.Fts;
             return;
         }
 
         if (Program.IsSteamDeckHardware && (Program.Steam == null || !Program.Steam.IsValid))
         {
             // If IsIgnoringSteam == true, skip the error screen. This fixes a bug with Steam Deck always showing the Fts Error screen.
-            if (App.Settings.IsIgnoringSteam ?? false) return;
-            App.State = LauncherApp.LauncherState.Fts;
+            if (this.App.Settings.IsIgnoringSteam ?? false) return;
+            this.App.State = LauncherApp.LauncherState.Fts;
             this.isSteamDeckAppIdError = true;
         }
     }
 
     private void FinishFts(bool save)
     {
-        App.State = LauncherApp.LauncherState.Main;
+        this.App.State = LauncherApp.LauncherState.Main;
 
         if (save)
-            App.Settings.CompletedFts = true;
+            this.App.Settings.CompletedFts = true;
     }
 
     public override void Draw()
