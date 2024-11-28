@@ -14,7 +14,7 @@ public class FileSecretProvider : ISecretProvider
         if (configFile.Exists)
             this.savedPasswords = JsonSerializer.Deserialize<Dictionary<string, string>>(configFile.OpenText().ReadToEnd())!;
 
-        this.savedPasswords ??= new Dictionary<string, string>();
+        this.savedPasswords ??= [];
     }
 
     public string? GetPassword(string accountName)
@@ -36,14 +36,14 @@ public class FileSecretProvider : ISecretProvider
             this.savedPasswords.Add(accountName, password);
         }
 
-        Save();
+        this.Save();
     }
 
     public void DeletePassword(string accountName)
     {
         this.savedPasswords.Remove(accountName);
 
-        Save();
+        this.Save();
     }
 
     private void Save()

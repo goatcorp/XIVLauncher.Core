@@ -51,13 +51,13 @@ public class ImGuiBindings : IDisposable
 
     // Image trackers
     private readonly Dictionary<TextureView, ResourceSetInfo> setsByView
-        = new Dictionary<TextureView, ResourceSetInfo>();
+        = [];
 
     private readonly Dictionary<Texture, TextureView> autoViewsByTexture
-        = new Dictionary<Texture, TextureView>();
+        = [];
 
-    private readonly Dictionary<IntPtr, ResourceSetInfo> viewsById = new Dictionary<IntPtr, ResourceSetInfo>();
-    private readonly List<IDisposable> ownedResources = new List<IDisposable>();
+    private readonly Dictionary<IntPtr, ResourceSetInfo> viewsById = [];
+    private readonly List<IDisposable> ownedResources = [];
     private int lastAssignedID = 100;
 
     private delegate void SetClipboardTextDelegate(IntPtr userData, string text);
@@ -74,8 +74,8 @@ public class ImGuiBindings : IDisposable
     public ImGuiBindings(GraphicsDevice gd, OutputDescription outputDescription, int width, int height, FileInfo iniPath, float fontPxSize)
     {
         this.gd = gd;
-        windowWidth = width;
-        windowHeight = height;
+        this.windowWidth = width;
+        this.windowHeight = height;
 
         IntPtr context = ImGui.CreateContext();
         ImGui.SetCurrentContext(context);
@@ -85,37 +85,37 @@ public class ImGuiBindings : IDisposable
         ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard | ImGuiConfigFlags.NavEnableGamepad;
         ImGui.GetIO().BackendFlags |= ImGuiBackendFlags.HasGamepad;
 
-        SetIniPath(iniPath.FullName);
+        this.SetIniPath(iniPath.FullName);
 
-        setText = new SetClipboardTextDelegate(SetClipboardText);
-        getText = new GetClipboardTextDelegate(GetClipboardText);
+        this.setText = new SetClipboardTextDelegate(SetClipboardText);
+        this.getText = new GetClipboardTextDelegate(GetClipboardText);
 
         var io = ImGui.GetIO();
-        io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(setText);
-        io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(getText);
+        io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(this.setText);
+        io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(this.getText);
         io.ClipboardUserData = IntPtr.Zero;
 
-        CreateDeviceResources(gd, outputDescription, fontPxSize);
+        this.CreateDeviceResources(gd, outputDescription, fontPxSize);
         SetKeyMappings();
 
-        SetPerFrameImGuiData(1f / 60f);
+        this.SetPerFrameImGuiData(1f / 60f);
 
         ImGui.NewFrame();
-        frameBegun = true;
+        this.frameBegun = true;
     }
 
     private void SetIniPath(string iniPath)
     {
-        if (iniPathPtr != IntPtr.Zero)
+        if (this.iniPathPtr != IntPtr.Zero)
         {
-            Marshal.FreeHGlobal(iniPathPtr);
+            Marshal.FreeHGlobal(this.iniPathPtr);
         }
 
-        iniPathPtr = Marshal.StringToHGlobalAnsi(iniPath);
+        this.iniPathPtr = Marshal.StringToHGlobalAnsi(iniPath);
 
         unsafe
         {
-            ImGui.GetIO().NativePtr->IniFilename = (byte*)iniPathPtr.ToPointer();
+            ImGui.GetIO().NativePtr->IniFilename = (byte*)this.iniPathPtr.ToPointer();
         }
     }
 
@@ -132,49 +132,49 @@ public class ImGuiBindings : IDisposable
 
     public void WindowResized(int width, int height)
     {
-        windowWidth = width;
-        windowHeight = height;
+        this.windowWidth = width;
+        this.windowHeight = height;
     }
 
     public void DestroyDeviceObjects()
     {
-        Dispose();
+        this.Dispose();
     }
 
     public void CreateDeviceResources(GraphicsDevice gd, OutputDescription outputDescription, float fontPxSize)
     {
         this.gd = gd;
         ResourceFactory factory = gd.ResourceFactory;
-        vertexBuffer = factory.CreateBuffer(new BufferDescription(10000, BufferUsage.VertexBuffer | BufferUsage.Dynamic));
-        vertexBuffer.Name = "ImGui.NET Vertex Buffer";
-        indexBuffer = factory.CreateBuffer(new BufferDescription(2000, BufferUsage.IndexBuffer | BufferUsage.Dynamic));
-        indexBuffer.Name = "ImGui.NET Index Buffer";
+        this.vertexBuffer = factory.CreateBuffer(new BufferDescription(10000, BufferUsage.VertexBuffer | BufferUsage.Dynamic));
+        this.vertexBuffer.Name = "ImGui.NET Vertex Buffer";
+        this.indexBuffer = factory.CreateBuffer(new BufferDescription(2000, BufferUsage.IndexBuffer | BufferUsage.Dynamic));
+        this.indexBuffer.Name = "ImGui.NET Index Buffer";
 
         var fontMr = new FontManager();
         fontMr.SetupFonts(fontPxSize);
-        RecreateFontDeviceTexture(gd);
+        this.RecreateFontDeviceTexture(gd);
         Log.Debug("Fonts OK!");
 
-        projMatrixBuffer = factory.CreateBuffer(new BufferDescription(64, BufferUsage.UniformBuffer | BufferUsage.Dynamic));
-        projMatrixBuffer.Name = "ImGui.NET Projection Buffer";
+        this.projMatrixBuffer = factory.CreateBuffer(new BufferDescription(64, BufferUsage.UniformBuffer | BufferUsage.Dynamic));
+        this.projMatrixBuffer.Name = "ImGui.NET Projection Buffer";
 
-        byte[] vertexShaderBytes = LoadEmbeddedShaderCode(gd.ResourceFactory, "imgui-vertex", ShaderStages.Vertex);
-        byte[] fragmentShaderBytes = LoadEmbeddedShaderCode(gd.ResourceFactory, "imgui-frag", ShaderStages.Fragment);
-        vertexShader = factory.CreateShader(new ShaderDescription(ShaderStages.Vertex, vertexShaderBytes, gd.BackendType == GraphicsBackend.Metal ? "VS" : "main"));
-        fragmentShader = factory.CreateShader(new ShaderDescription(ShaderStages.Fragment, fragmentShaderBytes, gd.BackendType == GraphicsBackend.Metal ? "FS" : "main"));
+        byte[] vertexShaderBytes = this.LoadEmbeddedShaderCode(gd.ResourceFactory, "imgui-vertex", ShaderStages.Vertex);
+        byte[] fragmentShaderBytes = this.LoadEmbeddedShaderCode(gd.ResourceFactory, "imgui-frag", ShaderStages.Fragment);
+        this.vertexShader = factory.CreateShader(new ShaderDescription(ShaderStages.Vertex, vertexShaderBytes, gd.BackendType == GraphicsBackend.Metal ? "VS" : "main"));
+        this.fragmentShader = factory.CreateShader(new ShaderDescription(ShaderStages.Fragment, fragmentShaderBytes, gd.BackendType == GraphicsBackend.Metal ? "FS" : "main"));
 
-        VertexLayoutDescription[] vertexLayouts = new VertexLayoutDescription[]
-        {
+        VertexLayoutDescription[] vertexLayouts =
+        [
             new VertexLayoutDescription(
                 new VertexElementDescription("in_position", VertexElementSemantic.Position, VertexElementFormat.Float2),
                 new VertexElementDescription("in_texCoord", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
                 new VertexElementDescription("in_color", VertexElementSemantic.Color, VertexElementFormat.Byte4_Norm))
-        };
+        ];
 
-        layout = factory.CreateResourceLayout(new ResourceLayoutDescription(
+        this.layout = factory.CreateResourceLayout(new ResourceLayoutDescription(
             new ResourceLayoutElementDescription("ProjectionMatrixBuffer", ResourceKind.UniformBuffer, ShaderStages.Vertex),
             new ResourceLayoutElementDescription("MainSampler", ResourceKind.Sampler, ShaderStages.Fragment)));
-        textureLayout = factory.CreateResourceLayout(new ResourceLayoutDescription(
+        this.textureLayout = factory.CreateResourceLayout(new ResourceLayoutDescription(
             new ResourceLayoutElementDescription("MainTexture", ResourceKind.TextureReadOnly, ShaderStages.Fragment)));
 
         GraphicsPipelineDescription pd = new GraphicsPipelineDescription(
@@ -182,17 +182,17 @@ public class ImGuiBindings : IDisposable
             new DepthStencilStateDescription(false, false, ComparisonKind.Always),
             new RasterizerStateDescription(FaceCullMode.None, PolygonFillMode.Solid, FrontFace.Clockwise, false, true),
             PrimitiveTopology.TriangleList,
-            new ShaderSetDescription(vertexLayouts, new[] { vertexShader, fragmentShader }),
-            new ResourceLayout[] { layout, textureLayout },
+            new ShaderSetDescription(vertexLayouts, [this.vertexShader, this.fragmentShader]),
+            [this.layout, this.textureLayout],
             outputDescription,
             ResourceBindingModel.Default);
-        pipeline = factory.CreateGraphicsPipeline(ref pd);
+        this.pipeline = factory.CreateGraphicsPipeline(ref pd);
 
-        mainResourceSet = factory.CreateResourceSet(new ResourceSetDescription(layout,
-            projMatrixBuffer,
+        this.mainResourceSet = factory.CreateResourceSet(new ResourceSetDescription(this.layout,
+            this.projMatrixBuffer,
             gd.PointSampler));
 
-        fontTextureResourceSet = factory.CreateResourceSet(new ResourceSetDescription(textureLayout, fontTextureView));
+        this.fontTextureResourceSet = factory.CreateResourceSet(new ResourceSetDescription(this.textureLayout, this.fontTextureView));
     }
 
     /// <summary>
@@ -201,14 +201,14 @@ public class ImGuiBindings : IDisposable
     /// </summary>
     public IntPtr GetOrCreateImGuiBinding(ResourceFactory factory, TextureView textureView)
     {
-        if (!setsByView.TryGetValue(textureView, out ResourceSetInfo rsi))
+        if (!this.setsByView.TryGetValue(textureView, out ResourceSetInfo rsi))
         {
-            ResourceSet resourceSet = factory.CreateResourceSet(new ResourceSetDescription(textureLayout, textureView));
-            rsi = new ResourceSetInfo(GetNextImGuiBindingID(), resourceSet);
+            ResourceSet resourceSet = factory.CreateResourceSet(new ResourceSetDescription(this.textureLayout, textureView));
+            rsi = new ResourceSetInfo(this.GetNextImGuiBindingID(), resourceSet);
 
-            setsByView.Add(textureView, rsi);
-            viewsById.Add(rsi.ImGuiBinding, rsi);
-            ownedResources.Add(resourceSet);
+            this.setsByView.Add(textureView, rsi);
+            this.viewsById.Add(rsi.ImGuiBinding, rsi);
+            this.ownedResources.Add(resourceSet);
         }
 
         return rsi.ImGuiBinding;
@@ -216,7 +216,7 @@ public class ImGuiBindings : IDisposable
 
     private IntPtr GetNextImGuiBindingID()
     {
-        int newID = lastAssignedID++;
+        int newID = this.lastAssignedID++;
         return (IntPtr)newID;
     }
 
@@ -226,14 +226,14 @@ public class ImGuiBindings : IDisposable
     /// </summary>
     public IntPtr GetOrCreateImGuiBinding(ResourceFactory factory, Texture texture)
     {
-        if (!autoViewsByTexture.TryGetValue(texture, out var textureView))
+        if (!this.autoViewsByTexture.TryGetValue(texture, out var textureView))
         {
             textureView = factory.CreateTextureView(texture);
-            autoViewsByTexture.Add(texture, textureView);
-            ownedResources.Add(textureView);
+            this.autoViewsByTexture.Add(texture, textureView);
+            this.ownedResources.Add(textureView);
         }
 
-        return GetOrCreateImGuiBinding(factory, textureView);
+        return this.GetOrCreateImGuiBinding(factory, textureView);
     }
 
     /// <summary>
@@ -241,7 +241,7 @@ public class ImGuiBindings : IDisposable
     /// </summary>
     public ResourceSet GetImageResourceSet(IntPtr imGuiBinding)
     {
-        if (!viewsById.TryGetValue(imGuiBinding, out ResourceSetInfo tvi))
+        if (!this.viewsById.TryGetValue(imGuiBinding, out ResourceSetInfo tvi))
         {
             throw new InvalidOperationException("No registered ImGui binding with id " + imGuiBinding.ToString());
         }
@@ -251,16 +251,16 @@ public class ImGuiBindings : IDisposable
 
     public void ClearCachedImageResources()
     {
-        foreach (IDisposable resource in ownedResources)
+        foreach (IDisposable resource in this.ownedResources)
         {
             resource.Dispose();
         }
 
-        ownedResources.Clear();
-        setsByView.Clear();
-        viewsById.Clear();
-        autoViewsByTexture.Clear();
-        lastAssignedID = 100;
+        this.ownedResources.Clear();
+        this.setsByView.Clear();
+        this.viewsById.Clear();
+        this.autoViewsByTexture.Clear();
+        this.lastAssignedID = 100;
     }
 
     private byte[] LoadEmbeddedShaderCode(ResourceFactory factory, string name, ShaderStages stage)
@@ -307,18 +307,18 @@ public class ImGuiBindings : IDisposable
         int width, height, bytesPerPixel;
         io.Fonts.GetTexDataAsRGBA32(out pixels, out width, out height, out bytesPerPixel);
         // Store our identifier
-        io.Fonts.SetTexID(fontAtlasID);
+        io.Fonts.SetTexID(this.fontAtlasID);
 
-        fontTexture = gd.ResourceFactory.CreateTexture(TextureDescription.Texture2D(
+        this.fontTexture = gd.ResourceFactory.CreateTexture(TextureDescription.Texture2D(
             (uint)width,
             (uint)height,
             1,
             1,
             PixelFormat.R8_G8_B8_A8_UNorm,
             TextureUsage.Sampled));
-        fontTexture.Name = "ImGui.NET Font Texture";
+        this.fontTexture.Name = "ImGui.NET Font Texture";
         gd.UpdateTexture(
-            fontTexture,
+            this.fontTexture,
             pixels,
             (uint)(bytesPerPixel * width * height),
             0,
@@ -329,7 +329,7 @@ public class ImGuiBindings : IDisposable
             1,
             0,
             0);
-        fontTextureView = gd.ResourceFactory.CreateTextureView(fontTexture);
+        this.fontTextureView = gd.ResourceFactory.CreateTextureView(this.fontTexture);
 
         io.Fonts.ClearTexData();
     }
@@ -342,11 +342,11 @@ public class ImGuiBindings : IDisposable
     /// </summary>
     public void Render(GraphicsDevice gd, CommandList cl)
     {
-        if (frameBegun)
+        if (this.frameBegun)
         {
-            frameBegun = false;
+            this.frameBegun = false;
             ImGui.Render();
-            RenderImDrawData(ImGui.GetDrawData(), gd, cl);
+            this.RenderImDrawData(ImGui.GetDrawData(), gd, cl);
         }
     }
 
@@ -355,15 +355,15 @@ public class ImGuiBindings : IDisposable
     /// </summary>
     public void Update(float deltaSeconds, InputSnapshot snapshot)
     {
-        if (frameBegun)
+        if (this.frameBegun)
         {
             ImGui.Render();
         }
 
-        SetPerFrameImGuiData(deltaSeconds);
-        UpdateImGuiInput(snapshot);
+        this.SetPerFrameImGuiData(deltaSeconds);
+        this.UpdateImGuiInput(snapshot);
 
-        frameBegun = true;
+        this.frameBegun = true;
         ImGui.NewFrame();
     }
 
@@ -375,9 +375,9 @@ public class ImGuiBindings : IDisposable
     {
         ImGuiIOPtr io = ImGui.GetIO();
         io.DisplaySize = new Vector2(
-            windowWidth / scaleFactor.X,
-            windowHeight / scaleFactor.Y);
-        io.DisplayFramebufferScale = scaleFactor;
+            this.windowWidth / this.scaleFactor.X,
+            this.windowHeight / this.scaleFactor.Y);
+        io.DisplayFramebufferScale = this.scaleFactor;
         io.DeltaTime = deltaSeconds; // DeltaTime is in seconds.
     }
 
@@ -436,29 +436,29 @@ public class ImGuiBindings : IDisposable
 
             if (keyEvent.Key == Key.ControlLeft)
             {
-                controlDown = keyEvent.Down;
+                this.controlDown = keyEvent.Down;
             }
 
             if (keyEvent.Key == Key.ShiftLeft)
             {
-                shiftDown = keyEvent.Down;
+                this.shiftDown = keyEvent.Down;
             }
 
             if (keyEvent.Key == Key.AltLeft)
             {
-                altDown = keyEvent.Down;
+                this.altDown = keyEvent.Down;
             }
 
             if (keyEvent.Key == Key.WinLeft)
             {
-                winKeyDown = keyEvent.Down;
+                this.winKeyDown = keyEvent.Down;
             }
         }
 
-        io.KeyCtrl = controlDown;
-        io.KeyAlt = altDown;
-        io.KeyShift = shiftDown;
-        io.KeySuper = winKeyDown;
+        io.KeyCtrl = this.controlDown;
+        io.KeyAlt = this.altDown;
+        io.KeyShift = this.shiftDown;
+        io.KeySuper = this.winKeyDown;
     }
 
     private static void SetKeyMappings()
@@ -499,18 +499,18 @@ public class ImGuiBindings : IDisposable
 
         uint totalVbSize = (uint)(drawData.TotalVtxCount * Unsafe.SizeOf<ImDrawVert>());
 
-        if (totalVbSize > vertexBuffer.SizeInBytes)
+        if (totalVbSize > this.vertexBuffer.SizeInBytes)
         {
-            gd.DisposeWhenIdle(vertexBuffer);
-            vertexBuffer = gd.ResourceFactory.CreateBuffer(new BufferDescription((uint)(totalVbSize * 1.5f), BufferUsage.VertexBuffer | BufferUsage.Dynamic));
+            gd.DisposeWhenIdle(this.vertexBuffer);
+            this.vertexBuffer = gd.ResourceFactory.CreateBuffer(new BufferDescription((uint)(totalVbSize * 1.5f), BufferUsage.VertexBuffer | BufferUsage.Dynamic));
         }
 
         uint totalIbSize = (uint)(drawData.TotalIdxCount * sizeof(ushort));
 
-        if (totalIbSize > indexBuffer.SizeInBytes)
+        if (totalIbSize > this.indexBuffer.SizeInBytes)
         {
-            gd.DisposeWhenIdle(indexBuffer);
-            indexBuffer = gd.ResourceFactory.CreateBuffer(new BufferDescription((uint)(totalIbSize * 1.5f), BufferUsage.IndexBuffer | BufferUsage.Dynamic));
+            gd.DisposeWhenIdle(this.indexBuffer);
+            this.indexBuffer = gd.ResourceFactory.CreateBuffer(new BufferDescription((uint)(totalIbSize * 1.5f), BufferUsage.IndexBuffer | BufferUsage.Dynamic));
         }
 
         for (int i = 0; i < drawData.CmdListsCount; i++)
@@ -518,13 +518,13 @@ public class ImGuiBindings : IDisposable
             ImDrawListPtr cmdList = drawData.CmdListsRange[i];
 
             cl.UpdateBuffer(
-                vertexBuffer,
+                this.vertexBuffer,
                 vertexOffsetInVertices * (uint)Unsafe.SizeOf<ImDrawVert>(),
                 cmdList.VtxBuffer.Data,
                 (uint)(cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>()));
 
             cl.UpdateBuffer(
-                indexBuffer,
+                this.indexBuffer,
                 indexOffsetInElements * sizeof(ushort),
                 cmdList.IdxBuffer.Data,
                 (uint)(cmdList.IdxBuffer.Size * sizeof(ushort)));
@@ -545,10 +545,10 @@ public class ImGuiBindings : IDisposable
 
         this.gd.UpdateBuffer(this.projMatrixBuffer, 0, ref mvp);
 
-        cl.SetVertexBuffer(0, vertexBuffer);
-        cl.SetIndexBuffer(indexBuffer, IndexFormat.UInt16);
-        cl.SetPipeline(pipeline);
-        cl.SetGraphicsResourceSet(0, mainResourceSet);
+        cl.SetVertexBuffer(0, this.vertexBuffer);
+        cl.SetIndexBuffer(this.indexBuffer, IndexFormat.UInt16);
+        cl.SetPipeline(this.pipeline);
+        cl.SetGraphicsResourceSet(0, this.mainResourceSet);
 
         drawData.ScaleClipRects(io.DisplayFramebufferScale);
 
@@ -572,13 +572,13 @@ public class ImGuiBindings : IDisposable
                 {
                     if (pcmd.TextureId != IntPtr.Zero)
                     {
-                        if (pcmd.TextureId == fontAtlasID)
+                        if (pcmd.TextureId == this.fontAtlasID)
                         {
-                            cl.SetGraphicsResourceSet(1, fontTextureResourceSet);
+                            cl.SetGraphicsResourceSet(1, this.fontTextureResourceSet);
                         }
                         else
                         {
-                            cl.SetGraphicsResourceSet(1, GetImageResourceSet(pcmd.TextureId));
+                            cl.SetGraphicsResourceSet(1, this.GetImageResourceSet(pcmd.TextureId));
                         }
                     }
 
@@ -603,19 +603,19 @@ public class ImGuiBindings : IDisposable
     /// </summary>
     public void Dispose()
     {
-        vertexBuffer.Dispose();
-        indexBuffer.Dispose();
-        projMatrixBuffer.Dispose();
-        fontTexture.Dispose();
-        fontTextureView.Dispose();
-        vertexShader.Dispose();
-        fragmentShader.Dispose();
-        layout.Dispose();
-        textureLayout.Dispose();
-        pipeline.Dispose();
-        mainResourceSet.Dispose();
+        this.vertexBuffer.Dispose();
+        this.indexBuffer.Dispose();
+        this.projMatrixBuffer.Dispose();
+        this.fontTexture.Dispose();
+        this.fontTextureView.Dispose();
+        this.vertexShader.Dispose();
+        this.fragmentShader.Dispose();
+        this.layout.Dispose();
+        this.textureLayout.Dispose();
+        this.pipeline.Dispose();
+        this.mainResourceSet.Dispose();
 
-        foreach (IDisposable resource in ownedResources)
+        foreach (IDisposable resource in this.ownedResources)
         {
             resource.Dispose();
         }
@@ -628,8 +628,8 @@ public class ImGuiBindings : IDisposable
 
         public ResourceSetInfo(IntPtr imGuiBinding, ResourceSet resourceSet)
         {
-            ImGuiBinding = imGuiBinding;
-            ResourceSet = resourceSet;
+            this.ImGuiBinding = imGuiBinding;
+            this.ResourceSet = resourceSet;
         }
     }
 }

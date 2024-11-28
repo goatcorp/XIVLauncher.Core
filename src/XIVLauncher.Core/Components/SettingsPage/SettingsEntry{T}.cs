@@ -20,7 +20,7 @@ public class SettingsEntry<T> : SettingsEntry
 
     public Func<bool>? CheckVisibility { get; init; }
 
-    public override bool IsVisible => CheckVisibility?.Invoke() ?? true;
+    public override bool IsVisible => this.CheckVisibility?.Invoke() ?? true;
 
     public T? Value => this.InternalValue == default ? default : (T)this.InternalValue;
 
@@ -43,7 +43,7 @@ public class SettingsEntry<T> : SettingsEntry
             var value = this.Value as DirectoryInfo;
             var nativeBuffer = value?.FullName ?? string.Empty;
 
-            if (ImGui.InputText($"###{Id.ToString()}", ref nativeBuffer, 10000))
+            if (ImGui.InputText($"###{this.Id.ToString()}", ref nativeBuffer, 10000))
             {
                 this.InternalValue = !string.IsNullOrEmpty(nativeBuffer) ? new DirectoryInfo(nativeBuffer) : null;
             }
@@ -54,7 +54,7 @@ public class SettingsEntry<T> : SettingsEntry
 
             var nativeBuffer = this.Value as string ?? string.Empty;
 
-            if (ImGui.InputText($"###{Id.ToString()}", ref nativeBuffer, 1000))
+            if (ImGui.InputText($"###{this.Id.ToString()}", ref nativeBuffer, 1000))
             {
                 this.InternalValue = nativeBuffer;
             }
@@ -63,7 +63,7 @@ public class SettingsEntry<T> : SettingsEntry
         {
             var nativeValue = this.Value as bool? ?? false;
 
-            if (ImGui.Checkbox($"{Name}###{Id.ToString()}", ref nativeValue))
+            if (ImGui.Checkbox($"{this.Name}###{this.Id.ToString()}", ref nativeValue))
             {
                 this.InternalValue = nativeValue;
             }
@@ -76,7 +76,7 @@ public class SettingsEntry<T> : SettingsEntry
             var values = Enum.GetValues(type);
             var descriptions = values.Cast<Enum>().Select(x => x.GetAttribute<SettingsDescriptionAttribute>() ?? new SettingsDescriptionAttribute(x.ToString(), string.Empty)).ToArray();
 
-            if (ImGui.BeginCombo($"###{Id.ToString()}", descriptions[idx].FriendlyName))
+            if (ImGui.BeginCombo($"###{this.Id.ToString()}", descriptions[idx].FriendlyName))
             {
                 foreach (int value in values)
                 {

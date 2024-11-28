@@ -8,7 +8,7 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 public class SettingsTabTroubleshooting : SettingsTab
 {
     public override SettingsEntry[] Entries { get; } =
-    {
+    [
         new SettingsEntry<bool>("Hack: Disable gameoverlayrenderer.so", "Fixes some stuttering issues after 40+ minutes, but may affect steam overlay and input.", () => Program.Config.FixLDP ?? false, x => Program.Config.FixLDP = x),
         new SettingsEntry<bool>("Hack: XMODIFIERS=\"@im=null\"", "Fixes some mouse-related issues, some stuttering issues", () => Program.Config.FixIM ?? false, x => Program.Config.FixIM = x),
         new SettingsEntry<bool>($"Hack: Force locale to {(!string.IsNullOrEmpty(Program.CType) ? Program.CType : "C.UTF-8 (exact value depends on distro)")}",
@@ -23,7 +23,7 @@ public class SettingsTabTroubleshooting : SettingsTab
                 return null;
             }
         },
-    };
+    ];
     public override string Title => "Troubleshooting";
 
     public override void Draw()

@@ -8,44 +8,44 @@ namespace XIVLauncher.Core.Accounts;
 
 public class AccountManager
 {
-    public ObservableCollection<XivAccount> Accounts = new();
+    public ObservableCollection<XivAccount> Accounts = [];
 
     public XivAccount? CurrentAccount
     {
-        get { return Accounts.Count > 1 ? Accounts.FirstOrDefault(a => a.Id == Program.Config.CurrentAccountId) : Accounts.FirstOrDefault(); }
+        get { return this.Accounts.Count > 1 ? this.Accounts.FirstOrDefault(a => a.Id == Program.Config.CurrentAccountId) : this.Accounts.FirstOrDefault(); }
         set => Program.Config.CurrentAccountId = value?.Id;
     }
 
     public AccountManager(FileInfo configFile)
     {
         this.configFile = configFile;
-        Load();
+        this.Load();
 
-        Accounts.CollectionChanged += Accounts_CollectionChanged;
+        this.Accounts.CollectionChanged += this.Accounts_CollectionChanged;
     }
 
     private void Accounts_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
-        Save();
+        this.Save();
     }
 
     public void UpdatePassword(XivAccount account, string password)
     {
         Log.Information("UpdatePassword() called");
-        var existingAccount = Accounts.FirstOrDefault(a => a.Id == account.Id);
+        var existingAccount = this.Accounts.FirstOrDefault(a => a.Id == account.Id);
         if (existingAccount is not null) existingAccount.Password = password;
     }
 
     public void UpdateLastSuccessfulOtp(XivAccount account, string lastOtp)
     {
-        var existingAccount = Accounts.FirstOrDefault(a => a.Id == account.Id);
+        var existingAccount = this.Accounts.FirstOrDefault(a => a.Id == account.Id);
         if (existingAccount is not null) existingAccount.LastSuccessfulOtp = lastOtp;
-        Save();
+        this.Save();
     }
 
     public void AddAccount(XivAccount account)
     {
-        var existingAccount = Accounts.FirstOrDefault(a => a.Id == account.Id);
+        var existingAccount = this.Accounts.FirstOrDefault(a => a.Id == account.Id);
 
         Log.Verbose($"existingAccount: {existingAccount?.Id}");
 
@@ -59,12 +59,12 @@ public class AccountManager
         if (existingAccount != null)
             return;
 
-        Accounts.Add(account);
+        this.Accounts.Add(account);
     }
 
     public void RemoveAccount(XivAccount account)
     {
-        Accounts.Remove(account);
+        this.Accounts.Remove(account);
     }
 
     #region SaveLoad
@@ -73,21 +73,21 @@ public class AccountManager
 
     public void Save()
     {
-        File.WriteAllText(this.configFile.FullName, JsonConvert.SerializeObject(Accounts, Formatting.Indented));
+        File.WriteAllText(this.configFile.FullName, JsonConvert.SerializeObject(this.Accounts, Formatting.Indented));
     }
 
     public void Load()
     {
         if (!this.configFile.Exists)
         {
-            Save();
+            this.Save();
             return;
         }
 
-        Accounts = JsonConvert.DeserializeObject<ObservableCollection<XivAccount>>(File.ReadAllText(this.configFile.FullName));
+        this.Accounts = JsonConvert.DeserializeObject<ObservableCollection<XivAccount>>(File.ReadAllText(this.configFile.FullName));
 
         // If the file is corrupted, this will be null anyway
-        Accounts ??= new ObservableCollection<XivAccount>();
+        this.Accounts ??= [];
     }
 
     #endregion

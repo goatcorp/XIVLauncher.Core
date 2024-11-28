@@ -14,17 +14,17 @@ public class Checkbox : Component
 
     public bool Value
     {
-        get => inputBacking;
-        set => inputBacking = value;
+        get => this.inputBacking;
+        set => this.inputBacking = value;
     }
 
     public event Action<bool>? OnChange;
 
     public Checkbox(string label, bool value = false, bool isEnabled = true)
     {
-        Label = label;
-        Value = value;
-        IsEnabled = isEnabled;
+        this.Label = label;
+        this.Value = value;
+        this.IsEnabled = isEnabled;
     }
 
     public override void Draw()
@@ -40,7 +40,7 @@ public class Checkbox : Component
         if (!this.IsEnabled)
             ImGui.BeginDisabled();
 
-        if (ImGui.Checkbox($"###{Id}", ref inputBacking))
+        if (ImGui.Checkbox($"###{this.Id}", ref this.inputBacking))
         {
             this.OnChange?.Invoke(this.inputBacking);
         }
@@ -50,7 +50,7 @@ public class Checkbox : Component
 
         ImGui.SameLine();
 
-        ImGui.Text(Label);
+        ImGui.Text(this.Label);
 
         if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
         {

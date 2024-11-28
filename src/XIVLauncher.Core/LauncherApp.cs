@@ -133,7 +133,7 @@ public class LauncherApp : Component
 
         this.Accounts = new AccountManager(this.Storage.GetFile("accounts.json"));
         this.UniqueIdCache = new CommonUniqueIdCache(this.Storage.GetFile("uidCache.json"));
-        this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings, frontierUrl);
+        this.Launcher = new Launcher(Program.Steam, this.UniqueIdCache, Program.CommonSettings, frontierUrl);
 
         this.mainPage = new MainPage(this);
         this.setPage = new SettingsPage(this);
@@ -332,9 +332,9 @@ public class LauncherApp : Component
             const float BUTTON_WIDTH = 120f;
             ImGui.SetCursorPosX((ImGui.GetWindowWidth() - BUTTON_WIDTH) / 2);
 
-            if (ImGui.Button(modalButtonText, new Vector2(BUTTON_WIDTH, 40)))
+            if (ImGui.Button(this.modalButtonText, new Vector2(BUTTON_WIDTH, 40)))
             {
-                modalButtonPressAction();
+                this.modalButtonPressAction();
             }
 
             ImGui.EndPopup();

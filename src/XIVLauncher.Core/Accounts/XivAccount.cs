@@ -8,9 +8,9 @@ namespace XIVLauncher.Core.Accounts;
 public class XivAccount
 {
     [JsonIgnore]
-    public string Id => $"{UserName}-{UseOtp}-{UseSteamServiceAccount}";
+    public string Id => $"{this.UserName}-{this.UseOtp}-{this.UseSteamServiceAccount}";
 
-    public override string ToString() => Id;
+    public override string ToString() => this.Id;
 
     public string UserName { get; private set; }
 
@@ -19,17 +19,17 @@ public class XivAccount
     {
         get
         {
-            if (string.IsNullOrEmpty(UserName))
+            if (string.IsNullOrEmpty(this.UserName))
                 return string.Empty;
 
-            var credentials = Program.Secrets.GetPassword(UserName);
+            var credentials = Program.Secrets.GetPassword(this.UserName);
             return credentials ?? string.Empty;
         }
         set
         {
             if (!string.IsNullOrEmpty(value))
             {
-                Program.Secrets.SavePassword(UserName, value);
+                Program.Secrets.SavePassword(this.UserName, value);
             }
         }
     }
@@ -46,17 +46,17 @@ public class XivAccount
 
     public XivAccount(string userName)
     {
-        UserName = userName.ToLower();
+        this.UserName = userName.ToLower();
     }
 
     public string? FindCharacterThumb()
     {
-        if (string.IsNullOrEmpty(ChosenCharacterName) || string.IsNullOrEmpty(ChosenCharacterWorld))
+        if (string.IsNullOrEmpty(this.ChosenCharacterName) || string.IsNullOrEmpty(this.ChosenCharacterWorld))
             return null;
 
         try
         {
-            dynamic searchResponse = GetCharacterSearch(ChosenCharacterName, ChosenCharacterWorld)
+            dynamic searchResponse = GetCharacterSearch(this.ChosenCharacterName, this.ChosenCharacterWorld)
                                      .GetAwaiter().GetResult();
 
             if (searchResponse.Results.Count > 1) //If we get more than one match from XIVAPI
@@ -64,7 +64,7 @@ public class XivAccount
                 foreach (var accountInfo in searchResponse.Results)
                 {
                     //We have to check with it all lower in case they type their character name LiKe ThIsLoL. The server XIVAPI returns also contains the DC name, so let's just do a contains on the server to make it easy.
-                    if (accountInfo.Name.Value.ToLower() == ChosenCharacterName.ToLower() && accountInfo.Server.Value.ToLower().Contains(ChosenCharacterWorld.ToLower()))
+                    if (accountInfo.Name.Value.ToLower() == this.ChosenCharacterName.ToLower() && accountInfo.Server.Value.ToLower().Contains(this.ChosenCharacterWorld.ToLower()))
                     {
                         return accountInfo.Avatar.Value;
                     }

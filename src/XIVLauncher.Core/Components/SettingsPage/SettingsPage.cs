@@ -9,7 +9,7 @@ namespace XIVLauncher.Core.Components.SettingsPage;
 public class SettingsPage : Page
 {
     private readonly SettingsTab[] tabs =
-    {
+    [
         new SettingsTabGame(),
         new SettingsTabPatching(),
         new SettingsTabWine(),
@@ -17,7 +17,7 @@ public class SettingsPage : Page
         new SettingsTabAbout(),
         new SettingsTabDebug(),
         new SettingsTabTroubleshooting(),
-    };
+    ];
 
     private string searchInput = string.Empty;
 

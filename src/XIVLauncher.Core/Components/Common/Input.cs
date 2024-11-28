@@ -34,8 +34,8 @@ public class Input : Component
 
     public string Value
     {
-        get => inputBacking;
-        set => inputBacking = value;
+        get => this.inputBacking;
+        set => this.inputBacking = value;
     }
 
     public Input(
@@ -46,19 +46,19 @@ public class Input : Component
         bool isEnabled = true,
         ImGuiInputTextFlags flags = ImGuiInputTextFlags.None)
     {
-        Label = label;
-        Hint = hint;
-        MaxLength = maxLength;
-        Flags = flags;
-        IsEnabled = isEnabled;
-        Spacing = spacing ?? Vector2.Zero;
+        this.Label = label;
+        this.Hint = hint;
+        this.MaxLength = maxLength;
+        this.Flags = flags;
+        this.IsEnabled = isEnabled;
+        this.Spacing = spacing ?? Vector2.Zero;
 
-        SteamDeckPrompt = hint;
+        this.SteamDeckPrompt = hint;
 
         if (Program.Steam != null)
         {
             Program.Steam.OnGamepadTextInputDismissed += this.SteamOnOnGamepadTextInputDismissed;
-            HasSteamDeckInput = Program.IsSteamDeckHardware;
+            this.HasSteamDeckInput = Program.IsSteamDeckHardware;
         }
     }
 
@@ -80,10 +80,10 @@ public class Input : Component
         ImGui.PushStyleColor(ImGuiCol.TextDisabled, ImGuiColors.TextDisabled);
         ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.Text);
 
-        if (TakeKeyboardFocus && ImGui.IsWindowAppearing())
+        if (this.TakeKeyboardFocus && ImGui.IsWindowAppearing())
             ImGui.SetKeyboardFocusHere();
 
-        ImGui.Text(Label);
+        ImGui.Text(this.Label);
 
         if (!this.IsEnabled || this.isSteamDeckInputActive)
             ImGui.BeginDisabled();
@@ -93,20 +93,20 @@ public class Input : Component
 
         ImGui.PopStyleColor();
 
-        ImGui.InputTextWithHint($"###{Id}", Hint, ref inputBacking, MaxLength, Flags);
+        ImGui.InputTextWithHint($"###{this.Id}", this.Hint, ref this.inputBacking, this.MaxLength, this.Flags);
 
         if (ImGui.IsItemFocused() && ImGui.IsKeyPressed(ImGuiKey.Enter))
         {
             Enter?.Invoke();
         }
 
-        if (ImGui.IsItemActivated() && HasSteamDeckInput && Program.Steam != null && Program.Steam.IsValid)
+        if (ImGui.IsItemActivated() && this.HasSteamDeckInput && Program.Steam != null && Program.Steam.IsValid)
         {
-            this.isSteamDeckInputActive = Program.Steam?.ShowGamepadTextInput(Flags.HasFlag(ImGuiInputTextFlags.Password), false, SteamDeckPrompt, (int)MaxLength, this.inputBacking) ?? false;
+            this.isSteamDeckInputActive = Program.Steam?.ShowGamepadTextInput(this.Flags.HasFlag(ImGuiInputTextFlags.Password), false, this.SteamDeckPrompt, (int)this.MaxLength, this.inputBacking) ?? false;
             Log.Information("SteamDeck Input Active({Name}): {IsActive}", this.Label, this.isSteamDeckInputActive);
         }
 
-        ImGui.Dummy(Spacing);
+        ImGui.Dummy(this.Spacing);
 
         if (!this.IsEnabled || this.isSteamDeckInputActive)
             ImGui.EndDisabled();

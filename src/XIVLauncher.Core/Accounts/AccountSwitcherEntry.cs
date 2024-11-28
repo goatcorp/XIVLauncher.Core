@@ -13,13 +13,13 @@ class AccountSwitcherEntry
 
     public void UpdateProfileImage(DirectoryInfo storage)
     {
-        if (string.IsNullOrEmpty(Account.ThumbnailUrl))
+        if (string.IsNullOrEmpty(this.Account.ThumbnailUrl))
             return;
 
         var cacheFolder = Path.Combine(storage.FullName, "profilePictures");
         Directory.CreateDirectory(cacheFolder);
 
-        var uri = new Uri(Account.ThumbnailUrl);
+        var uri = new Uri(this.Account.ThumbnailUrl);
         var cacheFile = Path.Combine(cacheFolder, uri.Segments.Last());
 
         byte[] imageBytes;
