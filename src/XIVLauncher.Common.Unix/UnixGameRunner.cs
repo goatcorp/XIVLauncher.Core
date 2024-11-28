@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Unix.Compatibility;
@@ -24,6 +25,7 @@ public class UnixGameRunner : IGameRunner
     {
         if (dalamudOk)
         {
+            environment.Add("XL_PLATFORM", "Linux");
             return this.dalamudLauncher.Run(new FileInfo(path), arguments, environment);
         }
         else
