@@ -246,12 +246,6 @@ public class LauncherApp : Component
         this.State = LauncherState.Main;
     }
 
-    public void FinishFromUpdateWarn()
-    {
-        this.State = LauncherState.Main;
-        this.RunStartupTasks();
-    }
-
     public void RunStartupTasks()
     {
 #if FLATPAK
