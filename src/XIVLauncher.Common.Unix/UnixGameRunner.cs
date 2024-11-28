@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.PlatformAbstractions;
@@ -25,7 +26,14 @@ public class UnixGameRunner : IGameRunner
     {
         if (dalamudOk)
         {
-            environment.Add("XL_PLATFORM", "Linux");
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                environment.Add("XL_PLATFORM", "Linux");
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                environment.Add("XL_PLATFORM", "MacOS");
+            }
             return this.dalamudLauncher.Run(new FileInfo(path), arguments, environment);
         }
         else
