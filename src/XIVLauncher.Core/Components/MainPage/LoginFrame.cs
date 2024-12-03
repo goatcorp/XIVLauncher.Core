@@ -119,6 +119,13 @@ public class LoginFrame : Component
 
                 ImGui.Separator();
 
+                if (ImGui.MenuItem("Launch without any plugins"))
+                {
+                    this.OnLogin?.Invoke(LoginAction.GameNoPlugins);
+                }
+
+                ImGui.Separator();
+
                 if (ImGui.MenuItem("Launch without custom repo plugins"))
                 {
                     this.OnLogin?.Invoke(LoginAction.GameNoThirdparty);
