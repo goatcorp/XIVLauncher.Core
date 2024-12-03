@@ -369,7 +369,7 @@ public class MainPage : Page
 
             try
             {
-                using var process = await StartGameAndAddon(loginResult, isSteam, action == LoginAction.GameNoDalamud, action == LoginAction.GameNoThirdparty).ConfigureAwait(false);
+                using var process = await StartGameAndAddon(loginResult, isSteam, action == LoginAction.GameNoDalamud, action == LoginAction.GameNoPlugins, action == LoginAction.GameNoThirdparty).ConfigureAwait(false);
 
                 if (process is null)
                     throw new InvalidOperationException("Could not obtain Process Handle");
@@ -592,7 +592,7 @@ public class MainPage : Page
         }
     }
 
-    public async Task<Process> StartGameAndAddon(Launcher.LoginResult loginResult, bool isSteam, bool forceNoDalamud, bool noThird)
+    public async Task<Process> StartGameAndAddon(Launcher.LoginResult loginResult, bool isSteam, bool forceNoDalamud, bool noPlugins , bool noThird)
     {
         var dalamudOk = false;
 
@@ -620,7 +620,7 @@ public class MainPage : Page
         var dalamudLauncher = new DalamudLauncher(dalamudRunner, Program.DalamudUpdater,
             App.Settings.DalamudLoadMethod.GetValueOrDefault(DalamudLoadMethod.DllInject), App.Settings.GamePath,
             App.Storage.Root, App.Storage.GetFolder("logs"), App.Settings.ClientLanguage ?? ClientLanguage.English,
-            App.Settings.DalamudLoadDelay, false, false, noThird, Troubleshooting.GetTroubleshootingJson());
+            App.Settings.DalamudLoadDelay, false, noPlugins, noThird, Troubleshooting.GetTroubleshootingJson());
 
         try
         {
