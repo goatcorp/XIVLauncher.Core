@@ -12,7 +12,7 @@ namespace XIVLauncher.Core;
 public readonly struct LauncherClientConfig
 {
     private const string LAUNCHER_CONFIG_URL = "https://kamori.goats.dev/Launcher/GetLauncherClientConfig";
-    private const string FRONTIER_FALLBACK = "https://launcher.finalfantasyxiv.com/v650/index.html?rc_lang={0}&time={1}";
+    private const string FRONTIER_FALLBACK = "https://launcher.finalfantasyxiv.com/v710/index.html?rc_lang={0}&time={1}";
 
     public string frontierUrl { get; init; }
     public string? cutOffBootver { get; init; }
