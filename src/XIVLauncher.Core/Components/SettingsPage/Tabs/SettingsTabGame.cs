@@ -1,3 +1,4 @@
+using ImGuiNET;
 using XIVLauncher.Common;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
@@ -45,5 +46,10 @@ public class SettingsTabGame : SettingsTab
     public override void Draw()
     {
         base.Draw();
+
+        if (ImGui.Button("Reset UID Cache"))
+        {
+            Program.ResetUIDCache();
+        }
     }
 }

@@ -495,4 +495,6 @@ sealed class Program
         ClearTools(tsbutton);
         ClearLogs(true);
     }
+
+    public static void ResetUIDCache(bool tsbutton = false) => launcherApp.UniqueIdCache.Reset();
 }
