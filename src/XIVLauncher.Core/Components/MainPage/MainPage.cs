@@ -711,6 +711,12 @@ public class MainPage : Page
             System.Environment.SetEnvironmentVariable("XMODIFIERS", "@im=null");
         }
 
+        // Hack: Fix libicuuc dalamud crashes
+        if (App.Settings.FixError127 == true)
+        {
+            System.Environment.SetEnvironmentVariable("DOTNET_SYSTEM_GLOBALIZATION_USENLS", "true");
+        }
+
         // Deal with "Additional Arguments". VAR=value %command% -args
         var launchOptions = (App.Settings.AdditionalArgs ?? string.Empty).Split("%command%", 2);
         var launchEnv = "";

@@ -139,6 +139,7 @@ sealed class Program
         Config.FixLDP ??= false;
         Config.FixIM ??= false;
         Config.FixLocale ??= false;
+        Config.FixError127 ??= false;
     }
 
     public const uint STEAM_APP_ID = 39210;
