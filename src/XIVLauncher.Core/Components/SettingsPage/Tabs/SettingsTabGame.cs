@@ -38,7 +38,7 @@ public class SettingsTabGame : SettingsTab
         {
             CheckVisibility = () => !CoreEnvironmentSettings.IsSteamCompatTool,
         },
-        new SettingsEntry<bool>("Use Experimental UID Cache", "Tries to save your login token for the next start. Can result in launching with expired sessions.\nDisable if receiving FFXIV error 1012 or 500X.", () => Program.Config.IsUidCacheEnabled ?? false, x => Program.Config.IsUidCacheEnabled = x),
+        new SettingsEntry<bool>("Use Experimental UID Cache", "Tries to save your login token for the next start. Can result in launching with expired sessions.", () => Program.Config.IsUidCacheEnabled ?? false, x => Program.Config.IsUidCacheEnabled = x),
     };
 
     public override string Title => "Game";
@@ -47,9 +47,13 @@ public class SettingsTabGame : SettingsTab
     {
         base.Draw();
 
-        if (ImGui.Button("Reset UID Cache"))
+        if (Program.Config.IsUidCacheEnabled == true)
         {
-            Program.ResetUIDCache();
+            ImGui.Text("Reset the UID cache; use if you are getting FFXIV error 1012 or 500X.");
+            if (ImGui.Button("Reset UID Cache"))
+            {
+                Program.ResetUIDCache();
+            }
         }
     }
 }
