@@ -16,7 +16,7 @@ jobs:
       GITHUB_REPOSITORY: ${{ github.repository }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
           fetch-depth: 0
@@ -31,11 +31,11 @@ jobs:
           sudo apt update -y
           sudo apt install flatpak -y
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 
-          flatpak install --user org.freedesktop.Sdk.Extension.dotnet8/x86_64/23.08 -y
-          flatpak install --user org.freedesktop.Sdk/x86_64/23.08 -y
+          flatpak install --user org.freedesktop.Sdk.Extension.dotnet8/x86_64/24.08 -y
+          flatpak install --user org.freedesktop.Sdk/x86_64/24.08 -y
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x # Set this to be the same as the projects required dotnet version.
 
@@ -63,10 +63,10 @@ jobs:
         working-directory: ./src/XIVLauncher.Core/
         run: |
           curl -LO https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/dotnet/flatpak-dotnet-generator.py
-          python3 flatpak-dotnet-generator.py --dotnet 8 --freedesktop 23.08 nuget-dependencies.json XIVLauncher.Core.csproj
+          python3 flatpak-dotnet-generator.py --dotnet 8 --freedesktop 24.08 nuget-dependencies.json XIVLauncher.Core.csproj
 
       - name: Upload nuget-dependencies.json
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nuget-dependencies
           path: |
@@ -83,7 +83,7 @@ jobs:
           zip -r ./dist/XIVLauncher.Core-win10x64.zip ./src/XIVLauncher.Core/dist/XIVLauncher.Core-win10x64
 
       - name: Release on GitHub
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
           # body_path: .github/release_notices.md
