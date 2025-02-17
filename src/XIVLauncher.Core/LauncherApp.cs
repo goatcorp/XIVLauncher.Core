@@ -41,7 +41,6 @@ public class LauncherApp : Component
         Loading,
         OtpEntry,
         Fts,
-        UpdateWarn,
         SteamDeckPrompt,
     }
 
@@ -82,10 +81,6 @@ public class LauncherApp : Component
                     this.ftsPage.OnShow();
                     break;
 
-                case LauncherState.UpdateWarn:
-                    this.updateWarnPage.OnShow();
-                    break;
-
                 case LauncherState.SteamDeckPrompt:
                     this.steamDeckPromptPage.OnShow();
                     break;
@@ -103,7 +98,6 @@ public class LauncherApp : Component
         LauncherState.Loading => this.LoadingPage,
         LauncherState.OtpEntry => this.otpEntryPage,
         LauncherState.Fts => this.ftsPage,
-        LauncherState.UpdateWarn => this.updateWarnPage,
         LauncherState.SteamDeckPrompt => this.steamDeckPromptPage,
         _ => throw new ArgumentOutOfRangeException(nameof(this.state), this.state, null)
     };
@@ -122,12 +116,11 @@ public class LauncherApp : Component
     private readonly SettingsPage setPage;
     private readonly OtpEntryPage otpEntryPage;
     private readonly FtsPage ftsPage;
-    private readonly UpdateWarnPage updateWarnPage;
     private readonly SteamDeckPromptPage steamDeckPromptPage;
 
     private readonly Background background = new();
 
-    public LauncherApp(Storage storage, bool needsUpdateWarning, string frontierUrl, string? cutOffBootver)
+    public LauncherApp(Storage storage, string frontierUrl, string? cutOffBootver)
     {
         this.Storage = storage;
 
@@ -140,7 +133,6 @@ public class LauncherApp : Component
         this.otpEntryPage = new OtpEntryPage(this);
         this.LoadingPage = new LoadingPage(this);
         this.ftsPage = new FtsPage(this);
-        this.updateWarnPage = new UpdateWarnPage(this);
         this.steamDeckPromptPage = new SteamDeckPromptPage(this);
 
         if (!EnvironmentSettings.IsNoKillswitch && !string.IsNullOrEmpty(cutOffBootver))
@@ -158,14 +150,7 @@ public class LauncherApp : Component
             }
         }
 
-        if (needsUpdateWarning)
-        {
-            this.State = LauncherState.UpdateWarn;
-        }
-        else
-        {
-            this.RunStartupTasks();
-        }
+        this.RunStartupTasks();
 
 #if DEBUG
         IsDebug = true;
@@ -259,12 +244,6 @@ public class LauncherApp : Component
     public void StopLoading()
     {
         this.State = LauncherState.Main;
-    }
-
-    public void FinishFromUpdateWarn()
-    {
-        this.State = LauncherState.Main;
-        this.RunStartupTasks();
     }
 
     public void RunStartupTasks()
