@@ -288,3 +288,8 @@ src/Update.exe
 
 # XLCore build directory
 src/XIVLauncher.Core/build
+
+# Flatpak stuff
+flatpak-dotnet-generator.py
+nuget-dep*.json
+tmp*/
