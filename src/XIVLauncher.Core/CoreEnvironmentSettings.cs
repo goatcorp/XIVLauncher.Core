@@ -11,7 +11,6 @@ public static class CoreEnvironmentSettings
     public static bool? IsDeckGameMode => CheckEnvBoolOrNull("XL_GAMEMODE");
     public static bool IsSteamGamepadUIVar => CheckEnvBool("SteamGamepadUI");
     public static bool? IsDeckFirstRun => CheckEnvBoolOrNull("XL_FIRSTRUN");
-    public static bool IsUpgrade => CheckEnvBool("XL_SHOW_UPGRADE");
     public static bool ClearSettings => CheckEnvBool("XL_CLEAR_SETTINGS");
     public static bool ClearPrefix => CheckEnvBool("XL_CLEAR_PREFIX");
     public static bool ClearDalamud => CheckEnvBool("XL_CLEAR_DALAMUD");
@@ -30,14 +29,14 @@ public static class CoreEnvironmentSettings
 
     private static bool CheckEnvBool(string key)
     {
-        string val = (System.Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
+        string val = (Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
         if (val == "1" || val == "true" || val == "yes" || val == "y" || val == "on") return true;
         return false;
     }
 
     private static bool? CheckEnvBoolOrNull(string key)
     {
-        string val = (System.Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
+        string val = (Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
         if (val == "1" || val == "true" || val == "yes" || val == "y" || val == "on") return true;
         if (val == "0" || val == "false" || val == "no" || val == "n" || val == "off") return false;
         return null;
@@ -53,14 +52,14 @@ public static class CoreEnvironmentSettings
     public static uint GetAppId(string? appid)
     {
         uint.TryParse(appid, out var result);
-        
+
         // Will return 0 if appid is invalid (or zero).
         return result;
     }
 
     public static string GetCType()
     {
-        if (System.OperatingSystem.IsWindows())
+        if (OperatingSystem.IsWindows())
             return "";
         var psi = new ProcessStartInfo("sh");
         psi.Arguments = "-c \"locale -a 2>/dev/null | grep -i utf\"";
