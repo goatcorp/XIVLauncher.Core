@@ -1,6 +1,9 @@
 using System.Collections;
 
 using ImGuiNET;
+using XIVLauncher.Core;
+using XIVLauncher.Common;
+using XIVLauncher.Common.Unix;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -13,18 +16,24 @@ public class SettingsTabDebug : SettingsTab
     {
         ImGui.TextUnformatted("Generic Information");
         ImGui.Separator();
-        ImGui.TextUnformatted($"Operating System: {Environment.OSVersion}");
-        ImGui.TextUnformatted($"Runtime Version: {Environment.Version}");
-
+        if (LinuxInfo.IsLinux)
+            ImGui.TextUnformatted($"Operating System: {LinuxInfo.Name} - {Environment.OSVersion}");
+        else
+            ImGui.TextUnformatted($"Operating System: {Environment.OSVersion}");
+        ImGui.TextUnformatted($"Runtime Version: {Environment.Version}"); 
+        
         if (Program.IsSteamDeckHardware)
             ImGui.Text("Steam Deck Hardware Detected");
 
         if (Program.IsSteamDeckGamingMode)
             ImGui.Text("Steam Deck Gaming Mode Detected");
 
-#if FLATPAK
-            ImGui.Text("Running as a Flatpak");
-#endif
+        if (LinuxInfo.Container == LinuxContainer.flatpak)
+            ImGui.Text("Running in a Flatpak container");
+
+        if (LinuxInfo.Container == LinuxContainer.snap)
+            ImGui.Text("Running in a Snap container");
+
 
         ImGui.Spacing();
 
