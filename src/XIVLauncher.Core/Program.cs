@@ -14,6 +14,7 @@ using Veldrid.StartupUtilities;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
+using XIVLauncher.Common.Game.Patch;
 using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Support;
@@ -52,6 +53,7 @@ sealed class Program
     {
         Timeout = TimeSpan.FromSeconds(5)
     };
+    public static PatchManager Patcher { get; set; } = null!;
 
     private static readonly Vector3 ClearColor = new(0.1f, 0.1f, 0.1f);
 
@@ -150,6 +152,7 @@ sealed class Program
         Config.FixLDP ??= false;
         Config.FixIM ??= false;
         Config.FixLocale ??= false;
+        Config.FixError127 ??= false;
     }
 
     public const uint STEAM_APP_ID = 39210;
@@ -376,8 +379,18 @@ sealed class Program
         bindings.Dispose();
         cl.Dispose();
         gd.Dispose();
-        
+
         HttpClient.Dispose();
+
+        if (Patcher is not null)
+        {
+            Patcher.CancelAllDownloads();
+            Task.Run(async() =>
+            {
+                await PatchManager.UnInitializeAcquisition().ConfigureAwait(false);
+                Environment.Exit(0);
+            });
+        }
     }
 
     public static void CreateCompatToolsInstance()
@@ -512,4 +525,6 @@ sealed class Program
         ClearTools(tsbutton);
         ClearLogs(true);
     }
+
+    public static void ResetUIDCache(bool tsbutton = false) => launcherApp.UniqueIdCache.Reset();
 }

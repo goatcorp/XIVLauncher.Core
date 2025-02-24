@@ -185,7 +185,7 @@ public class MainPage : Page
 
         var otp = string.Empty;
 
-        if (isOtp)
+        if (isOtp && !App.UniqueIdCache.HasValidCache(username))
         {
             App.AskForOtp();
             otp = App.WaitForOtp();
@@ -370,7 +370,7 @@ public class MainPage : Page
 
             try
             {
-                using var process = await StartGameAndAddon(loginResult, isSteam, action == LoginAction.GameNoDalamud, action == LoginAction.GameNoThirdparty).ConfigureAwait(false);
+                using var process = await StartGameAndAddon(loginResult, isSteam, action == LoginAction.GameNoDalamud, action == LoginAction.GameNoPlugins, action == LoginAction.GameNoThirdparty).ConfigureAwait(false);
 
                 if (process is null)
                     throw new InvalidOperationException("Could not obtain Process Handle");
@@ -593,7 +593,7 @@ public class MainPage : Page
         }
     }
 
-    public async Task<Process> StartGameAndAddon(Launcher.LoginResult loginResult, bool isSteam, bool forceNoDalamud, bool noThird)
+    public async Task<Process> StartGameAndAddon(Launcher.LoginResult loginResult, bool isSteam, bool forceNoDalamud, bool noPlugins , bool noThird)
     {
         var dalamudOk = false;
 
@@ -621,7 +621,7 @@ public class MainPage : Page
         var dalamudLauncher = new DalamudLauncher(dalamudRunner, Program.DalamudUpdater,
             App.Settings.DalamudLoadMethod.GetValueOrDefault(DalamudLoadMethod.DllInject), App.Settings.GamePath,
             App.Storage.Root, App.Storage.GetFolder("logs"), App.Settings.ClientLanguage ?? ClientLanguage.English,
-            App.Settings.DalamudLoadDelay, false, false, noThird, Troubleshooting.GetTroubleshootingJson());
+            App.Settings.DalamudLoadDelay, false, noPlugins, noThird, Troubleshooting.GetTroubleshootingJson());
 
         try
         {
@@ -710,6 +710,12 @@ public class MainPage : Page
         if (App.Settings.FixIM == true)
         {
             System.Environment.SetEnvironmentVariable("XMODIFIERS", "@im=null");
+        }
+
+        // Hack: Fix libicuuc dalamud crashes
+        if (App.Settings.FixError127 == true)
+        {
+            System.Environment.SetEnvironmentVariable("DOTNET_SYSTEM_GLOBALIZATION_USENLS", "true");
         }
 
         // Deal with "Additional Arguments". VAR=value %command% -args
@@ -1004,9 +1010,9 @@ public class MainPage : Page
         }
 
         using var installer = new PatchInstaller(App.Settings.KeepPatches ?? false);
-        var patcher = new PatchManager(App.Settings.PatchAcquisitionMethod ?? AcquisitionMethod.Aria, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
+        Program.Patcher = new PatchManager(App.Settings.PatchAcquisitionMethod ?? AcquisitionMethod.Aria, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
             App.Settings.PatchPath, installer, App.Launcher, sid);
-        patcher.OnFail += PatcherOnFail;
+        Program.Patcher.OnFail += PatcherOnFail;
         installer.OnFail += this.InstallerOnFail;
 
         /*
@@ -1038,18 +1044,18 @@ public class MainPage : Page
                 {
                     Thread.Sleep(30);
 
-                    App.LoadingPage.Line2 = string.Format("Working on {0}/{1}", patcher.CurrentInstallIndex, patcher.Downloads.Count);
-                    App.LoadingPage.Line3 = string.Format("{0} left to download at {1}/s", ApiHelpers.BytesToString(patcher.AllDownloadsLength < 0 ? 0 : patcher.AllDownloadsLength),
-                        ApiHelpers.BytesToString(patcher.Speeds.Sum()));
+                    App.LoadingPage.Line2 = string.Format("Working on {0}/{1}", Program.Patcher.CurrentInstallIndex, Program.Patcher.Downloads.Count);
+                    App.LoadingPage.Line3 = string.Format("{0} left to download at {1}/s", ApiHelpers.BytesToString(Program.Patcher.AllDownloadsLength < 0 ? 0 : Program.Patcher.AllDownloadsLength),
+                        ApiHelpers.BytesToString(Program.Patcher.Speeds.Sum()));
 
-                    App.LoadingPage.Progress = patcher.CurrentInstallIndex / (float)patcher.Downloads.Count;
+                    App.LoadingPage.Progress = Program.Patcher.CurrentInstallIndex / (float)Program.Patcher.Downloads.Count;
                 }
             }
 
             try
             {
                 var aria2LogFile = new FileInfo(Path.Combine(App.Storage.GetFolder("logs").FullName, "launcher.log"));
-                await patcher.PatchAsync(aria2LogFile, false).ConfigureAwait(false);
+                await Program.Patcher.PatchAsync(aria2LogFile, false).ConfigureAwait(false);
             }
             finally
             {
