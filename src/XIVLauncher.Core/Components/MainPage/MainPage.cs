@@ -183,6 +183,9 @@ public class MainPage : Page
             return false;
 
         var otp = string.Empty;
+        
+        if (isOtp && App.UniqueIdCache.HasValidCache(username) && App.Settings.IsUidCacheEnabled == false)
+            Program.ResetUIDCache();
 
         if (isOtp && !App.UniqueIdCache.HasValidCache(username))
         {
