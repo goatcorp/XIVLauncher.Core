@@ -184,7 +184,10 @@ public class MainPage : Page
 
         var otp = string.Empty;
         
-        if (isOtp && (!App.UniqueIdCache.HasValidCache(username) || App.Settings.IsUidCacheEnabled == false))
+        if (isOtp && App.UniqueIdCache.HasValidCache(username) && App.Settings.IsUidCacheEnabled == false)
+            Program.ResetUIDCache();
+
+        if (isOtp && !App.UniqueIdCache.HasValidCache(username))
         {
             App.AskForOtp();
             otp = App.WaitForOtp();
