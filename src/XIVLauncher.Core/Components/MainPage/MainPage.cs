@@ -23,6 +23,7 @@ using XIVLauncher.Common.Util;
 using XIVLauncher.Common.Windows;
 using XIVLauncher.Core.Accounts;
 using XIVLauncher.Core.Support;
+using XIVLauncher.Core.UnixCompatibility;
 
 namespace XIVLauncher.Core.Components.MainPage;
 
@@ -760,16 +761,16 @@ public class MainPage : Page
         }
         else if (Environment.OSVersion.Platform == PlatformID.Unix)
         {
-            if (App.Settings.WineStartupType == WineStartupType.Custom)
+            if (App.Settings.WineType.Value == WineType.Custom)
             {
                 if (App.Settings.WineBinaryPath == null)
                     throw new InvalidOperationException("Custom wine binary path wasn't set.");
                 else if (!Directory.Exists(App.Settings.WineBinaryPath))
                     throw new InvalidOperationException("Custom wine binary path is invalid: no such directory.\n" +
-                                                        "Check path carefully for typos: " + App.Settings.WineBinaryPath);
-                else if (!File.Exists(Path.Combine(App.Settings.WineBinaryPath, "wine64")))
-                    throw new InvalidOperationException("Custom wine binary path is invalid: no wine64 found at that location.\n" +
-                                                        "Check path carefully for typos: " + App.Settings.WineBinaryPath);
+                        "Check path carefully for typos: " + App.Settings.WineBinaryPath);
+                else if (!File.Exists(Path.Combine(App.Settings.WineBinaryPath, "wine64")) && !File.Exists(Path.Combine(App.Settings.WineBinaryPath, "wine")))
+                    throw new InvalidOperationException("Custom wine binary path is invalid: no wine or wine64 found at that location.\n" +
+                        "Check path carefully for typos: " + App.Settings.WineBinaryPath);
             }
 
             var signal = new ManualResetEvent(false);
@@ -778,10 +779,8 @@ public class MainPage : Page
             var _ = Task.Run(async () =>
             {
                 var tempPath = App.Storage.GetFolder("temp");
-                var winver = (App.Settings.SetWin7 ?? true) ? "win7" : "win10";
 
                 await Program.CompatibilityTools.EnsureTool(tempPath).ConfigureAwait(false);
-                Program.CompatibilityTools.RunInPrefix($"winecfg /v {winver}");
 
                 var gameFixApply = new GameFixApply(App.Settings.GamePath, App.Settings.GameConfigPath, Program.CompatibilityTools.Settings.Prefix, tempPath);
                 gameFixApply.UpdateProgress += (text, hasProgress, progress) =>
