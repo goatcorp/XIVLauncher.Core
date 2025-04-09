@@ -69,8 +69,6 @@ public class CompatibilityTools
 
     public async Task EnsureTool(DirectoryInfo tempPath)
     {
-        Console.WriteLine(WineBinPath);
-        Console.WriteLine(Wine64Path);
         if (!File.Exists(Wine64Path))
         {
             Log.Information("Compatibility tool does not exist, downloading");
@@ -78,17 +76,13 @@ public class CompatibilityTools
         }
 
         EnsurePrefix();
-        Console.WriteLine("Checking Dxvk");
-        Console.WriteLine($"Dxvk is {(DxvkVersion == DxvkVersion.Disabled ? "disabled" : "enabled")}");
         await Dxvk.InstallDxvk(Settings.Prefix, dxvkDirectory, DxvkVersion).ConfigureAwait(false);
-        Console.WriteLine("Dxvk Installed");
 
         IsToolReady = true;
     }
 
     private async Task DownloadTool(DirectoryInfo tempPath)
     {
-        Console.WriteLine("Downloading wine");
         using var client = new HttpClient();
         var tempFilePath = Path.Combine(tempPath.FullName, $"{Guid.NewGuid()}");
 

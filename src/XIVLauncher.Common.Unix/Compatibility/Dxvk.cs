@@ -19,7 +19,6 @@ public static class Dxvk
     {
         string name;
         string url;
-        Console.WriteLine("Installing DXVK");
         switch (version)
         {
             case DxvkVersion.Current:
@@ -38,9 +37,7 @@ public static class Dxvk
             default:
                 throw new ArgumentOutOfRangeException("Invalid Dxvk.DxvkVersion. Value does not exist.");
         }
-        Console.WriteLine($"name = {name}, url = {url}");
         var dxvkPath = Path.Combine(installDirectory.FullName, name, "x64");
-        Console.WriteLine(dxvkPath);
 
         if (!Directory.Exists(dxvkPath))
         {
@@ -59,7 +56,6 @@ public static class Dxvk
 
     private static async Task DownloadDxvk(DirectoryInfo installDirectory, string url)
     {
-        Console.WriteLine($"Downloading Dxvk from {url}");
         using var client = new HttpClient();
         var tempPath = PlatformHelpers.GetTempFileName();
 
