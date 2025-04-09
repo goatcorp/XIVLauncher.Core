@@ -31,9 +31,12 @@ public class WineSettings
 #else
     private const string DISTRO = "ubuntu";
 #endif
+    // These lines need to be changed to point at an official release
     private const string CURRENT_RELEASE = "wine-xiv-staging-fsync-git-10.5.r0.g835c92a2";
-    private const string LEGACY_RELEASE = "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7";
     private string CURRENT_RELEASE_URL => $"https://github.com/rankynbass/unofficial-wine-xiv-git/releases/download/10.5.r0.g835c92a2/wine-xiv-staging-fsync-git-{DISTRO}-10.5.r0.g835c92a2.tar.xz";
+
+    // These point to the current release, which will hopefully become the legacy release
+    private const string LEGACY_RELEASE = "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7";
     private string LEGACY_RELEASE_URL => $"https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-{DISTRO}-8.5.r4.g4211bac7.tar.xz";
 
     public string ReleaseName { get; private set; }
