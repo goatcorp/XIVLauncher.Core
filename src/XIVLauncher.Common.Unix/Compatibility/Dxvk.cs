@@ -80,10 +80,10 @@ public enum DxvkHudType
 
 public enum DxvkVersion
 {
-    [SettingsDescription("GPLAsync 2.6", "Dxvk 2.6 with GPLAsync patches. For most graphics cards.")]
+    [SettingsDescription("Current", "Dxvk 2.6 with GPLAsync patches. For most graphics cards.")]
     Current,
 
-    [SettingsDescription("Async 1.10.3", "Dxvk 1.10.3 with Async patches. For older graphics cards.")]
+    [SettingsDescription("Legacy", "Dxvk 1.10.3 with Async patches. For older graphics cards.")]
     Legacy,
 
     [SettingsDescription("Disabled", "Use OpenGL/WineD3D instead. Slow, and might not work with Dalamud.")]
