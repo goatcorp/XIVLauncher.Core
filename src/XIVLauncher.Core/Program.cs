@@ -127,12 +127,14 @@ sealed class Program
         Config.GlobalScale ??= 1.0f;
 
         Config.GameModeEnabled ??= false;
+        Config.DxvkVersion ??= DxvkVersion.Current;
         Config.DxvkAsyncEnabled ??= true;
         Config.ESyncEnabled ??= true;
         Config.FSyncEnabled ??= false;
         Config.SetWin7 ??= true;
 
         Config.WineStartupType ??= WineStartupType.Managed;
+        Config.WineManagedVersion ??= WineManagedVersion.Current;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
 
@@ -369,11 +371,11 @@ sealed class Program
     {
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
-        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
+        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineManagedVersion, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
         var toolsFolder = storage.GetFolder("compatibilitytool");
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "dxvk"));
-        Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "beta"));
-        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
+        Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "wine"));
+        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkVersion, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
     }
 
     public static void ShowWindow()

@@ -62,9 +62,13 @@ public interface ILauncherConfig
 
     public WineStartupType? WineStartupType { get; set; }
 
+    public WineManagedVersion? WineManagedVersion { get; set; }
+
     public string? WineBinaryPath { get; set; }
 
     public bool? GameModeEnabled { get; set; }
+
+    public DxvkVersion? DxvkVersion { get; set; }
 
     public bool? DxvkAsyncEnabled { get; set; }
 
@@ -72,7 +76,7 @@ public interface ILauncherConfig
 
     public bool? FSyncEnabled { get; set; }
 
-    public Dxvk.DxvkHudType DxvkHudType { get; set; }
+    public DxvkHudType DxvkHudType { get; set; }
 
     public string? WineDebugVars { get; set; }
 
