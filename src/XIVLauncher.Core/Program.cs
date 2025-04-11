@@ -20,6 +20,8 @@ using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Support;
 using XIVLauncher.Common.Unix;
 using XIVLauncher.Common.Unix.Compatibility;
+using XIVLauncher.Common.Unix.Compatibility.Dxvk;
+using XIVLauncher.Common.Unix.Compatibility.Wine;
 using XIVLauncher.Common.Util;
 using XIVLauncher.Common.Windows;
 using XIVLauncher.Core.Accounts.Secrets;
@@ -127,14 +129,14 @@ sealed class Program
         Config.GlobalScale ??= 1.0f;
 
         Config.GameModeEnabled ??= false;
-        Config.DxvkVersion ??= DxvkVersion.Current;
+        Config.DxvkVersion ??= DxvkVersion.Stable;
         Config.DxvkAsyncEnabled ??= true;
         Config.ESyncEnabled ??= true;
         Config.FSyncEnabled ??= false;
         Config.SetWin7 ??= true;
 
         Config.WineStartupType ??= WineStartupType.Managed;
-        Config.WineManagedVersion ??= WineManagedVersion.Current;
+        Config.WineManagedVersion ??= WineManagedVersion.Stable;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
 
@@ -163,7 +165,7 @@ sealed class Program
     /// <returns>A <see cref="DalamudUpdater"/> instance.</returns>
     private static DalamudUpdater CreateDalamudUpdater()
     {
-        FileInfo runnerOverride = null;
+        FileInfo? runnerOverride = null;
         if (Config.DalamudManualInjectPath is not null &&
             Config.DalamudManualInjectionEnabled == true &&
             Config.DalamudManualInjectPath.Exists &&
@@ -371,11 +373,11 @@ sealed class Program
     {
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
-        var wineSettings = new WineSettings(Config.WineStartupType, Config.WineManagedVersion, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled, Config.FSyncEnabled);
+        var wineSettings = new WineSettings(Config.WineStartupType ?? WineStartupType.Custom, Config.WineManagedVersion ?? WineManagedVersion.Stable, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled ?? true, Config.FSyncEnabled ?? false);
         var toolsFolder = storage.GetFolder("compatibilitytool");
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "dxvk"));
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "wine"));
-        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkVersion, Config.DxvkHudType, Config.GameModeEnabled, Config.DxvkAsyncEnabled, toolsFolder);
+        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkVersion ?? DxvkVersion.Stable, Config.DxvkHudType, Config.GameModeEnabled ?? false, Config.DxvkAsyncEnabled ?? true, toolsFolder);
     }
 
     public static void ShowWindow()

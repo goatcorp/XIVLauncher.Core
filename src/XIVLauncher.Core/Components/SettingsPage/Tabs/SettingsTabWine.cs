@@ -3,7 +3,8 @@ using System.Runtime.InteropServices;
 
 using ImGuiNET;
 
-using XIVLauncher.Common.Unix.Compatibility;
+using XIVLauncher.Common.Unix.Compatibility.Dxvk;
+using XIVLauncher.Common.Unix.Compatibility.Wine;
 using XIVLauncher.Common.Util;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
@@ -21,7 +22,7 @@ public class SettingsTabWine : SettingsTab
             startupTypeSetting = new SettingsEntry<WineStartupType>("Wine Version", "Choose how XIVLauncher will start and manage your wine installation.",
                 () => Program.Config.WineStartupType ?? WineStartupType.Managed, x => Program.Config.WineStartupType = x),
 
-            new SettingsEntry<WineManagedVersion>("Wine Release", "If you change wine releases, you might have to clear your prefix (Troubleshooting tab)", () => Program.Config.WineManagedVersion ?? WineManagedVersion.Current,
+            new SettingsEntry<WineManagedVersion>("Wine Release", "If you change wine releases, you might have to clear your prefix (Troubleshooting tab)", () => Program.Config.WineManagedVersion ?? WineManagedVersion.Stable,
                 x => Program.Config.WineManagedVersion = x )
             {
                 CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Managed
@@ -34,7 +35,7 @@ public class SettingsTabWine : SettingsTab
                 CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Custom
             },
 
-            dxvkVersionSetting = new SettingsEntry<DxvkVersion>("Dxvk Version", "Choose which Dxvk version to use.", () => Program.Config.DxvkVersion ?? DxvkVersion.Current, x => Program.Config.DxvkVersion = x),
+            dxvkVersionSetting = new SettingsEntry<DxvkVersion>("Dxvk Version", "Choose which Dxvk version to use.", () => Program.Config.DxvkVersion ?? DxvkVersion.Stable, x => Program.Config.DxvkVersion = x),
 
             new SettingsEntry<bool>("Enable DXVK ASYNC", "Enable DXVK ASYNC patch.", () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
             {
