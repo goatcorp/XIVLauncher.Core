@@ -161,7 +161,7 @@ sealed class Program
     /// <returns>A <see cref="DalamudUpdater"/> instance.</returns>
     private static DalamudUpdater CreateDalamudUpdater()
     {
-        FileInfo runnerOverride = null;
+        FileInfo? runnerOverride = null;
         if (Config.DalamudManualInjectPath is not null &&
             Config.DalamudManualInjectionEnabled == true &&
             Config.DalamudManualInjectPath.Exists &&
@@ -201,8 +201,8 @@ sealed class Program
 
         Loc.SetupWithFallbacks();
 
-        Dictionary<uint, string> apps = new Dictionary<uint, string>();
-        uint[] ignoredIds = { 0, STEAM_APP_ID, STEAM_APP_ID_FT };
+        Dictionary<uint, string> apps = [];
+        uint[] ignoredIds = [0, STEAM_APP_ID, STEAM_APP_ID_FT];
         if (!ignoredIds.Contains(CoreEnvironmentSettings.SteamAppId))
         {
             apps.Add(CoreEnvironmentSettings.SteamAppId, "XLM");
@@ -273,13 +273,18 @@ sealed class Program
         var version = $"{AppUtil.GetAssemblyVersion()} ({AppUtil.GetGitHash()})";
 #endif
 
-        // Create window, GraphicsDevice, and all resources necessary for the demo.
-        VeldridStartup.CreateWindowAndGraphicsDevice(
-            new WindowCreateInfo(50, 50, 1280, 800, WindowState.Normal, $"XIVLauncher {version}"),
-            new GraphicsDeviceOptions(false, null, true, ResourceBindingModel.Improved, true, true),
-            out window,
-            out gd);
-
+        // Initialise SDL, as that's needed to figure out where to spawn the window.
+        Sdl2Native.SDL_Init(SDLInitFlags.Video);
+        
+        // For now, just spawn the window on the primary display, which in SDL2 has displayIndex 0.
+        // Maybe we may want to save the window location or the preferred display in the config at some point?
+        if (!GetDisplayBounds(displayIndex: 0, out var bounds))
+            Log.Warning("Couldn't figure out the bounds of the primary display, falling back to previous assumption that (0,0) is the top left corner of the left-most monitor.");
+        
+        // Create the window and graphics device separately, because Veldrid would have reinitialised SDL if done with their combined method.
+        window = VeldridStartup.CreateWindow(new WindowCreateInfo(50 + bounds.X, 50 + bounds.Y, 1280, 800, WindowState.Normal, $"XIVLauncher {version}"));
+        gd = VeldridStartup.CreateGraphicsDevice(window, new GraphicsDeviceOptions(false, null, true, ResourceBindingModel.Improved, true, true));
+        
         window.Resized += () =>
         {
             gd.MainSwapchain.Resize((uint)window.Width, (uint)window.Height);
@@ -305,7 +310,7 @@ sealed class Program
         {
             Thread.Sleep(50);
 
-            InputSnapshot snapshot = window.PumpEvents();
+            var snapshot = window.PumpEvents();
 
             if (!window.Exists)
                 break;
@@ -347,6 +352,7 @@ sealed class Program
         }
 
         // Clean up Veldrid resources
+        // FIXME: Veldrid doesn't clean up after SDL though, so some leakage may have been happening for all this time.
         gd.WaitForIdle();
         bindings.Dispose();
         cl.Dispose();
@@ -484,4 +490,17 @@ sealed class Program
     }
 
     public static void ResetUIDCache(bool tsbutton = false) => launcherApp.UniqueIdCache.Reset();
+
+    private static unsafe bool GetDisplayBounds(int displayIndex, out Rectangle bounds)
+    {
+        bounds = new Rectangle();
+        fixed (Rectangle* rectangle = &bounds)
+        {
+            if (Sdl2Native.SDL_GetDisplayBounds(displayIndex, rectangle) != 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
