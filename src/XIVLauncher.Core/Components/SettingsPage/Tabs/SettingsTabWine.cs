@@ -22,11 +22,12 @@ public class SettingsTabWine : SettingsTab
             startupTypeSetting = new SettingsEntry<WineStartupType>("Wine Version", "Choose how XIVLauncher will start and manage your wine installation.",
                 () => Program.Config.WineStartupType ?? WineStartupType.Managed, x => Program.Config.WineStartupType = x),
 
-            new SettingsEntry<WineManagedVersion>("Wine Release", "If you change wine releases, you might have to clear your prefix (Troubleshooting tab)", () => Program.Config.WineManagedVersion ?? WineManagedVersion.Stable,
-                x => Program.Config.WineManagedVersion = x )
-            {
-                CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Managed
-            },
+            // Uncomment this section once a new wine version is released.
+            // new SettingsEntry<WineManagedVersion>("Wine Release", "If you change wine releases, you might have to clear your prefix (Troubleshooting tab)", () => Program.Config.WineManagedVersion ?? WineManagedVersion.Stable,
+            //     x => Program.Config.WineManagedVersion = x )
+            // {
+            //     CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Managed
+            // },
 
             new SettingsEntry<string>("Wine Binary Path",
                 "Set the path XIVLauncher will use to run applications via wine.\nIt should be an absolute path to a folder containing wine64 and wineserver binaries.",
