@@ -6,6 +6,7 @@ namespace XIVLauncher.Core.Components.MainPage;
 
 public class ActionButtons : Component
 {
+    public event Action? OnAccountButtonClicked;
     public event Action? OnStatusButtonClicked;
     public event Action? OnSettingsButtonClicked;
 
@@ -14,8 +15,20 @@ public class ActionButtons : Component
         var btnSize = new Vector2(80) * ImGuiHelpers.GlobalScale;
 
         ImGui.PushFont(FontManager.IconFont);
+        ImGui.BeginDisabled(this.OnAccountButtonClicked == null);
+        if (ImGui.Button(FontAwesomeIcon.User.ToIconString(), btnSize))
+        {
+            this.OnAccountButtonClicked?.Invoke();
+        }
+        ImGui.PushFont(FontManager.TextFont);
+        ImGuiHelpers.AddTooltip("My Account");
+        ImGui.PopFont();
+        ImGui.EndDisabled();
+
+        ImGui.SameLine();
+
         ImGui.BeginDisabled(this.OnStatusButtonClicked == null);
-        if (ImGui.Button(FontAwesomeIcon.Globe.ToIconString(), btnSize))
+        if (ImGui.Button(FontAwesomeIcon.Heartbeat.ToIconString(), btnSize))
         {
             this.OnStatusButtonClicked?.Invoke();
         }
@@ -32,7 +45,7 @@ public class ActionButtons : Component
             this.OnSettingsButtonClicked?.Invoke();
         }
         ImGui.PushFont(FontManager.TextFont);
-        ImGuiHelpers.AddTooltip("Settings");
+        ImGuiHelpers.AddTooltip("Launcher Settings");
         ImGui.PopFont();
         ImGui.EndDisabled();
 
