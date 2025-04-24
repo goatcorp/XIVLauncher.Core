@@ -2,7 +2,8 @@ using XIVLauncher.Common;
 using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch.Acquisition;
-using XIVLauncher.Common.Unix.Compatibility;
+using XIVLauncher.Common.Unix.Compatibility.Dxvk;
+using XIVLauncher.Common.Unix.Compatibility.Wine;
 
 namespace XIVLauncher.Core.Configuration;
 
@@ -62,9 +63,13 @@ public interface ILauncherConfig
 
     public WineStartupType? WineStartupType { get; set; }
 
+    public WineManagedVersion? WineManagedVersion { get; set; }
+
     public string? WineBinaryPath { get; set; }
 
     public bool? GameModeEnabled { get; set; }
+
+    public DxvkVersion? DxvkVersion { get; set; }
 
     public bool? DxvkAsyncEnabled { get; set; }
 
@@ -72,7 +77,7 @@ public interface ILauncherConfig
 
     public bool? FSyncEnabled { get; set; }
 
-    public Dxvk.DxvkHudType DxvkHudType { get; set; }
+    public DxvkHudType DxvkHudType { get; set; }
 
     public string? WineDebugVars { get; set; }
 

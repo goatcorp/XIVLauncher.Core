@@ -43,17 +43,9 @@ jobs:
         working-directory: ./src/XIVLauncher.Core/
         run: dotnet restore
 
-      - name: Dotnet Build (Default)
+      - name: Dotnet Build (Linux)
         working-directory: ./src/XIVLauncher.Core/
         run: dotnet publish -r linux-x64 --sc --configuration Release --no-restore -o ./dist/XIVLauncher.Core
-
-      - name: Dotnet Build (Arch)
-        working-directory: ./src/XIVLauncher.Core/
-        run: dotnet publish -r linux-x64 --sc --configuration Release -p:DefineConstants=WINE_XIV_ARCH_LINUX --no-restore -o ./dist/XIVLauncher.Core-arch
-
-      - name: Dotnet Build (Fedora)
-        working-directory: ./src/XIVLauncher.Core/
-        run: dotnet publish -r linux-x64 --sc --configuration Release -p:DefineConstants=WINE_XIV_FEDORA_LINUX --no-restore -o ./dist/XIVLauncher.Core-fedora
 
       - name: Dotnet Build (Windows)
         working-directory: ./src/XIVLauncher.Core/
@@ -78,8 +70,6 @@ jobs:
           mkdir -p ./dist
           # remove leading directories
           tar -czf ./dist/XIVLauncher.Core.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core .
-          tar -czf ./dist/XIVLauncher.Core-arch.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core-arch .
-          tar -czf ./dist/XIVLauncher.Core-fedora.tar.gz -C ./src/XIVLauncher.Core/dist/XIVLauncher.Core-fedora .
           zip -r ./dist/XIVLauncher.Core-win10x64.zip ./src/XIVLauncher.Core/dist/XIVLauncher.Core-win10x64
 
       - name: Release on GitHub
@@ -90,6 +80,4 @@ jobs:
           # append_body: true # and this to make sure they are appended, not replacing the original.
           files: |
             ./dist/XIVLauncher.Core.tar.gz
-            ./dist/XIVLauncher.Core-arch.tar.gz
-            ./dist/XIVLauncher.Core-fedora.tar.gz
             ./dist/XIVLauncher.Core-win10x64.zip

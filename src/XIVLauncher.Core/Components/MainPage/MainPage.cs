@@ -17,8 +17,7 @@ using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.Game.Patch.PatchList;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Unix;
-using XIVLauncher.Common.Unix.Compatibility;
-using XIVLauncher.Common.Unix.Compatibility.GameFixes;
+using XIVLauncher.Common.Unix.Compatibility.Wine;
 using XIVLauncher.Common.Util;
 using XIVLauncher.Common.Windows;
 using XIVLauncher.Core.Accounts;
@@ -183,7 +182,7 @@ public class MainPage : Page
             return false;
 
         var otp = string.Empty;
-        
+
         if (isOtp && App.UniqueIdCache.HasValidCache(username) && App.Settings.IsUidCacheEnabled == false)
             Program.ResetUIDCache();
 
@@ -595,7 +594,7 @@ public class MainPage : Page
         }
     }
 
-    public async Task<Process> StartGameAndAddon(Launcher.LoginResult loginResult, bool isSteam, bool forceNoDalamud, bool noPlugins , bool noThird)
+    public async Task<Process> StartGameAndAddon(Launcher.LoginResult loginResult, bool isSteam, bool forceNoDalamud, bool noPlugins, bool noThird)
     {
         var dalamudOk = false;
 
@@ -782,18 +781,6 @@ public class MainPage : Page
 
                 await Program.CompatibilityTools.EnsureTool(tempPath).ConfigureAwait(false);
                 Program.CompatibilityTools.RunInPrefix($"winecfg /v {winver}");
-
-                var gameFixApply = new GameFixApply(App.Settings.GamePath, App.Settings.GameConfigPath, Program.CompatibilityTools.Settings.Prefix, tempPath);
-                gameFixApply.UpdateProgress += (text, hasProgress, progress) =>
-                {
-                    App.LoadingPage.Line1 = "Applying game-specific fixes...";
-                    App.LoadingPage.Line2 = text;
-                    App.LoadingPage.Line3 = "This may take a little while. Please hold!";
-                    App.LoadingPage.IsIndeterminate = !hasProgress;
-                    App.LoadingPage.Progress = progress;
-                };
-
-                gameFixApply.Run();
             }).ContinueWith(t =>
             {
                 isFailed = t.IsFaulted || t.IsCanceled;

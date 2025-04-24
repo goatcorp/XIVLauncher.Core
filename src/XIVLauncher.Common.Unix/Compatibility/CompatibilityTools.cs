@@ -6,64 +6,70 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Serilog;
-using XIVLauncher.Common.Util;
 
-#if FLATPAK
-#warning THIS IS A FLATPAK BUILD!!!
-#endif
+using Serilog;
+
+using XIVLauncher.Common.Unix.Compatibility.Dxvk;
+using XIVLauncher.Common.Unix.Compatibility.Wine;
+using XIVLauncher.Common.Util;
 
 namespace XIVLauncher.Common.Unix.Compatibility;
 
 public class CompatibilityTools
 {
-    private DirectoryInfo toolDirectory;
-    private DirectoryInfo dxvkDirectory;
+    private const string WINEDLLOVERRIDES = "msquic=,mscoree=n,b;d3d9,d3d11,d3d10core,dxgi=";
+    private const uint DXVK_CLEANUP_THRESHHOLD = 5;
+    private const uint WINE_CLEANUP_THRESHHOLD = 5;
 
-    private StreamWriter logWriter;
-
-#if WINE_XIV_ARCH_LINUX
-    private const string WINE_XIV_RELEASE_URL = "https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-arch-8.5.r4.g4211bac7.tar.xz";
-#elif WINE_XIV_FEDORA_LINUX
-    private const string WINE_XIV_RELEASE_URL = "https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-fedora-8.5.r4.g4211bac7.tar.xz";
-#else
-    private const string WINE_XIV_RELEASE_URL = "https://github.com/goatcorp/wine-xiv-git/releases/download/8.5.r4.g4211bac7/wine-xiv-staging-fsync-git-ubuntu-8.5.r4.g4211bac7.tar.xz";
-#endif
-    private const string WINE_XIV_RELEASE_NAME = "wine-xiv-staging-fsync-git-8.5.r4.g4211bac7";
-
-    public bool IsToolReady { get; private set; }
-
-    public WineSettings Settings { get; private set; }
+    private readonly DirectoryInfo wineDirectory;
+    private readonly DirectoryInfo dxvkDirectory;
+    private readonly StreamWriter logWriter;
 
     private string WineBinPath => Settings.StartupType == WineStartupType.Managed ?
-                                    Path.Combine(toolDirectory.FullName, WINE_XIV_RELEASE_NAME, "bin") :
+                                    Path.Combine(wineDirectory.FullName, Settings.WineRelease.Name, "bin") :
                                     Settings.CustomBinPath;
     private string Wine64Path => Path.Combine(WineBinPath, "wine64");
     private string WineServerPath => Path.Combine(WineBinPath, "wineserver");
 
-    public bool IsToolDownloaded => File.Exists(Wine64Path) && Settings.Prefix.Exists;
-
-    private readonly Dxvk.DxvkHudType hudType;
+    private readonly DxvkVersion dxvkVersion;
+    private readonly DxvkHudType hudType;
     private readonly bool gamemodeOn;
     private readonly string dxvkAsyncOn;
 
-    public CompatibilityTools(WineSettings wineSettings, Dxvk.DxvkHudType hudType, bool? gamemodeOn, bool? dxvkAsyncOn, DirectoryInfo toolsFolder)
+    public bool IsToolReady { get; private set; }
+    public WineSettings Settings { get; private set; }
+    public bool IsToolDownloaded => File.Exists(Wine64Path) && Settings.Prefix.Exists;
+
+    public CompatibilityTools(WineSettings wineSettings, DxvkVersion dxvkVersion, DxvkHudType hudType, bool gamemodeOn, bool dxvkAsyncOn, DirectoryInfo toolsFolder)
     {
         this.Settings = wineSettings;
+        this.dxvkVersion = dxvkVersion;
         this.hudType = hudType;
-        this.gamemodeOn = gamemodeOn ?? false;
-        this.dxvkAsyncOn = (dxvkAsyncOn ?? false) ? "1" : "0";
+        this.gamemodeOn = gamemodeOn;
+        this.dxvkAsyncOn = dxvkAsyncOn ? "1" : "0";
 
-        this.toolDirectory = new DirectoryInfo(Path.Combine(toolsFolder.FullName, "beta"));
+        this.wineDirectory = new DirectoryInfo(Path.Combine(toolsFolder.FullName, "wine"));
         this.dxvkDirectory = new DirectoryInfo(Path.Combine(toolsFolder.FullName, "dxvk"));
+
+        // TODO: Replace these with a nicer way of preventing a pileup of compat tools,
+        // This implementation is just a hack.
+        if (Directory.GetFiles(dxvkDirectory.FullName).Length >= DXVK_CLEANUP_THRESHHOLD)
+        {
+            Directory.Delete(dxvkDirectory.FullName, true);
+            Directory.CreateDirectory(dxvkDirectory.FullName);
+        }
+        if (Directory.GetFiles(wineDirectory.FullName).Length >= WINE_CLEANUP_THRESHHOLD)
+        {
+            Directory.Delete(wineDirectory.FullName, true);
+            Directory.CreateDirectory(wineDirectory.FullName);
+        }
 
         this.logWriter = new StreamWriter(wineSettings.LogFile.FullName);
 
         if (wineSettings.StartupType == WineStartupType.Managed)
         {
-            if (!this.toolDirectory.Exists)
-                this.toolDirectory.Create();
-
+            if (!this.wineDirectory.Exists)
+                this.wineDirectory.Create();
             if (!this.dxvkDirectory.Exists)
                 this.dxvkDirectory.Create();
         }
@@ -76,12 +82,12 @@ public class CompatibilityTools
     {
         if (!File.Exists(Wine64Path))
         {
-            Log.Information("Compatibility tool does not exist, downloading");
+            Log.Information($"Compatibility tool does not exist, downloading {Settings.WineRelease.DownloadUrl}");
             await DownloadTool(tempPath).ConfigureAwait(false);
         }
 
         EnsurePrefix();
-        await Dxvk.InstallDxvk(Settings.Prefix, dxvkDirectory).ConfigureAwait(false);
+        await Dxvk.Dxvk.InstallDxvk(Settings.Prefix, dxvkDirectory, dxvkVersion).ConfigureAwait(false);
 
         IsToolReady = true;
     }
@@ -91,24 +97,13 @@ public class CompatibilityTools
         using var client = new HttpClient();
         var tempFilePath = Path.Combine(tempPath.FullName, $"{Guid.NewGuid()}");
 
-        await File.WriteAllBytesAsync(tempFilePath, await client.GetByteArrayAsync(WINE_XIV_RELEASE_URL).ConfigureAwait(false)).ConfigureAwait(false);
+        await File.WriteAllBytesAsync(tempFilePath, await client.GetByteArrayAsync(Settings.WineRelease.DownloadUrl).ConfigureAwait(false)).ConfigureAwait(false);
 
-        PlatformHelpers.Untar(tempFilePath, this.toolDirectory.FullName);
+        PlatformHelpers.Untar(tempFilePath, this.wineDirectory.FullName);
 
-        Log.Information("Compatibility tool successfully extracted to {Path}", this.toolDirectory.FullName);
+        Log.Information("Compatibility tool successfully extracted to {Path}", this.wineDirectory.FullName);
 
         File.Delete(tempFilePath);
-    }
-
-    private void ResetPrefix()
-    {
-        Settings.Prefix.Refresh();
-
-        if (Settings.Prefix.Exists)
-            Settings.Prefix.Delete(true);
-
-        Settings.Prefix.Create();
-        EnsurePrefix();
     }
 
     public void EnsurePrefix()
@@ -156,9 +151,13 @@ public class CompatibilityTools
         psi.UseShellExecute = false;
         psi.WorkingDirectory = workingDirectory;
 
-        var wineEnviromentVariables = new Dictionary<string, string>();
-        wineEnviromentVariables.Add("WINEPREFIX", Settings.Prefix.FullName);
-        wineEnviromentVariables.Add("WINEDLLOVERRIDES", $"msquic=,mscoree=n,b;d3d9,d3d11,d3d10core,dxgi={(wineD3D ? "b" : "n")}");
+        var ogl = wineD3D || this.dxvkVersion == DxvkVersion.Disabled;
+
+        var wineEnviromentVariables = new Dictionary<string, string>
+        {
+            { "WINEPREFIX", Settings.Prefix.FullName },
+            { "WINEDLLOVERRIDES", $"{WINEDLLOVERRIDES}{(ogl ? "b" : "n,b")}" }
+        };
 
         if (!string.IsNullOrEmpty(Settings.DebugVars))
         {
@@ -170,15 +169,15 @@ public class CompatibilityTools
 
         string dxvkHud = hudType switch
         {
-            Dxvk.DxvkHudType.None => "0",
-            Dxvk.DxvkHudType.Fps => "fps",
-            Dxvk.DxvkHudType.Full => "full",
+            DxvkHudType.None => "0",
+            DxvkHudType.Fps => "fps",
+            DxvkHudType.Full => "full",
             _ => throw new ArgumentOutOfRangeException()
         };
 
         if (this.gamemodeOn == true && !ldPreload.Contains("libgamemodeauto.so.0"))
         {
-            ldPreload = ldPreload.Equals("") ? "libgamemodeauto.so.0" : ldPreload + ":libgamemodeauto.so.0";
+            ldPreload = ldPreload.Equals("", StringComparison.OrdinalIgnoreCase) ? "libgamemodeauto.so.0" : ldPreload + ":libgamemodeauto.so.0";
         }
 
         wineEnviromentVariables.Add("DXVK_HUD", dxvkHud);
@@ -191,31 +190,11 @@ public class CompatibilityTools
         MergeDictionaries(psi.EnvironmentVariables, wineEnviromentVariables);
         MergeDictionaries(psi.EnvironmentVariables, environment);
 
-#if FLATPAK_NOTRIGHTNOW
-        psi.FileName = "flatpak-spawn";
-
-        psi.ArgumentList.Insert(0, "--host");
-        psi.ArgumentList.Insert(1, Wine64Path);
-
-        foreach (KeyValuePair<string, string> envVar in wineEnviromentVariables)
-        {
-            psi.ArgumentList.Insert(1, $"--env={envVar.Key}={envVar.Value}");
-        }
-
-        if (environment != null)
-        {
-            foreach (KeyValuePair<string, string> envVar in environment)
-            {
-                psi.ArgumentList.Insert(1, $"--env=\"{envVar.Key}\"=\"{envVar.Value}\"");
-            }
-        }
-#endif
-
         Process helperProcess = new();
         helperProcess.StartInfo = psi;
         helperProcess.ErrorDataReceived += new DataReceivedEventHandler((_, errLine) =>
         {
-            if (String.IsNullOrEmpty(errLine.Data))
+            if (string.IsNullOrEmpty(errLine.Data))
                 return;
 
             try
@@ -240,7 +219,7 @@ public class CompatibilityTools
         return helperProcess;
     }
 
-    public Int32[] GetProcessIds(string executableName)
+    public int[] GetProcessIds(string executableName)
     {
         var wineDbg = RunInPrefix("winedbg --command \"info proc\"", redirectOutput: true);
         var output = wineDbg.StandardOutput.ReadToEnd();
@@ -248,12 +227,12 @@ public class CompatibilityTools
         return matchingLines.Select(l => int.Parse(l.Substring(1, 8), System.Globalization.NumberStyles.HexNumber)).ToArray();
     }
 
-    public Int32 GetProcessId(string executableName)
+    public int GetProcessId(string executableName)
     {
         return GetProcessIds(executableName).FirstOrDefault();
     }
 
-    public Int32 GetUnixProcessId(Int32 winePid)
+    public int GetUnixProcessId(int winePid)
     {
         var wineDbg = RunInPrefix("winedbg --command \"info procmap\"", redirectOutput: true);
         var output = wineDbg.StandardOutput.ReadToEnd();
