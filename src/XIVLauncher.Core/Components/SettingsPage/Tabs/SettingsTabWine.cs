@@ -12,21 +12,23 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 public class SettingsTabWine : SettingsTab
 {
     private SettingsEntry<WineStartupType> startupTypeSetting;
-
     private SettingsEntry<DxvkVersion> dxvkVersionSetting;
 
     public SettingsTabWine()
     {
-        Entries = new SettingsEntry[]
-        {
-            startupTypeSetting = new SettingsEntry<WineStartupType>("Wine Version", "Choose how XIVLauncher will start and manage your wine installation.",
-                () => Program.Config.WineStartupType ?? WineStartupType.Managed, x => Program.Config.WineStartupType = x),
+        Entries =
+        [
+            startupTypeSetting = new SettingsEntry<WineStartupType>("Wine Version", "Choose how XIVLauncher will start and manage your wine installation.", () => Program.Config.WineStartupType ?? WineStartupType.Managed, x => Program.Config.WineStartupType = x),
 
             // Uncomment this section once a new wine version is released.
-            // new SettingsEntry<WineManagedVersion>("Wine Release", "If you change wine releases, you might have to clear your prefix (Troubleshooting tab)", () => Program.Config.WineManagedVersion ?? WineManagedVersion.Stable,
-            //     x => Program.Config.WineManagedVersion = x )
+            // new SettingsEntry<WineManagedVersion>("Wine Release", "If you change wine releases your wineprefix will be automatically reset.", () => Program.Config.WineManagedVersion ?? WineManagedVersion.Stable,
+            // x =>
             // {
-            //     CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Managed
+                // Program.Config.WineManagedVersion = x;
+                // Program.ClearPrefix();
+            // })
+            // {
+                // CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Managed
             // },
 
             new SettingsEntry<string>("Wine Binary Path",
@@ -62,9 +64,8 @@ public class SettingsTabWine : SettingsTab
                 CheckVisibility = () => RuntimeInformation.IsOSPlatform(OSPlatform.Linux),
                 CheckValidity = b =>
                 {
-                    if (b == true && (Environment.OSVersion.Version.Major < 5 && (Environment.OSVersion.Version.Minor < 16 || Environment.OSVersion.Version.Major < 6)))
+                    if (b == true && Environment.OSVersion.Version.Major < 5 && (Environment.OSVersion.Version.Minor < 16 || Environment.OSVersion.Version.Major < 6))
                         return "Linux kernel 5.16 or higher is required for FSync.";
-
                     return null;
                 }
             },
@@ -73,7 +74,7 @@ public class SettingsTabWine : SettingsTab
 
             new SettingsEntry<DxvkHudType>("DXVK Overlay", "Configure how much of the DXVK overlay is to be shown.", () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type),
             new SettingsEntry<string>("WINEDEBUG Variables", "Configure debug logging for wine. Useful for troubleshooting.", () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s)
-        };
+        ];
     }
 
     public override SettingsEntry[] Entries { get; }
@@ -127,6 +128,7 @@ public class SettingsTabWine : SettingsTab
     public override void Save()
     {
         base.Save();
+
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             Program.CreateCompatToolsInstance();
     }
