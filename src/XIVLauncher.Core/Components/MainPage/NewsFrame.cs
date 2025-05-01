@@ -87,7 +87,7 @@ public class NewsFrame : Component
                 {
                     if (!string.IsNullOrEmpty(newsEntry.Url))
                     {
-                        if (ImGui.Selectable(newsEntry.Title) && !string.IsNullOrEmpty(newsEntry.Url))
+                        if (ImGui.Selectable(newsEntry.Title, default, default, ImGui.CalcTextSize(newsEntry.Title)) && !string.IsNullOrEmpty(newsEntry.Url))
                         {
                             AppUtil.OpenBrowser(newsEntry.Url);
                         }
