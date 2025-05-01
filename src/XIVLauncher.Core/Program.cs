@@ -116,7 +116,6 @@ sealed class Program
         Config.FontPxSize ??= 22.0f;
 
         Config.IsEncryptArgs ??= true;
-        Config.IsFt ??= false;
         Config.IsOtpServer ??= false;
         Config.IsIgnoringSteam = CoreEnvironmentSettings.UseSteam.HasValue ? !CoreEnvironmentSettings.UseSteam.Value : Config.IsIgnoringSteam ?? false;
 
@@ -215,16 +214,8 @@ sealed class Program
         {
             apps.Add(CoreEnvironmentSettings.AltAppID, "XL_APPID");
         }
-        if (Config.IsFt == true)
-        {
-            apps.Add(STEAM_APP_ID_FT, "FFXIV Free Trial");
-            apps.Add(STEAM_APP_ID, "FFXIV Retail");
-        }
-        else
-        {
-            apps.Add(STEAM_APP_ID, "FFXIV Retail");
-            apps.Add(STEAM_APP_ID_FT, "FFXIV Free Trial");
-        }
+        apps.Add(STEAM_APP_ID, "FFXIV Retail");
+        apps.Add(STEAM_APP_ID_FT, "FFXIV Free Trial");
         try
         {
             switch (Environment.OSVersion.Platform)
@@ -279,16 +270,16 @@ sealed class Program
 
         // Initialise SDL, as that's needed to figure out where to spawn the window.
         Sdl2Native.SDL_Init(SDLInitFlags.Video);
-        
+
         // For now, just spawn the window on the primary display, which in SDL2 has displayIndex 0.
         // Maybe we may want to save the window location or the preferred display in the config at some point?
         if (!GetDisplayBounds(displayIndex: 0, out var bounds))
             Log.Warning("Couldn't figure out the bounds of the primary display, falling back to previous assumption that (0,0) is the top left corner of the left-most monitor.");
-        
+
         // Create the window and graphics device separately, because Veldrid would have reinitialised SDL if done with their combined method.
         window = VeldridStartup.CreateWindow(new WindowCreateInfo(50 + bounds.X, 50 + bounds.Y, 1280, 800, WindowState.Normal, $"XIVLauncher {version}"));
         gd = VeldridStartup.CreateGraphicsDevice(window, new GraphicsDeviceOptions(false, null, true, ResourceBindingModel.Improved, true, true));
-        
+
         window.Resized += () =>
         {
             gd.MainSwapchain.Resize((uint)window.Width, (uint)window.Height);
