@@ -35,10 +35,17 @@ namespace XIVLauncher.Core;
 
 sealed class Program
 {
+    private const string APP_NAME = "xlcore";
+
+    private static readonly Vector3 ClearColor = new(0.1f, 0.1f, 0.1f);
+    private static string[] mainArgs = [];
+    private static LauncherApp launcherApp = null!;
     private static Sdl2Window window = null!;
     private static CommandList cl = null!;
     private static GraphicsDevice gd = null!;
     private static ImGuiBindings bindings = null!;
+    private static uint invalidationFrames = 0;
+    private static Vector2 lastMousePosition = Vector2.Zero;
 
     public static GraphicsDevice GraphicsDevice => gd;
     public static ImGuiBindings ImGuiBindings => bindings;
@@ -54,30 +61,14 @@ sealed class Program
         Timeout = TimeSpan.FromSeconds(5)
     };
     public static PatchManager Patcher { get; set; } = null!;
-
-    private static readonly Vector3 ClearColor = new(0.1f, 0.1f, 0.1f);
-
-    private static LauncherApp launcherApp = null!;
     public static Storage storage = null!;
     public static DirectoryInfo DotnetRuntime => storage.GetFolder("runtime");
+    public static string CType = CoreEnvironmentSettings.GetCType();
 
     // TODO: We don't have the steamworks api for this yet.
     public static bool IsSteamDeckHardware => CoreEnvironmentSettings.IsDeck.HasValue ?
         CoreEnvironmentSettings.IsDeck.Value :
         Directory.Exists("/home/deck") || (CoreEnvironmentSettings.IsDeckGameMode ?? false) || (CoreEnvironmentSettings.IsDeckFirstRun ?? false);
-    public static bool IsSteamDeckGamingMode => CoreEnvironmentSettings.IsDeckGameMode.HasValue ?
-        CoreEnvironmentSettings.IsDeckGameMode.Value :
-        Steam != null && Steam.IsValid && Steam.IsRunningOnSteamDeck();
-
-    private const string APP_NAME = "xlcore";
-
-    private static string[] mainArgs = { };
-
-    private static uint invalidationFrames = 0;
-    private static Vector2 lastMousePosition = Vector2.Zero;
-
-
-    public static string CType = CoreEnvironmentSettings.GetCType();
 
     public static void Invalidate(uint frames = 100)
     {
@@ -106,7 +97,14 @@ sealed class Program
             Config.AcceptLanguage = ApiHelpers.GenerateAcceptLanguage();
         }
 
-        Config.GamePath ??= storage.GetFolder("ffxiv");
+        if (Config.GamePath == null)
+        {
+            var envPath = Environment.GetEnvironmentVariable("STEAM_COMPAT_INSTALL_PATH"); // auto-set when using compat tool
+            Config.GamePath = !string.IsNullOrWhiteSpace(envPath)
+                ? new DirectoryInfo(envPath)
+                : storage.GetFolder("ffxiv");
+        }
+
         Config.GameConfigPath ??= storage.GetFolder("ffxivConfig");
         Config.ClientLanguage ??= ClientLanguage.English;
         Config.DpiAwareness ??= DpiAwareness.Unaware;
@@ -279,16 +277,16 @@ sealed class Program
 
         // Initialise SDL, as that's needed to figure out where to spawn the window.
         Sdl2Native.SDL_Init(SDLInitFlags.Video);
-        
+
         // For now, just spawn the window on the primary display, which in SDL2 has displayIndex 0.
         // Maybe we may want to save the window location or the preferred display in the config at some point?
         if (!GetDisplayBounds(displayIndex: 0, out var bounds))
             Log.Warning("Couldn't figure out the bounds of the primary display, falling back to previous assumption that (0,0) is the top left corner of the left-most monitor.");
-        
+
         // Create the window and graphics device separately, because Veldrid would have reinitialised SDL if done with their combined method.
         window = VeldridStartup.CreateWindow(new WindowCreateInfo(50 + bounds.X, 50 + bounds.Y, 1280, 800, WindowState.Normal, $"XIVLauncher {version}"));
         gd = VeldridStartup.CreateGraphicsDevice(window, new GraphicsDeviceOptions(false, null, true, ResourceBindingModel.Improved, true, true));
-        
+
         window.Resized += () =>
         {
             gd.MainSwapchain.Resize((uint)window.Width, (uint)window.Height);

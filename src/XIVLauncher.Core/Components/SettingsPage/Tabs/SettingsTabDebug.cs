@@ -19,9 +19,6 @@ public class SettingsTabDebug : SettingsTab
         if (Program.IsSteamDeckHardware)
             ImGui.Text("Steam Deck Hardware Detected");
 
-        if (Program.IsSteamDeckGamingMode)
-            ImGui.Text("Steam Deck Gaming Mode Detected");
-
 #if FLATPAK
             ImGui.Text("Running as a Flatpak");
 #endif
@@ -36,7 +33,7 @@ public class SettingsTabDebug : SettingsTab
             ImGui.TableSetupColumn("Key", ImGuiTableColumnFlags.WidthStretch, 0.35f);
             ImGui.TableSetupColumn("Value");
             ImGui.TableHeadersRow();
-            foreach (DictionaryEntry entry in Environment.GetEnvironmentVariables())
+            foreach (DictionaryEntry entry in Environment.GetEnvironmentVariables().Cast<DictionaryEntry>().OrderBy(entry => entry.Key.ToString()))
             {
                 ImGui.TableNextRow();
                 ImGui.TableNextColumn();
