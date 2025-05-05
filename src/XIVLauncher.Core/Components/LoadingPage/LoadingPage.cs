@@ -107,8 +107,6 @@ public class LoadingPage : Page
             ImGui.ProgressBar(Progress, new Vector2(width, 20), ProgressText);
         }
 
-        Program.Invalidate(10);
-
         base.Draw();
     }
 }

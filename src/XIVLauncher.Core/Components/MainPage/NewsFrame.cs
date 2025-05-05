@@ -38,7 +38,6 @@ public class NewsFrame : Component
             return;
 
         this.currentBanner = (this.currentBanner + 1) % this.banners.Length;
-        Program.Invalidate(10);
     }
 
     public void ReloadNews()
