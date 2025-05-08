@@ -163,7 +163,7 @@ public class MainPage : Page
         });
     }
 
-    public async Task<bool> Login(string username, string password, bool isOtp, bool isSteam, bool doingAutoLogin, bool isFreeTrial, LoginAction action)
+    public async Task<bool> Login(string username, string password, bool isOtp, bool isSteam, bool isFreeTrial, bool doingAutoLogin, LoginAction action)
     {
         if (action == LoginAction.Fake)
         {
