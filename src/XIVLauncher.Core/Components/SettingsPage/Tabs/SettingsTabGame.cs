@@ -1,4 +1,5 @@
 using ImGuiNET;
+
 using XIVLauncher.Common;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
@@ -32,7 +33,6 @@ public class SettingsTabGame : SettingsTab
         new SettingsEntry<string>("Additional Game Arguments", "Follows Steam conventions: VAR1=value VAR2=value %command% -arg1 -arg2.\nCan't pass programs (like gamescope -- %command%). Does not accept flatpak args (--parent-pid=1, etc.)", () => Program.Config.AdditionalArgs, x => Program.Config.AdditionalArgs = x),
         new SettingsEntry<ClientLanguage>("Game Language", "Select the game's language.", () => Program.Config.ClientLanguage ?? ClientLanguage.English, x => Program.Config.ClientLanguage = x),
         new SettingsEntry<DpiAwareness>("Game DPI Awareness", "Select the game's DPI Awareness. Change this if the game's scaling looks wrong.", () => Program.Config.DpiAwareness ?? DpiAwareness.Unaware, x => Program.Config.DpiAwareness = x),
-        new SettingsEntry<bool>("Free Trial Account", "Check this if you are using a free trial account.", () => Program.Config.IsFt ?? false, x => Program.Config.IsFt = x),
         new SettingsEntry<bool>("Use XIVLauncher authenticator/OTP macros", "Check this if you want to use the XIVLauncher authenticator app or macros.", () => Program.Config.IsOtpServer ?? false, x => Program.Config.IsOtpServer = x),
         new SettingsEntry<bool>("Ignore Steam", "Check this if you do not want XIVLauncher to communicate with Steam (Requires Restart).", () => Program.Config.IsIgnoringSteam ?? false, x => Program.Config.IsIgnoringSteam = x)
         {
