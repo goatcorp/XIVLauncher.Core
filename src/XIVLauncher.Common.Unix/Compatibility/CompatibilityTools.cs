@@ -232,7 +232,7 @@ public class CompatibilityTools
         return GetProcessIds(executableName).FirstOrDefault();
     }
 
-    public Int32 GetUnixProcessId(Int32 winePid)
+    public int GetUnixProcessId(int winePid)
     {
         var wineDbg = RunInPrefix("winedbg --command \"info procmap\"", redirectOutput: true);
         var output = wineDbg.StandardOutput.ReadToEnd();
@@ -247,7 +247,7 @@ public class CompatibilityTools
         return unixPids.FirstOrDefault();
     }
 
-    private string GetProcessName(Int32 winePid)
+    private string GetProcessName(int winePid)
     {
         var wineDbg = RunInPrefix("winedbg --command \"info proc\"", redirectOutput: true);
         var output = wineDbg.StandardOutput.ReadToEnd();
@@ -257,7 +257,7 @@ public class CompatibilityTools
         return processNames.FirstOrDefault();
     }
 
-    private Int32 GetUnixProcessIdByName(string executableName)
+    private int GetUnixProcessIdByName(string executableName)
     {
         int closest = 0;
         int early = 0;
