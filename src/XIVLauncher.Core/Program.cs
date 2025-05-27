@@ -37,19 +37,16 @@ namespace XIVLauncher.Core;
 sealed class Program
 {
     private const string APP_NAME = "xlcore";
-
     private static readonly Vector3 ClearColor = new(0.1f, 0.1f, 0.1f);
     private static string[] mainArgs = [];
     private static LauncherApp launcherApp = null!;
     private static Sdl2Window window = null!;
-    private static CommandList cl = null!;
-    private static GraphicsDevice gd = null!;
-    private static ImGuiBindings bindings = null!;
-    private static uint invalidationFrames = 0;
-    private static Vector2 lastMousePosition = Vector2.Zero;
+    private static CommandList commandList = null!;
+    private static GraphicsDevice graphicsDevice = null!;
+    private static ImGuiBindings guiBindings = null!;
 
-    public static GraphicsDevice GraphicsDevice => gd;
-    public static ImGuiBindings ImGuiBindings => bindings;
+    public static GraphicsDevice GraphicsDevice => graphicsDevice;
+    public static ImGuiBindings ImGuiBindings => guiBindings;
     public static ILauncherConfig Config { get; private set; } = null!;
     public static CommonSettings CommonSettings => new(Config);
     public static ISteam? Steam { get; private set; }
@@ -71,10 +68,6 @@ sealed class Program
         CoreEnvironmentSettings.IsDeck.Value :
         Directory.Exists("/home/deck") || (CoreEnvironmentSettings.IsDeckGameMode ?? false) || (CoreEnvironmentSettings.IsDeckFirstRun ?? false);
 
-    public static void Invalidate(uint frames = 100)
-    {
-        invalidationFrames = frames;
-    }
 
     private static void SetupLogging(string[] args)
     {
@@ -286,18 +279,17 @@ sealed class Program
 
         // Create the window and graphics device separately, because Veldrid would have reinitialised SDL if done with their combined method.
         window = VeldridStartup.CreateWindow(new WindowCreateInfo(50 + bounds.X, 50 + bounds.Y, 1280, 800, WindowState.Normal, $"XIVLauncher {version}"));
-        gd = VeldridStartup.CreateGraphicsDevice(window, new GraphicsDeviceOptions(false, null, true, ResourceBindingModel.Improved, true, true));
+        graphicsDevice = VeldridStartup.CreateGraphicsDevice(window, new GraphicsDeviceOptions(false, null, true, ResourceBindingModel.Improved, true, true));
 
         window.Resized += () =>
         {
-            gd.MainSwapchain.Resize((uint)window.Width, (uint)window.Height);
-            bindings.WindowResized(window.Width, window.Height);
-            Invalidate();
+            graphicsDevice.MainSwapchain.Resize((uint)window.Width, (uint)window.Height);
+            guiBindings.WindowResized(window.Width, window.Height);
         };
-        cl = gd.ResourceFactory.CreateCommandList();
+        commandList = graphicsDevice.ResourceFactory.CreateCommandList();
         Log.Debug("Veldrid OK!");
 
-        bindings = new ImGuiBindings(gd, gd.MainSwapchain.Framebuffer.OutputDescription, window.Width, window.Height, storage.GetFile("launcherUI.ini"), Config.FontPxSize ?? 21.0f);
+        guiBindings = new ImGuiBindings(graphicsDevice, graphicsDevice.MainSwapchain.Framebuffer.OutputDescription, window.Width, window.Height, storage.GetFile("launcherUI.ini"), Config.FontPxSize ?? 21.0f);
         Log.Debug("ImGui OK!");
 
         StyleModelV1.DalamudStandard.Apply();
@@ -306,60 +298,31 @@ sealed class Program
         var launcherClientConfig = LauncherClientConfig.GetAsync().GetAwaiter().GetResult();
         launcherApp = new LauncherApp(storage, launcherClientConfig.frontierUrl, launcherClientConfig.cutOffBootver);
 
-        Invalidate(20);
-
         // Main application loop
         while (window.Exists)
         {
-            Thread.Sleep(50);
-
+            Thread.Sleep(30);
             var snapshot = window.PumpEvents();
-
             if (!window.Exists)
                 break;
 
-            var overlayNeedsPresent = false;
-
-            if (Steam != null && Steam.IsValid)
-                overlayNeedsPresent = Steam.BOverlayNeedsPresent;
-
-            if (!snapshot.KeyEvents.Any() && !snapshot.MouseEvents.Any() && !snapshot.KeyCharPresses.Any() && invalidationFrames == 0 && lastMousePosition == snapshot.MousePosition
-                && !overlayNeedsPresent)
-            {
-                continue;
-            }
-
-            if (invalidationFrames == 0)
-            {
-                invalidationFrames = 10;
-            }
-
-            if (invalidationFrames > 0)
-            {
-                invalidationFrames--;
-            }
-
-            lastMousePosition = snapshot.MousePosition;
-
-            bindings.Update(1f / 60f, snapshot);
-
+            guiBindings.Update(1 / 60f, snapshot);
             launcherApp.Draw();
-
-            cl.Begin();
-            cl.SetFramebuffer(gd.MainSwapchain.Framebuffer);
-            cl.ClearColorTarget(0, new RgbaFloat(ClearColor.X, ClearColor.Y, ClearColor.Z, 1f));
-            bindings.Render(gd, cl);
-            cl.End();
-            gd.SubmitCommands(cl);
-            gd.SwapBuffers(gd.MainSwapchain);
+            commandList.Begin();
+            commandList.SetFramebuffer(graphicsDevice.MainSwapchain.Framebuffer);
+            commandList.ClearColorTarget(0, new RgbaFloat(ClearColor.X, ClearColor.Y, ClearColor.Z, 1f));
+            guiBindings.Render(graphicsDevice, commandList);
+            commandList.End();
+            graphicsDevice.SubmitCommands(commandList);
+            graphicsDevice.SwapBuffers(graphicsDevice.MainSwapchain);
         }
 
         // Clean up Veldrid resources
         // FIXME: Veldrid doesn't clean up after SDL though, so some leakage may have been happening for all this time.
-        gd.WaitForIdle();
-        bindings.Dispose();
-        cl.Dispose();
-        gd.Dispose();
+        graphicsDevice.WaitForIdle();
+        guiBindings.Dispose();
+        commandList.Dispose();
+        graphicsDevice.Dispose();
 
         HttpClient.Dispose();
 
