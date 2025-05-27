@@ -38,7 +38,6 @@ public class NewsFrame : Component
             return;
 
         this.currentBanner = (this.currentBanner + 1) % this.banners.Length;
-        Program.Invalidate(10);
     }
 
     public void ReloadNews()
@@ -46,24 +45,16 @@ public class NewsFrame : Component
         Task.Run(async () =>
         {
             this.newsLoaded = false;
-
             await Headlines.GetWorlds(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
-
             bannerList = await Headlines.GetBanners(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
-
             await Headlines.GetMessage(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
-
             headlines = await Headlines.GetNews(this.app.Launcher, this.app.Settings.ClientLanguage ?? ClientLanguage.English).ConfigureAwait(false);
-
             this.banners = new TextureWrap[bannerList.Count];
-
-
             for (var i = 0; i < bannerList.Count; i++)
             {
                 var textureBytes = await Program.HttpClient.GetByteArrayAsync(this.bannerList[i].LsbBanner).ConfigureAwait(false);
                 this.banners[i] = TextureWrap.Load(textureBytes);
             }
-
             this.newsLoaded = true;
         });
     }
@@ -93,11 +84,16 @@ public class NewsFrame : Component
 
                 void ShowNewsEntry(News newsEntry)
                 {
-                    ImGui.TextUnformatted(newsEntry.Title);
-
-                    if (ImGui.IsItemClicked(ImGuiMouseButton.Left) && !string.IsNullOrEmpty(newsEntry.Url))
+                    if (!string.IsNullOrEmpty(newsEntry.Url))
                     {
-                        AppUtil.OpenBrowser(newsEntry.Url);
+                        if (ImGui.Selectable(newsEntry.Title, default, default, ImGui.CalcTextSize(newsEntry.Title)) && !string.IsNullOrEmpty(newsEntry.Url))
+                        {
+                            AppUtil.OpenBrowser(newsEntry.Url);
+                        }
+                    }
+                    else
+                    {
+                        ImGui.TextUnformatted(newsEntry.Title);
                     }
                 }
 
