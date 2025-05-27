@@ -1,5 +1,3 @@
-using System.Numerics;
-
 using CheapLoc;
 
 using Config.Net;
@@ -7,6 +5,9 @@ using Config.Net;
 using ImGuiNET;
 
 using Serilog;
+
+using System.Numerics;
+using System.Runtime.InteropServices;
 
 using Veldrid;
 using Veldrid.Sdl2;
@@ -375,6 +376,7 @@ sealed class Program
 
     public static void CreateCompatToolsInstance()
     {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return;
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
         var wineSettings = new WineSettings(Config.WineStartupType ?? WineStartupType.Custom, Config.WineManagedVersion ?? WineManagedVersion.Stable, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled ?? true, Config.FSyncEnabled ?? false);
