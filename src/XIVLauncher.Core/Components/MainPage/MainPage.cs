@@ -902,13 +902,18 @@ public class MainPage : Page
 
     private void PersistAccount(string username, string password, bool isOtp, bool isSteam, bool isFreeTrial)
     {
+        // Update account password.
         if (App.Accounts.CurrentAccount != null && App.Accounts.CurrentAccount.UserName.Equals(username, StringComparison.Ordinal) &&
             App.Accounts.CurrentAccount.Password != password &&
             App.Accounts.CurrentAccount.SavePassword)
             App.Accounts.UpdatePassword(App.Accounts.CurrentAccount, password);
 
-        if (App.Accounts.CurrentAccount == null ||
-            App.Accounts.CurrentAccount.Id != $"{username}-{isOtp}-{isFreeTrial}-{isSteam}")
+        // Update account free trial status.
+        if (App.Accounts.CurrentAccount != null && App.Accounts.CurrentAccount.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) &&
+            App.Accounts.CurrentAccount.IsFreeTrial != isFreeTrial)
+            App.Accounts.UpdateFreeTrial(App.Accounts.CurrentAccount, isFreeTrial);
+
+        if (App.Accounts.CurrentAccount is null || App.Accounts.CurrentAccount.Id != $"{username}-{isOtp}-{isSteam}")
         {
             var accountToSave = new XivAccount(username)
             {
@@ -918,9 +923,7 @@ public class MainPage : Page
                 IsFreeTrial = isFreeTrial,
                 UseSteamServiceAccount = isSteam
             };
-
             App.Accounts.AddAccount(accountToSave);
-
             App.Accounts.CurrentAccount = accountToSave;
         }
     }

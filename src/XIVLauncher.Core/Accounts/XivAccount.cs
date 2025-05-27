@@ -8,7 +8,7 @@ namespace XIVLauncher.Core.Accounts;
 public class XivAccount
 {
     [JsonIgnore]
-    public string Id => $"{UserName}-{UseOtp}-{IsFreeTrial}-{UseSteamServiceAccount}";
+    public string Id => $"{UserName}-{UseOtp}-{UseSteamServiceAccount}";
 
     public override string ToString() => Id;
 
