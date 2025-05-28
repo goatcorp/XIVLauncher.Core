@@ -92,6 +92,7 @@ public class MainPage : Page
     {
         this.loginFrame.Username = account.UserName;
         this.loginFrame.IsOtp = account.UseOtp;
+        this.loginFrame.IsFreeTrial = account.IsFreeTrial;
         this.loginFrame.IsSteam = account.UseSteamServiceAccount;
         this.loginFrame.IsAutoLogin = App.Settings.IsAutologin ?? false;
 
@@ -144,7 +145,7 @@ public class MainPage : Page
 
             App.Settings.IsAutologin = this.loginFrame.IsAutoLogin;
 
-            var result = await Login(loginFrame.Username, loginFrame.Password, loginFrame.IsOtp, loginFrame.IsSteam, false, action).ConfigureAwait(false);
+            var result = await Login(loginFrame.Username, loginFrame.Password, loginFrame.IsOtp, loginFrame.IsSteam, loginFrame.IsFreeTrial, false, action).ConfigureAwait(false);
 
             if (result)
             {
@@ -162,7 +163,7 @@ public class MainPage : Page
         });
     }
 
-    public async Task<bool> Login(string username, string password, bool isOtp, bool isSteam, bool doingAutoLogin, LoginAction action)
+    public async Task<bool> Login(string username, string password, bool isOtp, bool isSteam, bool isFreeTrial, bool doingAutoLogin, LoginAction action)
     {
         if (action == LoginAction.Fake)
         {
@@ -199,14 +200,14 @@ public class MainPage : Page
         if (otp == null)
             return false;
 
-        PersistAccount(username, password, isOtp, isSteam);
+        PersistAccount(username, password, isOtp, isSteam, isFreeTrial);
 
-        var loginResult = await TryLoginToGame(username, password, otp, isSteam, action).ConfigureAwait(false);
+        var loginResult = await TryLoginToGame(username, password, otp, isSteam, isFreeTrial, action).ConfigureAwait(false);
 
         return await TryProcessLoginResult(loginResult, isSteam, action).ConfigureAwait(false);
     }
 
-    private async Task<Launcher.LoginResult> TryLoginToGame(string username, string password, string otp, bool isSteam, LoginAction action)
+    private async Task<Launcher.LoginResult> TryLoginToGame(string username, string password, string otp, bool isSteam, bool isFreeTrial, LoginAction action)
     {
 #if !DEBUG
         bool? gateStatus = null;
@@ -234,9 +235,9 @@ public class MainPage : Page
             var gamePath = App.Settings.GamePath!;
 
             if (action == LoginAction.Repair)
-                return await App.Launcher.Login(username, password, otp, isSteam, false, gamePath, true, App.Settings.IsFt.GetValueOrDefault(false)).ConfigureAwait(false);
+                return await App.Launcher.Login(username, password, otp, isSteam, false, gamePath, true, isFreeTrial).ConfigureAwait(false);
             else
-                return await App.Launcher.Login(username, password, otp, isSteam, enableUidCache, gamePath, false, App.Settings.IsFt.GetValueOrDefault(false)).ConfigureAwait(false);
+                return await App.Launcher.Login(username, password, otp, isSteam, enableUidCache, gamePath, false, isFreeTrial).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -899,26 +900,30 @@ public class MainPage : Page
         return launchedProcess!;
     }
 
-    private void PersistAccount(string username, string password, bool isOtp, bool isSteam)
+    private void PersistAccount(string username, string password, bool isOtp, bool isSteam, bool isFreeTrial)
     {
+        // Update account password.
         if (App.Accounts.CurrentAccount != null && App.Accounts.CurrentAccount.UserName.Equals(username, StringComparison.Ordinal) &&
             App.Accounts.CurrentAccount.Password != password &&
             App.Accounts.CurrentAccount.SavePassword)
             App.Accounts.UpdatePassword(App.Accounts.CurrentAccount, password);
 
-        if (App.Accounts.CurrentAccount == null ||
-            App.Accounts.CurrentAccount.Id != $"{username}-{isOtp}-{isSteam}")
+        // Update account free trial status.
+        if (App.Accounts.CurrentAccount != null && App.Accounts.CurrentAccount.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) &&
+            App.Accounts.CurrentAccount.IsFreeTrial != isFreeTrial)
+            App.Accounts.UpdateFreeTrial(App.Accounts.CurrentAccount, isFreeTrial);
+
+        if (App.Accounts.CurrentAccount is null || App.Accounts.CurrentAccount.Id != $"{username}-{isOtp}-{isSteam}")
         {
             var accountToSave = new XivAccount(username)
             {
                 Password = password,
                 SavePassword = true,
                 UseOtp = isOtp,
+                IsFreeTrial = isFreeTrial,
                 UseSteamServiceAccount = isSteam
             };
-
             App.Accounts.AddAccount(accountToSave);
-
             App.Accounts.CurrentAccount = accountToSave;
         }
     }

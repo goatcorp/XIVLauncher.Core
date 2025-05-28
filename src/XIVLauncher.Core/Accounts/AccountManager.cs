@@ -6,6 +6,7 @@ using Serilog;
 
 namespace XIVLauncher.Core.Accounts;
 
+// TODO: Store XivAccounts by username instead of using Id.
 public class AccountManager
 {
     public ObservableCollection<XivAccount> Accounts = new();
@@ -34,6 +35,14 @@ public class AccountManager
         Log.Information("UpdatePassword() called");
         var existingAccount = Accounts.FirstOrDefault(a => a.Id == account.Id);
         if (existingAccount is not null) existingAccount.Password = password;
+    }
+
+    public void UpdateFreeTrial(XivAccount account, bool freeTrial)
+    {
+        Log.Information("UpdateFreeTrial() called");
+        var existingAccount = Accounts.FirstOrDefault(a => a.Id == account.Id);
+        if (existingAccount is not null) existingAccount.IsFreeTrial = freeTrial;
+        Save();
     }
 
     public void UpdateLastSuccessfulOtp(XivAccount account, string lastOtp)
