@@ -12,15 +12,12 @@ public class OtpEntryPage : Page
 {
     private string otp = string.Empty;
     private bool appearing = false;
-
-    public string? Result { get; private set; }
-
-    public bool Cancelled { get; private set; }
-
     private OtpListener? otpListener;
 
-    public OtpEntryPage(LauncherApp app)
-        : base(app)
+    public string? Result { get; private set; }
+    public bool Cancelled { get; private set; }
+
+    public OtpEntryPage(LauncherApp app) : base(app)
     {
         if (Program.Steam is not null) Program.Steam.OnGamepadTextInputDismissed += this.SteamOnOnGamepadTextInputDismissed;
     }
@@ -29,7 +26,7 @@ public class OtpEntryPage : Page
     {
         if (success)
         {
-            if (Program.Steam is not null) Result = Program.Steam.GetEnteredGamepadText();
+            if (Program.Steam is not null) this.Result = Program.Steam.GetEnteredGamepadText();
         }
     }
 
@@ -50,13 +47,10 @@ public class OtpEntryPage : Page
 
         if (App.Settings.IsOtpServer ?? false)
         {
-            this.otpListener = new OtpListener("core-" + AppUtil.GetAssemblyVersion());
-            this.otpListener.OnOtpReceived += TryAcceptOtp;
-
             try
             {
                 // Start Listen
-                Task.Run(() => this.otpListener.Start());
+                this.StartOtpListener();
                 Log.Debug("OTP server started...");
             }
             catch (Exception ex)
@@ -76,6 +70,26 @@ public class OtpEntryPage : Page
 
         Log.Verbose("Received OTP: {Otp}", otp);
         this.Result = otp;
+    }
+
+    public void StartOtpListener()
+    {
+        if (this.otpListener is null)
+        {
+            this.otpListener = new OtpListener("core-" + AppUtil.GetAssemblyVersion());
+            this.otpListener.OnOtpReceived += this.TryAcceptOtp;
+            Task.Run(this.otpListener.Start);
+        }
+    }
+
+    public void StopOtpListener()
+    {
+        if (this.otpListener is not null)
+        {
+            this.otpListener.Stop();
+            this.otpListener.OnOtpReceived -= this.TryAcceptOtp;
+        }
+        this.otpListener = null;
     }
 
     public override void Draw()

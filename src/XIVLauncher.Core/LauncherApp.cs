@@ -225,7 +225,9 @@ public class LauncherApp : Component
         while (this.otpEntryPage.Result == null && !this.otpEntryPage.Cancelled)
             Thread.Yield();
 
-        return this.otpEntryPage.Result;
+        var res = this.otpEntryPage.Result;
+        this.otpEntryPage.StopOtpListener();
+        return res;
     }
 
     public void StartLoading(string line1, string line2 = "", string line3 = "", bool isIndeterminate = true, bool canCancel = false, bool canDisableAutoLogin = false)
