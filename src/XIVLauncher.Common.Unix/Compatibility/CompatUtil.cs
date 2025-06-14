@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 namespace XIVLauncher.Common.Unix.Compatibility.Wine;
 
@@ -87,5 +89,17 @@ public static class CompatUtil
         {
             return WineReleaseDistro.ubuntu;
         }
+    }
+
+    public static bool EnsureChecksumMatch(string filePath, string[] checksums)
+    {
+        if (checksums.Length == 0)
+        {
+            return false;
+        }
+        using var sha512 = SHA512.Create();
+        using var stream = File.OpenRead(filePath);
+        var computedHash = Convert.ToHexString(sha512.ComputeHash(stream)).ToLowerInvariant();
+        return checksums.Any(checksum => string.Equals(checksum, computedHash, StringComparison.OrdinalIgnoreCase));
     }
 }
