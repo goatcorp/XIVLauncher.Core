@@ -108,7 +108,6 @@ sealed class Program
         Config.FontPxSize ??= 22.0f;
 
         Config.IsEncryptArgs ??= true;
-        Config.IsFt ??= false;
         Config.IsOtpServer ??= false;
         Config.IsIgnoringSteam = CoreEnvironmentSettings.UseSteam.HasValue ? !CoreEnvironmentSettings.UseSteam.Value : Config.IsIgnoringSteam ?? false;
 
@@ -207,16 +206,8 @@ sealed class Program
         {
             apps.Add(CoreEnvironmentSettings.AltAppID, "XL_APPID");
         }
-        if (Config.IsFt == true)
-        {
-            apps.Add(STEAM_APP_ID_FT, "FFXIV Free Trial");
-            apps.Add(STEAM_APP_ID, "FFXIV Retail");
-        }
-        else
-        {
-            apps.Add(STEAM_APP_ID, "FFXIV Retail");
-            apps.Add(STEAM_APP_ID_FT, "FFXIV Free Trial");
-        }
+        apps.Add(STEAM_APP_ID, "FFXIV Retail");
+        apps.Add(STEAM_APP_ID_FT, "FFXIV Free Trial");
         try
         {
             switch (Environment.OSVersion.Platform)

@@ -41,8 +41,6 @@ public interface ILauncherConfig
 
     public bool? IsEncryptArgs { get; set; }
 
-    public bool? IsFt { get; set; }
-
     public bool? IsOtpServer { get; set; }
 
     public bool? IsIgnoringSteam { get; set; }

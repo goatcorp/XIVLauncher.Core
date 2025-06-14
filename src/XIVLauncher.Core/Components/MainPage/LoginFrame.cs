@@ -15,6 +15,7 @@ public class LoginFrame : Component
     private readonly Input passwordInput;
     private readonly Checkbox oneTimePasswordCheckbox;
     private readonly Checkbox useSteamServiceCheckbox;
+    private readonly Checkbox freeTrialCheckbox;
     private readonly Checkbox autoLoginCheckbox;
     private readonly Button loginButton;
 
@@ -48,6 +49,12 @@ public class LoginFrame : Component
         set => this.autoLoginCheckbox.Value = value;
     }
 
+    public bool IsFreeTrial
+    {
+        get => this.freeTrialCheckbox.Value;
+        set => this.freeTrialCheckbox.Value = value;
+    }
+
     public event Action<LoginAction>? OnLogin;
 
     private const string POPUP_ID_LOGINACTION = "popup_loginaction";
@@ -71,9 +78,8 @@ public class LoginFrame : Component
         this.passwordInput.Enter += TriggerLogin;
 
         this.oneTimePasswordCheckbox = new Checkbox("Use one-time password");
-
-        this.useSteamServiceCheckbox = new Checkbox("Use steam service");
-
+        this.useSteamServiceCheckbox = new Checkbox("Steam service account");
+        this.freeTrialCheckbox = new Checkbox("Free trial account");
         this.autoLoginCheckbox = new Checkbox("Log in automatically");
 
         this.loginButton = new Button("Login");
@@ -96,6 +102,7 @@ public class LoginFrame : Component
 
             this.oneTimePasswordCheckbox.Draw();
             this.useSteamServiceCheckbox.Draw();
+            this.freeTrialCheckbox.Draw();
             this.autoLoginCheckbox.Draw();
 
             ImGui.Dummy(new Vector2(10));
