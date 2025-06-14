@@ -6,6 +6,17 @@ Cross-platform version of XIVLauncher, optimized for Steam Deck. Comes with a ve
 ## Using on Steam Deck
 If you want to use XIVLauncher on your Steam Deck, feel free to [follow our guide in our FAQ](https://goatcorp.github.io/faq/steamdeck). If you're having trouble, you can [join our Discord server](https://discord.gg/3NMcUV5) - please don't use the GitHub issues for troubleshooting unless you're sure that your problem is an actual issue with XIVLauncher.
 
+## Environment Variables for troubleshooting
+| Variable      | Description    |
+| ------------- | -------------- |
+| `XL_PATH` | Set to an alternate path to override the default `~/.xlcore` config path. For example, `XL_PATH=~/.local/share/xlcore`. This will try to create the path if it does not exist, so be careful.
+| `XL_SECRET_PROVIDER` | Set to `file` if using the Steam Deck or other desktop session that doesn't have a secret provider. Set to `none` to disable secret provider. |
+| `XL_DECK` | Force XIVLauncher-RB to pretend it's Steam Deck. Does not enable the Steam keyboard. |
+| `XL_GAMEMODE` | Forces XIVLauncher-RB to pretend it's in Steam Deck Game Mode. Also does not enable the Steam keyboard. |
+| `XL_FIRSTRUN` | Set to 0 or 1 to force the launcher to skip or activate the Steam Deck First Run screen. |
+| `XL_USE_STEAM` | Set to 0 or 1 to enable or disable steam API checks. |
+| `XL_APPID` | Set to a steam AppID number to hook that application instead of FFXIV or the free trial. Ignored when using XLM. |
+
 ## Building & Contributing
 1. Clone this repository with submodules
 2. Make sure you have a recent(.NET 6.0.400+) version of the .NET SDK installed
