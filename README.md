@@ -13,7 +13,6 @@ If you want to use XIVLauncher on your Steam Deck, feel free to [follow our guid
 | `XL_SECRET_PROVIDER` | Set to `file` if using the Steam Deck or other desktop session that doesn't have a secret provider. Set to `none` to disable secret provider. |
 | `XL_DECK` | Force XIVLauncher to pretend it's Steam Deck. Does not enable the Steam keyboard. |
 | `XL_GAMEMODE` | Forces XIVLauncher to pretend it's in Steam Deck Game Mode. Also does not enable the Steam keyboard. |
-| `XL_FIRSTRUN` | Set to 0 or 1 to force the launcher to skip or activate the Steam Deck First Run screen. |
 | `XL_USE_STEAM` | Set to 0 or 1 to enable or disable steam API checks. |
 | `XL_APPID` | Set to a steam AppID number to hook that application instead of FFXIV or the free trial. Ignored when using XLM. |
 
