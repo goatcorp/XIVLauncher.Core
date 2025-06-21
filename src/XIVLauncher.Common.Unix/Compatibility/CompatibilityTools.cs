@@ -96,13 +96,13 @@ public class CompatibilityTools
     {
         using var client = new HttpClient();
         var tempFilePath = Path.Combine(tempPath.FullName, $"{Guid.NewGuid()}");
-
         await File.WriteAllBytesAsync(tempFilePath, await client.GetByteArrayAsync(Settings.WineRelease.DownloadUrl).ConfigureAwait(false)).ConfigureAwait(false);
-
+        if (!CompatUtil.EnsureChecksumMatch(tempFilePath, Settings.WineRelease.Checksums))
+        {
+            throw new InvalidDataException("SHA512 checksum verification failed");
+        }
         PlatformHelpers.Untar(tempFilePath, this.wineDirectory.FullName);
-
         Log.Information("Compatibility tool successfully extracted to {Path}", this.wineDirectory.FullName);
-
         File.Delete(tempFilePath);
     }
 
