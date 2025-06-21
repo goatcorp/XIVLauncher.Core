@@ -79,7 +79,7 @@ public static class CompatUtil
                 }
                 else if (kvp.Value.ToLower().Contains("ubuntu") || kvp.Value.ToLower().Contains("debian"))
                 {
-                    return WineReleaseDistro.arch;
+                    return WineReleaseDistro.ubuntu;
                 }
             }
 
