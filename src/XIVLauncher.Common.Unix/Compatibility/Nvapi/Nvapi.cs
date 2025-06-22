@@ -77,8 +77,14 @@ public static class Nvapi
             return;
         }
 
-        File.Copy(Path.Combine(nvngxPath, "nvngx.dll"), Path.Combine(game, "nvngx.dll"), true);
-        File.Copy(Path.Combine(nvngxPath, "_nvngx.dll"), Path.Combine(game, "_nvngx.dll"), true);
+        var files = Directory.GetFiles(nvngxPath);
+
+        // Only nvngx.dll and _nvngx.dll are needed for dlss to function, but there is also nvngx_dlssg.dll
+        // which may be needed in the future. So just copy all the files.
+        foreach (var file in files)
+        {
+            File.Copy(file, Path.Combine(game, Path.GetFileName(file)), true);
+        }
     }
 
     private static string NvidiaWineDLLPath()
