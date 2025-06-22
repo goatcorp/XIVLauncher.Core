@@ -137,6 +137,7 @@ sealed class Program
         Config.WineManagedVersion ??= WineManagedVersion.Stable;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
+        Config.WineDLLOverrides ??= "";
 
         Config.FixLDP ??= false;
         Config.FixIM ??= false;
@@ -353,7 +354,7 @@ sealed class Program
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "dxvk"));
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "nvapi"));
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "wine"));
-        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkVersion ?? DxvkVersion.Stable, Config.DxvkHudType, Config.NvapiVersion ?? NvapiVersion.Stable, Config.GameModeEnabled ?? false, Config.DxvkAsyncEnabled ?? true, toolsFolder, Config.GamePath);
+        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkVersion ?? DxvkVersion.Stable, Config.DxvkHudType, Config.NvapiVersion ?? NvapiVersion.Stable, Config.GameModeEnabled ?? false, Config.WineDLLOverrides ?? "", Config.DxvkAsyncEnabled ?? true, toolsFolder, Config.GamePath);
     }
 
     public static void ShowWindow()

@@ -2,6 +2,7 @@ using ImGuiNET;
 
 using XIVLauncher.Common;
 using XIVLauncher.Core.Resources.Localization;
+using XIVLauncher.Common.Unix.Compatibility.Wine;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -32,6 +33,16 @@ public class SettingsTabGame : SettingsTab
         },
 
         new SettingsEntry<string>(Strings.AdditionalGameArgsSetting, Strings.AdditionalGameArgsSettingDescription, () => Program.Config.AdditionalArgs, x => Program.Config.AdditionalArgs = x),
+        new SettingsEntry<string>("Extra WINEDLLOVERRIDES", "Add extra WINEDLLOVERRIDES. No spaces, semicolon separated.\nDo not use msquic, mscoree, d3d9, d3d10core, d3d11, or dxgi. These are already set.", () => Program.Config.WineDLLOverrides ?? "", s => Program.Config.WineDLLOverrides = s)
+        {
+            CheckValidity = s =>
+            {
+                if (!WineSettings.WineDLLOverrideIsValid(s))
+                    return "Not a valid WINEDLLOVERRIDE string";
+                
+                return null;
+            },
+        },
         new SettingsEntry<ClientLanguage>(Strings.GameLanguageSetting, Strings.GameLanguageSettingDescription, () => Program.Config.ClientLanguage ?? ClientLanguage.English, x => Program.Config.ClientLanguage = x),
         new SettingsEntry<DpiAwareness>(Strings.GameDPIAwarenessSetting, Strings.GameDPIAwarenessSettingDescription, () => Program.Config.DpiAwareness ?? DpiAwareness.Unaware, x => Program.Config.DpiAwareness = x),
         new SettingsEntry<bool>(Strings.UseXLAuthMacrosSetting, Strings.UseXLAuthMacrosSettingDescription, () => Program.Config.IsOtpServer ?? false, x => Program.Config.IsOtpServer = x),

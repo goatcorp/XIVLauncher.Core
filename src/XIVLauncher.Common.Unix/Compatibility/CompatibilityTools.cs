@@ -38,6 +38,7 @@ public class CompatibilityTools
     private readonly DxvkVersion dxvkVersion;
     private readonly DxvkHudType hudType;
     private readonly NvapiVersion nvapiVersion;
+    private readonly string ExtraWineDLLOverrides;
     private readonly bool gamemodeOn;
     private readonly string dxvkAsyncOn;
 
@@ -45,13 +46,14 @@ public class CompatibilityTools
     public WineSettings Settings { get; private set; }
     public bool IsToolDownloaded => File.Exists(Wine64Path) && Settings.Prefix.Exists;
 
-    public CompatibilityTools(WineSettings wineSettings, DxvkVersion dxvkVersion, DxvkHudType hudType, NvapiVersion nvapiVersion, bool gamemodeOn, bool dxvkAsyncOn, DirectoryInfo toolsFolder, DirectoryInfo gameDirectory)
+    public CompatibilityTools(WineSettings wineSettings, DxvkVersion dxvkVersion, DxvkHudType hudType, NvapiVersion nvapiVersion, bool gamemodeOn, string winedlloverrides, bool dxvkAsyncOn, DirectoryInfo toolsFolder, DirectoryInfo gameDirectory)
     {
         this.Settings = wineSettings;
         this.dxvkVersion = dxvkVersion;
         this.hudType = hudType;
         this.nvapiVersion = dxvkVersion != DxvkVersion.Disabled ? nvapiVersion : NvapiVersion.Disabled;
         this.gamemodeOn = gamemodeOn;
+        this.ExtraWineDLLOverrides = WineSettings.WineDLLOverrideIsValid(winedlloverrides) ? winedlloverrides : "";
         this.dxvkAsyncOn = dxvkAsyncOn ? "1" : "0";
 
         this.wineDirectory = new DirectoryInfo(Path.Combine(toolsFolder.FullName, "wine"));
@@ -170,7 +172,7 @@ public class CompatibilityTools
         var wineEnviromentVariables = new Dictionary<string, string>
         {
             { "WINEPREFIX", Settings.Prefix.FullName },
-            { "WINEDLLOVERRIDES", $"{WINEDLLOVERRIDES}{(ogl ? "b" : "n,b")}" }
+            { "WINEDLLOVERRIDES", $"{WINEDLLOVERRIDES}{(ogl ? "b" : "n,b")};{ExtraWineDLLOverrides}" }
         };
 
         if (!ogl && nvapiVersion != NvapiVersion.Disabled)
