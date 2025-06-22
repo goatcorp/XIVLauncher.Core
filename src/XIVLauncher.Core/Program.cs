@@ -184,6 +184,9 @@ sealed class Program
         mainArgs = args;
         storage = new Storage(APP_NAME);
 
+        SetupLogging(mainArgs);
+        LoadConfig(storage);
+
         if (CoreEnvironmentSettings.ClearAll)
         {
             ClearAll();
@@ -194,11 +197,9 @@ sealed class Program
             if (CoreEnvironmentSettings.ClearPrefix) ClearPrefix();
             if (CoreEnvironmentSettings.ClearPlugins) ClearPlugins();
             if (CoreEnvironmentSettings.ClearTools) ClearTools();
-            if (CoreEnvironmentSettings.ClearLogs) ClearLogs();
+            if (CoreEnvironmentSettings.ClearLogs) ClearLogs(true);
+            if (CoreEnvironmentSettings.ClearNvngx) ClearNvngx();
         }
-
-        SetupLogging(mainArgs);
-        LoadConfig(storage);
 
         Secrets = GetSecretProvider(storage);
 
@@ -454,6 +455,17 @@ sealed class Program
             SetupLogging(mainArgs);
 
     }
+
+    public static void ClearNvngx()
+    {
+        var nvngx = new FileInfo(Path.Combine(Config.GamePath.FullName, "game", "nvngx.dll"));
+        var _nvngx = new FileInfo(Path.Combine(Config.GamePath.FullName, "game", "_nvngx.dll"));
+        var nvngxdlssg = new FileInfo(Path.Combine(Config.GamePath.FullName, "game", "nvngx_dlssg.dll"));
+        if (nvngx.Exists) nvngx.Delete();
+        if (_nvngx.Exists) _nvngx.Delete();
+        if (nvngxdlssg.Exists) nvngxdlssg.Delete();
+    }
+
     public static void ClearAll(bool tsbutton = false)
     {
         ClearSettings(tsbutton);
@@ -461,6 +473,7 @@ sealed class Program
         ClearPlugins(tsbutton);
         ClearTools(tsbutton);
         ClearLogs(true);
+        ClearNvngx();
     }
 
     public static void ResetUIDCache(bool tsbutton = false) => launcherApp.UniqueIdCache.Reset();
