@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Serilog;
 
 using XIVLauncher.Common.Unix.Compatibility.Dxvk.Releases;
+using XIVLauncher.Common.Unix.Compatibility.Wine;
 using XIVLauncher.Common.Util;
 
 namespace XIVLauncher.Common.Unix.Compatibility.Dxvk;
@@ -54,7 +55,7 @@ public static class Dxvk
         if (!Directory.Exists(dxvkPath))
         {
             Log.Information("DXVK does not exist, downloading");
-            await DownloadDxvk(installDirectory, release.DownloadUrl).ConfigureAwait(false);
+            await DownloadDxvk(installDirectory, release.DownloadUrl, release.Checksum).ConfigureAwait(false);
         }
 
         var system32 = Path.Combine(prefix.FullName, "drive_c", "windows", "system32");
@@ -66,12 +67,18 @@ public static class Dxvk
         }
     }
 
-    private static async Task DownloadDxvk(DirectoryInfo installDirectory, string url)
+    private static async Task DownloadDxvk(DirectoryInfo installDirectory, string url, string checksum)
     {
         using var client = new HttpClient();
         var tempPath = PlatformHelpers.GetTempFileName();
 
         File.WriteAllBytes(tempPath, await client.GetByteArrayAsync(url).ConfigureAwait(false));
+
+        if (!CompatUtil.EnsureChecksumMatch(tempPath, [checksum]))
+        {
+            throw new InvalidDataException("SHA512 checksum verification failed");
+        }
+
         PlatformHelpers.Untar(tempPath, installDirectory.FullName);
 
         File.Delete(tempPath);

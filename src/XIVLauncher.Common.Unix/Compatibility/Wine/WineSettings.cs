@@ -14,20 +14,13 @@ public enum WineStartupType
     Custom,
 }
 
-// Uncomment this enum and delete the one below when a new stable wine is released.
-// public enum WineManagedVersion
-// {
-//     [SettingsDescription("Stable", "Based on Wine 10.5 - recommended for most users.")]
-//     Stable,
-//
-//     [SettingsDescription("Legacy", "Based on Wine 8.5 - use for compatibility with some plugins.")]
-//     Legacy,
-// }
-//
 public enum WineManagedVersion
 {
-    [SettingsDescription("Stable", "Current release based on Wine 8.5")]
+    [SettingsDescription("Stable", "Based on Wine 10.8 - recommended for most users.")]
     Stable,
+
+    [SettingsDescription("Legacy", "Based on Wine 8.5 - use for compatibility with some plugins.")]
+    Legacy,
 }
 
 public class WineSettings
@@ -47,20 +40,17 @@ public class WineSettings
         this.StartupType = startupType;
 
         var wineDistroId = CompatUtil.GetWineIdForDistro();
-        // Uncomment below once a new stable wine is released.
-        // switch (managedWine)
-        // {
-        //     case WineManagedVersion.Stable:
-        //         this.WineRelease = new WineStableRelease(wineDistroId);
-        //         break;
-        //     case WineManagedVersion.Legacy:
-        //         this.WineRelease = new WineLegacyRelease(wineDistroId);
-        //         break;
-        //     default:
-        //         throw new ArgumentOutOfRangeException(managedWine.ToString());
-        // }
-        // Delete the next line once a new stable wine is released.
-        this.WineRelease = new WineLegacyRelease(wineDistroId);
+        switch (managedWine)
+        {
+            case WineManagedVersion.Stable:
+                this.WineRelease = new WineStableRelease(wineDistroId);
+                break;
+            case WineManagedVersion.Legacy:
+                this.WineRelease = new WineLegacyRelease(wineDistroId);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(managedWine.ToString());
+        }
         this.CustomBinPath = customBinPath;
         this.EsyncOn = esyncOn ? "1" : "0";
         this.FsyncOn = fsyncOn ? "1" : "0";
