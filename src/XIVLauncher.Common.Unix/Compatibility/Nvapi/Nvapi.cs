@@ -56,31 +56,18 @@ public static class Nvapi
         }
     }
 
-    public static void CopyNvngx(DirectoryInfo prefix, DirectoryInfo gameDirectory)
+    // In order for the nvngx dlls to work properly with wine-staging, they need to be in the game directory.
+    // The prefix system32 folder will not work. If the dlls are only in system32, the game will hang on startup.
+    public static void CopyNvngx(DirectoryInfo gameDirectory)
     {
-        var system32 = Path.Combine(prefix.FullName, "drive_c", "windows", "system32");
         var game = Path.Combine(gameDirectory.FullName, "game");
-        var system32Installed = File.Exists(Path.Combine(system32, "nvngx.dll")) && File.Exists(Path.Combine(system32, "_nvngx.dll"));
-        var gameInstalled = File.Exists(Path.Combine(game, "nvngx.dll")) && File.Exists(Path.Combine(game, "_nvngx.dll"));
-        Log.Verbose($"nvngx.dll installed in {system32}: {system32Installed.ToString()}");
-        Log.Verbose($"nvngx.dll installed in {game}: {gameInstalled.ToString()}");
-        if (system32Installed && gameInstalled)
+        if (File.Exists(Path.Combine(game, "nvngx.dll")) && File.Exists(Path.Combine(game, "_nvngx.dll")))
         {
             // Already installed. Don't bother copying.
+            Log.Verbose($"nvngx.dll installed in {game}: True");
             return;
         }
-        if (gameInstalled)
-        {
-            File.Copy(Path.Combine(game, "nvngx.dll"), Path.Combine(system32, "nvngx.dll"), true);
-            File.Copy(Path.Combine(game, "_nvngx.dll"), Path.Combine(system32, "_nvngx.dll"), true);
-            return;
-        }
-        if (system32Installed)
-        {
-            File.Copy(Path.Combine(system32, "nvngx.dll"), Path.Combine(game, "nvngx.dll"), true);
-            File.Copy(Path.Combine(system32, "_nvngx.dll"), Path.Combine(game, "_nvngx.dll"), true);
-            return;
-        }
+        Log.Verbose($"nvngx.dll installed in {game}: False");
 
         var nvngxPath = NvidiaWineDLLPath();
         if (string.IsNullOrEmpty(nvngxPath))
@@ -90,9 +77,7 @@ public static class Nvapi
             return;
         }
 
-        File.Copy(Path.Combine(nvngxPath, "nvngx.dll"), Path.Combine(system32, "nvngx.dll"), true);
         File.Copy(Path.Combine(nvngxPath, "nvngx.dll"), Path.Combine(game, "nvngx.dll"), true);
-        File.Copy(Path.Combine(nvngxPath, "_nvngx.dll"), Path.Combine(system32, "_nvngx.dll"), true);
         File.Copy(Path.Combine(nvngxPath, "_nvngx.dll"), Path.Combine(game, "_nvngx.dll"), true);
     }
 
