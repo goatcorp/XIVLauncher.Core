@@ -100,6 +100,7 @@ public static class Nvapi
     {
         string nvngxPath = "";
         string HOME = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        string PATH = Environment.GetEnvironmentVariable("XL_NVNGXPATH");      
 
         var targets = new List<string>
         { 
@@ -110,6 +111,13 @@ public static class Nvapi
             Path.Combine("/", "usr", "lib64"),                      // fedora, opensuse
             Path.Combine("/", "usr", "lib"),                        // arch
         };
+
+        if (!string.IsNullOrEmpty(PATH))
+        {
+            var firstcheck = new DirectoryInfo(PATH);
+            Log.Verbose("XL_NVNGXPATH: " + firstcheck.FullName);
+            targets.Insert(0, firstcheck.FullName);
+        }
         
         var options = new EnumerationOptions();
         options.RecurseSubdirectories = true;
