@@ -23,6 +23,7 @@ using XIVLauncher.Common.Support;
 using XIVLauncher.Common.Unix;
 using XIVLauncher.Common.Unix.Compatibility;
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
+using XIVLauncher.Common.Unix.Compatibility.Nvapi;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
 using XIVLauncher.Common.Util;
 using XIVLauncher.Common.Windows;
@@ -127,6 +128,7 @@ sealed class Program
         Config.GameModeEnabled ??= false;
         Config.DxvkVersion ??= DxvkVersion.Stable;
         Config.DxvkAsyncEnabled ??= true;
+        Config.NvapiVersion ??= NvapiVersion.Stable;
         Config.ESyncEnabled ??= true;
         Config.FSyncEnabled ??= false;
         Config.SetWin7 ??= true;
@@ -348,8 +350,9 @@ sealed class Program
         var wineSettings = new WineSettings(Config.WineStartupType ?? WineStartupType.Custom, Config.WineManagedVersion ?? WineManagedVersion.Stable, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled ?? true, Config.FSyncEnabled ?? false);
         var toolsFolder = storage.GetFolder("compatibilitytool");
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "dxvk"));
+        Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "nvapi"));
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "wine"));
-        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkVersion ?? DxvkVersion.Stable, Config.DxvkHudType, Config.GameModeEnabled ?? false, Config.DxvkAsyncEnabled ?? true, toolsFolder);
+        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkVersion ?? DxvkVersion.Stable, Config.DxvkHudType, Config.NvapiVersion ?? NvapiVersion.Stable, Config.GameModeEnabled ?? false, Config.DxvkAsyncEnabled ?? true, toolsFolder, Config.GamePath);
     }
 
     public static void ShowWindow()
@@ -436,6 +439,7 @@ sealed class Program
         storage.GetFolder("compatibilitytool").Delete(true);
         storage.GetFolder("compatibilitytool/wine");
         storage.GetFolder("compatibilitytool/dxvk");
+        storage.GetFolder("compatibilitytool/nvapi");
         if (tsbutton) CreateCompatToolsInstance();
     }
 

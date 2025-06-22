@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using ImGuiNET;
 
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
+using XIVLauncher.Common.Unix.Compatibility.Nvapi;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
 using XIVLauncher.Common.Util;
 using XIVLauncher.Core.Resources.Localization;
@@ -39,6 +40,11 @@ public class SettingsTabWine : SettingsTab
             dxvkVersionSetting = new SettingsEntry<DxvkVersion>(Strings.DXVKVersionSetting, Strings.DXVKVersionSettingDescription, () => Program.Config.DxvkVersion ?? DxvkVersion.Stable, x => Program.Config.DxvkVersion = x),
 
             new SettingsEntry<bool>(Strings.DXVKEnableAsyncSetting, Strings.DXVKEnableAsyncSettingDescription, () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
+            {
+                CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled
+            },
+
+            new SettingsEntry<NvapiVersion>("Dxvk-Nvapi Version", "Choose which version of Dxvk-Nvapi to use.", () => Program.Config.NvapiVersion ?? NvapiVersion.Stable, x => Program.Config.NvapiVersion = x)
             {
                 CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled
             },

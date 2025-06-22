@@ -3,6 +3,7 @@ using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
+using XIVLauncher.Common.Unix.Compatibility.Nvapi;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
 
 namespace XIVLauncher.Core.Configuration;
@@ -74,6 +75,8 @@ public interface ILauncherConfig
     public bool? FSyncEnabled { get; set; }
 
     public DxvkHudType DxvkHudType { get; set; }
+
+    public NvapiVersion? NvapiVersion { get; set; }
 
     public string? WineDebugVars { get; set; }
 
