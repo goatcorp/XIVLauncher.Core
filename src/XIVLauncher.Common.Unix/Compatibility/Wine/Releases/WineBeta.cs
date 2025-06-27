@@ -1,6 +1,6 @@
 namespace XIVLauncher.Common.Unix.Compatibility.Wine.Releases;
 
-public sealed class WineLSteamClientRelease(WineReleaseDistro wineDistroId) : IWineRelease
+public sealed class WineBetaRelease(WineReleaseDistro wineDistroId) : IWineRelease
 {
     public string Name { get; } = $"wine-xiv-staging-fsync-git-10.8.r0.g47f77594";
     public string DownloadUrl { get; } = $"https://github.com/goatcorp/wine-xiv-git/releases/download/10.8.r0.g47f77594/wine-xiv-staging-fsync-git-{wineDistroId}-10.8.r0.g47f77594.tar.xz";

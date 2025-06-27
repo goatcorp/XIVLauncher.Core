@@ -16,11 +16,11 @@ public enum WineStartupType
 
 public enum WineManagedVersion
 {
+    [SettingsDescription("Beta", "Testing ground for the newest wine changes. Based on Wine 10.8 with lsteamclient patches.")]
+    Beta,
+
     [SettingsDescription("Stable", "Based on Wine 10.8 - recommended for most users.")]
     Stable,
-
-    [SettingsDescription("LSteamClient", "Based on Wine 10.8 with lsteamclient patches. Better Steam integration.")]
-    LSteamClient,
 
     [SettingsDescription("Legacy", "Based on Wine 8.5 - use for compatibility with some plugins.")]
     Legacy,
@@ -48,8 +48,8 @@ public class WineSettings
             case WineManagedVersion.Stable:
                 this.WineRelease = new WineStableRelease(wineDistroId);
                 break;
-            case WineManagedVersion.LSteamClient:
-                this.WineRelease = new WineLSteamClientRelease(wineDistroId);
+            case WineManagedVersion.Beta:
+                this.WineRelease = new WineBetaRelease(wineDistroId);
                 break;
             case WineManagedVersion.Legacy:
                 this.WineRelease = new WineLegacyRelease(wineDistroId);
