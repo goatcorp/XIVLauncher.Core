@@ -11,6 +11,7 @@ using Serilog;
 
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
+using XIVLauncher.Common.Unix.Compatibility.Wine.Releases;
 using XIVLauncher.Common.Util;
 
 namespace XIVLauncher.Common.Unix.Compatibility;
@@ -86,7 +87,15 @@ public class CompatibilityTools
             await DownloadTool(tempPath).ConfigureAwait(false);
         }
 
+        if (Settings.WineRelease is not WineBetaRelease || Settings.StartupType == WineStartupType.Custom)
+        {
+            Console.WriteLine("LSTEAMCLIENT: deleting from prefix");
+            var lsteamclient = new FileInfo(Path.Combine(Settings.Prefix.FullName, "drive_c", "windows", "system32", "lsteamclient.dll"));
+            lsteamclient.Delete();
+        }
+
         EnsurePrefix();
+
         await Dxvk.Dxvk.InstallDxvk(Settings.Prefix, dxvkDirectory, dxvkVersion).ConfigureAwait(false);
 
         IsToolReady = true;
