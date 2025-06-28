@@ -90,7 +90,7 @@ public class CompatibilityTools
         if (Settings.WineRelease is not WineBetaRelease || Settings.StartupType == WineStartupType.Custom)
         {
             var lsteamclient = new FileInfo(Path.Combine(Settings.Prefix.FullName, "drive_c", "windows", "system32", "lsteamclient.dll"));
-            lsteamclient.Delete();
+            if (lsteamclient.Exists) lsteamclient.Delete();
         }
 
         EnsurePrefix();
