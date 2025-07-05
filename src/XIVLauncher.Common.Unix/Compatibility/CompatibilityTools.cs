@@ -94,7 +94,7 @@ public class CompatibilityTools
 
     private async Task DownloadTool(DirectoryInfo tempPath)
     {
-        using var client = new HttpClient();
+        using var client = HappyEyeballsHttp.CreateHttpClient();
         var tempFilePath = Path.Combine(tempPath.FullName, $"{Guid.NewGuid()}");
         await File.WriteAllBytesAsync(tempFilePath, await client.GetByteArrayAsync(Settings.WineRelease.DownloadUrl).ConfigureAwait(false)).ConfigureAwait(false);
         if (!CompatUtil.EnsureChecksumMatch(tempFilePath, Settings.WineRelease.Checksums))

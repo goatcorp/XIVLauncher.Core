@@ -69,7 +69,7 @@ public static class Dxvk
 
     private static async Task DownloadDxvk(DirectoryInfo installDirectory, string url, string checksum)
     {
-        using var client = new HttpClient();
+        using var client = HappyEyeballsHttp.CreateHttpClient();
         var tempPath = PlatformHelpers.GetTempFileName();
 
         File.WriteAllBytes(tempPath, await client.GetByteArrayAsync(url).ConfigureAwait(false));
