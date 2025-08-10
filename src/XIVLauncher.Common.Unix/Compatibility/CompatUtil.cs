@@ -65,19 +65,17 @@ public static class CompatUtil
             // Check for values in osInfo.
             foreach (var kvp in osInfo)
             {
-                if (kvp.Value.ToLower().Contains("fedora"))
+                if (kvp.Value.ToLower().Contains("fedora") || kvp.Value.ToLower().Contains("tumbleweed"))
                 {
                     return WineReleaseDistro.fedora;
                 }
-                else if (kvp.Value.ToLower().Contains("tumbleweed"))
-                {
-                    return WineReleaseDistro.fedora;
-                }
-                else if (kvp.Value.ToLower().Contains("arch"))
+
+                if (kvp.Value.ToLower().Contains("arch"))
                 {
                     return WineReleaseDistro.arch;
                 }
-                else if (kvp.Value.ToLower().Contains("ubuntu") || kvp.Value.ToLower().Contains("debian"))
+
+                if (kvp.Value.ToLower().Contains("ubuntu") || kvp.Value.ToLower().Contains("debian"))
                 {
                     return WineReleaseDistro.ubuntu;
                 }
