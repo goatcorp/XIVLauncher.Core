@@ -42,21 +42,18 @@ public class WineSettings
     {
         this.StartupType = startupType;
 
-        var wineDistroId = CompatUtil.GetWineIdForDistro();
-        switch (managedWine)
+        if (startupType == WineStartupType.Managed)
         {
-            case WineManagedVersion.Stable:
-                this.WineRelease = new WineStableRelease(wineDistroId);
-                break;
-            case WineManagedVersion.Beta:
-                this.WineRelease = new WineBetaRelease(wineDistroId);
-                break;
-            case WineManagedVersion.Legacy:
-                this.WineRelease = new WineLegacyRelease(wineDistroId);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(managedWine.ToString());
+            var wineDistroId = CompatUtil.GetWineIdForDistro();
+            this.WineRelease = managedWine switch
+            {
+                WineManagedVersion.Stable => new WineStableRelease(wineDistroId),
+                WineManagedVersion.Beta => new WineBetaRelease(wineDistroId),
+                WineManagedVersion.Legacy => new WineLegacyRelease(wineDistroId),
+                _ => throw new ArgumentOutOfRangeException(managedWine.ToString())
+            };
         }
+
         this.CustomBinPath = customBinPath;
         this.EsyncOn = esyncOn ? "1" : "0";
         this.FsyncOn = fsyncOn ? "1" : "0";
