@@ -12,21 +12,27 @@ public enum WineReleaseDistro
     ubuntu,
     fedora,
     arch,
+    macOS
 }
 
 public static class CompatUtil
 {
-    private const string OS_RELEASE_PATH = "/etc/os-release";
-
     public static WineReleaseDistro GetWineIdForDistro()
     {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            return WineReleaseDistro.macOS;
+        }
+        
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            throw new InvalidOperationException("GetWineIdForDistro can only be called on the Linux platform");
+            throw new InvalidOperationException("GetWineIdForDistro called on unsupported platform");
         }
 
         try
         {
+            const string OS_RELEASE_PATH = "/etc/os-release";
+
             if (!File.Exists(OS_RELEASE_PATH))
             {
                 return WineReleaseDistro.ubuntu;
