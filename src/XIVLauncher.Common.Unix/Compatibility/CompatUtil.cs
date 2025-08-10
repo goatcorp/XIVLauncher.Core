@@ -42,10 +42,6 @@ public static class CompatUtil
                     osInfo.Add(keyValue[0], keyValue[1]);
             }
 
-            var name = (osInfo.ContainsKey("NAME") ? osInfo["NAME"] : "").Trim('"');
-            var pretty = (osInfo.ContainsKey("PRETTY_NAME") ? osInfo["PRETTY_NAME"] : "").Trim('"');
-            name = pretty == "" ? (name == "" ? "Unknown distribution" : name) : pretty;
-
             // Check for flatpak or snap
             if (osInfo.ContainsKey("ID"))
             {
