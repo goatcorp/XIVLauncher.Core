@@ -1200,14 +1200,14 @@ public class MainPage : Page
                 case PatchVerifier.VerifyState.Done:
                     // TODO: ask the user if they want to login or rerun after repair
 
-                    string mainText = verify.NumBrokenFiles switch
+                    var mainText = verify.NumBrokenFiles switch
                     {
                         0 => Loc.Localize("GameRepairSuccess0", "All game files seem to be valid."),
                         1 => Loc.Localize("GameRepairSuccess1", "XIVLauncher has successfully repaired 1 game file."),
                         _ => string.Format(Loc.Localize("GameRepairSuccessPlural", "XIVLauncher has successfully repaired {0} game files."), verify.NumBrokenFiles),
                     };
 
-                    string additionalText = verify.MovedFiles.Count switch
+                    var additionalText = verify.MovedFiles.Count switch
                     {
                         0 => "",
                         1 => "\n\n" + string.Format(Loc.Localize("GameRepairSuccessMoved1", "Additionally, 1 file that did not come with the original game installation has been moved to {0}.\nIf you were using ReShade, you will have to reinstall it."), verify.MovedFileToDir),
