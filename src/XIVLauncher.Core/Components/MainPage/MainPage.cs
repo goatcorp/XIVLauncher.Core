@@ -947,7 +947,7 @@ public class MainPage : Page
         }
         catch (PatchInstallerException ex)
         {
-            App.ShowMessageBlocking(string.Format( Strings.PatchInstallerStartFailError, ex.Message), Strings.XIVLauncherError);
+            App.ShowMessageBlocking(string.Format(Strings.PatchInstallerStartFailError, ex.Message), Strings.XIVLauncherError);
         }
         catch (NotEnoughSpaceException sex)
         {

@@ -5,7 +5,6 @@ using ImGuiNET;
 
 using XIVLauncher.Core.Components.SettingsPage.Tabs;
 using XIVLauncher.Core.Resources.Localization;
-using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage;
 

@@ -53,7 +53,7 @@ public class SettingsTabTroubleshooting : SettingsTab
             PlatformHelpers.OpenBrowser(Program.storage.GetFolder("logs").FullName);
         }
         ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.GenerateTSPackTroubleshooting);
-        
+
         ImGui.Separator();
         ImGui.TextDisabled("Cleanup");
         ImGui.TextColored(ImGuiColors.DalamudRed, Strings.TroubleshootingDestructiveActionWarning);
