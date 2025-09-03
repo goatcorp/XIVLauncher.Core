@@ -1,13 +1,13 @@
-using CheapLoc;
+using System.Globalization;
+using System.Numerics;
+using System.Resources;
+using System.Runtime.InteropServices;
 
 using Config.Net;
 
 using ImGuiNET;
 
 using Serilog;
-
-using System.Numerics;
-using System.Runtime.InteropServices;
 
 using Veldrid;
 using Veldrid.Sdl2;
@@ -30,6 +30,7 @@ using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
+using XIVLauncher.Core.Resources.Localization;
 using XIVLauncher.Core.Style;
 
 namespace XIVLauncher.Core;
@@ -193,8 +194,6 @@ sealed class Program
         LoadConfig(storage);
 
         Secrets = GetSecretProvider(storage);
-
-        Loc.SetupWithFallbacks();
 
         Dictionary<uint, string> apps = [];
         uint[] ignoredIds = [0, STEAM_APP_ID, STEAM_APP_ID_FT];

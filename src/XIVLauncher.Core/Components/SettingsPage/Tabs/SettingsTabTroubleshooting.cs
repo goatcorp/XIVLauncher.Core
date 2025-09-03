@@ -1,6 +1,7 @@
 using ImGuiNET;
 
 using XIVLauncher.Common.Util;
+using XIVLauncher.Core.Resources.Localization;
 using XIVLauncher.Core.Support;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
@@ -9,71 +10,89 @@ public class SettingsTabTroubleshooting : SettingsTab
 {
     public override SettingsEntry[] Entries { get; } =
     {
-        new SettingsEntry<bool>("Hack: Disable gameoverlayrenderer.so", "May fix black screen on launch (Steam Deck) and some stuttering issues after 40+ minutes.", () => Program.Config.FixLDP ?? false, x => Program.Config.FixLDP = x),
-        new SettingsEntry<bool>("Hack: XMODIFIERS=\"@im=null\"", "Fixes some mouse-related issues, some stuttering issues", () => Program.Config.FixIM ?? false, x => Program.Config.FixIM = x),
-        new SettingsEntry<bool>("Hack: Fix libicuuc Dalamud error", "Fixes a specific \"an internal Dalamud error has occurred.\" In the terminal you will see this text:\n\"Cannot get symbol u_charsToUChars from libicuuc Error: 127\"", () => Program.Config.FixError127 ?? false, x => Program.Config.FixError127 = x),
-        new SettingsEntry<bool>($"Hack: Force locale to {(!string.IsNullOrEmpty(Program.CType) ? Program.CType : "C.UTF-8 (exact value depends on distro)")}",
-                                !string.IsNullOrEmpty(Program.CType) ? $"Sets LC_ALL and LC_CTYPE to \"{Program.CType}\". This can fix some issues with non-Latin unicode characters in file paths if LANG is not a UTF-8 type" : "Hack Disabled. Could not find a UTF-8 C locale. You may have to set LC_ALL manually if LANG is not a UTF-8 type.",
+        new SettingsEntry<bool>(Strings.DisableGameoverlayRendererHack, Strings.DisableGameoverlayRendererHackDescription, () => Program.Config.FixLDP ?? false, x => Program.Config.FixLDP = x)
+        {
+            CheckVisibility = () => Environment.OSVersion.Platform == PlatformID.Unix
+        },
+        new SettingsEntry<bool>(Strings.XModifiersHack, Strings.XModifiersHackDescription, () => Program.Config.FixIM ?? false, x => Program.Config.FixIM = x)
+        {
+            CheckVisibility = () => Environment.OSVersion.Platform == PlatformID.Unix
+        },
+        new SettingsEntry<bool>(Strings.FixLibICUUCErrorHack, Strings.FixLibICUUCErrorHackDescription, () => Program.Config.FixError127 ?? false, x => Program.Config.FixError127 = x)
+        {
+            CheckVisibility = () => Environment.OSVersion.Platform == PlatformID.Unix
+        },
+        new SettingsEntry<bool>(string.Format(Strings.ForceLocaleHack, (!string.IsNullOrEmpty(Program.CType) ? Program.CType : Strings.ForceLocaleHackCUTF8)),
+                                !string.IsNullOrEmpty(Program.CType) ? string.Format(Strings.ForceLocaleHackDescription, Program.CType) : "Hack Disabled. Could not find a UTF-8 C locale. You may have to set LC_ALL manually if LANG is not a UTF-8 type.",
                                 () => Program.Config.FixLocale ?? false, b => Program.Config.FixLocale = b)
         {
+            CheckVisibility = () => Environment.OSVersion.Platform == PlatformID.Unix,
             CheckWarning = b =>
             {
                 var lang = CoreEnvironmentSettings.GetCleanEnvironmentVariable("LANG");
                 if (lang.ToUpper().Contains("UTF") && b)
-                    return $"Your locale is \"{lang}\". You probably don't need this hack.";
+                    return string.Format(Strings.ForceLocaleHackUTFValidation, lang);
                 return null;
-            }
+            },
         },
     };
-    public override string Title => "Troubleshooting";
+    public override string Title => Strings.TroubleshootingTitle;
 
     public override void Draw()
     {
+        ImGui.TextDisabled("Fixes");
+        ImGui.Spacing();
         base.Draw();
 
         ImGui.Separator();
-
-        ImGui.Text("\nClear the Wine Prefix - delete the ~/.xlcore/wineprefix folder");
-        if (ImGui.Button("Clear Prefix"))
-        {
-            Program.ClearPrefix();
-        }
-
-        ImGui.Text("\nClear the managed Wine install and DXVK");
-        if (ImGui.Button("Clear Wine & DXVK"))
-        {
-            Program.ClearTools(true);
-        }
-
-        ImGui.Text("\nClear all the files and folders related to Dalamud. Your settings will not be touched,\nbut all your plugins will be uninstalled, including custom repos.");
-        if (ImGui.Button("Clear Dalamud"))
-        {
-            Program.ClearPlugins(true);
-        }
-
-        ImGui.Text("\nClear all the log files.");
-        if (ImGui.Button("Clear Logs"))
-        {
-            Program.ClearLogs(true);
-        }
-
-        ImGui.Text("\nReset settings to default.");
-        if (ImGui.Button("Clear Settings"))
-        {
-            Program.ClearSettings(true);
-        }
-
-        ImGui.Text("\nDo all of the above.");
-        if (ImGui.Button("Clear Everything"))
-        {
-            Program.ClearAll(true);
-        }
-
-        ImGui.Text("\nGenerate a troubleshooting pack to upload to the official Discord channel");
-        if (ImGui.Button("Generate tspack"))
+        ImGui.TextDisabled("Logs");
+        ImGui.Spacing();
+        if (ImGui.Button(Strings.GenerateTSPackTroubleshootingButton))
         {
             PackGenerator.SavePack(Program.storage);
             PlatformHelpers.OpenBrowser(Program.storage.GetFolder("logs").FullName);
         }
+        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.GenerateTSPackTroubleshooting);
+        
+        ImGui.Separator();
+        ImGui.TextDisabled("Cleanup");
+        ImGui.TextColored(ImGuiColors.DalamudRed, Strings.TroubleshootingDestructiveActionWarning);
+        ImGui.Spacing();
+
+        if (ImGui.Button(Strings.ClearWINEPrefixTroubleshootingButton))
+        {
+            Program.ClearPrefix();
+        }
+        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearWINEPrefixTroubleshooting);
+
+        if (ImGui.Button(Strings.ClearManagedCompatToolsTroubleshootingButton))
+        {
+            Program.ClearTools(true);
+        }
+        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearManagedCompatToolsTroubleshooting);
+
+        if (ImGui.Button(Strings.ClearDalamudTroubleshootingButton))
+        {
+            Program.ClearPlugins(true);
+        }
+        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearDalamudTroubleshooting);
+
+        if (ImGui.Button(Strings.ClearAllLogsTroubleshootingButton))
+        {
+            Program.ClearLogs(true);
+        }
+        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearAllLogsTroubleshooting);
+
+        if (ImGui.Button(Strings.ResetSettingsTroubleshootingButton))
+        {
+            Program.ClearSettings(true);
+        }
+        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ResetSettingsTroubleshooting);
+
+        if (ImGui.Button(Strings.ResetAllTroubleshootingButton))
+        {
+            Program.ClearAll(true);
+        }
+        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ResetAllTroubleshooting);
     }
 }

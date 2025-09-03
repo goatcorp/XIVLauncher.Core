@@ -2,6 +2,8 @@ using System.Numerics;
 
 using ImGuiNET;
 
+using XIVLauncher.Core.Resources.Localization;
+
 namespace XIVLauncher.Core.Components.MainPage;
 
 public class ActionButtons : Component
@@ -21,7 +23,7 @@ public class ActionButtons : Component
             this.OnAccountButtonClicked?.Invoke();
         }
         ImGui.PushFont(FontManager.TextFont);
-        ImGuiHelpers.AddTooltip("My Account");
+        ImGuiHelpers.AddTooltip(Strings.MyAccount);
         ImGui.PopFont();
         ImGui.EndDisabled();
 
@@ -33,7 +35,7 @@ public class ActionButtons : Component
             this.OnStatusButtonClicked?.Invoke();
         }
         ImGui.PushFont(FontManager.TextFont);
-        ImGuiHelpers.AddTooltip("Service Status");
+        ImGuiHelpers.AddTooltip(Strings.ServiceStatus);
         ImGui.PopFont();
         ImGui.EndDisabled();
 
@@ -45,7 +47,7 @@ public class ActionButtons : Component
             this.OnSettingsButtonClicked?.Invoke();
         }
         ImGui.PushFont(FontManager.TextFont);
-        ImGuiHelpers.AddTooltip("Launcher Settings");
+        ImGuiHelpers.AddTooltip(Strings.LauncherSettings);
         ImGui.PopFont();
         ImGui.EndDisabled();
 

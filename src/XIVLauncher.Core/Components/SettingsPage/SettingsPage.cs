@@ -1,8 +1,11 @@
+using System.Collections.Immutable;
 using System.Numerics;
 
 using ImGuiNET;
 
 using XIVLauncher.Core.Components.SettingsPage.Tabs;
+using XIVLauncher.Core.Resources.Localization;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage;
 
@@ -63,7 +66,7 @@ public class SettingsPage : Page
             }
             else
             {
-                if (ImGui.BeginTabItem("Search Results"))
+                if (ImGui.BeginTabItem(Strings.SearchResults))
                 {
                     var any = false;
 
@@ -74,7 +77,8 @@ public class SettingsPage : Page
 
                         var eligible = settingsTab.Entries
                             .Where(x => x.Name.Contains(this.searchInput.Trim(),
-                                StringComparison.InvariantCultureIgnoreCase));
+                                StringComparison.InvariantCultureIgnoreCase))
+                            .ToImmutableArray();
 
                         if (!eligible.Any())
                             continue;
@@ -102,7 +106,7 @@ public class SettingsPage : Page
                     }
 
                     if (!any)
-                        ImGui.TextColored(ImGuiColors.DalamudGrey, "No results found...");
+                        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.NoResultsFound);
 
                     ImGui.EndTabItem();
                 }
@@ -147,7 +151,7 @@ public class SettingsPage : Page
         var vpSize = ImGuiHelpers.ViewportSize;
         ImGui.SetCursorPos(new Vector2(vpSize.X - 260, 4));
         ImGui.SetNextItemWidth(250);
-        ImGui.InputTextWithHint("###searchInput", "Search for settings...", ref this.searchInput, 100);
+        ImGui.InputTextWithHint("###searchInput", Strings.SearchForSettings, ref this.searchInput, 100);
 
         base.Draw();
     }

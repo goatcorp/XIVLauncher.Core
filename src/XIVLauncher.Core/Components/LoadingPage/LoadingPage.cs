@@ -3,6 +3,7 @@ using System.Numerics;
 using ImGuiNET;
 
 using XIVLauncher.Core.Components.Common;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.LoadingPage;
 
@@ -22,8 +23,8 @@ public class LoadingPage : Page
     public string? ProgressText { get; set; } = null;
 
     private Spinner spinner;
-    private Button cancelButton = new("Cancel");
-    private Button disableAutoLoginButton = new("Disable auto login");
+    private Button cancelButton = new(Strings.CancelLabel);
+    private Button disableAutoLoginButton = new(Strings.DisableAutoLoginButton);
 
     private bool hasDisabledAutoLogin = false;
 
@@ -90,7 +91,7 @@ public class LoadingPage : Page
         }
         else if (this.hasDisabledAutoLogin)
         {
-            ImGuiHelpers.CenteredText("Auto login disabled on next start!");
+            ImGuiHelpers.CenteredText(Strings.AutoLoginDisabledNextStart);
         }
 
         ImGui.Dummy(new Vector2(20));
