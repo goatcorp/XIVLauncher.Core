@@ -770,7 +770,14 @@ public class MainPage : Page
                 else if (!File.Exists(Path.Combine(App.Settings.WineBinaryPath, "wine64")))
                     throw new InvalidOperationException("Custom wine binary path is invalid: no wine64 found at that location.\n" +
                                                         "Check path carefully for typos: " + App.Settings.WineBinaryPath);
+                
+                Log.Information("Using Custom Wine: " + App.Settings.WineBinaryPath);
             }
+            else
+            {
+                Log.Information("Using Managed Wine: " + App.Settings.WineManagedVersion.ToString());
+            }
+            Log.Information("Using Dxvk Version: " + App.Settings.DxvkVersion.ToString());
 
             var signal = new ManualResetEvent(false);
             var isFailed = false;
