@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -14,10 +13,10 @@ namespace XIVLauncher.Common.Unix.Compatibility.Dxvk;
 
 public enum DxvkVersion
 {
-    [SettingsDescription("Stable", "Dxvk 2.6 with GPLAsync patches. For most graphics cards.")]
+    [SettingsDescription("Stable", "DXVK 2.6 with GPLAsync patches. For most graphics cards.")]
     Stable,
 
-    [SettingsDescription("Legacy", "Dxvk 1.10.3 with Async patches. For older graphics cards.")]
+    [SettingsDescription("Legacy", "DXVK 1.10.3 with Async patches. For older graphics cards.")]
     Legacy,
 
     [SettingsDescription("Disabled", "Use OpenGL/WineD3D instead. Slow, and might not work with Dalamud.")]

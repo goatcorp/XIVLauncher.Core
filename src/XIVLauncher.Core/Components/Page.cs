@@ -6,9 +6,9 @@ public class Page : Component
 {
     protected LauncherApp App { get; }
 
-    public Vector2? Padding { get; set; } = null;
+    public Vector2? Padding { get; init; } = null;
 
-    public Page(LauncherApp app)
+    protected Page(LauncherApp app)
     {
         this.App = app;
     }

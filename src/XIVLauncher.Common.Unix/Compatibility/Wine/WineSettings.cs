@@ -7,22 +7,22 @@ namespace XIVLauncher.Common.Unix.Compatibility.Wine;
 
 public enum WineStartupType
 {
-    [SettingsDescription("Managed by XIVLauncher", "Wine setup is managed by XIVLauncher - you can leave it up to us.")]
+    [SettingsDescription("Managed by XIVLauncher", "WINE setup is managed by XIVLauncher - you can leave it up to us.")]
     Managed,
 
-    [SettingsDescription("Custom", "Point XIVLauncher to a custom location containing wine binaries to run the game with.")]
+    [SettingsDescription("Custom", "Point XIVLauncher to a custom location containing WINE binaries to run the game with.")]
     Custom,
 }
 
 public enum WineManagedVersion
 {
-    [SettingsDescription("Stable", "Based on Wine 10.8 - recommended for most users.")]
+    [SettingsDescription("Stable", "Based on WINE 10.8 - recommended for most users.")]
     Stable,
 
-    [SettingsDescription("Beta", "Testing ground for the newest wine changes. Based on Wine 10.8 with lsteamclient patches.")]
+    [SettingsDescription("Beta", "Testing ground for the newest wine changes. Based on WINE 10.8 with lsteamclient patches.")]
     Beta,
 
-    [SettingsDescription("Legacy", "Based on Wine 8.5 - use for compatibility with some plugins.")]
+    [SettingsDescription("Legacy", "Based on WINE 8.5 - use for compatibility with some plugins.")]
     Legacy,
 }
 
