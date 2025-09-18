@@ -6,7 +6,6 @@ using Serilog;
 
 using XIVLauncher.Common.Http;
 using XIVLauncher.Core.Resources.Localization;
-using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components;
 
