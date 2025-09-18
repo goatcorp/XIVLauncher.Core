@@ -14,6 +14,7 @@ using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Components.MainPage;
 using XIVLauncher.Core.Components.SettingsPage;
 using XIVLauncher.Core.Configuration;
+using XIVLauncher.Core.Resources.Localization;
 using XIVLauncher.PlatformAbstractions;
 
 namespace XIVLauncher.Core;
@@ -194,7 +195,7 @@ public class LauncherApp : Component
 
     public void ShowExceptionBlocking(Exception exception, string context)
     {
-        this.ShowMessageBlocking($"An error occurred ({context}).\n\n{exception}", "XIVLauncher Error");
+        this.ShowMessageBlocking($"An error occurred ({context}).\n\n{exception}", Strings.XIVLauncherError);
     }
 
     public bool HandleContinuationBlocking(Task task)

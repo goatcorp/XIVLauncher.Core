@@ -1,10 +1,11 @@
 using XIVLauncher.Common.Dalamud;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabDalamud : SettingsTab
 {
-    public override string Title => "Dalamud";
+    public override string Title => Strings.DalamudTitle;
     public override SettingsEntry[] Entries { get; }
     private SettingsEntry<bool> enableManualInjection;
 
@@ -13,13 +14,13 @@ public class SettingsTabDalamud : SettingsTab
         this.Entries = new SettingsEntry[]
         {
 
-            new SettingsEntry<bool>("Enable Dalamud", "Enable the Dalamud plugin system", () => Program.Config.DalamudEnabled ?? true, b => Program.Config.DalamudEnabled = b),
+            new SettingsEntry<bool>(Strings.EnableDalamudSetting, Strings.EnableDalamudSettingDescription, () => Program.Config.DalamudEnabled ?? true, b => Program.Config.DalamudEnabled = b),
 
-            new SettingsEntry<DalamudLoadMethod>("Load Method", "Choose how Dalamud is loaded.", () => Program.Config.DalamudLoadMethod ?? DalamudLoadMethod.DllInject, method => Program.Config.DalamudLoadMethod = method),
+            new SettingsEntry<DalamudLoadMethod>(Strings.LoadMethodSetting, Strings.LoadMethodSettingDescription, () => Program.Config.DalamudLoadMethod ?? DalamudLoadMethod.DllInject, method => Program.Config.DalamudLoadMethod = method),
 
-            new NumericSettingsEntry("Injection Delay (ms)", "Choose how long to wait after the game has loaded before injecting.", () => Program.Config.DalamudLoadDelay, delay => Program.Config.DalamudLoadDelay = delay, 0, int.MaxValue, 1000),
+            new NumericSettingsEntry(Strings.DalamudInjectionDelaySetting, Strings.DalamudInjectionDelaySettingDescription, () => Program.Config.DalamudLoadDelay, delay => Program.Config.DalamudLoadDelay = delay, 0, int.MaxValue, 1000),
 
-            enableManualInjection = new SettingsEntry<bool>("Enable Manual Injection", "Use a local build of Dalamud instead of the automatically provided one (For developers only!)", () => Program.Config.DalamudManualInjectionEnabled ?? false, (enabled) =>
+            enableManualInjection = new SettingsEntry<bool>(Strings.DalamudManualInjectionEnableSetting, Strings.DalamudManualInjectionEnableSettingDescription, () => Program.Config.DalamudManualInjectionEnabled ?? false, (enabled) =>
             {
                 Program.Config.DalamudManualInjectionEnabled = enabled;
 
@@ -37,7 +38,7 @@ public class SettingsTabDalamud : SettingsTab
                 }
             }),
 
-            new SettingsEntry<DirectoryInfo>("Manual Injection Path", "The path to the local version of Dalamud where Dalamud.Injector.exe is located", () => Program.Config.DalamudManualInjectPath, (input) =>
+            new SettingsEntry<DirectoryInfo>(Strings.DalamudLocalInjectionPathSetting, Strings.DalamudLocalInjectionPathSettingDescription, () => Program.Config.DalamudManualInjectPath, (input) =>
             {
                 if (enableManualInjection.Value == false) return;
                 if (input is null) return;
@@ -50,11 +51,11 @@ public class SettingsTabDalamud : SettingsTab
                 {
                     if (input is null || !input.Exists)
                     {
-                        return "There is no directory at that path.";
+                        return Strings.DalamudLocalInjectionPathSettingNoDirValidation;
                     }
                     else if (input.GetFiles().FirstOrDefault(x => x.Name == Program.DALAMUD_INJECTOR_NAME) is null)
                     {
-                        return "Dalamud.Injector.exe was not found inside of the provided directory.";
+                        return Strings.DalamudLocalInjectionPathSettingNoInjValidation;
                     }
                     return null;
                 },
