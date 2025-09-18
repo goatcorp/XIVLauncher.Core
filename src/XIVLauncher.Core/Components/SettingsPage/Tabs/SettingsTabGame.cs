@@ -1,6 +1,7 @@
 using ImGuiNET;
 
 using XIVLauncher.Common;
+using XIVLauncher.Common.Unix.Compatibility.Wine;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -30,7 +31,17 @@ public class SettingsTabGame : SettingsTab
             CheckVisibility = () => Environment.OSVersion.Platform == PlatformID.Unix,
         },
 
-        new SettingsEntry<string>("Additional Game Arguments", "Follows Steam conventions: VAR1=value VAR2=value %command% -arg1 -arg2.\nCan't pass programs (like gamescope -- %command%). Does not accept flatpak args (--parent-pid=1, etc.)", () => Program.Config.AdditionalArgs, x => Program.Config.AdditionalArgs = x),
+        new SettingsEntry<string>("Additional Game Arguments", "Follows Steam conventions: VAR1=value VAR2=value %command% -arg1 -arg2. Can't pass programs \n(like gamescope -- %command%). Does not accept flatpak args (--parent-pid=1, etc.) or WINEDLLOVERRIDES", () => Program.Config.AdditionalArgs, x => Program.Config.AdditionalArgs = x),
+        new SettingsEntry<string>("Extra WINEDLLOVERRIDES", "Add extra WINEDLLOVERRIDES. No spaces, semicolon separated.\nDo not use msquic, mscoree, d3d9, d3d10core, d3d11, or dxgi. These are already set.", () => Program.Config.WineDLLOverrides ?? "", s => Program.Config.WineDLLOverrides = s)
+        {
+            CheckValidity = s =>
+            {
+                if (!WineSettings.WineDLLOverrideIsValid(s))
+                    return "Not a valid WINEDLLOVERRIDE string";
+                
+                return null;
+            },
+        },
         new SettingsEntry<ClientLanguage>("Game Language", "Select the game's language.", () => Program.Config.ClientLanguage ?? ClientLanguage.English, x => Program.Config.ClientLanguage = x),
         new SettingsEntry<DpiAwareness>("Game DPI Awareness", "Select the game's DPI Awareness. Change this if the game's scaling looks wrong.", () => Program.Config.DpiAwareness ?? DpiAwareness.Unaware, x => Program.Config.DpiAwareness = x),
         new SettingsEntry<bool>("Use XIVLauncher authenticator/OTP macros", "Check this if you want to use the XIVLauncher authenticator app or macros.", () => Program.Config.IsOtpServer ?? false, x => Program.Config.IsOtpServer = x),
