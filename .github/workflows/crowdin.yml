@@ -9,9 +9,10 @@ jobs:
   synchronize-with-crowdin:
     if: github.repository_owner == 'goatcorp'
     runs-on: ubuntu-latest
-
+    permissions: 
+      contents: write
+      pull-requests: write
     steps:
-
     - name: Checkout
       uses: actions/checkout@v5
 
@@ -32,6 +33,6 @@ jobs:
           pull_request_body: 'Update localization with latest translations from crowdin'
           config: '.github/crowdin.yml'
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
         CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
