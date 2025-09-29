@@ -5,6 +5,7 @@ using ImGuiNET;
 using Serilog;
 
 using XIVLauncher.Common.Http;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components;
 
@@ -41,7 +42,7 @@ public class OtpEntryPage : Page
         // BUG: We have to turn this off when using OTP server, because there's no way to dismiss open keyboards
         if (Program.Steam != null && Program.Steam.IsValid && Program.IsSteamDeckHardware && App.Settings.IsOtpServer is false)
         {
-            var success = Program.Steam.ShowGamepadTextInput(false, false, "Please enter your OTP", 6, string.Empty);
+            var success = Program.Steam.ShowGamepadTextInput(false, false, Strings.EnterYourOTP, 6, string.Empty);
             Log.Verbose("ShowGamepadTextInput: {Success}", success);
         }
 
@@ -107,7 +108,7 @@ public class OtpEntryPage : Page
             ImGui.Dummy(new Vector2(40));
 
             // center text in window
-            ImGuiHelpers.CenteredText("Please enter your OTP");
+            ImGuiHelpers.CenteredText(Strings.EnterYourOTP);
 
             const int INPUT_WIDTH = 150;
             ImGui.SetNextItemWidth(INPUT_WIDTH);
@@ -124,14 +125,14 @@ public class OtpEntryPage : Page
             var buttonSize = new Vector2(INPUT_WIDTH / 2 - 4, 30);
             ImGuiHelpers.CenterCursorFor(INPUT_WIDTH);
 
-            if (ImGui.Button("OK", buttonSize) || doEnter)
+            if (ImGui.Button(Strings.OKLabel, buttonSize) || doEnter)
             {
                 TryAcceptOtp(this.otp);
             }
 
             ImGui.SameLine();
 
-            if (ImGui.Button("Cancel", buttonSize))
+            if (ImGui.Button(Strings.CancelLabel, buttonSize))
             {
                 this.Cancelled = true;
             }

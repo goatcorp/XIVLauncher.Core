@@ -4,6 +4,7 @@ using ImGuiNET;
 
 using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.Common;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.MainPage;
 
@@ -68,21 +69,21 @@ public class LoginFrame : Component
             this.OnLogin?.Invoke(LoginAction.Game);
         }
 
-        this.loginInput = new Input("Username", "Enter your Username", new Vector2(12f, 0f), 128)
+        this.loginInput = new Input(Strings.UsernameInput, Strings.UsernameInputHint, new Vector2(12f, 0f), 128)
         {
             TakeKeyboardFocus = true
         };
         this.loginInput.Enter += TriggerLogin;
 
-        this.passwordInput = new Input("Password", "Enter your password", new Vector2(12f, 0f), 128, flags: ImGuiInputTextFlags.Password | ImGuiInputTextFlags.NoUndoRedo);
+        this.passwordInput = new Input(Strings.PasswordInput, Strings.PasswordInputHint, new Vector2(12f, 0f), 128, flags: ImGuiInputTextFlags.Password | ImGuiInputTextFlags.NoUndoRedo);
         this.passwordInput.Enter += TriggerLogin;
 
-        this.oneTimePasswordCheckbox = new Checkbox("Use one-time password");
-        this.useSteamServiceCheckbox = new Checkbox("Steam service account");
-        this.freeTrialCheckbox = new Checkbox("Free trial account");
-        this.autoLoginCheckbox = new Checkbox("Log in automatically");
+        this.oneTimePasswordCheckbox = new Checkbox(Strings.UseOneTimePasswordCheckbox);
+        this.useSteamServiceCheckbox = new Checkbox(Strings.UseSteamServiceAccount);
+        this.freeTrialCheckbox = new Checkbox(Strings.FreeTrialAccountCheckbox);
+        this.autoLoginCheckbox = new Checkbox(Strings.LogInAutomaticCheckbox);
 
-        this.loginButton = new Button("Login");
+        this.loginButton = new Button(Strings.LoginButton);
         this.loginButton.Click += TriggerLogin;
     }
 
@@ -119,35 +120,35 @@ public class LoginFrame : Component
 
             if (ImGui.BeginPopupContextItem(POPUP_ID_LOGINACTION))
             {
-                if (ImGui.MenuItem("Launch without Dalamud"))
+                if (ImGui.MenuItem(Strings.LaunchWithoutDalamudButton))
                 {
                     this.OnLogin?.Invoke(LoginAction.GameNoDalamud);
                 }
 
                 ImGui.Separator();
 
-                if (ImGui.MenuItem("Launch without any plugins"))
+                if (ImGui.MenuItem(Strings.LaunchWithoutPluginsButton))
                 {
                     this.OnLogin?.Invoke(LoginAction.GameNoPlugins);
                 }
 
                 ImGui.Separator();
 
-                if (ImGui.MenuItem("Launch without custom repo plugins"))
+                if (ImGui.MenuItem(Strings.LaunchWithNoCustomPluginsButton))
                 {
                     this.OnLogin?.Invoke(LoginAction.GameNoThirdparty);
                 }
 
                 ImGui.Separator();
 
-                if (ImGui.MenuItem("Patch without launching"))
+                if (ImGui.MenuItem(Strings.PatchWithoutLaunchingButton))
                 {
                     this.OnLogin?.Invoke(LoginAction.GameNoLaunch);
                 }
 
                 ImGui.Separator();
 
-                if (ImGui.MenuItem("Repair game files"))
+                if (ImGui.MenuItem(Strings.RepairGameFilesButton))
                 {
                     this.OnLogin?.Invoke(LoginAction.Repair);
                 }
@@ -170,7 +171,7 @@ public class LoginFrame : Component
             if (Program.Secrets is DummySecretProvider)
             {
                 ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
-                ImGui.TextWrapped("Take care! No secrets provider is installed or configured. Passwords can't be saved.");
+                ImGui.TextWrapped(Strings.NoSecretsProviderWarning);
                 ImGui.PopStyleColor();
 
                 ImGui.Dummy(new Vector2(15));
