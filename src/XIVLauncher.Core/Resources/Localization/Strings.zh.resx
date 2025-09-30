@@ -20,552 +20,553 @@
             Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EnterYourOTP" xml:space="preserve">
-        <value>Please enter your OTP</value>
+        <value>请输入你的动态密码 (OTP)</value>
     </data>
   <data name="OKLabel" xml:space="preserve">
-        <value>OK</value>
+        <value>确定</value>
     </data>
   <data name="CancelLabel" xml:space="preserve">
-        <value>Cancel</value>
+        <value>取消</value>
     </data>
   <data name="SearchResults" xml:space="preserve">
-        <value>Search Results</value>
+        <value>搜索结果</value>
     </data>
   <data name="NoResultsFound" xml:space="preserve">
-        <value>No results found...</value>
+        <value>未找到结果...</value>
     </data>
   <data name="SearchForSettings" xml:space="preserve">
-        <value>Search for settings...</value>
+        <value>搜索设置...</value>
     </data>
   <data name="AboutTitle" xml:space="preserve">
-        <value>About</value>
+        <value>关于</value>
     </data>
   <data name="WineInstallSetting" xml:space="preserve">
-        <value>WINE Install</value>
+        <value>WINE 安装</value>
     </data>
   <data name="WineInstallSettingDescription" xml:space="preserve">
-        <value>Choose how XIVLauncher will start and manage your WINE installation.</value>
+        <value>请选择 XIVLauncher 启动及管理 WINE 安装的方式。</value>
     </data>
   <data name="WineVersionSetting" xml:space="preserve">
-        <value>WINE Version</value>
+        <value>WINE 版本</value>
     </data>
   <data name="WineVersionSettingDescription" xml:space="preserve">
-        <value>If you change WINE releases, you might have to clear your prefix (Troubleshooting tab)</value>
+        <value>如果更换 WINE 版本，可能需要清空你的 prefix (可在“故障排除”标签页操作)</value>
     </data>
   <data name="WineBinaryPathSetting" xml:space="preserve">
-        <value>WINE Binary Path</value>
+        <value>WINE 可执行文件路径</value>
     </data>
   <data name="WineBinarySettingDescription" xml:space="preserve">
-        <value>Set the path XIVLauncher will use to run applications via WINE.
-It should be an absolute path to a folder containing wine64 and wineserver binaries.</value>
+        <value>设置 XIVLauncher 通过 WINE 运行应用程序时使用的路径。
+该路径必须是包含 wine64 和 wineserver 可执行文件的文件夹的绝对路径。</value>
     </data>
   <data name="DXVKVersionSetting" xml:space="preserve">
-        <value>DXVK Version</value>
+        <value>DXVK 版本</value>
     </data>
   <data name="DXVKVersionSettingDescription" xml:space="preserve">
-        <value>Choose which DXVK version to use.</value>
+        <value>选择要使用的 DXVK 版本。</value>
     </data>
   <data name="DXVKEnableAsyncSetting" xml:space="preserve">
-        <value>Enable DXVK ASYNC</value>
+        <value>启用 DXVK ASYNC</value>
     </data>
   <data name="DXVKEnableAsyncSettingDescription" xml:space="preserve">
-        <value>Enable DXVK ASYNC patch.</value>
+        <value>启用 DXVK ASYNC 补丁。</value>
     </data>
   <data name="EnableFeralGameModeSetting" xml:space="preserve">
-        <value>Enable Feral's GameMode</value>
+        <value>启用 Feral 的 GameMode</value>
     </data>
   <data name="EnableFeralGameModeSettingDescription" xml:space="preserve">
-        <value>Enable launching with Feral Interactive's GameMode CPU optimizations.</value>
+        <value>启用 Feral Interactive 的 GameMode CPU 优化功能。</value>
     </data>
   <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
-        <value>GameMode was not detected on your system.</value>
+        <value>未在你的系统上检测到 GameMode。</value>
     </data>
   <data name="EnableESyncSetting" xml:space="preserve">
-        <value>Enable ESync</value>
+        <value>启用 ESync</value>
     </data>
   <data name="EnableFSyncSetting" xml:space="preserve">
-        <value>Enable FSync</value>
+        <value>启用 FSync</value>
     </data>
   <data name="EnableESyncSettingDescription" xml:space="preserve">
-        <value>Enable eventfd-based synchronization.</value>
+        <value>启用基于 eventfd 的同步。</value>
     </data>
   <data name="EnableFSyncSettingDescription" xml:space="preserve">
-        <value>Enable fast user mutex (futex2).</value>
+        <value>启用快速用户互斥锁 (futex2)。</value>
     </data>
   <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
-        <value>Linux kernel 5.16 or higher is required for FSync.</value>
+        <value>FSync 需要 Linux 内核 5.16 或以上。</value>
     </data>
   <data name="SetWindows7Setting" xml:space="preserve">
-        <value>Set Windows version to 7</value>
+        <value>将 Windows 版本设置为 Win7</value>
     </data>
   <data name="SetWindows7SettingDescription" xml:space="preserve">
-        <value>Default for WINE 8.1+ is Windows 10, but this causes issues with some Dalamud plugins. Windows 7 is recommended for now.</value>
+        <value>WINE 8.1 及以上版本默认使用 Windows 10 模式，但该模式可能导致部分 Dalamud 插件出现问题，建议暂时设置为 Windows 7 模式。</value>
     </data>
   <data name="EnableDXVKOverlaySetting" xml:space="preserve">
-        <value>DXVK Overlay</value>
+        <value>DXVK 叠加层</value>
     </data>
   <data name="EnableDXVKOverlaySettingDescription" xml:space="preserve">
-        <value>Configure how much of the DXVK overlay is to be shown.</value>
+        <value>配置 DXVK 叠加层显示的内容。</value>
     </data>
   <data name="WineDebugAdditionalVarSetting" xml:space="preserve">
-        <value>WINEDEBUG Variables</value>
+        <value>WINEDEBUG 变量</value>
     </data>
   <data name="WineDebugAdditionalVarSettingDescription" xml:space="preserve">
-        <value>Configure debug logging for WINE. Useful for troubleshooting.</value>
+        <value>配置 WINE 的调试日志。可用于故障排查。</value>
     </data>
   <data name="WineTitle" xml:space="preserve">
         <value>WINE</value>
     </data>
   <data name="CompatibilityToolNotSetup" xml:space="preserve">
-        <value>Compatibility tool has not been set up yet, please ensure you have started the game at least once.</value>
+        <value>兼容性工具尚未配置完成，请确认你已至少启动过一次游戏。</value>
     </data>
   <data name="OpenWINEPrefix" xml:space="preserve">
-        <value>Open WINE Prefix</value>
+        <value>打开 WINE Prefix</value>
     </data>
   <data name="OpenWINEConfiguration" xml:space="preserve">
-        <value>Open WINE configuration</value>
+        <value>打开 WINE 配置</value>
     </data>
   <data name="OpenWINEExplorer" xml:space="preserve">
-        <value>Open WINE explorer (run apps in prefix)</value>
+        <value>打开 WINE 资源管理器 (在 Prefix 内运行应用)</value>
     </data>
   <data name="KillAllWINEProcesses" xml:space="preserve">
-        <value>Kill all WINE processes</value>
+        <value>终止所有 WINE 进程</value>
     </data>
   <data name="DisableGameoverlayRendererHack" xml:space="preserve">
-        <value>Hack: Disable gameoverlayrenderer.so</value>
+        <value>Hack: 禁用 gameoverlayrenderer.so</value>
     </data>
   <data name="DisableGameoverlayRendererHackDescription" xml:space="preserve">
-        <value>May fix black screen on launch (Steam Deck) and some stuttering issues after 40+ minutes.</value>
+        <value>可修复启动黑屏 (Steam Deck) 及运行 40 分钟后出现的卡顿问题。</value>
     </data>
   <data name="XModifiersHack" xml:space="preserve">
         <value>Hack: XMODIFIERS="@im=null"</value>
     </data>
   <data name="XModifiersHackDescription" xml:space="preserve">
-        <value>Fixes some mouse-related issues, some stuttering issues</value>
+        <value>可修复部分鼠标相关问题及卡顿现象</value>
     </data>
   <data name="FixLibICUUCErrorHack" xml:space="preserve">
-        <value>Hack: Fix libicuuc Dalamud error</value>
+        <value>Hack: 修复 libicuuc Dalamud 错误</value>
     </data>
   <data name="FixLibICUUCErrorHackDescription" xml:space="preserve">
-        <value>Fixes a specific "an internal Dalamud error has occurred." In the terminal you will see this text:
-"Cannot get symbol u_charsToUChars from libicuuc Error: 127"</value>
+        <value>可修复特定的“Dalamud 内部错误”。终端中会提示：
+“Cannot get symbol u_charsToUChars from libicuuc Error: 127”</value>
     </data>
   <data name="ForceLocaleHack" xml:space="preserve">
-        <value>Hack: Force locale to {0}</value>
+        <value>Hack: 强制区域设置为 {0}</value>
     </data>
   <data name="ForceLocaleHackCUTF8" xml:space="preserve">
-        <value>C.UTF-8 (exact value depends on distro)</value>
+        <value>C.UTF-8 (具体值取决于发行版)</value>
     </data>
   <data name="ForceLocaleHackDescription" xml:space="preserve">
-        <value>Sets LC_ALL and LC_CTYPE to "{0}". This can fix some issues with non-Latin unicode characters in file paths if LANG is not a UTF-8 type</value>
+        <value>将 LC_ALL 与 LC_CTYPE 设为 "{0}"。若 LANG 未采用 UTF-8 编码，此设置可修复文件路径中非拉丁字符引发的问题</value>
     </data>
   <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
-        <value>Your locale is "{0}". You probably don't need this hack.</value>
+        <value>你的区域设置为 "{0}"，通常无需启用此 Hack。</value>
     </data>
   <data name="TroubleshootingTitle" xml:space="preserve">
-        <value>Troubleshooting</value>
+        <value>故障排除</value>
     </data>
   <data name="ClearWINEPrefixTroubleshooting" xml:space="preserve">
-        <value>Clear the WINE Prefix.</value>
+        <value>清除 WINE Prefix。</value>
     </data>
   <data name="ClearWINEPrefixTroubleshootingButton" xml:space="preserve">
-        <value>Clear WINE Prefix</value>
+        <value>清除 WINE Prefix</value>
     </data>
   <data name="ClearManagedCompatToolsTroubleshooting" xml:space="preserve">
-        <value>Clear the managed WINE install and DXVK</value>
+        <value>清除托管的 WINE 安装与 DXVK</value>
     </data>
   <data name="ClearManagedCompatToolsTroubleshootingButton" xml:space="preserve">
-        <value>Clear WINE &amp; DXVK Installs</value>
+        <value>清除 WINE 与 DXVK 安装</value>
     </data>
   <data name="ClearDalamudTroubleshooting" xml:space="preserve">
-        <value>Clear all the files and folders related to Dalamud. Your settings will not be touched, but all your plugins will be uninstalled, including custom repos.</value>
+        <value>清除所有与 Dalamud 相关的文件和文件夹。你的设置将保持不变，但所有插件 (包括自定义仓库的插件) 都将被卸载。</value>
     </data>
   <data name="ClearDalamudTroubleshootingButton" xml:space="preserve">
-        <value>Clear Dalamud</value>
+        <value>清除 Dalamud</value>
     </data>
   <data name="ClearAllLogsTroubleshooting" xml:space="preserve">
-        <value>Clear all the log files.</value>
+        <value>清除所有日志文件。</value>
     </data>
   <data name="ClearAllLogsTroubleshootingButton" xml:space="preserve">
-        <value>Clear Logs</value>
+        <value>清除日志</value>
     </data>
   <data name="ResetSettingsTroubleshooting" xml:space="preserve">
-        <value>Reset settings to default.</value>
+        <value>将设置重置为默认值。</value>
     </data>
   <data name="ResetSettingsTroubleshootingButton" xml:space="preserve">
-        <value>Clear Settings</value>
+        <value>清除设置</value>
     </data>
   <data name="ResetAllTroubleshooting" xml:space="preserve">
-        <value>Do all of the above.</value>
+        <value>执行以上所有操作。</value>
     </data>
   <data name="GenerateTSPackTroubleshooting" xml:space="preserve">
-        <value>Generate a troubleshooting pack to upload to the official Discord channel</value>
+        <value>生成故障排查包，以便上传至官方 Discord 频道</value>
     </data>
   <data name="GenerateTSPackTroubleshootingButton" xml:space="preserve">
-        <value>Generate TSPack</value>
+        <value>生成 TSPack</value>
     </data>
   <data name="ResetAllTroubleshootingButton" xml:space="preserve">
-        <value>Clear Everything</value>
+        <value>清除全部</value>
     </data>
   <data name="PatchPathSetting" xml:space="preserve">
-        <value>Patch Path</value>
+        <value>补丁路径</value>
     </data>
   <data name="PatchPathSettingDescription" xml:space="preserve">
-        <value>Where patches should be downloaded to.</value>
+        <value>补丁下载位置。</value>
     </data>
   <data name="PatchPathSettingNotSetValidation" xml:space="preserve">
-        <value>Patch path is not set.</value>
+        <value>未设置补丁路径。</value>
     </data>
   <data name="PatchDownloadMethodSetting" xml:space="preserve">
-        <value>Patch Download Method</value>
+        <value>补丁下载方式</value>
     </data>
   <data name="PatchDownloadMethodSettingDescription" xml:space="preserve">
-        <value>How patches should be downloaded.</value>
+        <value>下载补丁的方式。</value>
     </data>
   <data name="MaximumSpeedSetting" xml:space="preserve">
-        <value>Maximum Speed</value>
+        <value>最大速度</value>
     </data>
   <data name="MaximumSpeedSettingDescription" xml:space="preserve">
-        <value>Maximum download speed in bytes per second. Set to 0 for unlimited.</value>
+        <value>最大下载速度 (字节/秒)。设为 0 表示不限速。</value>
     </data>
   <data name="KeepPatchesSetting" xml:space="preserve">
-        <value>Keep Patches</value>
+        <value>保留补丁</value>
     </data>
   <data name="KeepPatchesSettingDescription" xml:space="preserve">
-        <value>Keep patches on disk after installing.</value>
+        <value>安装完成后保留补丁文件。</value>
     </data>
   <data name="PatchingTitle" xml:space="preserve">
-        <value>Patching</value>
+        <value>修补中</value>
     </data>
   <data name="GamePathSetting" xml:space="preserve">
-        <value>Game Path</value>
+        <value>游戏路径</value>
     </data>
   <data name="GamePathSettingDescription" xml:space="preserve">
-        <value>Where the game is or will be installed.</value>
+        <value>游戏当前或即将安装的位置。</value>
     </data>
   <data name="GamePathSettingNotSetValidation" xml:space="preserve">
-        <value>Game path is not set.</value>
+        <value>未设置游戏路径。</value>
     </data>
   <data name="GamePathSettingInvalidValidationj" xml:space="preserve">
-        <value>Please select the path containing the folders "game" and "boot", not the folders itself.</value>
+        <value>请选择包含 "game" 和 "boot" 文件夹的路径，而非这两个文件夹本身。</value>
     </data>
   <data name="GameConfigurationPathSetting" xml:space="preserve">
-        <value>Game Configuration Path</value>
+        <value>游戏配置路径</value>
     </data>
   <data name="GameConfigurationPathSettingDescription" xml:space="preserve">
-        <value>Where your user config files will be stored.</value>
+        <value>你的用户配置文件将存储的位置。</value>
     </data>
   <data name="GameConfigurationPathNotSetValidation" xml:space="preserve">
-        <value>Game Config Path is not set.</value>
+        <value>未设置游戏配置路径。</value>
     </data>
   <data name="AdditionalGameArgsSetting" xml:space="preserve">
-        <value>Additional Game Arguments</value>
+        <value>额外游戏参数</value>
     </data>
   <data name="AdditionalGameArgsSettingDescription" xml:space="preserve">
-        <value>Follows Steam conventions: VAR1=value VAR2=value %command% -arg1 -arg2.
-Can't pass programs (like gamescope -- %command%). Does not accept flatpak args (--parent-pid=1, etc.)</value>
+        <value>遵循 Steam 惯例: VAR1=value VAR2=value %command% -arg1 -arg2。
+不支持传递程序 (如 gamescope -- %command%)，也不接受 flatpak 参数 (如 --parent-pid=1 等)</value>
     </data>
   <data name="GameLanguageSetting" xml:space="preserve">
-        <value>Game Language</value>
+        <value>游戏语言</value>
     </data>
   <data name="GameLanguageSettingDescription" xml:space="preserve">
-        <value>Select the game's language.</value>
+        <value>选择游戏语言。</value>
     </data>
   <data name="GameDPIAwarenessSetting" xml:space="preserve">
-        <value>Game DPI Awareness</value>
+        <value>游戏 DPI 修正</value>
     </data>
   <data name="GameDPIAwarenessSettingDescription" xml:space="preserve">
-        <value>Select the game's DPI Awareness. Change this if the game's scaling looks wrong.</value>
+        <value>选择游戏的 DPI 缩放模式。若游戏界面缩放异常，可更改此项。</value>
     </data>
   <data name="UseXLAuthMacrosSetting" xml:space="preserve">
-        <value>Use XIVLauncher authenticator/OTP macros</value>
+        <value>使用 XIVLauncher 验证器 / OTP 宏</value>
     </data>
   <data name="UseXLAuthMacrosSettingDescription" xml:space="preserve">
-        <value>Check this if you want to use the XIVLauncher authenticator app or macros.</value>
+        <value>如需使用 XIVLauncher 验证器应用或动态口令，请勾选此项。</value>
     </data>
   <data name="IgnoreSteamSetting" xml:space="preserve">
-        <value>Ignore Steam</value>
+        <value>忽略 Steam</value>
     </data>
   <data name="IgnoreSteamSettingDescription" xml:space="preserve">
-        <value>Check this if you do not want XIVLauncher to communicate with Steam (Requires Restart).</value>
+        <value>若你不希望 XIVLauncher 与 Steam 通信，请勾选此项 (需重启)。</value>
     </data>
   <data name="UseUIDCacheSetting" xml:space="preserve">
-        <value>Use Experimental UID Cache</value>
+        <value>使用实验性 UID 缓存</value>
     </data>
   <data name="UseUIDCacheSettingDescription" xml:space="preserve">
-        <value>Tries to save your login token for the next start. Can result in launching with expired sessions.</value>
+        <value>尝试保存你的登录令牌以供下次启动使用，但可能导致使用过期会话启动。</value>
     </data>
   <data name="GameTitle" xml:space="preserve">
-        <value>Game</value>
+        <value>游戏</value>
     </data>
   <data name="ResetUIDCacheInfo" xml:space="preserve">
-        <value>Reset the UID cache; use if you are getting FFXIV error 1012 or 500X.</value>
+        <value>重置 UID 缓存；若遇到 FFXIV 错误 1012 或 500X，可尝试此操作。</value>
     </data>
   <data name="ResetUIDCacheButton" xml:space="preserve">
-        <value>Reset UID Cache</value>
+        <value>重置 UID 缓存</value>
     </data>
   <data name="DebugTitle" xml:space="preserve">
-        <value>Debug</value>
+        <value>调试</value>
     </data>
   <data name="DalamudTitle" xml:space="preserve">
         <value>Dalamud</value>
     </data>
   <data name="EnableDalamudSetting" xml:space="preserve">
-        <value>Enable Dalamud</value>
+        <value>启用 Dalamud</value>
     </data>
   <data name="EnableDalamudSettingDescription" xml:space="preserve">
-        <value>Enable the Dalamud plugin system</value>
+        <value>启用 Dalamud 插件系统</value>
     </data>
   <data name="LoadMethodSetting" xml:space="preserve">
-        <value>Load Method</value>
+        <value>加载方式</value>
     </data>
   <data name="LoadMethodSettingDescription" xml:space="preserve">
-        <value>Choose how Dalamud is loaded.</value>
+        <value>选择 Dalamud 的加载方式。</value>
     </data>
   <data name="DalamudInjectionDelaySetting" xml:space="preserve">
-        <value>Injection Delay (ms)</value>
+        <value>注入延迟 (ms)</value>
     </data>
   <data name="DalamudInjectionDelaySettingDescription" xml:space="preserve">
-        <value>Choose how long to wait after the game has loaded before injecting.</value>
+        <value>选择游戏加载完成后等待多久再进行注入。</value>
     </data>
   <data name="DalamudManualInjectionEnableSetting" xml:space="preserve">
-        <value>Use Local Dalamud</value>
+        <value>使用本地 Dalamud</value>
     </data>
   <data name="DalamudManualInjectionEnableSettingDescription" xml:space="preserve">
-        <value>Use a local build of Dalamud instead of the automatically provided one (For developers only!)</value>
+        <value>使用本地构建的 Dalamud，而非自动提供的版本 (仅供开发者使用！)</value>
     </data>
   <data name="DalamudLocalInjectionPathSetting" xml:space="preserve">
-        <value>Local Dalamud Injector Path</value>
+        <value>本地 Dalamud 注入器路径</value>
     </data>
   <data name="DalamudLocalInjectionPathSettingDescription" xml:space="preserve">
-        <value>The path to the local version of Dalamud where Dalamud.Injector.exe is located</value>
+        <value>本地 Dalamud 版本的路径，需包含 Dalamud.Injector.exe</value>
     </data>
   <data name="DalamudLocalInjectionPathSettingNoDirValidation" xml:space="preserve">
-        <value>There is no directory at that path.</value>
+        <value>该路径下不存在目录。</value>
     </data>
   <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
-        <value>Dalamud.Injector.exe was not found inside of the provided directory.</value>
+        <value>在指定目录中未找到 Dalamud.Injector.exe。</value>
     </data>
   <data name="OpenRepositoryButton" xml:space="preserve">
-        <value>Open Repository</value>
+        <value>打开仓库</value>
     </data>
   <data name="JoinDiscordButton" xml:space="preserve">
-        <value>Join our Discord</value>
+        <value>加入我们的 Discord 服务器</value>
     </data>
   <data name="SeeSoftwareLicensesButton" xml:space="preserve">
-        <value>See Software Licenses</value>
+        <value>查看软件许可证</value>
     </data>
   <data name="XLCoreCreatedBy" xml:space="preserve">
-        <value>By {0} and other contributors.</value>
+        <value>由 {0} 及其他贡献者开发。</value>
     </data>
   <data name="NewsCaption" xml:space="preserve">
-        <value>News</value>
+        <value>新闻</value>
     </data>
   <data name="TopicsCaption" xml:space="preserve">
-        <value>Topics</value>
+        <value>主题</value>
     </data>
   <data name="NewsLoading" xml:space="preserve">
-        <value>News is loading...</value>
+        <value>正在加载新闻...</value>
     </data>
   <data name="XLElevatedWarning" xml:space="preserve">
-        <value>XIVLauncher is running as administrator/root user.
-This can cause various issues, including but not limited to addons failing to launch and hotkey applications failing to respond.
+        <value>XIVLauncher 正以管理员 / root 身份运行。
+这可能引发多种问题，包括但不限于插件无法启动、热键程序无响应。
 
-Please take care to avoid running XIVLauncher with elevated privileges</value>
+请避免提权运行 XIVLauncher</value>
     </data>
   <data name="LoggingIn" xml:space="preserve">
-        <value>Logging in...</value>
+        <value>正在登录…</value>
     </data>
   <data name="RepairOfficialLauncherOpenError" xml:space="preserve">
-        <value>The game and/or the official launcher are open. XIVLauncher cannot repair the game if this is the case.
-Please close them and try again.</value>
+        <value>游戏和/或官方启动器正在运行，XIVLauncher 无法在此状态下修复游戏。
+请先关闭它们，然后再试一次。</value>
     </data>
   <data name="XIVLauncherError" xml:space="preserve">
-        <value>XIVLauncher Error</value>
+        <value>XIVLauncher 错误</value>
     </data>
   <data name="ReinstallUIDCacheError" xml:space="preserve">
-        <value>You enabled the UID cache in the patcher settings.
-This setting does not allow you to reinstall FFXIV.
+        <value>你在更新设置中启用了 UID 缓存。
+该设置会阻止重新安装 FFXIV。
 
-If you want to reinstall FFXIV, please take care to disable it first.</value>
+如需重新安装 FFXIV，请务必先将其禁用。</value>
     </data>
   <data name="LoginNoServiceAccountError" xml:space="preserve">
-        <value>No service account or subscription</value>
+        <value>未检测到服务账号或有效订阅</value>
     </data>
   <data name="LoginTermsNotAcceptedError" xml:space="preserve">
-        <value>Need to accept terms of use</value>
+        <value>需要接受使用条款</value>
     </data>
   <data name="UpdateCheckFinished" xml:space="preserve">
-        <value>An update check was executed and any pending updates were installed.</value>
+        <value>更新检查已完成，所有待更新内容均已安装。</value>
     </data>
   <data name="WaitingForDalamud" xml:space="preserve">
-        <value>Waiting for Dalamud to be ready...</value>
+        <value>正在等待 Dalamud 准备就绪...</value>
     </data>
   <data name="PleaseBePatient" xml:space="preserve">
-        <value>This may take a little while, please be patient.</value>
+        <value>这可能需要一点时间，请耐心等待。</value>
     </data>
   <data name="DisableAutoLoginButton" xml:space="preserve">
-        <value>Disable auto login</value>
+        <value>禁用自动登录</value>
     </data>
   <data name="AutoLoginDisabledNextStart" xml:space="preserve">
-        <value>Auto login disabled on next start!</value>
+        <value>下次启动时将禁用自动登录！</value>
     </data>
   <data name="NoSavedAccounts" xml:space="preserve">
-        <value>No saved accounts...</value>
+        <value>暂无已保存的账号...</value>
     </data>
   <data name="MyAccount" xml:space="preserve">
-        <value>My Account</value>
+        <value>我的账号</value>
     </data>
   <data name="ServiceStatus" xml:space="preserve">
-        <value>Service Status</value>
+        <value>服务状态</value>
     </data>
   <data name="LauncherSettings" xml:space="preserve">
-        <value>Launcher Settings</value>
+        <value>启动器设置</value>
     </data>
   <data name="UsernameInput" xml:space="preserve">
-        <value>Username</value>
+        <value>用户名</value>
     </data>
   <data name="UsernameInputHint" xml:space="preserve">
-        <value>Enter your Username</value>
+        <value>输入你的用户名</value>
     </data>
   <data name="PasswordInput" xml:space="preserve">
-        <value>Password</value>
+        <value>密码</value>
     </data>
   <data name="PasswordInputHint" xml:space="preserve">
-        <value>Enter your password</value>
+        <value>输入你的密码</value>
     </data>
   <data name="UseOneTimePasswordCheckbox" xml:space="preserve">
-        <value>Use one-time password</value>
+        <value>使用动态密码 (OTP)</value>
     </data>
   <data name="UseSteamServiceAccount" xml:space="preserve">
-        <value>Steam service account</value>
+        <value>Steam 账户</value>
     </data>
   <data name="FreeTrialAccountCheckbox" xml:space="preserve">
-        <value>Free trial account</value>
+        <value>免费试用账户</value>
     </data>
   <data name="LogInAutomaticCheckbox" xml:space="preserve">
-        <value>Log in automatically</value>
+        <value>自动登录</value>
     </data>
   <data name="LoginButton" xml:space="preserve">
-        <value>Login</value>
+        <value>登录</value>
     </data>
   <data name="LaunchWithoutDalamudButton" xml:space="preserve">
-        <value>Launch without Dalamud</value>
+        <value>不加载 Dalamud 启动</value>
     </data>
   <data name="LaunchWithoutPluginsButton" xml:space="preserve">
-        <value>Launch without any plugins</value>
+        <value>不加载所有插件启动</value>
     </data>
   <data name="LaunchWithNoCustomPluginsButton" xml:space="preserve">
-        <value>Launch without custom repo plugins</value>
+        <value>不加载自定义仓库插件启动</value>
     </data>
   <data name="PatchWithoutLaunchingButton" xml:space="preserve">
-        <value>Patch without launching</value>
+        <value>仅更新补丁，不启动游戏</value>
     </data>
   <data name="RepairGameFilesButton" xml:space="preserve">
-        <value>Repair game files</value>
+        <value>修复游戏文件</value>
     </data>
   <data name="NoSecretsProviderWarning" xml:space="preserve">
-        <value>Take care! No secrets provider is installed or configured. Passwords can't be saved.</value>
+        <value>请注意！未安装或未配置任何机密存储提供程序，密码将无法保存。</value>
     </data>
   <data name="TroubleshootingDestructiveActionWarning" xml:space="preserve">
-        <value>Actions here are potentially destructive, take care.</value>
+        <value>以下操作可能具有破坏性，请谨慎执行。</value>
     </data>
   <data name="PreparingForCompatTool" xml:space="preserve">
-        <value>Preparing required compatibility tools</value>
+        <value>正在准备所需的兼容性工具</value>
     </data>
   <data name="StartingGame" xml:space="preserve">
-        <value>Starting game...</value>
+        <value>正在启动游戏...</value>
     </data>
   <data name="HaveFun" xml:space="preserve">
-        <value>Have fun!</value>
+        <value>祝你玩得开心！</value>
     </data>
   <data name="CannotGetBootVerError" xml:space="preserve">
-        <value>XIVLauncher was not able to check the boot version for the select game installation. This can happen if a maintenance is currently in progress or if your connection to the version check server is not available. Please report this error if you are able to login with the official launcher, but not XIVLauncher.</value>
+        <value>XIVLauncher 无法获取可用的启动器版本。这可能是因为游戏服务器正在进行维护，或者你与版本服务器的连接不可用。如果你能够使用官方启动器登录，请向我们报告此问题。</value>
     </data>
   <data name="CannotPatchGameOpenError" xml:space="preserve">
-        <value>The game and/or the official launcher are open. XIVLauncher cannot patch the game if this is the case.
-Please close the official launcher and try again.</value>
+        <value>游戏或官方启动器正在运行中，XIVLauncher 无法为你更新游戏。
+请关闭游戏或官方启动器后再试一次。</value>
     </data>
   <data name="NowPatching" xml:space="preserve">
-        <value>Now patching {0}...</value>
+        <value>正在修补 {0}…</value>
     </data>
   <data name="WorkingOnStatus" xml:space="preserve">
-        <value>Working on {0}/{1}</value>
+        <value>正在处理 {0}/{1}</value>
     </data>
   <data name="LeftToDownloadStatus" xml:space="preserve">
-        <value>{0} left to download at {1}/s</value>
+        <value>剩余 {0} (下载速度: {1}/s)</value>
     </data>
   <data name="NotEnoughSpacePatchesError" xml:space="preserve">
-        <value>There is not enough space on your drive to download patches.
+        <value>你的磁盘空间不足，无法下载更新。
 
-You can change the location patches are downloaded to in the settings.
+你可以在设置中更改更新下载目录。
 
-Required:{0}
-Free:{1}</value>
+需要: {0}
+可用: {1}</value>
     </data>
   <data name="PatchInstallerStartFailError" xml:space="preserve">
-        <value>The patch installer could not start correctly.
+        <value>更新程序无法正常启动。
 {0}
 
-If you have denied access to it, please try again. If this issue persists, please contact us via Discord.</value>
+如果你刚才拒绝了权限请求，请重试并授权。
+如果该问题仍然持续，请在 Discord 上联系我们。</value>
     </data>
   <data name="NotEnoughSpaceAllPatchesError" xml:space="preserve">
-        <value>There is not enough space on your drive to download all patches.
+        <value>你的磁盘空间不足，无法下载所有更新。
 
-You can change the location patches are downloaded to in the XIVLauncher settings.
+你可以在 XIVLauncher 的设置中更改更新下载目录。
 
-Required:{0}
-Free:{1}</value>
+需要: {0}
+可用: {1}</value>
     </data>
   <data name="NotEnoughSpaceGameError" xml:space="preserve">
-        <value>There is not enough space on your drive to install patches.
+        <value>你的磁盘空间不足，无法安装更新。
 
-You can change the location the game is installed to in the settings.
+你可以在设置中更改游戏安装目录。
 
-Required:{0}
-Free:{1}</value>
+需要: {0}
+可用: {1}</value>
     </data>
   <data name="CannotVerifyGameFilesError" xml:space="preserve">
-        <value>XIVLauncher could not verify the downloaded game files. Please restart and try again.
+        <value>XIVLauncher 无法验证已下载的游戏文件。请重新启动并再试一次。
 
-This usually indicates a problem with your internet connection.
-If this error persists, try using a VPN set to Japan.
+这通常代表你的互联网连接发生问题。
+如果此错误仍然存在，请尝试使用日本 VPN。
 
-Context: {0}
+相关资讯：{0}
 {1}</value>
     </data>
   <data name="PatchInstallerGenericError" xml:space="preserve">
-        <value>The patch installer ran into an error.
-Please report this error.
+        <value>更新程序发生错误。
+请向我们报告此错误。
 
-Please try again or use the official launcher.</value>
+请再试一次或使用官方启动器进行更新。</value>
     </data>
   <data name="NowRepairingFiles" xml:space="preserve">
-        <value>Now repairing...</value>
+        <value>正在修复...</value>
     </data>
   <data name="RepairAllFilesValid" xml:space="preserve">
-        <value>All game files seem to be valid.</value>
+        <value>所有游戏文件均验证通过。</value>
     </data>
   <data name="RepairFixedSingularFile" xml:space="preserve">
-        <value>XIVLauncher has successfully repaired 1 game file.</value>
+        <value>XIVLauncher 已成功修复 1 个游戏文件。</value>
     </data>
   <data name="RepairFixedPluralFiles" xml:space="preserve">
-        <value>XIVLauncher has successfully repaired {0} game files.</value>
+        <value>XIVLauncher 已成功修复 {0} 个游戏文件。</value>
     </data>
   <data name="RepairSingleFileMoved" xml:space="preserve">
-        <value>Additionally, 1 file that did not come with the original game installation has been moved to {0}.
-If you were using ReShade, you will have to reinstall it.</value>
+        <value>此外，检测到 1 个非原始游戏安装自带的文件，已将其移至 {0}。
+如果你正在使用 ReShade，需重新安装该插件。</value>
     </data>
   <data name="RepairPluralFilesMoved" xml:space="preserve">
-        <value>Additionally, {0} files that did not come with the original game installation have been moved to {1}.
-If you were using ReShade, you will have to reinstall it.</value>
+        <value>此外，检测到 {0} 个非原始游戏安装自带的文件，已将其移至 {1}。
+如果你正在使用 ReShade，需重新安装该插件。</value>
     </data>
   <data name="RepairGameVerUnsupportedError" xml:space="preserve">
-        <value>The version of the game you are on cannot be repaired by XIVLauncher yet, as reference information is not yet available.
-Please try again later.</value>
+        <value>你正在使用的游戏版本因参考信息不足而无法被 XIVLauncher 修复。
+请稍后再试。</value>
     </data>
   <data name="RepairFailureError" xml:space="preserve">
-        <value>An error occurred while repairing the game files.
-You may have to reinstall the game.</value>
+        <value>修复游戏文件时发生错误。
+你可能需要重新安装游戏。</value>
     </data>
 </root>

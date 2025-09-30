@@ -20,377 +20,377 @@
             Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EnterYourOTP" xml:space="preserve">
-        <value>Please enter your OTP</value>
+        <value>OTP 키를 입력해주세요</value>
     </data>
   <data name="OKLabel" xml:space="preserve">
-        <value>OK</value>
+        <value>확인</value>
     </data>
   <data name="CancelLabel" xml:space="preserve">
-        <value>Cancel</value>
+        <value>취소</value>
     </data>
   <data name="SearchResults" xml:space="preserve">
-        <value>Search Results</value>
+        <value>검색 결과</value>
     </data>
   <data name="NoResultsFound" xml:space="preserve">
-        <value>No results found...</value>
+        <value>검색 결과 없음...</value>
     </data>
   <data name="SearchForSettings" xml:space="preserve">
-        <value>Search for settings...</value>
+        <value>설정 찾는 중...</value>
     </data>
   <data name="AboutTitle" xml:space="preserve">
-        <value>About</value>
+        <value>정보</value>
     </data>
   <data name="WineInstallSetting" xml:space="preserve">
-        <value>WINE Install</value>
+        <value>WINE 설치</value>
     </data>
   <data name="WineInstallSettingDescription" xml:space="preserve">
-        <value>Choose how XIVLauncher will start and manage your WINE installation.</value>
+        <value>XIVLauncher가 WINE을 어떻게 실행하고 관리할지 선택하세요.</value>
     </data>
   <data name="WineVersionSetting" xml:space="preserve">
-        <value>WINE Version</value>
+        <value>WINE 버전</value>
     </data>
   <data name="WineVersionSettingDescription" xml:space="preserve">
-        <value>If you change WINE releases, you might have to clear your prefix (Troubleshooting tab)</value>
+        <value>WINE 릴리즈를 교체했다면, prefix를 초기화 해야할 수 있습니다 (트러블 슈팅 탭)</value>
     </data>
   <data name="WineBinaryPathSetting" xml:space="preserve">
-        <value>WINE Binary Path</value>
+        <value>WINE 바이너리 경로</value>
     </data>
   <data name="WineBinarySettingDescription" xml:space="preserve">
-        <value>Set the path XIVLauncher will use to run applications via WINE.
-It should be an absolute path to a folder containing wine64 and wineserver binaries.</value>
+        <value>XIVLauncher가 WINE을 통해 실행할 프로그램의 경로를 설정하세요.
+wine64와 wineserver 바이너리를 포함하는 폴더의 절대경로여야 합니다.</value>
     </data>
   <data name="DXVKVersionSetting" xml:space="preserve">
-        <value>DXVK Version</value>
+        <value>DXVK 버전</value>
     </data>
   <data name="DXVKVersionSettingDescription" xml:space="preserve">
-        <value>Choose which DXVK version to use.</value>
+        <value>사용할 DXVK 버전을 선택하세요.</value>
     </data>
   <data name="DXVKEnableAsyncSetting" xml:space="preserve">
-        <value>Enable DXVK ASYNC</value>
+        <value>DXVK ASYNC 활성화</value>
     </data>
   <data name="DXVKEnableAsyncSettingDescription" xml:space="preserve">
-        <value>Enable DXVK ASYNC patch.</value>
+        <value>DXVK ASYNC 패치를 활성화 합니다.</value>
     </data>
   <data name="EnableFeralGameModeSetting" xml:space="preserve">
-        <value>Enable Feral's GameMode</value>
+        <value>Feral의 GameMode 활성화</value>
     </data>
   <data name="EnableFeralGameModeSettingDescription" xml:space="preserve">
-        <value>Enable launching with Feral Interactive's GameMode CPU optimizations.</value>
+        <value>Feral Interactive의 GameMode CPU 최적화와 함께 실행하게 합니다.</value>
     </data>
   <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
-        <value>GameMode was not detected on your system.</value>
+        <value>GameMode를 당신의 시스템에서 찾을 수 없습니다.</value>
     </data>
   <data name="EnableESyncSetting" xml:space="preserve">
-        <value>Enable ESync</value>
+        <value>ESync 활성화</value>
     </data>
   <data name="EnableFSyncSetting" xml:space="preserve">
-        <value>Enable FSync</value>
+        <value>FSync 활성화</value>
     </data>
   <data name="EnableESyncSettingDescription" xml:space="preserve">
-        <value>Enable eventfd-based synchronization.</value>
+        <value>eventfd 기반 동기화를 활성화 합니다.</value>
     </data>
   <data name="EnableFSyncSettingDescription" xml:space="preserve">
-        <value>Enable fast user mutex (futex2).</value>
+        <value>fast user mutex를 활성화 합니다. (futex2).</value>
     </data>
   <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
-        <value>Linux kernel 5.16 or higher is required for FSync.</value>
+        <value>FSync를 사용하려면 Linux 커널 5.16 이상이 필요합니다.</value>
     </data>
   <data name="SetWindows7Setting" xml:space="preserve">
-        <value>Set Windows version to 7</value>
+        <value>Windows 버전을 Windows 7로 설정</value>
     </data>
   <data name="SetWindows7SettingDescription" xml:space="preserve">
-        <value>Default for WINE 8.1+ is Windows 10, but this causes issues with some Dalamud plugins. Windows 7 is recommended for now.</value>
+        <value>WINE 8.1+의 기본 설정은 Windows 10이지만, 이는 일부 Dalamud 플러그인에서 문제를 일으킬 수 있습니다. Windows 7 사용을 권장합니다.</value>
     </data>
   <data name="EnableDXVKOverlaySetting" xml:space="preserve">
-        <value>DXVK Overlay</value>
+        <value>DXVK 오버레이</value>
     </data>
   <data name="EnableDXVKOverlaySettingDescription" xml:space="preserve">
-        <value>Configure how much of the DXVK overlay is to be shown.</value>
+        <value>DXVK 오버레이를 얼마나 표지할지 설정합니다.</value>
     </data>
   <data name="WineDebugAdditionalVarSetting" xml:space="preserve">
-        <value>WINEDEBUG Variables</value>
+        <value>WINEDEBUG 변수</value>
     </data>
   <data name="WineDebugAdditionalVarSettingDescription" xml:space="preserve">
-        <value>Configure debug logging for WINE. Useful for troubleshooting.</value>
+        <value>WINE용 디버그 로깅을 구성합니다. 문제 해결에 유용합니다.</value>
     </data>
   <data name="WineTitle" xml:space="preserve">
         <value>WINE</value>
     </data>
   <data name="CompatibilityToolNotSetup" xml:space="preserve">
-        <value>Compatibility tool has not been set up yet, please ensure you have started the game at least once.</value>
+        <value>호환성 도구가 아직 설정되지 않았습니다. 게임을 최소한 한 번 이상 실행했는지 확인해 주세요.</value>
     </data>
   <data name="OpenWINEPrefix" xml:space="preserve">
-        <value>Open WINE Prefix</value>
+        <value>WINE Prefix 열기</value>
     </data>
   <data name="OpenWINEConfiguration" xml:space="preserve">
-        <value>Open WINE configuration</value>
+        <value>WINE 설정 열기</value>
     </data>
   <data name="OpenWINEExplorer" xml:space="preserve">
-        <value>Open WINE explorer (run apps in prefix)</value>
+        <value>WINE 탐색기 열기 (prefix 안에서 실행)</value>
     </data>
   <data name="KillAllWINEProcesses" xml:space="preserve">
-        <value>Kill all WINE processes</value>
+        <value>모든 WINE 프로세스 종료</value>
     </data>
   <data name="DisableGameoverlayRendererHack" xml:space="preserve">
-        <value>Hack: Disable gameoverlayrenderer.so</value>
+        <value>Hack: gameoverlayrenderer.so 비활성화</value>
     </data>
   <data name="DisableGameoverlayRendererHackDescription" xml:space="preserve">
-        <value>May fix black screen on launch (Steam Deck) and some stuttering issues after 40+ minutes.</value>
+        <value>실행 시 검은 화면(Steam Deck) 및 40분 이상 플레이 후 발생하는 일부 끊김 현상을 수정할 수 있습니다.</value>
     </data>
   <data name="XModifiersHack" xml:space="preserve">
         <value>Hack: XMODIFIERS="@im=null"</value>
     </data>
   <data name="XModifiersHackDescription" xml:space="preserve">
-        <value>Fixes some mouse-related issues, some stuttering issues</value>
+        <value>일부 마우스 관련 문제와 일부 끊김 현상을 수정</value>
     </data>
   <data name="FixLibICUUCErrorHack" xml:space="preserve">
-        <value>Hack: Fix libicuuc Dalamud error</value>
+        <value>Hack: libicuuc Dalamud 에러 수정</value>
     </data>
   <data name="FixLibICUUCErrorHackDescription" xml:space="preserve">
-        <value>Fixes a specific "an internal Dalamud error has occurred." In the terminal you will see this text:
+        <value>특정 "an internal Dalamud error has occurred."를 수정합니다. 터미널에서 다음 텍스트를 확인할 수 있습니다:
 "Cannot get symbol u_charsToUChars from libicuuc Error: 127"</value>
     </data>
   <data name="ForceLocaleHack" xml:space="preserve">
-        <value>Hack: Force locale to {0}</value>
+        <value>Hack: {0}로 로케일 강제</value>
     </data>
   <data name="ForceLocaleHackCUTF8" xml:space="preserve">
-        <value>C.UTF-8 (exact value depends on distro)</value>
+        <value>C.UTF-8 (정확한 값은 배포판에 따라 다름)</value>
     </data>
   <data name="ForceLocaleHackDescription" xml:space="preserve">
-        <value>Sets LC_ALL and LC_CTYPE to "{0}". This can fix some issues with non-Latin unicode characters in file paths if LANG is not a UTF-8 type</value>
+        <value>LC_ALL과 LC_CTYPE을 "{0}"로 설정합니다. LANG이 UTF-8 유형이 아닐 경우 파일 경로 내 비라틴 유니코드 문자 관련 일부 문제를 해결할 수 있습니다</value>
     </data>
   <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
-        <value>Your locale is "{0}". You probably don't need this hack.</value>
+        <value>현재 로케일은 "{0}"입니다. 이 Hack이 필요하지 않을 것입니다.</value>
     </data>
   <data name="TroubleshootingTitle" xml:space="preserve">
-        <value>Troubleshooting</value>
+        <value>트러블 슈팅</value>
     </data>
   <data name="ClearWINEPrefixTroubleshooting" xml:space="preserve">
-        <value>Clear the WINE Prefix.</value>
+        <value>WINE Prefix를 제거합니다.</value>
     </data>
   <data name="ClearWINEPrefixTroubleshootingButton" xml:space="preserve">
-        <value>Clear WINE Prefix</value>
+        <value>WINE Prefix 제거</value>
     </data>
   <data name="ClearManagedCompatToolsTroubleshooting" xml:space="preserve">
-        <value>Clear the managed WINE install and DXVK</value>
+        <value>WINE 설치와 DXVK를 제거합니다</value>
     </data>
   <data name="ClearManagedCompatToolsTroubleshootingButton" xml:space="preserve">
-        <value>Clear WINE &amp; DXVK Installs</value>
+        <value>WINE &amp; DXVK 설치 제거</value>
     </data>
   <data name="ClearDalamudTroubleshooting" xml:space="preserve">
-        <value>Clear all the files and folders related to Dalamud. Your settings will not be touched, but all your plugins will be uninstalled, including custom repos.</value>
+        <value>Dalamud와 관련된 모든 파일 및 폴더를 제거합니다. 설정은 그대로 유지되지만, 커스텀 저장소를 포함한 모든 플러그인이 제거됩니다.</value>
     </data>
   <data name="ClearDalamudTroubleshootingButton" xml:space="preserve">
-        <value>Clear Dalamud</value>
+        <value>Dalamud 제거</value>
     </data>
   <data name="ClearAllLogsTroubleshooting" xml:space="preserve">
-        <value>Clear all the log files.</value>
+        <value>모든 로그 파일을 제거합니다.</value>
     </data>
   <data name="ClearAllLogsTroubleshootingButton" xml:space="preserve">
-        <value>Clear Logs</value>
+        <value>로그 제거</value>
     </data>
   <data name="ResetSettingsTroubleshooting" xml:space="preserve">
-        <value>Reset settings to default.</value>
+        <value>모든 설정을 기본값으로 되돌립니다.</value>
     </data>
   <data name="ResetSettingsTroubleshootingButton" xml:space="preserve">
-        <value>Clear Settings</value>
+        <value>설정 초기화</value>
     </data>
   <data name="ResetAllTroubleshooting" xml:space="preserve">
-        <value>Do all of the above.</value>
+        <value>위의 모든 것을 수행합니다.</value>
     </data>
   <data name="GenerateTSPackTroubleshooting" xml:space="preserve">
-        <value>Generate a troubleshooting pack to upload to the official Discord channel</value>
+        <value>공식 Discord 채널에 업로드 하기 위한 트러블슈팅 팩을 생성</value>
     </data>
   <data name="GenerateTSPackTroubleshootingButton" xml:space="preserve">
-        <value>Generate TSPack</value>
+        <value>TSPack 생성</value>
     </data>
   <data name="ResetAllTroubleshootingButton" xml:space="preserve">
-        <value>Clear Everything</value>
+        <value>전체 제거/초기화 </value>
     </data>
   <data name="PatchPathSetting" xml:space="preserve">
-        <value>Patch Path</value>
+        <value>패치 경로</value>
     </data>
   <data name="PatchPathSettingDescription" xml:space="preserve">
-        <value>Where patches should be downloaded to.</value>
+        <value>패치가 다운로드될 경로입니다.</value>
     </data>
   <data name="PatchPathSettingNotSetValidation" xml:space="preserve">
-        <value>Patch path is not set.</value>
+        <value>패치 경로가 설정되지 않았습니다.</value>
     </data>
   <data name="PatchDownloadMethodSetting" xml:space="preserve">
-        <value>Patch Download Method</value>
+        <value>패치 다운로드 방법</value>
     </data>
   <data name="PatchDownloadMethodSettingDescription" xml:space="preserve">
-        <value>How patches should be downloaded.</value>
+        <value>패치를 다운로드 받는 방법을 결정합니다.</value>
     </data>
   <data name="MaximumSpeedSetting" xml:space="preserve">
-        <value>Maximum Speed</value>
+        <value>최대 속도</value>
     </data>
   <data name="MaximumSpeedSettingDescription" xml:space="preserve">
-        <value>Maximum download speed in bytes per second. Set to 0 for unlimited.</value>
+        <value>최대 다운로드 속도 (초당 바이트). 0으로 설정 시 무제한입니다.</value>
     </data>
   <data name="KeepPatchesSetting" xml:space="preserve">
-        <value>Keep Patches</value>
+        <value>패치 보관</value>
     </data>
   <data name="KeepPatchesSettingDescription" xml:space="preserve">
-        <value>Keep patches on disk after installing.</value>
+        <value>설치 후에도 디스크에 패치를 보관합니다.</value>
     </data>
   <data name="PatchingTitle" xml:space="preserve">
-        <value>Patching</value>
+        <value>패치중</value>
     </data>
   <data name="GamePathSetting" xml:space="preserve">
-        <value>Game Path</value>
+        <value>게임 경로</value>
     </data>
   <data name="GamePathSettingDescription" xml:space="preserve">
-        <value>Where the game is or will be installed.</value>
+        <value>게임의 위치나 게임이 설치될 경로입니다.</value>
     </data>
   <data name="GamePathSettingNotSetValidation" xml:space="preserve">
-        <value>Game path is not set.</value>
+        <value>게임 경로가 설정되지 않았습니다.</value>
     </data>
   <data name="GamePathSettingInvalidValidationj" xml:space="preserve">
-        <value>Please select the path containing the folders "game" and "boot", not the folders itself.</value>
+        <value>"game" 및 "boot" 폴더가 포함된 경로를 선택하세요. 폴더 자체를 선택하면 안됩니다.</value>
     </data>
   <data name="GameConfigurationPathSetting" xml:space="preserve">
-        <value>Game Configuration Path</value>
+        <value>게임 설정 경로</value>
     </data>
   <data name="GameConfigurationPathSettingDescription" xml:space="preserve">
-        <value>Where your user config files will be stored.</value>
+        <value>설정 파일이 저장될 곳입니다.</value>
     </data>
   <data name="GameConfigurationPathNotSetValidation" xml:space="preserve">
-        <value>Game Config Path is not set.</value>
+        <value>게임 설정 경로가 설정되지 않았습니다.</value>
     </data>
   <data name="AdditionalGameArgsSetting" xml:space="preserve">
-        <value>Additional Game Arguments</value>
+        <value>추가 게임 인수</value>
     </data>
   <data name="AdditionalGameArgsSettingDescription" xml:space="preserve">
-        <value>Follows Steam conventions: VAR1=value VAR2=value %command% -arg1 -arg2.
-Can't pass programs (like gamescope -- %command%). Does not accept flatpak args (--parent-pid=1, etc.)</value>
+        <value>Steam 규칙을 따라야 합니다. VAR1=value VAR2=value %command% -arg1 -arg2.
+프로그램 자체는 전달할 수 없습니다 (예: gamescope -- %command%). flatpak 인자(--parent-pid=1 등)도 지원하지 않습니다</value>
     </data>
   <data name="GameLanguageSetting" xml:space="preserve">
-        <value>Game Language</value>
+        <value>게임 언어</value>
     </data>
   <data name="GameLanguageSettingDescription" xml:space="preserve">
-        <value>Select the game's language.</value>
+        <value>게임 언어를 선택하세요.</value>
     </data>
   <data name="GameDPIAwarenessSetting" xml:space="preserve">
-        <value>Game DPI Awareness</value>
+        <value>게임 DPI 인식</value>
     </data>
   <data name="GameDPIAwarenessSettingDescription" xml:space="preserve">
-        <value>Select the game's DPI Awareness. Change this if the game's scaling looks wrong.</value>
+        <value>게임의 DPI 인식 정도를 고릅니다. 게임 스케일링이 이상하게 보인다면 이 설정을 바꾸세요.</value>
     </data>
   <data name="UseXLAuthMacrosSetting" xml:space="preserve">
-        <value>Use XIVLauncher authenticator/OTP macros</value>
+        <value>XIVLauncher 인증기/OTP 매크로 사용</value>
     </data>
   <data name="UseXLAuthMacrosSettingDescription" xml:space="preserve">
-        <value>Check this if you want to use the XIVLauncher authenticator app or macros.</value>
+        <value>XIVLauncher 인증기 앱이나 매크로를 사용한다면 선택하세요.</value>
     </data>
   <data name="IgnoreSteamSetting" xml:space="preserve">
-        <value>Ignore Steam</value>
+        <value>Steam 무시</value>
     </data>
   <data name="IgnoreSteamSettingDescription" xml:space="preserve">
-        <value>Check this if you do not want XIVLauncher to communicate with Steam (Requires Restart).</value>
+        <value>XIVLauncher가 Steam과 통신하지 않게 하려면 선택하세요 (재시작 필요).</value>
     </data>
   <data name="UseUIDCacheSetting" xml:space="preserve">
-        <value>Use Experimental UID Cache</value>
+        <value>실험적 UID 캐싱 사용</value>
     </data>
   <data name="UseUIDCacheSettingDescription" xml:space="preserve">
-        <value>Tries to save your login token for the next start. Can result in launching with expired sessions.</value>
+        <value>다음 시작 시 로그인 토큰을 저장하려고 시도합니다. 이로 인해 만료된 세션으로 실행될 수 있습니다.</value>
     </data>
   <data name="GameTitle" xml:space="preserve">
-        <value>Game</value>
+        <value>게임</value>
     </data>
   <data name="ResetUIDCacheInfo" xml:space="preserve">
-        <value>Reset the UID cache; use if you are getting FFXIV error 1012 or 500X.</value>
+        <value>UID 캐시를 재설정하세요; FFXIV 1012 또는 500X가 발생하는 경우 사용하세요.</value>
     </data>
   <data name="ResetUIDCacheButton" xml:space="preserve">
-        <value>Reset UID Cache</value>
+        <value>UID 캐시 재설정</value>
     </data>
   <data name="DebugTitle" xml:space="preserve">
-        <value>Debug</value>
+        <value>디버그</value>
     </data>
   <data name="DalamudTitle" xml:space="preserve">
         <value>Dalamud</value>
     </data>
   <data name="EnableDalamudSetting" xml:space="preserve">
-        <value>Enable Dalamud</value>
+        <value>Dalamud 활성화</value>
     </data>
   <data name="EnableDalamudSettingDescription" xml:space="preserve">
-        <value>Enable the Dalamud plugin system</value>
+        <value>Dalamud 플러그인 시스템 활성화</value>
     </data>
   <data name="LoadMethodSetting" xml:space="preserve">
-        <value>Load Method</value>
+        <value>로드 방식</value>
     </data>
   <data name="LoadMethodSettingDescription" xml:space="preserve">
-        <value>Choose how Dalamud is loaded.</value>
+        <value>Dalamud를 어떻게 로드할지 선택하세요.</value>
     </data>
   <data name="DalamudInjectionDelaySetting" xml:space="preserve">
-        <value>Injection Delay (ms)</value>
+        <value>인젝션 딜레이 (ms)</value>
     </data>
   <data name="DalamudInjectionDelaySettingDescription" xml:space="preserve">
-        <value>Choose how long to wait after the game has loaded before injecting.</value>
+        <value>게임 시작 후 인젝션까지 얼마나 기다릴지 선택하세요.</value>
     </data>
   <data name="DalamudManualInjectionEnableSetting" xml:space="preserve">
-        <value>Use Local Dalamud</value>
+        <value>로컬 Dalamud 사용</value>
     </data>
   <data name="DalamudManualInjectionEnableSettingDescription" xml:space="preserve">
-        <value>Use a local build of Dalamud instead of the automatically provided one (For developers only!)</value>
+        <value>자동으로 제공되는 것 대신 로컬에서 빌드된 Dalamud를 사용합니다 (개발자 전용!)</value>
     </data>
   <data name="DalamudLocalInjectionPathSetting" xml:space="preserve">
-        <value>Local Dalamud Injector Path</value>
+        <value>로컬 Dalamud 인젝터 경로</value>
     </data>
   <data name="DalamudLocalInjectionPathSettingDescription" xml:space="preserve">
-        <value>The path to the local version of Dalamud where Dalamud.Injector.exe is located</value>
+        <value>Dalamud.Injector.exe가 위치한 로컬 Dalamud의 경로입니다</value>
     </data>
   <data name="DalamudLocalInjectionPathSettingNoDirValidation" xml:space="preserve">
-        <value>There is no directory at that path.</value>
+        <value>해당 경로엔 디렉토리가 없습니다.</value>
     </data>
   <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
-        <value>Dalamud.Injector.exe was not found inside of the provided directory.</value>
+        <value>제공된 경로에서 Dalamud.Injector.exe를 찾을 수 없습니다.</value>
     </data>
   <data name="OpenRepositoryButton" xml:space="preserve">
-        <value>Open Repository</value>
+        <value>저장소 열기</value>
     </data>
   <data name="JoinDiscordButton" xml:space="preserve">
-        <value>Join our Discord</value>
+        <value>Discord에 참여</value>
     </data>
   <data name="SeeSoftwareLicensesButton" xml:space="preserve">
-        <value>See Software Licenses</value>
+        <value>소프트웨어 라이센스 보기</value>
     </data>
   <data name="XLCoreCreatedBy" xml:space="preserve">
-        <value>By {0} and other contributors.</value>
+        <value>{0} 및 기타 기여자들에 의해 개발되었습니다.</value>
     </data>
   <data name="NewsCaption" xml:space="preserve">
-        <value>News</value>
+        <value>뉴스</value>
     </data>
   <data name="TopicsCaption" xml:space="preserve">
-        <value>Topics</value>
+        <value>토픽</value>
     </data>
   <data name="NewsLoading" xml:space="preserve">
-        <value>News is loading...</value>
+        <value>뉴스 로딩 중...</value>
     </data>
   <data name="XLElevatedWarning" xml:space="preserve">
-        <value>XIVLauncher is running as administrator/root user.
-This can cause various issues, including but not limited to addons failing to launch and hotkey applications failing to respond.
+        <value>XIVLauncher가 관리자/루트 권한으로 실행 중입니다.
+이로 인해 애드온 실행 실패, 단축키 응답 실패 등 다양한 문제가 발생할 수 있습니다.
 
-Please take care to avoid running XIVLauncher with elevated privileges</value>
+XIVLauncher를 관리자 권한으로 실행하지 않도록 주의하세요</value>
     </data>
   <data name="LoggingIn" xml:space="preserve">
-        <value>Logging in...</value>
+        <value>로그인 중...</value>
     </data>
   <data name="RepairOfficialLauncherOpenError" xml:space="preserve">
-        <value>The game and/or the official launcher are open. XIVLauncher cannot repair the game if this is the case.
-Please close them and try again.</value>
+        <value>게임 클라이언트나 공식 런처가 열려 있습니다. 이 상태에서는 XIVLauncher가 게임을 복구할 수 없습니다.
+클라이언트나 런처를 닫고 다시 시도하십시오.</value>
     </data>
   <data name="XIVLauncherError" xml:space="preserve">
-        <value>XIVLauncher Error</value>
+        <value>XIVLauncher 에러</value>
     </data>
   <data name="ReinstallUIDCacheError" xml:space="preserve">
-        <value>You enabled the UID cache in the patcher settings.
-This setting does not allow you to reinstall FFXIV.
+        <value>패쳐 설정에서 UID 캐시를 활성화했습니다.
+이 설정은 FFXIV 재설치를 허용하지 않습니다.
 
-If you want to reinstall FFXIV, please take care to disable it first.</value>
+재설치하기 전에 반드시 해당 설정을 비활성화하세요.</value>
     </data>
   <data name="LoginNoServiceAccountError" xml:space="preserve">
-        <value>No service account or subscription</value>
+        <value>서비스 계정이나 구독이 없습니다</value>
     </data>
   <data name="LoginTermsNotAcceptedError" xml:space="preserve">
         <value>Need to accept terms of use</value>
@@ -447,125 +447,125 @@ If you want to reinstall FFXIV, please take care to disable it first.</value>
         <value>Log in automatically</value>
     </data>
   <data name="LoginButton" xml:space="preserve">
-        <value>Login</value>
+        <value>로그인</value>
     </data>
   <data name="LaunchWithoutDalamudButton" xml:space="preserve">
-        <value>Launch without Dalamud</value>
+        <value>Dalamud 없이 실행</value>
     </data>
   <data name="LaunchWithoutPluginsButton" xml:space="preserve">
-        <value>Launch without any plugins</value>
+        <value>플러그인 없이 실행</value>
     </data>
   <data name="LaunchWithNoCustomPluginsButton" xml:space="preserve">
-        <value>Launch without custom repo plugins</value>
+        <value>커스텀 저장소 플러그인 없이 실행</value>
     </data>
   <data name="PatchWithoutLaunchingButton" xml:space="preserve">
-        <value>Patch without launching</value>
+        <value>실행하지 않고 패치</value>
     </data>
   <data name="RepairGameFilesButton" xml:space="preserve">
-        <value>Repair game files</value>
+        <value>게임 파일 복원</value>
     </data>
   <data name="NoSecretsProviderWarning" xml:space="preserve">
-        <value>Take care! No secrets provider is installed or configured. Passwords can't be saved.</value>
+        <value>주의하세요! 비밀번호 관리자가 설치되거나 구성되지 않았습니다. 비밀번호를 저장할 수 없습니다.</value>
     </data>
   <data name="TroubleshootingDestructiveActionWarning" xml:space="preserve">
-        <value>Actions here are potentially destructive, take care.</value>
+        <value>여기서 수행하는 작업은 잠재적으로 파괴적일 수 있으니 주의하세요.</value>
     </data>
   <data name="PreparingForCompatTool" xml:space="preserve">
-        <value>Preparing required compatibility tools</value>
+        <value>필요한 호환성 도구 준비</value>
     </data>
   <data name="StartingGame" xml:space="preserve">
-        <value>Starting game...</value>
+        <value>게임 시작 중...</value>
     </data>
   <data name="HaveFun" xml:space="preserve">
-        <value>Have fun!</value>
+        <value>즐기세요!</value>
     </data>
   <data name="CannotGetBootVerError" xml:space="preserve">
-        <value>XIVLauncher was not able to check the boot version for the select game installation. This can happen if a maintenance is currently in progress or if your connection to the version check server is not available. Please report this error if you are able to login with the official launcher, but not XIVLauncher.</value>
+        <value>XIVLauncher가 선택한 게임 설치본의 부트 버전을 확인할 수 없습니다. 이는 현재 점검이 진행 중이거나 버전 확인 서버에 연결할 수 없는 경우 발생할 수 있습니다. 공식 런처로는 로그인할 수 있지만 XIVLauncher로는 로그인할 수 없는 경우 이 오류를 신고해 주세요.</value>
     </data>
   <data name="CannotPatchGameOpenError" xml:space="preserve">
-        <value>The game and/or the official launcher are open. XIVLauncher cannot patch the game if this is the case.
-Please close the official launcher and try again.</value>
+        <value>게임 및/또는 공식 런처가 실행 중입니다. 이 경우 XIVLauncher는 게임을 패치할 수 없습니다.
+공식 런처를 닫고 다시 시도해 주세요.</value>
     </data>
   <data name="NowPatching" xml:space="preserve">
-        <value>Now patching {0}...</value>
+        <value>지금 {0} 패치 중...</value>
     </data>
   <data name="WorkingOnStatus" xml:space="preserve">
-        <value>Working on {0}/{1}</value>
+        <value>{0}/{1} 작업 중</value>
     </data>
   <data name="LeftToDownloadStatus" xml:space="preserve">
-        <value>{0} left to download at {1}/s</value>
+        <value>{0} 남음 (다운로드 속도: {1}/s)</value>
     </data>
   <data name="NotEnoughSpacePatchesError" xml:space="preserve">
-        <value>There is not enough space on your drive to download patches.
+        <value>패치를 다운로드 하기에 충분한 공간이 없습니다.
 
-You can change the location patches are downloaded to in the settings.
+설정에서 패치가 다운로드 될 경로를 변경할 수 있습니다.
 
-Required:{0}
-Free:{1}</value>
+필요 : {0}
+여유 : {1}</value>
     </data>
   <data name="PatchInstallerStartFailError" xml:space="preserve">
-        <value>The patch installer could not start correctly.
+        <value>패치 인스톨러를 정상적으로 실행할 수 없습니다.
 {0}
 
-If you have denied access to it, please try again. If this issue persists, please contact us via Discord.</value>
+액세스를 차단했다면 다시 시도하세요. 만약 문제가 지속되면 Discord를 통해 알려주세요.</value>
     </data>
   <data name="NotEnoughSpaceAllPatchesError" xml:space="preserve">
-        <value>There is not enough space on your drive to download all patches.
+        <value>모든 패치를 다운로드 하기에 충분한 공간이 없습니다.
 
-You can change the location patches are downloaded to in the XIVLauncher settings.
+설정에서 패치가 다운로드 될 경로를 변경할 수 있습니다.
 
-Required:{0}
-Free:{1}</value>
+필요 : {0}
+여유 : {1}</value>
     </data>
   <data name="NotEnoughSpaceGameError" xml:space="preserve">
-        <value>There is not enough space on your drive to install patches.
+        <value>패치를 설치 하기에 충분한 공간이 없습니다.
 
-You can change the location the game is installed to in the settings.
+설정에서 게임이 설치 될 경로를 변경할 수 있습니다.
 
-Required:{0}
-Free:{1}</value>
+필요 : {0}
+여유 : {1}</value>
     </data>
   <data name="CannotVerifyGameFilesError" xml:space="preserve">
-        <value>XIVLauncher could not verify the downloaded game files. Please restart and try again.
+        <value>XIVLauncher가 다운로드 된 게임 파일을 검증할 수 없습니다. 재시작 후 다시 시도하세요.
 
-This usually indicates a problem with your internet connection.
-If this error persists, try using a VPN set to Japan.
+이 문제는 보통 인터넷 연결 문제로 인해 발생합니다.
+문제가 지속되면 VPN을 일본으로 설정 후 시도해 보세요.
 
-Context: {0}
+관련 정보 : {0}
 {1}</value>
     </data>
   <data name="PatchInstallerGenericError" xml:space="preserve">
-        <value>The patch installer ran into an error.
-Please report this error.
+        <value>패치 인스톨러에 에러가 발생했습니다.
+이 문제를 보고해 주세요.
 
-Please try again or use the official launcher.</value>
+다시 시도하거나 공식 런처를 사용하세요.</value>
     </data>
   <data name="NowRepairingFiles" xml:space="preserve">
-        <value>Now repairing...</value>
+        <value>복구 중...</value>
     </data>
   <data name="RepairAllFilesValid" xml:space="preserve">
-        <value>All game files seem to be valid.</value>
+        <value>모든 게임 파일이 정상인 것으로 보입니다.</value>
     </data>
   <data name="RepairFixedSingularFile" xml:space="preserve">
-        <value>XIVLauncher has successfully repaired 1 game file.</value>
+        <value>XIVLauncher가 1개의 파일을 성공적으로 복구했습니다.</value>
     </data>
   <data name="RepairFixedPluralFiles" xml:space="preserve">
-        <value>XIVLauncher has successfully repaired {0} game files.</value>
+        <value>XIVLauncher가 {0}개의 파일을 성공적으로 복구했습니다.</value>
     </data>
   <data name="RepairSingleFileMoved" xml:space="preserve">
-        <value>Additionally, 1 file that did not come with the original game installation has been moved to {0}.
-If you were using ReShade, you will have to reinstall it.</value>
+        <value>또한, 원래 게임 설치 시 포함되지 않았던 1개의 파일이 {0}으로 이동되었습니다.
+ReShade를 사용 중이었다면, 다시 설치해야 합니다.</value>
     </data>
   <data name="RepairPluralFilesMoved" xml:space="preserve">
-        <value>Additionally, {0} files that did not come with the original game installation have been moved to {1}.
-If you were using ReShade, you will have to reinstall it.</value>
+        <value>또한, 원래 게임 설치 시 포함되지 않았던 {0}개의 파일이 {1}으로 이동되었습니다.
+ReShade를 사용 중이었다면, 다시 설치해야 합니다.</value>
     </data>
   <data name="RepairGameVerUnsupportedError" xml:space="preserve">
-        <value>The version of the game you are on cannot be repaired by XIVLauncher yet, as reference information is not yet available.
-Please try again later.</value>
+        <value>현재 사용 중인 게임 버전은 XIVLauncher에서 아직 복구할 수 없습니다. 참조 정보가 아직 제공되지 않기 때문입니다.
+나중에 다시 시도해 주세요.</value>
     </data>
   <data name="RepairFailureError" xml:space="preserve">
-        <value>An error occurred while repairing the game files.
-You may have to reinstall the game.</value>
+        <value>게임 파일 복구 중 오류가 발생했습니다.
+게임을 다시 설치해야 할 수 있습니다.</value>
     </data>
 </root>
