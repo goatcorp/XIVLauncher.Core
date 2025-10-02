@@ -393,58 +393,58 @@ XIVLauncher를 관리자 권한으로 실행하지 않도록 주의하세요</va
         <value>서비스 계정이나 구독이 없습니다</value>
     </data>
   <data name="LoginTermsNotAcceptedError" xml:space="preserve">
-        <value>Need to accept terms of use</value>
+        <value>이용 약관에 동의해야 합니다</value>
     </data>
   <data name="UpdateCheckFinished" xml:space="preserve">
-        <value>An update check was executed and any pending updates were installed.</value>
+        <value>업데이트 확인이 수행되었으며, 보류 중인 업데이트가 모두 설치되었습니다.</value>
     </data>
   <data name="WaitingForDalamud" xml:space="preserve">
-        <value>Waiting for Dalamud to be ready...</value>
+        <value>Dalamud 준비를 기다리는 중...</value>
     </data>
   <data name="PleaseBePatient" xml:space="preserve">
-        <value>This may take a little while, please be patient.</value>
+        <value>이 작업은 시간이 걸릴 수 있습니다, 기다려 주세요.</value>
     </data>
   <data name="DisableAutoLoginButton" xml:space="preserve">
-        <value>Disable auto login</value>
+        <value>자동 로그인 비활성화</value>
     </data>
   <data name="AutoLoginDisabledNextStart" xml:space="preserve">
-        <value>Auto login disabled on next start!</value>
+        <value>자동 로그인이 다음 시작 시 비활성화 됩니다!</value>
     </data>
   <data name="NoSavedAccounts" xml:space="preserve">
-        <value>No saved accounts...</value>
+        <value>저장된 계정이 없습니다...</value>
     </data>
   <data name="MyAccount" xml:space="preserve">
-        <value>My Account</value>
+        <value>내 계정</value>
     </data>
   <data name="ServiceStatus" xml:space="preserve">
-        <value>Service Status</value>
+        <value>서비스 상태</value>
     </data>
   <data name="LauncherSettings" xml:space="preserve">
-        <value>Launcher Settings</value>
+        <value>런처 설정</value>
     </data>
   <data name="UsernameInput" xml:space="preserve">
-        <value>Username</value>
+        <value>사용자명</value>
     </data>
   <data name="UsernameInputHint" xml:space="preserve">
-        <value>Enter your Username</value>
+        <value>사용자명을 입력하세요</value>
     </data>
   <data name="PasswordInput" xml:space="preserve">
-        <value>Password</value>
+        <value>비밀번호</value>
     </data>
   <data name="PasswordInputHint" xml:space="preserve">
-        <value>Enter your password</value>
+        <value>비밀번호를 입력하세요</value>
     </data>
   <data name="UseOneTimePasswordCheckbox" xml:space="preserve">
-        <value>Use one-time password</value>
+        <value>OTP 사용</value>
     </data>
   <data name="UseSteamServiceAccount" xml:space="preserve">
-        <value>Steam service account</value>
+        <value>스팀 서비스 계정</value>
     </data>
   <data name="FreeTrialAccountCheckbox" xml:space="preserve">
-        <value>Free trial account</value>
+        <value>프리 트라이얼 계정</value>
     </data>
   <data name="LogInAutomaticCheckbox" xml:space="preserve">
-        <value>Log in automatically</value>
+        <value>자동으로 로그인</value>
     </data>
   <data name="LoginButton" xml:space="preserve">
         <value>로그인</value>
