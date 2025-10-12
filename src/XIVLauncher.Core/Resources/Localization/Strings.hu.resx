@@ -20,265 +20,265 @@
             Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EnterYourOTP" xml:space="preserve">
-        <value>Please enter your OTP</value>
+        <value>Kétlépcsős azonosítási kód megadása</value>
     </data>
   <data name="OKLabel" xml:space="preserve">
         <value>OK</value>
     </data>
   <data name="CancelLabel" xml:space="preserve">
-        <value>Cancel</value>
+        <value>Mégse</value>
     </data>
   <data name="SearchResults" xml:space="preserve">
-        <value>Search Results</value>
+        <value>Keresési eredmények</value>
     </data>
   <data name="NoResultsFound" xml:space="preserve">
-        <value>No results found...</value>
+        <value>Nincs találat…</value>
     </data>
   <data name="SearchForSettings" xml:space="preserve">
-        <value>Search for settings...</value>
+        <value>Beállítások keresése…</value>
     </data>
   <data name="AboutTitle" xml:space="preserve">
-        <value>About</value>
+        <value>Névjegy</value>
     </data>
   <data name="WineInstallSetting" xml:space="preserve">
-        <value>WINE Install</value>
+        <value>Telepített WINE</value>
     </data>
   <data name="WineInstallSettingDescription" xml:space="preserve">
-        <value>Choose how XIVLauncher will start and manage your WINE installation.</value>
+        <value>A WINE indításának és kezelésének személyre szabása.</value>
     </data>
   <data name="WineVersionSetting" xml:space="preserve">
-        <value>WINE Version</value>
+        <value>WINE-verzió</value>
     </data>
   <data name="WineVersionSettingDescription" xml:space="preserve">
-        <value>If you change WINE releases, you might have to clear your prefix (Troubleshooting tab)</value>
+        <value>Ha megváltoztatod a használandó WINE-kiadást, akkor lehetséges, hogy törölnöd kell az előtagot (a Hibaelhárítás fülön)</value>
     </data>
   <data name="WineBinaryPathSetting" xml:space="preserve">
-        <value>WINE Binary Path</value>
+        <value>A WINE elérési útja</value>
     </data>
   <data name="WineBinarySettingDescription" xml:space="preserve">
-        <value>Set the path XIVLauncher will use to run applications via WINE.
-It should be an absolute path to a folder containing wine64 and wineserver binaries.</value>
+        <value>A XIVLauncher által használandó WINE-elérési útvonal.
+Ez egy abszolút útvonal, amely egy olyan könyvtárra mutat, ami egy wine64- és egy wineserver fájlt tartalmaz.</value>
     </data>
   <data name="DXVKVersionSetting" xml:space="preserve">
-        <value>DXVK Version</value>
+        <value>DXVK-verzió</value>
     </data>
   <data name="DXVKVersionSettingDescription" xml:space="preserve">
-        <value>Choose which DXVK version to use.</value>
+        <value>A használandó DXVK-verzió megadása.</value>
     </data>
   <data name="DXVKEnableAsyncSetting" xml:space="preserve">
-        <value>Enable DXVK ASYNC</value>
+        <value>DXVK ASYNC engedélyezése</value>
     </data>
   <data name="DXVKEnableAsyncSettingDescription" xml:space="preserve">
-        <value>Enable DXVK ASYNC patch.</value>
+        <value>DXVK ASYNC-javítás engedélyezése.</value>
     </data>
   <data name="EnableFeralGameModeSetting" xml:space="preserve">
-        <value>Enable Feral's GameMode</value>
+        <value>Feral GameMode engedélyezése</value>
     </data>
   <data name="EnableFeralGameModeSettingDescription" xml:space="preserve">
-        <value>Enable launching with Feral Interactive's GameMode CPU optimizations.</value>
+        <value>A Feral Interactive „GameMode” CPU-optimalizálásainak használata.</value>
     </data>
   <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
-        <value>GameMode was not detected on your system.</value>
+        <value>A GameMode nem észlelhető ezen a rendszeren.</value>
     </data>
   <data name="EnableESyncSetting" xml:space="preserve">
-        <value>Enable ESync</value>
+        <value>ESync engedélyezése</value>
     </data>
   <data name="EnableFSyncSetting" xml:space="preserve">
-        <value>Enable FSync</value>
+        <value>FSync engedélyezése</value>
     </data>
   <data name="EnableESyncSettingDescription" xml:space="preserve">
-        <value>Enable eventfd-based synchronization.</value>
+        <value>Eventfd-alapú szinkronizáció engedélyezése.</value>
     </data>
   <data name="EnableFSyncSettingDescription" xml:space="preserve">
-        <value>Enable fast user mutex (futex2).</value>
+        <value>Futex2 (fast user mutex) engedélyezése.</value>
     </data>
   <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
-        <value>Linux kernel 5.16 or higher is required for FSync.</value>
+        <value>Az FSync használatához a Linux kernel 5.16-os vagy újabb verziója szükséges.</value>
     </data>
   <data name="SetWindows7Setting" xml:space="preserve">
-        <value>Set Windows version to 7</value>
+        <value>Futtatás, mint Windows 7</value>
     </data>
   <data name="SetWindows7SettingDescription" xml:space="preserve">
-        <value>Default for WINE 8.1+ is Windows 10, but this causes issues with some Dalamud plugins. Windows 7 is recommended for now.</value>
+        <value>A WINE 8.1 és újabb verziói alapértelmezésből Windows 10-ként futtatnak programokat, de ez bizonyos Dalamud-bővítményekkel hibákat okoz. Az ajánlott verzió egyelőre Windows 7.</value>
     </data>
   <data name="EnableDXVKOverlaySetting" xml:space="preserve">
-        <value>DXVK Overlay</value>
+        <value>DXVK-átfedés</value>
     </data>
   <data name="EnableDXVKOverlaySettingDescription" xml:space="preserve">
-        <value>Configure how much of the DXVK overlay is to be shown.</value>
+        <value>A DXVK-átfedés elemei megjelenítésének testreszabása.</value>
     </data>
   <data name="WineDebugAdditionalVarSetting" xml:space="preserve">
-        <value>WINEDEBUG Variables</value>
+        <value>WINEDEBUG-változók</value>
     </data>
   <data name="WineDebugAdditionalVarSettingDescription" xml:space="preserve">
-        <value>Configure debug logging for WINE. Useful for troubleshooting.</value>
+        <value>A WINE naplózásának beállítása. Hibakereséshez hasznos lehet.</value>
     </data>
   <data name="WineTitle" xml:space="preserve">
         <value>WINE</value>
     </data>
   <data name="CompatibilityToolNotSetup" xml:space="preserve">
-        <value>Compatibility tool has not been set up yet, please ensure you have started the game at least once.</value>
+        <value>A kompatibilitási eszközök még nincsenek beállítva. A beállításhoz indítsd el a játékot legalább egyszer.</value>
     </data>
   <data name="OpenWINEPrefix" xml:space="preserve">
-        <value>Open WINE Prefix</value>
+        <value>WINE-előtag megnyitása</value>
     </data>
   <data name="OpenWINEConfiguration" xml:space="preserve">
-        <value>Open WINE configuration</value>
+        <value>WINE-beállítások megnyitása</value>
     </data>
   <data name="OpenWINEExplorer" xml:space="preserve">
-        <value>Open WINE explorer (run apps in prefix)</value>
+        <value>WINE-intéző megnyitása (alkalmazások futtatása az előtagban)</value>
     </data>
   <data name="KillAllWINEProcesses" xml:space="preserve">
-        <value>Kill all WINE processes</value>
+        <value>Minden WINE-folyamat kilövése</value>
     </data>
   <data name="DisableGameoverlayRendererHack" xml:space="preserve">
-        <value>Hack: Disable gameoverlayrenderer.so</value>
+        <value>Kerülőmegoldás: gameoverlayrenderer.so letiltása</value>
     </data>
   <data name="DisableGameoverlayRendererHackDescription" xml:space="preserve">
-        <value>May fix black screen on launch (Steam Deck) and some stuttering issues after 40+ minutes.</value>
+        <value>Bizonyos esetekben kijavíthatja az olyan problémákat, mint az indításkori fekete képernyő (Steam Decken) és a 40 percnyi játék után bekövetkező akadozás.</value>
     </data>
   <data name="XModifiersHack" xml:space="preserve">
-        <value>Hack: XMODIFIERS="@im=null"</value>
+        <value>Kerülőmegoldás: XMODIFIERS="@im=null"</value>
     </data>
   <data name="XModifiersHackDescription" xml:space="preserve">
-        <value>Fixes some mouse-related issues, some stuttering issues</value>
+        <value>Kijavíthat bizonyos egérrel vagy akadozással kapcsolatos hibákat.</value>
     </data>
   <data name="FixLibICUUCErrorHack" xml:space="preserve">
-        <value>Hack: Fix libicuuc Dalamud error</value>
+        <value>Kerülőmegoldás: libicuuc Dalamud-hiba javítása</value>
     </data>
   <data name="FixLibICUUCErrorHackDescription" xml:space="preserve">
-        <value>Fixes a specific "an internal Dalamud error has occurred." In the terminal you will see this text:
-"Cannot get symbol u_charsToUChars from libicuuc Error: 127"</value>
+        <value>Kijavíthat egy bizonyos belső Dalamud-hibát. Ilyenkor a terminálban az alábbi szöveg jelenik meg:
+„Cannot get symbol u_charsToUChars from libicuuc Error: 127”</value>
     </data>
   <data name="ForceLocaleHack" xml:space="preserve">
-        <value>Hack: Force locale to {0}</value>
+        <value>Kerülőmegoldás: területi beállítások átállítása a következőre: {0}</value>
     </data>
   <data name="ForceLocaleHackCUTF8" xml:space="preserve">
-        <value>C.UTF-8 (exact value depends on distro)</value>
+        <value>C.UTF-8 (a pontos érték disztribúciófüggő)</value>
     </data>
   <data name="ForceLocaleHackDescription" xml:space="preserve">
-        <value>Sets LC_ALL and LC_CTYPE to "{0}". This can fix some issues with non-Latin unicode characters in file paths if LANG is not a UTF-8 type</value>
+        <value>LC_ALL és LC_CTYPE átállítása a következőre: {0}. Ez olyan hibákat javíthat ki, amikor a fájlok elérési útjában nem latin karakterek fordulnak elő és a LANG értéke nem egy UTF-8-típusú nyelv.</value>
     </data>
   <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
-        <value>Your locale is "{0}". You probably don't need this hack.</value>
+        <value>A rendszer területi beállításai a következőre vannak beállítva: {0}. Erre a javításra valószínűleg nincs szükséged.</value>
     </data>
   <data name="TroubleshootingTitle" xml:space="preserve">
-        <value>Troubleshooting</value>
+        <value>Hibaelhárítás</value>
     </data>
   <data name="ClearWINEPrefixTroubleshooting" xml:space="preserve">
-        <value>Clear the WINE Prefix.</value>
+        <value>A WINE-előtag kiürítése.</value>
     </data>
   <data name="ClearWINEPrefixTroubleshootingButton" xml:space="preserve">
-        <value>Clear WINE Prefix</value>
+        <value>WINE-előtag ürítése</value>
     </data>
   <data name="ClearManagedCompatToolsTroubleshooting" xml:space="preserve">
-        <value>Clear the managed WINE install and DXVK</value>
+        <value>A kezelés alatt álló WINE-példány és a DXVK kiürítése.</value>
     </data>
   <data name="ClearManagedCompatToolsTroubleshootingButton" xml:space="preserve">
-        <value>Clear WINE &amp; DXVK Installs</value>
+        <value>WINE és DXVK ürítése</value>
     </data>
   <data name="ClearDalamudTroubleshooting" xml:space="preserve">
-        <value>Clear all the files and folders related to Dalamud. Your settings will not be touched, but all your plugins will be uninstalled, including custom repos.</value>
+        <value>A Dalamudhoz tartozó összes fájl és könyvtár törlése. A beállítások megmaradnak, de minden bővítmény – beleértve az egyéni adattárakból származókat is – eltávolításra kerül.</value>
     </data>
   <data name="ClearDalamudTroubleshootingButton" xml:space="preserve">
-        <value>Clear Dalamud</value>
+        <value>Dalamud ürítése</value>
     </data>
   <data name="ClearAllLogsTroubleshooting" xml:space="preserve">
-        <value>Clear all the log files.</value>
+        <value>Minden naplófájl törlése.</value>
     </data>
   <data name="ClearAllLogsTroubleshootingButton" xml:space="preserve">
-        <value>Clear Logs</value>
+        <value>Naplók ürítése</value>
     </data>
   <data name="ResetSettingsTroubleshooting" xml:space="preserve">
-        <value>Reset settings to default.</value>
+        <value>Minden beállítás visszaállítása alaphelyzetbe.</value>
     </data>
   <data name="ResetSettingsTroubleshootingButton" xml:space="preserve">
-        <value>Clear Settings</value>
+        <value>Alaphelyzet</value>
     </data>
   <data name="ResetAllTroubleshooting" xml:space="preserve">
-        <value>Do all of the above.</value>
+        <value>Összes kijelölése.</value>
     </data>
   <data name="GenerateTSPackTroubleshooting" xml:space="preserve">
-        <value>Generate a troubleshooting pack to upload to the official Discord channel</value>
+        <value>Hibaelhárítási csomag előállítása a hivatalos Discord-csatornához</value>
     </data>
   <data name="GenerateTSPackTroubleshootingButton" xml:space="preserve">
-        <value>Generate TSPack</value>
+        <value>TSPack (hibaelhárító csomag) előállítása</value>
     </data>
   <data name="ResetAllTroubleshootingButton" xml:space="preserve">
-        <value>Clear Everything</value>
+        <value>Minden törlése</value>
     </data>
   <data name="PatchPathSetting" xml:space="preserve">
-        <value>Patch Path</value>
+        <value>Frissítések elérési útja</value>
     </data>
   <data name="PatchPathSettingDescription" xml:space="preserve">
-        <value>Where patches should be downloaded to.</value>
+        <value>Az a könyvtár, ahova a program a játék frissítéseit tölti le.</value>
     </data>
   <data name="PatchPathSettingNotSetValidation" xml:space="preserve">
-        <value>Patch path is not set.</value>
+        <value>A frissítések elérési útja nincs beállítva!</value>
     </data>
   <data name="PatchDownloadMethodSetting" xml:space="preserve">
-        <value>Patch Download Method</value>
+        <value>Frissítések letöltési módszere</value>
     </data>
   <data name="PatchDownloadMethodSettingDescription" xml:space="preserve">
-        <value>How patches should be downloaded.</value>
+        <value>Az a módszer, amellyel a program a játékfrissítéseket tölti le.</value>
     </data>
   <data name="MaximumSpeedSetting" xml:space="preserve">
-        <value>Maximum Speed</value>
+        <value>Letöltési sebességkorlát</value>
     </data>
   <data name="MaximumSpeedSettingDescription" xml:space="preserve">
-        <value>Maximum download speed in bytes per second. Set to 0 for unlimited.</value>
+        <value>A maximális letöltési sebesség, bájt/s-ban megadva. A korlát feloldásához állítsd 0-ra.</value>
     </data>
   <data name="KeepPatchesSetting" xml:space="preserve">
-        <value>Keep Patches</value>
+        <value>Frissítések fájljainak megtartása</value>
     </data>
   <data name="KeepPatchesSettingDescription" xml:space="preserve">
-        <value>Keep patches on disk after installing.</value>
+        <value>Játékfrissítések fájljainak megtartása a lemezen telepítés után.</value>
     </data>
   <data name="PatchingTitle" xml:space="preserve">
-        <value>Patching</value>
+        <value>Frissítés</value>
     </data>
   <data name="GamePathSetting" xml:space="preserve">
-        <value>Game Path</value>
+        <value>A játék elérési útja</value>
     </data>
   <data name="GamePathSettingDescription" xml:space="preserve">
-        <value>Where the game is or will be installed.</value>
+        <value>A játék jelenlegi elérési útja vagy a kívánt telepítési könyvtár.</value>
     </data>
   <data name="GamePathSettingNotSetValidation" xml:space="preserve">
-        <value>Game path is not set.</value>
+        <value>A játék elérési útja nincs beállítva!</value>
     </data>
   <data name="GamePathSettingInvalidValidationj" xml:space="preserve">
-        <value>Please select the path containing the folders "game" and "boot", not the folders itself.</value>
+        <value>Azt a mappát add meg, amelyben a „game” és a „boot” almappák találhatók; nem pedig magukat az almappákat!</value>
     </data>
   <data name="GameConfigurationPathSetting" xml:space="preserve">
-        <value>Game Configuration Path</value>
+        <value>A játék beállításainak könyvtára</value>
     </data>
   <data name="GameConfigurationPathSettingDescription" xml:space="preserve">
-        <value>Where your user config files will be stored.</value>
+        <value>A felhasználói beállítási fájlokat tartalmazó könyvtár.</value>
     </data>
   <data name="GameConfigurationPathNotSetValidation" xml:space="preserve">
-        <value>Game Config Path is not set.</value>
+        <value>A játék beállításainak útja nincs beállítva!</value>
     </data>
   <data name="AdditionalGameArgsSetting" xml:space="preserve">
-        <value>Additional Game Arguments</value>
+        <value>Indítási opciók</value>
     </data>
   <data name="AdditionalGameArgsSettingDescription" xml:space="preserve">
-        <value>Follows Steam conventions: VAR1=value VAR2=value %command% -arg1 -arg2.
-Can't pass programs (like gamescope -- %command%). Does not accept flatpak args (--parent-pid=1, etc.)</value>
+        <value>Megegyezik a Steam szokásaival; pl.: VÁLTOZÓ1=érték VÁLTOZÓ2=érték %command% -arg1 -arg2.
+Külső programok nem futtathatók (pl.: gamescope -- %command%). Flatpak argumentumok nem használhatók (--parent-pid=1, stb.).</value>
     </data>
   <data name="GameLanguageSetting" xml:space="preserve">
-        <value>Game Language</value>
+        <value>A játék nyelve</value>
     </data>
   <data name="GameLanguageSettingDescription" xml:space="preserve">
-        <value>Select the game's language.</value>
+        <value>A játék nyelvének megadása.</value>
     </data>
   <data name="GameDPIAwarenessSetting" xml:space="preserve">
-        <value>Game DPI Awareness</value>
+        <value>DPI-figyelés</value>
     </data>
   <data name="GameDPIAwarenessSettingDescription" xml:space="preserve">
-        <value>Select the game's DPI Awareness. Change this if the game's scaling looks wrong.</value>
+        <value>A játék DPI-figyelésének módosítása. Ezt állítsd át, ha a a játék méretezése nem megfelelő.</value>
     </data>
   <data name="UseXLAuthMacrosSetting" xml:space="preserve">
-        <value>Use XIVLauncher authenticator/OTP macros</value>
+        <value>XIVLauncher Authenticator alkalmazás / kétlépcsős azonosítási makró használata</value>
     </data>
   <data name="UseXLAuthMacrosSettingDescription" xml:space="preserve">
         <value>Check this if you want to use the XIVLauncher authenticator app or macros.</value>
