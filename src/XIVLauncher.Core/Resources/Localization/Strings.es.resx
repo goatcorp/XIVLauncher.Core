@@ -20,86 +20,86 @@
             Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EnterYourOTP" xml:space="preserve">
-        <value>Please enter your OTP</value>
+        <value>Por favor introduce tu OTP</value>
     </data>
   <data name="OKLabel" xml:space="preserve">
         <value>OK</value>
     </data>
   <data name="CancelLabel" xml:space="preserve">
-        <value>Cancel</value>
+        <value>Cancelar</value>
     </data>
   <data name="SearchResults" xml:space="preserve">
-        <value>Search Results</value>
+        <value>Resultados de Búsqueda</value>
     </data>
   <data name="NoResultsFound" xml:space="preserve">
-        <value>No results found...</value>
+        <value>No se encontraron resultados...</value>
     </data>
   <data name="SearchForSettings" xml:space="preserve">
-        <value>Search for settings...</value>
+        <value>Buscar ajustes...</value>
     </data>
   <data name="AboutTitle" xml:space="preserve">
-        <value>About</value>
+        <value>Acerca de</value>
     </data>
   <data name="WineInstallSetting" xml:space="preserve">
-        <value>WINE Install</value>
+        <value>Instalar WINE</value>
     </data>
   <data name="WineInstallSettingDescription" xml:space="preserve">
-        <value>Choose how XIVLauncher will start and manage your WINE installation.</value>
+        <value>Elige como quieres que XIVLauncher se inicie y configura tu instalación de WINE.</value>
     </data>
   <data name="WineVersionSetting" xml:space="preserve">
-        <value>WINE Version</value>
+        <value>Versión de WINE</value>
     </data>
   <data name="WineVersionSettingDescription" xml:space="preserve">
-        <value>If you change WINE releases, you might have to clear your prefix (Troubleshooting tab)</value>
+        <value>Si cambias las versiones de WINE, puede que tengas que limpiar tu prefijo (pestaña de solución de problemas)</value>
     </data>
   <data name="WineBinaryPathSetting" xml:space="preserve">
-        <value>WINE Binary Path</value>
+        <value>Ruta Binaria de WINE</value>
     </data>
   <data name="WineBinarySettingDescription" xml:space="preserve">
-        <value>Set the path XIVLauncher will use to run applications via WINE.
-It should be an absolute path to a folder containing wine64 and wineserver binaries.</value>
+        <value>Elige la ruta que XIVLauncher va a utilizar para iniciar aplicaciones vía WINE.
+Debería ser una ruta absoluta a una carpeta que contenga los binarios wine64 y wineserver.</value>
     </data>
   <data name="DXVKVersionSetting" xml:space="preserve">
-        <value>DXVK Version</value>
+        <value>Versión DXVK</value>
     </data>
   <data name="DXVKVersionSettingDescription" xml:space="preserve">
-        <value>Choose which DXVK version to use.</value>
+        <value>Escoge qué version de DXVK utilizar.</value>
     </data>
   <data name="DXVKEnableAsyncSetting" xml:space="preserve">
-        <value>Enable DXVK ASYNC</value>
+        <value>Habilitar DXVK ASYNC</value>
     </data>
   <data name="DXVKEnableAsyncSettingDescription" xml:space="preserve">
-        <value>Enable DXVK ASYNC patch.</value>
+        <value>Habilitar parche de DXVK ASYNC.</value>
     </data>
   <data name="EnableFeralGameModeSetting" xml:space="preserve">
-        <value>Enable Feral's GameMode</value>
+        <value>Habilitar modo de juego Feral</value>
     </data>
   <data name="EnableFeralGameModeSettingDescription" xml:space="preserve">
-        <value>Enable launching with Feral Interactive's GameMode CPU optimizations.</value>
+        <value>Habilitar lanzar con las optimizaciones de CPU de Feral Interactive's GameMode.</value>
     </data>
   <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
-        <value>GameMode was not detected on your system.</value>
+        <value>No se detectó GameMode en tu sistema.</value>
     </data>
   <data name="EnableESyncSetting" xml:space="preserve">
-        <value>Enable ESync</value>
+        <value>Habilitar ESync</value>
     </data>
   <data name="EnableFSyncSetting" xml:space="preserve">
-        <value>Enable FSync</value>
+        <value>Habilitar FSync</value>
     </data>
   <data name="EnableESyncSettingDescription" xml:space="preserve">
-        <value>Enable eventfd-based synchronization.</value>
+        <value>Habilitar la sincronización basada en eventos.</value>
     </data>
   <data name="EnableFSyncSettingDescription" xml:space="preserve">
-        <value>Enable fast user mutex (futex2).</value>
+        <value>Habilitar mutex de usuario rápido (futex2).</value>
     </data>
   <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
-        <value>Linux kernel 5.16 or higher is required for FSync.</value>
+        <value>Se requiere Linux kernel 5.16 o más para FSync.</value>
     </data>
   <data name="SetWindows7Setting" xml:space="preserve">
-        <value>Set Windows version to 7</value>
+        <value>Establecer versión de Windows a 7</value>
     </data>
   <data name="SetWindows7SettingDescription" xml:space="preserve">
-        <value>Default for WINE 8.1+ is Windows 10, but this causes issues with some Dalamud plugins. Windows 7 is recommended for now.</value>
+        <value>Windows 10 es el por defecto para WINE 8.1+, pero esto causa algunos problemas con algún plugin de Dalamud. Lo recomendado por ahora es Windows 7.</value>
     </data>
   <data name="EnableDXVKOverlaySetting" xml:space="preserve">
         <value>DXVK Overlay</value>
