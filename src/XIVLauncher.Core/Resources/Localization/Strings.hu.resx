@@ -281,291 +281,291 @@ Külső programok nem futtathatók (pl.: gamescope -- %command%). Flatpak argume
         <value>XIVLauncher Authenticator alkalmazás / kétlépcsős azonosítási makró használata</value>
     </data>
   <data name="UseXLAuthMacrosSettingDescription" xml:space="preserve">
-        <value>Check this if you want to use the XIVLauncher authenticator app or macros.</value>
+        <value>Ezt kapcsold be, ha szeretnéd használni a XIVLauncher Authenticator alkalmazást vagy a makrókat.</value>
     </data>
   <data name="IgnoreSteamSetting" xml:space="preserve">
-        <value>Ignore Steam</value>
+        <value>Steam figyelmen kívül hagyása</value>
     </data>
   <data name="IgnoreSteamSettingDescription" xml:space="preserve">
-        <value>Check this if you do not want XIVLauncher to communicate with Steam (Requires Restart).</value>
+        <value>A XIVLauncher és a Steam közötti kommunikáció letiltása (a program újraindítása szükséges).</value>
     </data>
   <data name="UseUIDCacheSetting" xml:space="preserve">
-        <value>Use Experimental UID Cache</value>
+        <value>Kísérleti UID-gyorsítótár használata</value>
     </data>
   <data name="UseUIDCacheSettingDescription" xml:space="preserve">
-        <value>Tries to save your login token for the next start. Can result in launching with expired sessions.</value>
+        <value>Bejelentkezési jogkivonat elmentése és többszöri felhasználása. Lehetséges, hogy a második használatig a jogkivonat lejár.</value>
     </data>
   <data name="GameTitle" xml:space="preserve">
-        <value>Game</value>
+        <value>Játék</value>
     </data>
   <data name="ResetUIDCacheInfo" xml:space="preserve">
-        <value>Reset the UID cache; use if you are getting FFXIV error 1012 or 500X.</value>
+        <value>UID-gyorsítótár alaphelyzetbe állítása. Javasolt, ha a FFXIV 1012-es vagy 500X-es hibát jelent.</value>
     </data>
   <data name="ResetUIDCacheButton" xml:space="preserve">
-        <value>Reset UID Cache</value>
+        <value>UID-gyorsítótár alaphelyzetbe állítása</value>
     </data>
   <data name="DebugTitle" xml:space="preserve">
-        <value>Debug</value>
+        <value>Hibakeresés</value>
     </data>
   <data name="DalamudTitle" xml:space="preserve">
         <value>Dalamud</value>
     </data>
   <data name="EnableDalamudSetting" xml:space="preserve">
-        <value>Enable Dalamud</value>
+        <value>A Dalamud engedélyezése</value>
     </data>
   <data name="EnableDalamudSettingDescription" xml:space="preserve">
-        <value>Enable the Dalamud plugin system</value>
+        <value>Dalamud-bővítmények engedélyezése</value>
     </data>
   <data name="LoadMethodSetting" xml:space="preserve">
-        <value>Load Method</value>
+        <value>Betöltési módszer</value>
     </data>
   <data name="LoadMethodSettingDescription" xml:space="preserve">
-        <value>Choose how Dalamud is loaded.</value>
+        <value>A Dalamud betöltési módszerének megadása.</value>
     </data>
   <data name="DalamudInjectionDelaySetting" xml:space="preserve">
-        <value>Injection Delay (ms)</value>
+        <value>Befecskendezési késleltetés (ms-ban megadva)</value>
     </data>
   <data name="DalamudInjectionDelaySettingDescription" xml:space="preserve">
-        <value>Choose how long to wait after the game has loaded before injecting.</value>
+        <value>A befecskendezés további késleltetése a játék betöltése után.</value>
     </data>
   <data name="DalamudManualInjectionEnableSetting" xml:space="preserve">
-        <value>Use Local Dalamud</value>
+        <value>Helyi Dalamud-példány használata</value>
     </data>
   <data name="DalamudManualInjectionEnableSettingDescription" xml:space="preserve">
-        <value>Use a local build of Dalamud instead of the automatically provided one (For developers only!)</value>
+        <value>A Dalamud helyi összeállításának használata az automatikusan beszerzett helyett (csak fejlesztőknek!)</value>
     </data>
   <data name="DalamudLocalInjectionPathSetting" xml:space="preserve">
-        <value>Local Dalamud Injector Path</value>
+        <value>Helyi Dalamud elérési útja</value>
     </data>
   <data name="DalamudLocalInjectionPathSettingDescription" xml:space="preserve">
-        <value>The path to the local version of Dalamud where Dalamud.Injector.exe is located</value>
+        <value>A Dalamud helyi változatának elérési útja – az a könyvtár, ahol a Dalamud.Injector.exe található.</value>
     </data>
   <data name="DalamudLocalInjectionPathSettingNoDirValidation" xml:space="preserve">
-        <value>There is no directory at that path.</value>
+        <value>Nincs könyvtár megadott elérési úton.</value>
     </data>
   <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
-        <value>Dalamud.Injector.exe was not found inside of the provided directory.</value>
+        <value>Nem található Dalamud.Injector.exe a megadott elérési úton.</value>
     </data>
   <data name="OpenRepositoryButton" xml:space="preserve">
-        <value>Open Repository</value>
+        <value>Adattár megnyitása</value>
     </data>
   <data name="JoinDiscordButton" xml:space="preserve">
-        <value>Join our Discord</value>
+        <value>Csatlakozás a Discord-szerverhez</value>
     </data>
   <data name="SeeSoftwareLicensesButton" xml:space="preserve">
-        <value>See Software Licenses</value>
+        <value>Szoftverlicencek megtekintése</value>
     </data>
   <data name="XLCoreCreatedBy" xml:space="preserve">
-        <value>By {0} and other contributors.</value>
+        <value>Szerző: {0} és további közreműködők.</value>
     </data>
   <data name="NewsCaption" xml:space="preserve">
-        <value>News</value>
+        <value>Hírek</value>
     </data>
   <data name="TopicsCaption" xml:space="preserve">
-        <value>Topics</value>
+        <value>Témakörök</value>
     </data>
   <data name="NewsLoading" xml:space="preserve">
-        <value>News is loading...</value>
+        <value>Hírek betöltése folyamatban…</value>
     </data>
   <data name="XLElevatedWarning" xml:space="preserve">
-        <value>XIVLauncher is running as administrator/root user.
-This can cause various issues, including but not limited to addons failing to launch and hotkey applications failing to respond.
+        <value>A XIVLauncher jelenleg rendszergazdai/root-jogosultságokkal fut.
+Ez számos problémát okozhat, pl.: a bővítmények indításának meghiúsulását vagy a billentyűkombinációk nem működését.
 
-Please take care to avoid running XIVLauncher with elevated privileges</value>
+Ne futtasd meg a XIVLaunchert megemelt jogosultságokkal!</value>
     </data>
   <data name="LoggingIn" xml:space="preserve">
-        <value>Logging in...</value>
+        <value>Bejelentkezés folyamatban…</value>
     </data>
   <data name="RepairOfficialLauncherOpenError" xml:space="preserve">
-        <value>The game and/or the official launcher are open. XIVLauncher cannot repair the game if this is the case.
-Please close them and try again.</value>
+        <value>A játék és/vagy a hivatalos indítókliens jelenleg fut. A XIVLauncher így nem tudja megjavítani a játékfájlokat.
+Zárd be a játékot, majd próbáld újra.</value>
     </data>
   <data name="XIVLauncherError" xml:space="preserve">
-        <value>XIVLauncher Error</value>
+        <value>XIVLauncher-hiba</value>
     </data>
   <data name="ReinstallUIDCacheError" xml:space="preserve">
-        <value>You enabled the UID cache in the patcher settings.
-This setting does not allow you to reinstall FFXIV.
+        <value>Engedélyezted az UID-gyorsítótárat a beállításokban.
+Amíg ez a funkció aktív, addig nem telepítheted újra a FFXIV-t.
 
-If you want to reinstall FFXIV, please take care to disable it first.</value>
+Ha szeretnéd újratelepíteni a FFXIV-t, akkor először ki kell kapcsolnod az UID-gyorsítótárat.</value>
     </data>
   <data name="LoginNoServiceAccountError" xml:space="preserve">
-        <value>No service account or subscription</value>
+        <value>A felhasználói fiók vagy előfizetés nem található</value>
     </data>
   <data name="LoginTermsNotAcceptedError" xml:space="preserve">
-        <value>Need to accept terms of use</value>
+        <value>A felhasználási feltételek még nincsenek elfogadva</value>
     </data>
   <data name="UpdateCheckFinished" xml:space="preserve">
-        <value>An update check was executed and any pending updates were installed.</value>
+        <value>A frissítések keresése befejeződött és a függőben lévő frissítések telepítésre kerültek.</value>
     </data>
   <data name="WaitingForDalamud" xml:space="preserve">
-        <value>Waiting for Dalamud to be ready...</value>
+        <value>Várakozás a Dalamud előkészítésére…</value>
     </data>
   <data name="PleaseBePatient" xml:space="preserve">
-        <value>This may take a little while, please be patient.</value>
+        <value>Ez hosszabb időt is igénybe vehet – légy türelemmel.</value>
     </data>
   <data name="DisableAutoLoginButton" xml:space="preserve">
-        <value>Disable auto login</value>
+        <value>Automatikus bejelentkezés letiltása</value>
     </data>
   <data name="AutoLoginDisabledNextStart" xml:space="preserve">
-        <value>Auto login disabled on next start!</value>
+        <value>A következő indításnál a XIVLauncher nem fog automatikusan bejelentkezni.</value>
     </data>
   <data name="NoSavedAccounts" xml:space="preserve">
-        <value>No saved accounts...</value>
+        <value>Nincsenek elmentett fiókok.</value>
     </data>
   <data name="MyAccount" xml:space="preserve">
-        <value>My Account</value>
+        <value>Saját fiók</value>
     </data>
   <data name="ServiceStatus" xml:space="preserve">
-        <value>Service Status</value>
+        <value>Szolgáltatás állapota</value>
     </data>
   <data name="LauncherSettings" xml:space="preserve">
-        <value>Launcher Settings</value>
+        <value>Az indító beállításai</value>
     </data>
   <data name="UsernameInput" xml:space="preserve">
-        <value>Username</value>
+        <value>Felhasználónév</value>
     </data>
   <data name="UsernameInputHint" xml:space="preserve">
-        <value>Enter your Username</value>
+        <value>Felhasználónév megadása</value>
     </data>
   <data name="PasswordInput" xml:space="preserve">
-        <value>Password</value>
+        <value>Jelszó</value>
     </data>
   <data name="PasswordInputHint" xml:space="preserve">
-        <value>Enter your password</value>
+        <value>Jelszó megadása</value>
     </data>
   <data name="UseOneTimePasswordCheckbox" xml:space="preserve">
-        <value>Use one-time password</value>
+        <value>Kétlépcsős azonosítás használata</value>
     </data>
   <data name="UseSteamServiceAccount" xml:space="preserve">
-        <value>Steam service account</value>
+        <value>Steam-fiók</value>
     </data>
   <data name="FreeTrialAccountCheckbox" xml:space="preserve">
-        <value>Free trial account</value>
+        <value>Próbaverziós fiók</value>
     </data>
   <data name="LogInAutomaticCheckbox" xml:space="preserve">
-        <value>Log in automatically</value>
+        <value>Automatikus bejelentkezés</value>
     </data>
   <data name="LoginButton" xml:space="preserve">
-        <value>Login</value>
+        <value>Bejelentkezés</value>
     </data>
   <data name="LaunchWithoutDalamudButton" xml:space="preserve">
-        <value>Launch without Dalamud</value>
+        <value>A játék indítása Dalamud nélkül</value>
     </data>
   <data name="LaunchWithoutPluginsButton" xml:space="preserve">
-        <value>Launch without any plugins</value>
+        <value>A játék indítása bővítmények nélkül</value>
     </data>
   <data name="LaunchWithNoCustomPluginsButton" xml:space="preserve">
-        <value>Launch without custom repo plugins</value>
+        <value>A játék indítása egyéni adattáras bővítmények nélkül</value>
     </data>
   <data name="PatchWithoutLaunchingButton" xml:space="preserve">
-        <value>Patch without launching</value>
+        <value>A játék frissítése indítás nélkül</value>
     </data>
   <data name="RepairGameFilesButton" xml:space="preserve">
-        <value>Repair game files</value>
+        <value>Játékfájlok épségének ellenőrzése</value>
     </data>
   <data name="NoSecretsProviderWarning" xml:space="preserve">
-        <value>Take care! No secrets provider is installed or configured. Passwords can't be saved.</value>
+        <value>Figyelem! Ez a rendszer nem rendelkezik titokszolgáltatóval, vagy az nincs helyesen beállítva, ezért a XIVLauncher nem képes megjegyezni a jelszavakat.</value>
     </data>
   <data name="TroubleshootingDestructiveActionWarning" xml:space="preserve">
-        <value>Actions here are potentially destructive, take care.</value>
+        <value>Légy óvatos! Az alábbi beállítások roncsoló mellékhatásokkal bírhatnak.</value>
     </data>
   <data name="PreparingForCompatTool" xml:space="preserve">
-        <value>Preparing required compatibility tools</value>
+        <value>Szükséges kompatibilitási eszközök előkészítése folyamatban</value>
     </data>
   <data name="StartingGame" xml:space="preserve">
-        <value>Starting game...</value>
+        <value>A játék indítása folyamatban…</value>
     </data>
   <data name="HaveFun" xml:space="preserve">
-        <value>Have fun!</value>
+        <value>Jó szórakozást!</value>
     </data>
   <data name="CannotGetBootVerError" xml:space="preserve">
-        <value>XIVLauncher was not able to check the boot version for the select game installation. This can happen if a maintenance is currently in progress or if your connection to the version check server is not available. Please report this error if you are able to login with the official launcher, but not XIVLauncher.</value>
+        <value>A játék verziójának ellenőrzése meghiúsult. Lehetséges, hogy a játék éppen karbantartás alatt áll vagy a verzióhitelesítési kiszolgáló nem található. Ha képes vagy bejelentkezni a hivatalos indítóklienssel, de a XIVLauncherrel nem, kérjük jelentsd a hibát.</value>
     </data>
   <data name="CannotPatchGameOpenError" xml:space="preserve">
-        <value>The game and/or the official launcher are open. XIVLauncher cannot patch the game if this is the case.
-Please close the official launcher and try again.</value>
+        <value>A játék és/vagy a hivatalos indítókliens jelenleg fut. A XIVLauncher így nem tudja frissíteni a játékot.
+Zárd be a hivatalos indítóklienst, majd próbáld újra.</value>
     </data>
   <data name="NowPatching" xml:space="preserve">
-        <value>Now patching {0}...</value>
+        <value>{0} frissítése folyamatban…</value>
     </data>
   <data name="WorkingOnStatus" xml:space="preserve">
-        <value>Working on {0}/{1}</value>
+        <value>{1}/{0}. elem feldolgozása folyamatban…</value>
     </data>
   <data name="LeftToDownloadStatus" xml:space="preserve">
-        <value>{0} left to download at {1}/s</value>
+        <value>{0} maradt. Sebesség: {1}/s</value>
     </data>
   <data name="NotEnoughSpacePatchesError" xml:space="preserve">
-        <value>There is not enough space on your drive to download patches.
+        <value>Nincs elég szabad hely a frissítések letöltéséhez.
 
-You can change the location patches are downloaded to in the settings.
+Ha kell, a frissítések letöltési mappáját a beállításokban változtathatod meg.
 
-Required:{0}
-Free:{1}</value>
+Szükséges hely: {0}
+Szabad hely: {1}</value>
     </data>
   <data name="PatchInstallerStartFailError" xml:space="preserve">
-        <value>The patch installer could not start correctly.
+        <value>A frissítő elindítása meghiúsult.
 {0}
 
-If you have denied access to it, please try again. If this issue persists, please contact us via Discord.</value>
+Ha megtagadtad a hozzáférést, próbáld újra. Ha a probléma továbbra is fennáll, vedd fel velünk a kapcsolatot Discordon.</value>
     </data>
   <data name="NotEnoughSpaceAllPatchesError" xml:space="preserve">
-        <value>There is not enough space on your drive to download all patches.
+        <value>Nincs elég szabad hely az összes frissítés letöltéséhez.
 
-You can change the location patches are downloaded to in the XIVLauncher settings.
+Ha kell, a frissítések letöltési mappáját a XIVLauncher beállításaiban változtathatod meg.
 
-Required:{0}
-Free:{1}</value>
+Szükséges hely: {0}
+Szabad hely: {1}</value>
     </data>
   <data name="NotEnoughSpaceGameError" xml:space="preserve">
-        <value>There is not enough space on your drive to install patches.
+        <value>Nincs elég szabad hely a frissítések telepítéséhez.
 
-You can change the location the game is installed to in the settings.
+Ha kell, a játék mappáját a beállításokban változtathatod meg.
 
-Required:{0}
-Free:{1}</value>
+Szükséges hely: {0}
+Szabad hely: {1}</value>
     </data>
   <data name="CannotVerifyGameFilesError" xml:space="preserve">
-        <value>XIVLauncher could not verify the downloaded game files. Please restart and try again.
+        <value>A XIVLauncher nem tudta ellenőrizni a játékfájlok épségét. Indítsd újra az alkalmazást, majd próbáld újra.
 
-This usually indicates a problem with your internet connection.
-If this error persists, try using a VPN set to Japan.
+Ez a hiba általában az internetkapcsolat megszakadásából ered.
+Ha a probléma továbbra is fennáll, javasoljuk egy Japánba bújtatott VPN használatát.
 
-Context: {0}
+További információ: {0}
 {1}</value>
     </data>
   <data name="PatchInstallerGenericError" xml:space="preserve">
-        <value>The patch installer ran into an error.
-Please report this error.
+        <value>A frissítő hibába ütközött.
+Kérjük, jelentsd ezt a hibát!
 
-Please try again or use the official launcher.</value>
+Próbáld újra vagy használd a hivatalos indítóklienst a játékhoz.</value>
     </data>
   <data name="NowRepairingFiles" xml:space="preserve">
-        <value>Now repairing...</value>
+        <value>Javítás folyamatban…</value>
     </data>
   <data name="RepairAllFilesValid" xml:space="preserve">
-        <value>All game files seem to be valid.</value>
+        <value>A játékfájlok épek.</value>
     </data>
   <data name="RepairFixedSingularFile" xml:space="preserve">
-        <value>XIVLauncher has successfully repaired 1 game file.</value>
+        <value>A XIVLauncher sikeresen kijavított 1 játékfájlt.</value>
     </data>
   <data name="RepairFixedPluralFiles" xml:space="preserve">
-        <value>XIVLauncher has successfully repaired {0} game files.</value>
+        <value>A XIVLauncher sikeresen kijavított {0} játékfájlt.</value>
     </data>
   <data name="RepairSingleFileMoved" xml:space="preserve">
-        <value>Additionally, 1 file that did not come with the original game installation has been moved to {0}.
-If you were using ReShade, you will have to reinstall it.</value>
+        <value>Emellett találtunk 1 olyan fájlt, ami nem a játék része. Ez a következő helyre lett áthelyezve: {0}.
+Ha korábban a ReShade-et használtad, akkor azt újra kell telepítened.</value>
     </data>
   <data name="RepairPluralFilesMoved" xml:space="preserve">
-        <value>Additionally, {0} files that did not come with the original game installation have been moved to {1}.
-If you were using ReShade, you will have to reinstall it.</value>
+        <value>Emellett találtunk {0} olyan fájlt, ami nem a játék része. Ez a következő helyre lett áthelyezve: {1}.
+Ha korábban a ReShade-et használtad, akkor azt újra kell telepítened.</value>
     </data>
   <data name="RepairGameVerUnsupportedError" xml:space="preserve">
-        <value>The version of the game you are on cannot be repaired by XIVLauncher yet, as reference information is not yet available.
-Please try again later.</value>
+        <value>A játék jelenlegi verzióját még nem képes a XIVLauncher megjavítani, mert a referenciaadatok még nem állnak rendelkezésre.
+Próbáld újra később.</value>
     </data>
   <data name="RepairFailureError" xml:space="preserve">
-        <value>An error occurred while repairing the game files.
-You may have to reinstall the game.</value>
+        <value>Hiba történt a fájlok ellenőrzése közben.
+Lehetséges, hogy újra kell telepítened a játékot.</value>
     </data>
 </root>
