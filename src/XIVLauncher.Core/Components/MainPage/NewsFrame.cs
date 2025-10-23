@@ -1,6 +1,11 @@
 using System.Numerics;
 
+#if HEXA
+using Hexa.NET.ImGui;
+#endif
+#if VELDRID
 using ImGuiNET;
+#endif
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Game;
@@ -87,7 +92,7 @@ public class NewsFrame : Component
                 {
                     if (!string.IsNullOrEmpty(newsEntry.Url))
                     {
-                        if (ImGui.Selectable(newsEntry.Title, default, default, ImGui.CalcTextSize(newsEntry.Title)) && !string.IsNullOrEmpty(newsEntry.Url))
+                        if (ImGui.Selectable(newsEntry.Title, false, default, ImGui.CalcTextSize(newsEntry.Title)) && !string.IsNullOrEmpty(newsEntry.Url))
                         {
                             AppUtil.OpenBrowser(newsEntry.Url);
                         }

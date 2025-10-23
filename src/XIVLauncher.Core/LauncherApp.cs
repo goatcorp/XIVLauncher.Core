@@ -1,7 +1,12 @@
 using System.Diagnostics;
 using System.Numerics;
 
+#if HEXA
+using Hexa.NET.ImGui;
+#endif
+#if VELDRID
 using ImGuiNET;
+#endif
 
 using Serilog;
 
@@ -265,14 +270,15 @@ public class LauncherApp : Component
         ImGui.SetNextWindowPos(new Vector2(0, 0));
         ImGui.SetNextWindowSize(ImGuiHelpers.ViewportSize);
 
+        ImGui.PushStyleColor(ImGuiCol.WindowBg, ImGuiColors.BlueShade0);
         if (ImGui.Begin("Background",
                 ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNavFocus
                 | ImGuiWindowFlags.NoNavInputs | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
             this.background.Draw();
 
-            ImGui.PushStyleColor(ImGuiCol.WindowBg, ImGuiColors.BlueShade0);
         }
+        ImGui.PopStyleColor();
 
         ImGui.End();
 

@@ -1,6 +1,12 @@
 using System.Runtime.InteropServices;
 
+
+#if HEXA
+using Hexa.NET.ImGui;
+#endif
+#if VELDRID
 using ImGuiNET;
+#endif
 
 namespace XIVLauncher.Core;
 
@@ -19,7 +25,12 @@ public class FontManager
 
         ImGui.GetIO().Fonts.Clear();
 
+#if HEXA
+        var fontConfig = ImGui.ImFontConfig();
+#endif
+#if VELDRID
         ImFontConfigPtr fontConfig = ImGuiNative.ImFontConfig_ImFontConfig();
+#endif
         fontConfig.PixelSnapH = true;
 
         var fontDataText = AppUtil.GetEmbeddedResourceBytes(TEXT_FONT_NAME);
@@ -33,7 +44,18 @@ public class FontManager
 
         var japaneseRangeHandle = GCHandle.Alloc(GlyphRangesJapanese.GlyphRanges, GCHandleType.Pinned);
 
-        TextFont = ioFonts.AddFontFromMemoryTTF(fontDataTextPtr, fontDataText.Length, pxSize, null, japaneseRangeHandle.AddrOfPinnedObject());
+        TextFont = ioFonts.AddFontFromMemoryTTF(
+#if HEXA
+            (void*)
+#endif
+            fontDataTextPtr,
+            fontDataText.Length,
+            pxSize,
+            null,
+#if HEXA
+            (uint*)
+#endif
+            japaneseRangeHandle.AddrOfPinnedObject());
 
         var iconRangeHandle = GCHandle.Alloc(
             new ushort[]
@@ -44,8 +66,21 @@ public class FontManager
             },
             GCHandleType.Pinned);
 
-        IconFont = ioFonts.AddFontFromMemoryTTF(fontDataIconsPtr, fontDataIcons.Length, pxSize, fontConfig, iconRangeHandle.AddrOfPinnedObject());
+        IconFont = ioFonts.AddFontFromMemoryTTF(
 
+#if HEXA
+            (void*)
+#endif
+            fontDataIconsPtr,
+            fontDataIcons.Length,
+            pxSize,
+            fontConfig,
+#if HEXA
+            (uint*)
+#endif
+            iconRangeHandle.AddrOfPinnedObject());
+
+#if VELDRID
         ioFonts.Build();
 
         if (Math.Abs(FONT_GAMMA - 1.0f) >= 0.001)
@@ -55,6 +90,7 @@ public class FontManager
             for (int i = 3, j = texWidth * texHeight * 4; i < j; i += 4)
                 texPixels[i] = (byte)(Math.Pow(texPixels[i] / 255.0f, 1.0f / FONT_GAMMA) * 255.0f);
         }
+#endif
 
         fontConfig.Destroy();
         japaneseRangeHandle.Free();

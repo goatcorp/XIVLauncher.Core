@@ -5,14 +5,19 @@ using System.Runtime.InteropServices;
 
 using Config.Net;
 
+#if HEXA
+using Hexa.NET.SDL3;
+#endif
+
+#if VELDRID
 using ImGuiNET;
-
+#endif
 using Serilog;
-
+#if VELDRID
 using Veldrid;
 using Veldrid.Sdl2;
 using Veldrid.StartupUtilities;
-
+#endif
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch;
@@ -35,18 +40,27 @@ using XIVLauncher.Core.Style;
 
 namespace XIVLauncher.Core;
 
+
 sealed class Program
 {
     private const string APP_NAME = "xlcore";
     private static readonly Vector3 ClearColor = new(0.1f, 0.1f, 0.1f);
     private static string[] mainArgs = [];
     private static LauncherApp launcherApp = null!;
+#if HEXA
+    private static unsafe SDLWindow* window = null!;
+    private static unsafe SDLGPUDevice* gpuDevice = null!;
+    public static unsafe SDLGPUDevice* GPUDevice => gpuDevice;
+#endif
+#if VELDRID
     private static Sdl2Window window = null!;
     private static CommandList commandList = null!;
     private static GraphicsDevice graphicsDevice = null!;
+#endif
     private static ImGuiBindings guiBindings = null!;
-
+#if VELDRID
     public static GraphicsDevice GraphicsDevice => graphicsDevice;
+#endif
     public static ImGuiBindings ImGuiBindings => guiBindings;
     public static ILauncherConfig Config { get; private set; } = null!;
     public static CommonSettings CommonSettings => new(Config);
@@ -59,7 +73,7 @@ sealed class Program
     {
         Timeout = TimeSpan.FromSeconds(5)
     };
-    public static PatchManager Patcher { get; set; } = null!;
+    public static PatchManager? Patcher { get; set; } = null;
     public static Storage storage = null!;
     public static DirectoryInfo DotnetRuntime => storage.GetFolder("runtime");
     public static string CType = CoreEnvironmentSettings.GetCType();
@@ -251,7 +265,7 @@ sealed class Program
         // Manual or auto injection setup.
         DalamudLoadInfo = new DalamudOverlayInfoProxy();
         DalamudUpdater = CreateDalamudUpdater();
-        DalamudUpdater.Run();
+        DalamudUpdater.Run(null, null);
 
         CreateCompatToolsInstance();
 
@@ -262,7 +276,7 @@ sealed class Program
 #else
         var version = $"{AppUtil.GetAssemblyVersion()} ({AppUtil.GetGitHash()})";
 #endif
-
+#if VELDRID
         // Initialise SDL, as that's needed to figure out where to spawn the window.
         Sdl2Native.SDL_Init(SDLInitFlags.Video);
 
@@ -322,13 +336,92 @@ sealed class Program
 
         if (Patcher is not null)
         {
-            Patcher.CancelAllDownloads();
+            Patcher.StartCancellation();
             Task.Run(async () =>
             {
                 await PatchManager.UnInitializeAcquisition().ConfigureAwait(false);
                 Environment.Exit(0);
             });
         }
+#endif
+#if HEXA
+        unsafe
+        {
+            if (!SDL.Init(SDLInitFlags.Video | SDLInitFlags.Gamepad))
+            {
+                Log.Error($"Error: SDL_Init(): {SDL.GetErrorS()}");
+                Environment.Exit(1);
+            }
+
+            var mainScale = SDL.GetDisplayContentScale(SDL.GetPrimaryDisplay());
+            var windowFlags = SDLWindowFlags.Resizable | SDLWindowFlags.Hidden | SDLWindowFlags.HighPixelDensity;
+            window = SDL.CreateWindow(
+                $"XIVLauncher {version}",
+                (int)(1280 * mainScale),
+                (int)(800 * mainScale),
+                windowFlags);
+            if (window == null)
+            {
+                Log.Error($"Error: SDL_CreateWindow(): {SDL.GetErrorS()}");
+                Environment.Exit(1);
+            }
+
+            SDL.SetWindowPosition(window, (int)SDL.SDL_WINDOWPOS_CENTERED_MASK, (int)SDL.SDL_WINDOWPOS_CENTERED_MASK);
+            SDL.ShowWindow(window);
+            Log.Debug("SDL OK!");
+
+            gpuDevice = SDL.CreateGPUDevice(
+                SDLGPUShaderFormat.Spirv | SDLGPUShaderFormat.Dxil | SDLGPUShaderFormat.Metallib,
+                true,
+                (byte*)null);
+            if (gpuDevice == null)
+            {
+                Log.Error($"Error: SDL_CreateGPUDevice(): {SDL.GetErrorS()}");
+                Environment.Exit(1);
+            }
+
+            if (!SDL.ClaimWindowForGPUDevice(gpuDevice, window))
+            {
+                Log.Error($"Error: SDL_ClaimWindowForGPUDevice(): {SDL.GetErrorS()}");
+                Environment.Exit(1);
+            }
+
+            SDL.SetGPUSwapchainParameters(gpuDevice, window, SDLGPUSwapchainComposition.Sdr, SDLGPUPresentMode.Mailbox);
+            Log.Debug("SDL GPU OK!");
+
+            guiBindings = new ImGuiBindings(window, gpuDevice, storage.GetFile("launcherUI.ini"), Config.FontPxSize ?? 21.0f, mainScale);
+            Log.Debug("ImGui OK!");
+
+            StyleModelV1.DalamudStandard.Apply();
+
+            var launcherClientConfig = LauncherClientConfig.GetAsync().GetAwaiter().GetResult();
+            launcherApp = new LauncherApp(storage, launcherClientConfig.frontierUrl, launcherClientConfig.cutOffBootver);
+
+            var done = false;
+            while (!done)
+            {
+                if (guiBindings.ProcessExit())
+                {
+                    done = true;
+                }
+
+                if ((SDL.GetWindowFlags(window) & SDLWindowFlags.Minimized) != 0)
+                {
+                    SDL.Delay(10);
+                    continue;
+                }
+
+                guiBindings.NewFrame();
+                launcherApp.Draw();
+                guiBindings.Render();
+            }
+
+            SDL.ReleaseWindowFromGPUDevice(gpuDevice, window);
+            SDL.DestroyGPUDevice(gpuDevice);
+            SDL.DestroyWindow(window);
+            SDL.Quit();
+        }
+#endif
     }
 
     public static void CreateCompatToolsInstance()
@@ -345,12 +438,28 @@ sealed class Program
 
     public static void ShowWindow()
     {
+#if VELDRID
         window.Visible = true;
+#endif
+#if HEXA
+        unsafe
+        {
+            SDL.ShowWindow(window);
+        }
+#endif
     }
 
     public static void HideWindow()
     {
+#if VELDRID
         window.Visible = false;
+#endif
+#if HEXA
+        unsafe
+        {
+            SDL.HideWindow(window);
+        }
+#endif
     }
 
     private static ISecretProvider GetSecretProvider(Storage storage)
@@ -418,7 +527,7 @@ sealed class Program
         {
             DalamudLoadInfo = new DalamudOverlayInfoProxy();
             DalamudUpdater = CreateDalamudUpdater();
-            DalamudUpdater.Run();
+            DalamudUpdater.Run(null, null);
         }
     }
 
@@ -452,6 +561,7 @@ sealed class Program
 
     public static void ResetUIDCache(bool tsbutton = false) => launcherApp.UniqueIdCache.Reset();
 
+#if VELDRID
     private static unsafe bool GetDisplayBounds(int displayIndex, out Rectangle bounds)
     {
         bounds = new Rectangle();
@@ -464,4 +574,5 @@ sealed class Program
         }
         return true;
     }
+#endif
 }

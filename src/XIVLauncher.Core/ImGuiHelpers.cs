@@ -1,13 +1,24 @@
 using System.Numerics;
 
+#if HEXA
+using Hexa.NET.ImGui;
+#endif
+#if VELDRID
 using ImGuiNET;
+#endif
 
 namespace XIVLauncher.Core;
 
 public static class ImGuiHelpers
 {
     public static Vector2 ViewportSize => ImGui.GetIO().DisplaySize;
-    public static float GlobalScale => ImGui.GetIO().FontGlobalScale;
+    public static float GlobalScale => 
+#if VELDRID
+        ImGui.GetIO().FontGlobalScale;
+#endif
+#if HEXA
+        ImGui.GetStyle().FontScaleMain;
+#endif
 
     public static void TextWrapped(string text)
     {
