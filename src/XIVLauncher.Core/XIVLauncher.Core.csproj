@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -17,15 +17,13 @@
         <PublishSingleFile>true</PublishSingleFile>
         <SelfContained>true</SelfContained>
 
-        <IsWindows
-            Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
+        <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
             true</IsWindows>
-        <IsOSX
-            Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
+        <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
             true</IsOSX>
-        <IsLinux
-            Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">
+        <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">
             true</IsLinux>
+        <Configurations>Debug;Release</Configurations>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -48,16 +46,19 @@
         <PathMap>$(AppOutputBase)=C:\goatsoft\xl\XIVLauncher.Core\</PathMap>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DefineConstants>$(DefineConstants);HEXA</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <DefineConstants>$(DefineConstants);VELDRID</DefineConstants>
+    </PropertyGroup>
+
     <ItemGroup>
-        <ProjectReference
-            Include="../XIVLauncher.VersionGenerator/XIVLauncher.VersionGenerator.csproj"
-            OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-        <ProjectReference
-            Include="..\XIVLauncher.Common.Unix\XIVLauncher.Common.Unix.csproj" />
-        <ProjectReference
-            Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common.Windows\XIVLauncher.Common.Windows.csproj" />
-        <ProjectReference
-            Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
+        <ProjectReference Include="../XIVLauncher.VersionGenerator/XIVLauncher.VersionGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\XIVLauncher.Common.Unix\XIVLauncher.Common.Unix.csproj" />
+        <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common.Windows\XIVLauncher.Common.Windows.csproj" />
+        <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -66,12 +67,15 @@
 
     <ItemGroup>
         <PackageReference Include="Config.Net" Version="4.19.0" />
-        <PackageReference Include="ImGui.NET" Version="1.87.2" />
         <PackageReference Include="KeySharp" Version="1.0.5" />
-        <PackageReference Include="Serilog" Version="2.12.0" />
-        <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
-        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+        <PackageReference Include="Serilog" Version="4.3.0" />
+        <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+        <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="$(Configuration) == 'Release'">
+        <PackageReference Include="ImGui.NET" Version="1.87.2" />
         <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
         <PackageReference Include="Veldrid" Version="4.9.0" />
         <PackageReference Include="Veldrid.ImageSharp" Version="4.9.0" />
@@ -79,22 +83,28 @@
         <PackageReference Include="Veldrid.StartupUtilities" Version="4.9.0" />
     </ItemGroup>
 
-    <ItemGroup>
+    <ItemGroup Condition="$(Configuration) == 'Debug'">
+        <PackageReference Include="Hexa.NET.ImGui" Version="2.2.9" />
+        <PackageReference Include="Hexa.NET.ImGui.Backends.SDL3" Version="1.0.18" />
+        <PackageReference Include="Hexa.NET.SDL3" Version="1.2.16" />
+        <PackageReference Include="Hexa.NET.SDL3.Image" Version="1.0.0" />
+    </ItemGroup>
+
+    <ItemGroup Condition="$(Configuration) == 'Release'">
         <EmbeddedResource Include="Shaders/GLSL/imgui-vertex.glsl" LogicalName="imgui-vertex.glsl" />
         <EmbeddedResource Include="Shaders/GLSL/imgui-frag.glsl" LogicalName="imgui-frag.glsl" />
-        <EmbeddedResource Include="Shaders/HLSL/imgui-vertex.hlsl.bytes"
-            LogicalName="imgui-vertex.hlsl.bytes" />
-        <EmbeddedResource Include="Shaders/HLSL/imgui-frag.hlsl.bytes"
-            LogicalName="imgui-frag.hlsl.bytes" />
+        <EmbeddedResource Include="Shaders/HLSL/imgui-vertex.hlsl.bytes" LogicalName="imgui-vertex.hlsl.bytes" />
+        <EmbeddedResource Include="Shaders/HLSL/imgui-frag.hlsl.bytes" LogicalName="imgui-frag.hlsl.bytes" />
         <EmbeddedResource Include="Shaders/SPIR-V/imgui-vertex.spv" LogicalName="imgui-vertex.spv" />
         <EmbeddedResource Include="Shaders/SPIR-V/imgui-frag.spv" LogicalName="imgui-frag.spv" />
-        <EmbeddedResource Include="Shaders/Metal/imgui-vertex.metallib"
-            LogicalName="imgui-vertex.metallib" />
-        <EmbeddedResource Include="Shaders/Metal/imgui-frag.metallib"
-            LogicalName="imgui-frag.metallib" />
+        <EmbeddedResource Include="Shaders/Metal/imgui-vertex.metallib" LogicalName="imgui-vertex.metallib" />
+        <EmbeddedResource Include="Shaders/Metal/imgui-frag.metallib" LogicalName="imgui-frag.metallib" />
+    </ItemGroup>
+
+    <ItemGroup>
         <EmbeddedResource Update="Resources\Localization\Strings.resx">
-          <Generator>ResXFileCodeGenerator</Generator>
-          <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Strings.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
 
@@ -119,11 +129,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Resources\Localization\Strings.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Strings.resx</DependentUpon>
-      </Compile>
+        <Compile Update="Resources\Localization\Strings.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Strings.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <!-- Git -->
@@ -133,8 +143,7 @@
             <VerFile>$(IntermediateOutputPath)gitver</VerFile>
         </PropertyGroup>
         <!-- write the hash to the temp file.-->
-        <Exec
-            Command="git -C &quot;$(ProjectDir.Replace('\','\\'))&quot; describe --long --always --dirty &gt; $(VerFile)" />
+        <Exec Command="git -C &quot;$(ProjectDir.Replace('\','\\'))&quot; describe --long --always --dirty &gt; $(VerFile)" />
         <!-- read the version into the GitVersion itemGroup-->
         <ReadLinesFromFile File="$(VerFile)">
             <Output TaskParameter="Lines" ItemName="GitVersion" />
@@ -166,8 +175,7 @@
             </AssemblyAttributes>
         </ItemGroup>
         <!-- writes the attribute to the customAssemblyInfo file -->
-        <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)"
-            AssemblyAttributes="@(AssemblyAttributes)" />
+        <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)" AssemblyAttributes="@(AssemblyAttributes)" />
     </Target>
 
 </Project>

@@ -1,6 +1,11 @@
 using System.Numerics;
 
+#if HEXA
+using Hexa.NET.ImGui;
+#endif
+#if VELDRID
 using ImGuiNET;
+#endif
 
 using Newtonsoft.Json;
 
@@ -114,6 +119,15 @@ public class StyleModelV1 : StyleModel
             { "NavWindowingHighlight", new Vector4(1, 1, 1, 0.7f) },
             { "NavWindowingDimBg", new Vector4(0.8f, 0.8f, 0.8f, 0.2f) },
             { "ModalWindowDimBg", new Vector4(0.8f, 0.8f, 0.8f, 0.35f) },
+            { "InputTextCursor", new Vector4(0.3647059f, 0.078431375f, 0.078431375f, 0.94509804f) },
+            { "TabSelected", new Vector4(0.08f, 0.08f, 0.08f, 0.94f) },
+            { "TabSelectedOverline", new Vector4(0.5f, 0.5f, 0.5f, 1) },
+            { "TabDimmed", new Vector4(0.06f, 0.06f, 0.06f, 0.93f) },
+            { "TabDimmedSelected", new Vector4(0.5f, 0.5f, 0.5f, 1) },
+            { "TabDimmedSelectedOverline", new Vector4(0.54f, 0.54f, 0.54f, 0.4f) },
+            { "TextLink", new Vector4(0.08f, 0.08f, 0.08f, 0.94f) },
+            { "TreeLines", new Vector4(0.06f, 0.06f, 0.06f, 0.93f) },
+            { "NavCursor", new Vector4(0.54f, 0.54f, 0.54f, 0.4f) }
         },
     };
 
@@ -354,7 +368,12 @@ public class StyleModelV1 : StyleModel
 
         foreach (var imGuiCol in Enum.GetValues<ImGuiCol>())
         {
+#if VELDRID
             if (imGuiCol == ImGuiCol.COUNT)
+#endif
+#if HEXA
+            if (imGuiCol == ImGuiCol.Count)
+#endif
             {
                 continue;
             }
@@ -403,7 +422,12 @@ public class StyleModelV1 : StyleModel
 
         foreach (var imGuiCol in Enum.GetValues<ImGuiCol>())
         {
+#if VELDRID
             if (imGuiCol == ImGuiCol.COUNT)
+#endif
+#if HEXA
+            if (imGuiCol == ImGuiCol.Count)
+#endif
             {
                 continue;
             }

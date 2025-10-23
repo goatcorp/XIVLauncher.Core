@@ -2,12 +2,34 @@ using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-using ImGuiNET;
+#if HEXA
+using Hexa.NET.ImGui;
+using Hexa.NET.ImGui.Backends.SDL3;
+using Hexa.NET.SDL3;
 
+using HexaGen.Runtime;
+
+using ImSDLEvent = Hexa.NET.ImGui.Backends.SDL3.SDLEvent;
+using ImSDLWindow = Hexa.NET.ImGui.Backends.SDL3.SDLWindow;
+using SDLWindow = Hexa.NET.SDL3.SDLWindow;
+using SDLEvent = Hexa.NET.SDL3.SDLEvent;
+using SDLGPUDevice = Hexa.NET.SDL3.SDLGPUDevice;
+using ImSDLGPUDevice = Hexa.NET.ImGui.Backends.SDL3.SDLGPUDevice;
+using ImSDLGPUCommandBuffer = Hexa.NET.ImGui.Backends.SDL3.SDLGPUCommandBuffer;
+using ImSDLGPURenderPass = Hexa.NET.ImGui.Backends.SDL3.SDLGPURenderPass;
+using SDLGPUGraphicsPipeline = Hexa.NET.ImGui.Backends.SDL3.SDLGPUGraphicsPipeline;
+using SDLRenderer = Hexa.NET.SDL3.SDLRenderer;
+#endif
+#if VELDRID
+using ImGuiNET;
+#endif
 using Serilog;
 
+
+#if VELDRID
 using Veldrid;
 using Veldrid.Sdl2;
+#endif
 
 // Veldrid objects are setup in method called by constructor
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -20,10 +42,11 @@ namespace XIVLauncher.Core;
 /// </summary>
 public class ImGuiBindings : IDisposable
 {
-    private GraphicsDevice gd;
     private bool frameBegun;
 
+#if VELDRID
     // Veldrid objects
+    private GraphicsDevice gd;
     private DeviceBuffer vertexBuffer;
     private DeviceBuffer indexBuffer;
     private DeviceBuffer projMatrixBuffer;
@@ -36,6 +59,18 @@ public class ImGuiBindings : IDisposable
     private Pipeline pipeline;
     private ResourceSet mainResourceSet;
     private ResourceSet fontTextureResourceSet;
+#endif
+#if HEXA
+    // Hexa.NET objects
+    private unsafe SDLWindow* window;
+    private unsafe SDLGPUDevice* device;
+    private unsafe SDLRenderer* renderer;
+    private unsafe SDLGPUTransferBuffer* transferBuffer = null!;
+    private uint uploadSize = 0;
+    private Vector4 clearColor = new(0.45f, 0.55f, 0.60f, 1.00f);
+
+    public unsafe SDLRenderer* Renderer => this.renderer;
+#endif
 
     private IntPtr fontAtlasID = (IntPtr)1;
     private bool controlDown;
@@ -49,6 +84,7 @@ public class ImGuiBindings : IDisposable
     private int windowHeight;
     private Vector2 scaleFactor = Vector2.One;
 
+#if VELDRID
     // Image trackers
     private readonly Dictionary<TextureView, ResourceSetInfo> setsByView
         = new Dictionary<TextureView, ResourceSetInfo>();
@@ -58,6 +94,10 @@ public class ImGuiBindings : IDisposable
 
     private readonly Dictionary<IntPtr, ResourceSetInfo> viewsById = new Dictionary<IntPtr, ResourceSetInfo>();
     private readonly List<IDisposable> ownedResources = new List<IDisposable>();
+#endif
+#if HEXA
+    private readonly List<Tuple<Pointer<SDLGPUTexture>, Pointer<SDLSurface>>> texturesToBind = [];
+#endif
     private int lastAssignedID = 100;
 
     private delegate void SetClipboardTextDelegate(IntPtr userData, string text);
@@ -71,6 +111,7 @@ public class ImGuiBindings : IDisposable
     /// <summary>
     /// Constructs a new ImGuiController.
     /// </summary>
+#if VELDRID
     public ImGuiBindings(GraphicsDevice gd, OutputDescription outputDescription, int width, int height, FileInfo iniPath, float fontPxSize)
     {
         this.gd = gd;
@@ -103,37 +144,104 @@ public class ImGuiBindings : IDisposable
         ImGui.NewFrame();
         frameBegun = true;
     }
+#endif
+#if HEXA
+    public unsafe ImGuiBindings(SDLWindow* window, SDLGPUDevice* device, FileInfo iniPath, float fontPxSize, float mainScale)
+    {
+        this.window = window;
+        this.device = device;
+        this.renderer = SDL.CreateRenderer(window, (byte*)null);
+        var ctx = ImGui.CreateContext();
+        ImGui.SetCurrentContext(ctx);
+        var io = ImGui.GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard | ImGuiConfigFlags.NavEnableGamepad;
+        io.BackendFlags |= ImGuiBackendFlags.HasGamepad;
+        this.SetIniPath(iniPath.FullName);
+        var platformIo = ImGui.GetPlatformIO();
+        platformIo.PlatformSetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(SetClipboardText);
+        platformIo.PlatformGetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(GetClipboardText);
+        platformIo.PlatformClipboardUserData = (void*)IntPtr.Zero;
+
+        var style = ImGui.GetStyle();
+        style.ScaleAllSizes(mainScale);
+        style.FontScaleDpi = mainScale;
+        io.ConfigDpiScaleFonts = true;
+        io.ConfigDpiScaleViewports = true;
+
+        if ((io.ConfigFlags & ImGuiConfigFlags.ViewportsEnable) != 0)
+        {
+            style.WindowRounding = 0;
+            style.Colors[(int)ImGuiCol.WindowBg].W = 1;
+        }
+
+        ImGuiImplSDL3.SetCurrentContext(ctx);
+        ImGuiImplSDL3.InitForSDLGPU((ImSDLWindow*)window);
+
+        ImGuiImplSDLGPU3InitInfo initInfo = new()
+        {
+            Device = (ImSDLGPUDevice*)device,
+            ColorTargetFormat = (int)SDL.GetGPUSwapchainTextureFormat(device, window),
+            MSAASamples = (int)SDLGPUSampleCount.Samplecount1
+        };
+        ImGuiImplSDL3.SDLGPU3Init(&initInfo);
+    }
+#endif
 
     private void SetIniPath(string iniPath)
     {
-        if (iniPathPtr != IntPtr.Zero)
+        if (this.iniPathPtr != IntPtr.Zero)
         {
-            Marshal.FreeHGlobal(iniPathPtr);
+            Marshal.FreeHGlobal(this.iniPathPtr);
         }
 
-        iniPathPtr = Marshal.StringToHGlobalAnsi(iniPath);
+        this.iniPathPtr = Marshal.StringToHGlobalAnsi(iniPath);
 
         unsafe
         {
+#if VELDRID
             ImGui.GetIO().NativePtr->IniFilename = (byte*)iniPathPtr.ToPointer();
+#endif
+#if HEXA
+            var io = ImGui.GetIO();
+            io.IniFilename = (byte*)this.iniPathPtr.ToPointer();
+#endif
         }
     }
 
+
+#if VELDRID
     private static void SetClipboardText(IntPtr userData, string text)
     {
         // text always seems to have an extra newline, but I'll leave it for now
         Sdl2Native.SDL_SetClipboardText(text);
-    }
-
-    private static string GetClipboardText()
+#endif
+#if HEXA
+    private static unsafe void SetClipboardText(ImGuiContext* ctx, byte* text)
     {
-        return Sdl2Native.SDL_GetClipboardText();
+        SDL.SetClipboardText(text);
+#endif
     }
 
+#if VELDRID
+    private static string GetClipboardText()
+#endif
+#if HEXA
+    private static unsafe string GetClipboardText(ImGuiContext* ctx)
+#endif
+    {
+#if VELDRID
+        return Sdl2Native.SDL_GetClipboardText();
+#endif
+#if HEXA
+        return SDL.GetClipboardTextS();
+#endif
+    }
+
+#if VELDRID
     public void WindowResized(int width, int height)
     {
-        windowWidth = width;
-        windowHeight = height;
+        this.windowWidth = width;
+        this.windowHeight = height;
     }
 
     public void DestroyDeviceObjects()
@@ -632,4 +740,142 @@ public class ImGuiBindings : IDisposable
             ResourceSet = resourceSet;
         }
     }
+#endif
+#if HEXA
+    public unsafe void Dispose()
+    {
+        SDL.WaitForGPUIdle(this.device);
+        ImGuiImplSDL3.Shutdown();
+        ImGuiImplSDL3.SDLGPU3Shutdown();
+        ImGui.DestroyContext();
+        SDL.DestroyRenderer(this.renderer);
+    }
+
+    public unsafe bool ProcessExit()
+    {
+        SDLEvent e;
+        while (SDL.PollEvent(&e))
+        {
+            ImGuiImplSDL3.ProcessEvent((ImSDLEvent*)&e);
+            var type = (SDLEventType)e.Type;
+            if (type == SDLEventType.Quit || (type == SDLEventType.WindowCloseRequested &&
+                                              e.Window.WindowID == SDL.GetWindowID(this.window)))
+                return true;
+        }
+
+        return false;
+    }
+
+    public void NewFrame()
+    {
+        ImGuiImplSDL3.SDLGPU3NewFrame();
+        ImGuiImplSDL3.NewFrame();
+        ImGui.NewFrame();
+    }
+
+    private unsafe void CreateTransferBuffer(uint size)
+    {
+        if (this.transferBuffer != null)
+            SDL.ReleaseGPUTransferBuffer(this.device, this.transferBuffer);
+        this.uploadSize = size;
+        var transferCreateInfo = new SDLGPUTransferBufferCreateInfo
+        {
+            Size = this.uploadSize,
+            Props = 0,
+            Usage = SDLGPUTransferBufferUsage.Upload
+        };
+
+        this.transferBuffer = SDL.CreateGPUTransferBuffer(this.device, &transferCreateInfo);
+    }
+
+    public unsafe void Render()
+    {
+        ImGui.Render();
+        ImDrawData* drawData = ImGui.GetDrawData();
+        var isMinimized = drawData->DisplaySize.X <= 0 || drawData->DisplaySize.Y <= 0;
+
+        var commandBuffer = SDL.AcquireGPUCommandBuffer(this.device);
+        lock (this.texturesToBind)
+        {
+            var copyPass = SDL.BeginGPUCopyPass(commandBuffer);
+            foreach (var (texture, surface) in this.texturesToBind)
+            {
+                var size = (uint)(surface.Handle->Pitch * surface.Handle->H);
+                if (this.uploadSize < size)
+                    this.CreateTransferBuffer(size);
+                var transferBufferPtr = SDL.MapGPUTransferBuffer(Program.GPUDevice, this.transferBuffer, true);
+                new Span<byte>(surface.Handle->Pixels, (int)size).CopyTo(new Span<byte>(transferBufferPtr, (int)size));
+                SDL.UnmapGPUTransferBuffer(Program.GPUDevice, this.transferBuffer);
+                var transferInfo = new SDLGPUTextureTransferInfo
+                {
+                    TransferBuffer = this.transferBuffer,
+                    PixelsPerRow = 0,
+                    RowsPerLayer = 0
+                };
+                var textureRegion = new SDLGPUTextureRegion
+                {
+                    Texture = texture,
+                    X = 0,
+                    Y = 0,
+                    W = (uint)surface.Handle->W,
+                    H = (uint)surface.Handle->H,
+                    Z = 0,
+                    D = 1,
+                    Layer = 0,
+                    MipLevel = 0
+                };
+                SDL.UploadToGPUTexture(copyPass, &transferInfo, &textureRegion, true);
+            }
+            SDL.EndGPUCopyPass(copyPass);
+            this.texturesToBind.Clear();
+        }
+
+        SDLGPUTexture* swapTexture;
+        SDL.AcquireGPUSwapchainTexture(commandBuffer, this.window, &swapTexture, null, null);
+
+        if (swapTexture != null && !isMinimized)
+        {
+            ImGuiImplSDL3.SDLGPU3PrepareDrawData(drawData, (ImSDLGPUCommandBuffer*)commandBuffer);
+
+            SDLGPUColorTargetInfo targetInfo = new()
+            {
+                Texture = swapTexture,
+                ClearColor = new SDLFColor
+                {
+                    R = this.clearColor.X,
+                    G = this.clearColor.Y,
+                    B = this.clearColor.Z,
+                    A = this.clearColor.W
+                },
+                LoadOp = SDLGPULoadOp.Clear,
+                StoreOp = SDLGPUStoreOp.Store,
+                MipLevel = 0,
+                LayerOrDepthPlane = 0,
+                Cycle = 1
+            };
+
+            var renderPass = SDL.BeginGPURenderPass(commandBuffer, &targetInfo, 1, null);
+            ImGuiImplSDL3.SDLGPU3RenderDrawData(drawData, (ImSDLGPUCommandBuffer*)commandBuffer, (ImSDLGPURenderPass*)renderPass, (SDLGPUGraphicsPipeline*)null);
+            SDL.EndGPURenderPass(renderPass);
+        }
+
+        var io = ImGui.GetIO();
+
+        if ((io.ConfigFlags & ImGuiConfigFlags.ViewportsEnable) != 0)
+        {
+            ImGui.UpdatePlatformWindows();
+            ImGui.RenderPlatformWindowsDefault();
+        }
+
+        SDL.SubmitGPUCommandBuffer(commandBuffer);
+    }
+
+    public unsafe void AddTextureCreator(SDLGPUTexture* gpuTexture, SDLSurface* surface)
+    {
+        lock (this.texturesToBind)
+        {
+            this.texturesToBind.Add(Tuple.Create(new Pointer<SDLGPUTexture>(gpuTexture), new Pointer<SDLSurface>(surface)));
+        }
+    }
+#endif
 }

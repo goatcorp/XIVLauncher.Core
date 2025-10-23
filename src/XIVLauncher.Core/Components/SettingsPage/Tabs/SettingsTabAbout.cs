@@ -1,6 +1,12 @@
 using System.Numerics;
 
+
+#if HEXA
+using Hexa.NET.ImGui;
+#endif
+#if VELDRID
 using ImGuiNET;
+#endif
 
 using XIVLauncher.Common.Util;
 using XIVLauncher.Core.Resources.Localization;
@@ -27,7 +33,7 @@ public class SettingsTabAbout : SettingsTab
         ImGui.Text($"XIVLauncher Core v{AppUtil.GetAssemblyVersion()}({AppUtil.GetGitHash()})");
 
         var contribText = string.Format(Strings.XLCoreCreatedBy, "goaaats, Blooym, rankynbass");
-        if (ImGui.Selectable(contribText, default, default, ImGui.CalcTextSize(contribText)))
+        if (ImGui.Selectable(contribText, false, default, ImGui.CalcTextSize(contribText)))
             AppUtil.OpenBrowser("https://github.com/goatcorp/XIVLauncher.Core/graphs/contributors");
 
         ImGui.Dummy(new Vector2(20));

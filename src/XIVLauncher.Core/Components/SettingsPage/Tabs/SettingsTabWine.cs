@@ -1,7 +1,13 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 
+
+#if HEXA
+using Hexa.NET.ImGui;
+#endif
+#if VELDRID
 using ImGuiNET;
+#endif
 
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
 using XIVLauncher.Common.Unix.Compatibility.Wine;

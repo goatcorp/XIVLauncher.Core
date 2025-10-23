@@ -1,6 +1,11 @@
 using System.Numerics;
 
+#if HEXA
+using Hexa.NET.ImGui;
+#endif
+#if VELDRID
 using ImGuiNET;
+#endif
 
 using XIVLauncher.Core.Resources.Localization;
 
@@ -15,14 +20,24 @@ public class ActionButtons : Component
     public override void Draw()
     {
         var btnSize = new Vector2(80) * ImGuiHelpers.GlobalScale;
-
+        
+#if HEXA
+        ImGui.PushFont(FontManager.IconFont, 0.0f);
+#endif
+#if VELDRID
         ImGui.PushFont(FontManager.IconFont);
+#endif
         ImGui.BeginDisabled(this.OnAccountButtonClicked == null);
         if (ImGui.Button(FontAwesomeIcon.User.ToIconString(), btnSize))
         {
             this.OnAccountButtonClicked?.Invoke();
         }
+#if HEXA
+        ImGui.PushFont(FontManager.TextFont, 0.0f);
+#endif
+#if VELDRID
         ImGui.PushFont(FontManager.TextFont);
+#endif
         ImGuiHelpers.AddTooltip(Strings.MyAccount);
         ImGui.PopFont();
         ImGui.EndDisabled();
@@ -34,7 +49,12 @@ public class ActionButtons : Component
         {
             this.OnStatusButtonClicked?.Invoke();
         }
+#if HEXA
+        ImGui.PushFont(FontManager.TextFont, 0.0f);
+#endif
+#if VELDRID
         ImGui.PushFont(FontManager.TextFont);
+#endif
         ImGuiHelpers.AddTooltip(Strings.ServiceStatus);
         ImGui.PopFont();
         ImGui.EndDisabled();
@@ -46,7 +66,12 @@ public class ActionButtons : Component
         {
             this.OnSettingsButtonClicked?.Invoke();
         }
+#if HEXA
+        ImGui.PushFont(FontManager.TextFont, 0.0f);
+#endif
+#if VELDRID
         ImGui.PushFont(FontManager.TextFont);
+#endif
         ImGuiHelpers.AddTooltip(Strings.LauncherSettings);
         ImGui.PopFont();
         ImGui.EndDisabled();

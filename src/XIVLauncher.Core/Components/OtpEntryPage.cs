@@ -1,6 +1,11 @@
 using System.Numerics;
 
+#if HEXA
+using Hexa.NET.ImGui;
+#endif
+#if VELDRID
 using ImGuiNET;
+#endif
 
 using Serilog;
 
@@ -103,7 +108,12 @@ public class OtpEntryPage : Page
         ImGui.SetNextWindowPos(new Vector2(vpSize.X / 2 - childSize.X / 2, vpSize.Y / 2 - childSize.Y / 2), ImGuiCond.Always);
         ImGui.SetNextWindowBgAlpha(0.4f);
 
+#if VELDRID
         if (ImGui.BeginChild("###otp", childSize, true, ImGuiWindowFlags.AlwaysAutoResize))
+#endif
+#if HEXA
+        if (ImGui.BeginChild("###otp", childSize, ImGuiChildFlags.None, ImGuiWindowFlags.AlwaysAutoResize))
+#endif
         {
             ImGui.Dummy(new Vector2(40));
 

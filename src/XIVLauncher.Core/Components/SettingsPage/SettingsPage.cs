@@ -1,7 +1,13 @@
 using System.Collections.Immutable;
 using System.Numerics;
 
+
+#if HEXA
+using Hexa.NET.ImGui;
+#endif
+#if VELDRID
 using ImGuiNET;
+#endif
 
 using XIVLauncher.Core.Components.SettingsPage.Tabs;
 using XIVLauncher.Core.Resources.Localization;
@@ -53,7 +59,13 @@ public class SettingsPage : Page
 
                     if (ImGui.BeginTabItem(settingsTab.Title))
                     {
+                        
+#if VELDRID
                         if (ImGui.BeginChild($"###settings_scrolling_{settingsTab.Title}", new Vector2(-1, -1), false))
+#endif
+#if HEXA
+                        if (ImGui.BeginChild($"###settings_scrolling_{settingsTab.Title}", new Vector2(-1, -1)))
+#endif
                         {
                             settingsTab.Draw();
                         }
@@ -117,7 +129,12 @@ public class SettingsPage : Page
         if (ImGui.BeginChild("###settingsFinishButton"))
         {
             ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 100f);
-            ImGui.PushFont(FontManager.IconFont);
+#if HEXA
+            ImGui.PushFont(FontManager.IconFont, 0.0f);
+#endif
+#if VELDRID
+        ImGui.PushFont(FontManager.IconFont);
+#endif
 
             var invalid = this.tabs.Any(x => x.Entries.Any(y => y.IsVisible && !y.IsValid));
             if (invalid)
