@@ -1,66 +1,29 @@
 using System.Numerics;
 
-#if HEXA
 using System.Runtime.InteropServices;
 
 using Hexa.NET.ImGui;
 using Hexa.NET.SDL3;
 using Hexa.NET.SDL3.Image;
-#endif
-#if VELDRID
-
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-
-using Veldrid;
-using Veldrid.ImageSharp;
-#endif
 
 namespace XIVLauncher.Core;
 
 public class TextureWrap : IDisposable
 {
-#if VELDRID
-    public IntPtr ImGuiHandle { get; }
-
-    private readonly Texture deviceTexture;
-#endif
-#if HEXA
     public ImTextureRef ImGuiHandle { get; }
     private readonly unsafe ImTextureData* textureData;
 
     private readonly unsafe SDLGPUTexture* deviceTexture;
     private readonly unsafe SDLSurface* surface;
-#endif
 
-    public unsafe uint Width =>
-#if VELDRID
-        this.deviceTexture.Width;
-#endif
-#if HEXA
-        (uint)this.ImGuiHandle.TexData->Width;
-#endif
+    public unsafe uint Width => (uint)this.surface->W;
 
-    public unsafe uint Height =>
-#if VELDRID
-        this.deviceTexture.Height;
-#endif
-#if HEXA
-        (uint)this.ImGuiHandle.TexData->Height;
-#endif
+    public unsafe uint Height =>(uint)this.surface->H;
 
     public Vector2 Size => new(this.Width, this.Height);
 
     protected TextureWrap(byte[] data)
     {
-#if VELDRID
-        var image = Image.Load<Rgba32>(data);
-        var texture = new ImageSharpTexture(image, false);
-        this.deviceTexture = texture.CreateDeviceTexture(Program.GraphicsDevice, Program.GraphicsDevice.ResourceFactory);
-
-        this.ImGuiHandle = Program.ImGuiBindings.GetOrCreateImGuiBinding(Program.GraphicsDevice.ResourceFactory, this.deviceTexture);
-#endif
-#if HEXA
         unsafe
         {
             fixed (byte* dataPtr = data)
@@ -98,23 +61,17 @@ public class TextureWrap : IDisposable
             }
             this.ImGuiHandle = new(this.textureData, this.deviceTexture);
         }
-#endif
     }
 
     public static TextureWrap Load(byte[] data) => new(data);
 
     public void Dispose()
     {
-#if VELDRID
-        this.deviceTexture.Dispose();
-#endif
-#if HEXA
         unsafe
         {
             SDL.ReleaseGPUTexture(Program.GPUDevice, this.deviceTexture);
             Marshal.FreeHGlobal((nint)this.textureData);
             SDL.DestroySurface(this.surface);
         }
-#endif
     }
 }

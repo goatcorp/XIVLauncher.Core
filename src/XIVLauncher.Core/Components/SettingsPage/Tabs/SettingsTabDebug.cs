@@ -1,12 +1,6 @@
 using System.Collections;
 
-
-#if HEXA
 using Hexa.NET.ImGui;
-#endif
-#if VELDRID
-using ImGuiNET;
-#endif
 
 using XIVLauncher.Core.Resources.Localization;
 

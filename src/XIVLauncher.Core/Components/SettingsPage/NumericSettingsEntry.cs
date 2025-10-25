@@ -1,10 +1,4 @@
-
-#if HEXA
 using Hexa.NET.ImGui;
-#endif
-#if VELDRID
-using ImGuiNET;
-#endif
 
 namespace XIVLauncher.Core.Components.SettingsPage;
 

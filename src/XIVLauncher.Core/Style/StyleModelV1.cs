@@ -1,11 +1,6 @@
 using System.Numerics;
 
-#if HEXA
 using Hexa.NET.ImGui;
-#endif
-#if VELDRID
-using ImGuiNET;
-#endif
 
 using Newtonsoft.Json;
 
@@ -368,12 +363,7 @@ public class StyleModelV1 : StyleModel
 
         foreach (var imGuiCol in Enum.GetValues<ImGuiCol>())
         {
-#if VELDRID
-            if (imGuiCol == ImGuiCol.COUNT)
-#endif
-#if HEXA
             if (imGuiCol == ImGuiCol.Count)
-#endif
             {
                 continue;
             }
@@ -422,12 +412,7 @@ public class StyleModelV1 : StyleModel
 
         foreach (var imGuiCol in Enum.GetValues<ImGuiCol>())
         {
-#if VELDRID
-            if (imGuiCol == ImGuiCol.COUNT)
-#endif
-#if HEXA
             if (imGuiCol == ImGuiCol.Count)
-#endif
             {
                 continue;
             }

@@ -1,11 +1,6 @@
 using System.Numerics;
 
-#if HEXA
 using Hexa.NET.ImGui;
-#endif
-#if VELDRID
-using ImGuiNET;
-#endif
 
 using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.Common;
@@ -181,13 +176,8 @@ public class LoginFrame : Component
 
                 ImGui.Dummy(new Vector2(15));
             }
-            
-#if HEXA
+        
             ImGui.PushFont(FontManager.IconFont, 0.0f);
-#endif
-#if VELDRID
-            ImGui.PushFont(FontManager.IconFont);
-#endif
 
             var extraButtonSize = new Vector2(45) * ImGuiHelpers.GlobalScale;
 
