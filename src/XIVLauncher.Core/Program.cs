@@ -5,19 +5,9 @@ using System.Runtime.InteropServices;
 
 using Config.Net;
 
-#if HEXA
 using Hexa.NET.SDL3;
-#endif
 
-#if VELDRID
-using ImGuiNET;
-#endif
 using Serilog;
-#if VELDRID
-using Veldrid;
-using Veldrid.Sdl2;
-using Veldrid.StartupUtilities;
-#endif
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch;
@@ -47,20 +37,10 @@ sealed class Program
     private static readonly Vector3 ClearColor = new(0.1f, 0.1f, 0.1f);
     private static string[] mainArgs = [];
     private static LauncherApp launcherApp = null!;
-#if HEXA
     private static unsafe SDLWindow* window = null!;
     private static unsafe SDLGPUDevice* gpuDevice = null!;
     public static unsafe SDLGPUDevice* GPUDevice => gpuDevice;
-#endif
-#if VELDRID
-    private static Sdl2Window window = null!;
-    private static CommandList commandList = null!;
-    private static GraphicsDevice graphicsDevice = null!;
-#endif
     private static ImGuiBindings guiBindings = null!;
-#if VELDRID
-    public static GraphicsDevice GraphicsDevice => graphicsDevice;
-#endif
     public static ImGuiBindings ImGuiBindings => guiBindings;
     public static ILauncherConfig Config { get; private set; } = null!;
     public static CommonSettings CommonSettings => new(Config);
@@ -271,80 +251,7 @@ sealed class Program
 
         Log.Debug("Creating Veldrid devices...");
 
-#if DEBUG
         var version = AppUtil.GetGitHash();
-#else
-        var version = $"{AppUtil.GetAssemblyVersion()} ({AppUtil.GetGitHash()})";
-#endif
-#if VELDRID
-        // Initialise SDL, as that's needed to figure out where to spawn the window.
-        Sdl2Native.SDL_Init(SDLInitFlags.Video);
-
-        // For now, just spawn the window on the primary display, which in SDL2 has displayIndex 0.
-        // Maybe we may want to save the window location or the preferred display in the config at some point?
-        if (!GetDisplayBounds(displayIndex: 0, out var bounds))
-            Log.Warning("Couldn't figure out the bounds of the primary display, falling back to previous assumption that (0,0) is the top left corner of the left-most monitor.");
-
-        // Create the window and graphics device separately, because Veldrid would have reinitialised SDL if done with their combined method.
-        window = VeldridStartup.CreateWindow(new WindowCreateInfo(50 + bounds.X, 50 + bounds.Y, 1280, 800, WindowState.Normal, $"XIVLauncher {version}"));
-        graphicsDevice = VeldridStartup.CreateGraphicsDevice(window, new GraphicsDeviceOptions(false, null, true, ResourceBindingModel.Improved, true, true));
-
-        window.Resized += () =>
-        {
-            graphicsDevice.MainSwapchain.Resize((uint)window.Width, (uint)window.Height);
-            guiBindings.WindowResized(window.Width, window.Height);
-        };
-        commandList = graphicsDevice.ResourceFactory.CreateCommandList();
-        Log.Debug("Veldrid OK!");
-
-        guiBindings = new ImGuiBindings(graphicsDevice, graphicsDevice.MainSwapchain.Framebuffer.OutputDescription, window.Width, window.Height, storage.GetFile("launcherUI.ini"), Config.FontPxSize ?? 21.0f);
-        Log.Debug("ImGui OK!");
-
-        StyleModelV1.DalamudStandard.Apply();
-        ImGui.GetIO().FontGlobalScale = Config.GlobalScale ?? 1.0f;
-
-        var launcherClientConfig = LauncherClientConfig.GetAsync().GetAwaiter().GetResult();
-        launcherApp = new LauncherApp(storage, launcherClientConfig.frontierUrl, launcherClientConfig.cutOffBootver);
-
-        // Main application loop
-        while (window.Exists)
-        {
-            Thread.Sleep(30);
-            var snapshot = window.PumpEvents();
-            if (!window.Exists)
-                break;
-
-            guiBindings.Update(1 / 60f, snapshot);
-            launcherApp.Draw();
-            commandList.Begin();
-            commandList.SetFramebuffer(graphicsDevice.MainSwapchain.Framebuffer);
-            commandList.ClearColorTarget(0, new RgbaFloat(ClearColor.X, ClearColor.Y, ClearColor.Z, 1f));
-            guiBindings.Render(graphicsDevice, commandList);
-            commandList.End();
-            graphicsDevice.SubmitCommands(commandList);
-            graphicsDevice.SwapBuffers(graphicsDevice.MainSwapchain);
-        }
-
-        // Clean up Veldrid resources
-        // FIXME: Veldrid doesn't clean up after SDL though, so some leakage may have been happening for all this time.
-        graphicsDevice.WaitForIdle();
-        guiBindings.Dispose();
-        commandList.Dispose();
-        graphicsDevice.Dispose();
-
-        HttpClient.Dispose();
-
-        if (Patcher is not null)
-        {
-            Patcher.StartCancellation();
-            Task.Run(async () =>
-            {
-                await PatchManager.UnInitializeAcquisition().ConfigureAwait(false);
-                Environment.Exit(0);
-            });
-        }
-#endif
-#if HEXA
         unsafe
         {
             if (!SDL.Init(SDLInitFlags.Video | SDLInitFlags.Gamepad))
@@ -421,7 +328,6 @@ sealed class Program
             SDL.DestroyWindow(window);
             SDL.Quit();
         }
-#endif
     }
 
     public static void CreateCompatToolsInstance()
@@ -438,28 +344,18 @@ sealed class Program
 
     public static void ShowWindow()
     {
-#if VELDRID
-        window.Visible = true;
-#endif
-#if HEXA
         unsafe
         {
             SDL.ShowWindow(window);
         }
-#endif
     }
 
     public static void HideWindow()
     {
-#if VELDRID
-        window.Visible = false;
-#endif
-#if HEXA
         unsafe
         {
             SDL.HideWindow(window);
         }
-#endif
     }
 
     private static ISecretProvider GetSecretProvider(Storage storage)
@@ -560,19 +456,4 @@ sealed class Program
     }
 
     public static void ResetUIDCache(bool tsbutton = false) => launcherApp.UniqueIdCache.Reset();
-
-#if VELDRID
-    private static unsafe bool GetDisplayBounds(int displayIndex, out Rectangle bounds)
-    {
-        bounds = new Rectangle();
-        fixed (Rectangle* rectangle = &bounds)
-        {
-            if (Sdl2Native.SDL_GetDisplayBounds(displayIndex, rectangle) != 0)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-#endif
 }
