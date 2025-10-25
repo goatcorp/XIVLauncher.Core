@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Numerics;
 
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 using XIVLauncher.Core.Components.SettingsPage.Tabs;
 using XIVLauncher.Core.Resources.Localization;
@@ -53,7 +53,8 @@ public class SettingsPage : Page
 
                     if (ImGui.BeginTabItem(settingsTab.Title))
                     {
-                        if (ImGui.BeginChild($"###settings_scrolling_{settingsTab.Title}", new Vector2(-1, -1), false))
+
+                        if (ImGui.BeginChild($"###settings_scrolling_{settingsTab.Title}", new Vector2(-1, -1)))
                         {
                             settingsTab.Draw();
                         }
@@ -117,7 +118,7 @@ public class SettingsPage : Page
         if (ImGui.BeginChild("###settingsFinishButton"))
         {
             ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 100f);
-            ImGui.PushFont(FontManager.IconFont);
+            ImGui.PushFont(FontManager.IconFont, 0.0f);
 
             var invalid = this.tabs.Any(x => x.Entries.Any(y => y.IsVisible && !y.IsValid));
             if (invalid)
