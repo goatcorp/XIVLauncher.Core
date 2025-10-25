@@ -67,6 +67,10 @@ public class TextureWrap : IDisposable
             {
                 var ioStream = SDL.IOFromMem(dataPtr, (nuint)data.Length);
                 this.surface = SDLImage.LoadIO(ioStream, true);
+
+                // SDLGPUTextureFormat expects ABGR8888 format from SDLSurface
+                if (this.surface->Format != SDLPixelFormat.Abgr8888)
+                    this.surface = SDL.ConvertSurface(this.surface, SDLPixelFormat.Abgr8888);
                 var createInfo = new SDLGPUTextureCreateInfo
                 {
                     Width = (uint)this.surface->W,

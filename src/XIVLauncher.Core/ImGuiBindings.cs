@@ -184,6 +184,9 @@ public class ImGuiBindings : IDisposable
             MSAASamples = (int)SDLGPUSampleCount.Samplecount1
         };
         ImGuiImplSDL3.SDLGPU3Init(&initInfo);
+
+        var fontMr = new FontManager();
+        fontMr.SetupFonts(fontPxSize);
     }
 #endif
 
