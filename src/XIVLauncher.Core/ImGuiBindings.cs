@@ -1,24 +1,26 @@
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
 using Hexa.NET.ImGui;
 using Hexa.NET.ImGui.Backends.SDL3;
 using Hexa.NET.SDL3;
 
 using HexaGen.Runtime;
 
+using Serilog;
+
+using System.Diagnostics;
+using System.Numerics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
 using ImSDLEvent = Hexa.NET.ImGui.Backends.SDL3.SDLEvent;
+using ImSDLGPUCommandBuffer = Hexa.NET.ImGui.Backends.SDL3.SDLGPUCommandBuffer;
+using ImSDLGPUDevice = Hexa.NET.ImGui.Backends.SDL3.SDLGPUDevice;
+using ImSDLGPURenderPass = Hexa.NET.ImGui.Backends.SDL3.SDLGPURenderPass;
 using ImSDLWindow = Hexa.NET.ImGui.Backends.SDL3.SDLWindow;
-using SDLWindow = Hexa.NET.SDL3.SDLWindow;
 using SDLEvent = Hexa.NET.SDL3.SDLEvent;
 using SDLGPUDevice = Hexa.NET.SDL3.SDLGPUDevice;
-using ImSDLGPUDevice = Hexa.NET.ImGui.Backends.SDL3.SDLGPUDevice;
-using ImSDLGPUCommandBuffer = Hexa.NET.ImGui.Backends.SDL3.SDLGPUCommandBuffer;
-using ImSDLGPURenderPass = Hexa.NET.ImGui.Backends.SDL3.SDLGPURenderPass;
 using SDLGPUGraphicsPipeline = Hexa.NET.ImGui.Backends.SDL3.SDLGPUGraphicsPipeline;
 using SDLRenderer = Hexa.NET.SDL3.SDLRenderer;
-using Serilog;
+using SDLWindow = Hexa.NET.SDL3.SDLWindow;
 
 
 // Veldrid objects are setup in method called by constructor
@@ -79,6 +81,13 @@ public class ImGuiBindings : IDisposable
         var io = ImGui.GetIO();
         io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard | ImGuiConfigFlags.NavEnableGamepad;
         io.BackendFlags |= ImGuiBackendFlags.HasGamepad;
+#if DEBUG
+        io.ConfigDebugIsDebuggerPresent = Debugger.IsAttached;
+        io.ConfigErrorRecovery = true;
+        io.ConfigErrorRecoveryEnableAssert = false;
+        io.ConfigErrorRecoveryEnableDebugLog = false;
+        io.ConfigErrorRecoveryEnableTooltip = true;
+#endif
         this.SetIniPath(iniPath.FullName);
         var platformIo = ImGui.GetPlatformIO();
         platformIo.PlatformSetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(SetClipboardText);
