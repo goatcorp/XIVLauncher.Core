@@ -1,13 +1,13 @@
 using System.Numerics;
 
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace XIVLauncher.Core;
 
 public static class ImGuiHelpers
 {
     public static Vector2 ViewportSize => ImGui.GetIO().DisplaySize;
-    public static float GlobalScale => ImGui.GetIO().FontGlobalScale;
+    public static float GlobalScale => ImGui.GetStyle().FontScaleMain;
 
     public static void TextWrapped(string text)
     {

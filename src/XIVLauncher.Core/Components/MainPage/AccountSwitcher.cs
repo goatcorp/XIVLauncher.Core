@@ -1,6 +1,6 @@
 using System.Numerics;
 
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 using XIVLauncher.Core.Accounts;
 using XIVLauncher.Core.Resources.Localization;

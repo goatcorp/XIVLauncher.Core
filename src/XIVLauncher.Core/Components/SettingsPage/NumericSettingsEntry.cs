@@ -1,4 +1,4 @@
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace XIVLauncher.Core.Components.SettingsPage;
 
