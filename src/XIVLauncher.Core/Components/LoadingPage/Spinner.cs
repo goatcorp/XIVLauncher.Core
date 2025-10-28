@@ -21,6 +21,8 @@ public class Spinner : Component
     {
         var framePadding = ImGui.GetStyle().FramePadding;
 
+        ImGui.Dummy(new Vector2(this.radius * 2) + (framePadding * 2));
+
         var pos = ImGui.GetCursorPos();
 
         var time = ImGui.GetTime() / 1.2;
