@@ -249,7 +249,7 @@ sealed class Program
 
         CreateCompatToolsInstance();
 
-        Log.Debug("Creating Veldrid devices...");
+        Log.Debug("Creating SDL3 devices...");
 
         var version = AppUtil.GetGitHash();
         unsafe
@@ -274,7 +274,6 @@ sealed class Program
             }
 
             SDL.SetWindowPosition(window, (int)SDL.SDL_WINDOWPOS_CENTERED_MASK, (int)SDL.SDL_WINDOWPOS_CENTERED_MASK);
-            SDL.ShowWindow(window);
             Log.Debug("SDL OK!");
 
             gpuDevice = SDL.CreateGPUDevice(
@@ -303,6 +302,7 @@ sealed class Program
 
             var launcherClientConfig = LauncherClientConfig.GetAsync().GetAwaiter().GetResult();
             launcherApp = new LauncherApp(storage, launcherClientConfig.frontierUrl, launcherClientConfig.cutOffBootver);
+            SDL.ShowWindow(window);
 
             var done = false;
             while (!done)
