@@ -622,6 +622,14 @@ public class MainPage : Page
             System.Environment.SetEnvironmentVariable("DOTNET_SYSTEM_GLOBALIZATION_USENLS", "true");
         }
 
+        // The Timezone environment on Unix platforms tends to cause issues with in-game time display.
+        // For now the best workaround is to unset it, although it can be specified with AdditionalArgs
+        // again if the user really wants to.
+        if (Environment.OSVersion.Platform == PlatformID.Unix)
+        {
+            System.Environment.SetEnvironmentVariable("TZ", string.Empty);
+        }
+
         // Deal with "Additional Arguments". VAR=value %command% -args
         var launchOptions = (App.Settings.AdditionalArgs ?? string.Empty).Split("%command%", 2);
         var launchEnv = "";
