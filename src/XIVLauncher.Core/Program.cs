@@ -94,9 +94,13 @@ sealed class Program
 
         if (Config.GamePath == null)
         {
-            var envPath = Environment.GetEnvironmentVariable("STEAM_COMPAT_INSTALL_PATH"); // auto-set when using compat tool
-            Config.GamePath = !string.IsNullOrWhiteSpace(envPath)
-                ? new DirectoryInfo(envPath)
+            var compatGamePath = Environment.GetEnvironmentVariable("STEAM_COMPAT_INSTALL_PATH"); // auto-set when using compat tool
+            var compatGameId = Environment.GetEnvironmentVariable("STEAM_COMPAT_APP_ID"); // auto-set when using compat tool
+            // Set the game path to the game's installation directory if its either the full game or free trial.
+            Config.GamePath = !string.IsNullOrWhiteSpace(compatGamePath) &&
+                              int.TryParse(compatGameId, out int compatGameIdParsed) &&
+                              (compatGameIdParsed == STEAM_APP_ID || compatGameIdParsed == STEAM_APP_ID_FT)
+                ? new DirectoryInfo(compatGamePath)
                 : storage.GetFolder("ffxiv");
         }
 
