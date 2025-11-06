@@ -39,11 +39,9 @@ public class ImGuiBindings : IDisposable
     // Hexa.NET objects
     private unsafe SDLWindow* window;
     private unsafe SDLGPUDevice* device;
-    private unsafe SDLRenderer* renderer;
     private unsafe SDLGPUTransferBuffer* transferBuffer = null!;
     private uint uploadSize = 0;
     private Vector4 clearColor = new(0.45f, 0.55f, 0.60f, 1.00f);
-    public unsafe SDLRenderer* Renderer => this.renderer;
 
     private IntPtr fontAtlasID = (IntPtr)1;
     private bool controlDown;
@@ -58,6 +56,7 @@ public class ImGuiBindings : IDisposable
     private Vector2 scaleFactor = Vector2.One;
 
     private readonly List<Tuple<Pointer<SDLGPUTexture>, Pointer<SDLSurface>>> texturesToBind = [];
+    private readonly List<TextureWrap> texturesReferenced = [];
     private int lastAssignedID = 100;
 
     private delegate void SetClipboardTextDelegate(IntPtr userData, string text);
@@ -75,7 +74,6 @@ public class ImGuiBindings : IDisposable
     {
         this.window = window;
         this.device = device;
-        this.renderer = SDL.CreateRenderer(window, (byte*)null);
         var ctx = ImGui.CreateContext();
         ImGui.SetCurrentContext(ctx);
         var io = ImGui.GetIO();
@@ -150,11 +148,19 @@ public class ImGuiBindings : IDisposable
 
     public unsafe void Dispose()
     {
+        lock (this.texturesReferenced)
+        {
+            var textures = this.texturesReferenced.ToArray();
+            foreach (var texture in textures)
+            {
+                texture.Dispose();
+            }
+        }
+
         SDL.WaitForGPUIdle(this.device);
         ImGuiImplSDL3.Shutdown();
         ImGuiImplSDL3.SDLGPU3Shutdown();
         ImGui.DestroyContext();
-        SDL.DestroyRenderer(this.renderer);
     }
 
     public unsafe bool ProcessExit()
@@ -257,7 +263,7 @@ public class ImGuiBindings : IDisposable
                 StoreOp = SDLGPUStoreOp.Store,
                 MipLevel = 0,
                 LayerOrDepthPlane = 0,
-                Cycle = 1
+                Cycle = 0
             };
 
             var renderPass = SDL.BeginGPURenderPass(commandBuffer, &targetInfo, 1, null);
@@ -281,6 +287,22 @@ public class ImGuiBindings : IDisposable
         lock (this.texturesToBind)
         {
             this.texturesToBind.Add(Tuple.Create(new Pointer<SDLGPUTexture>(gpuTexture), new Pointer<SDLSurface>(surface)));
+        }
+    }
+
+    public void RefTexture(TextureWrap wrap)
+    {
+        lock (this.texturesReferenced)
+        {
+            this.texturesReferenced.Add(wrap);
+        }
+    }
+
+    public void DerefTexture(TextureWrap wrap)
+    {
+        lock (this.texturesReferenced)
+        {
+            this.texturesReferenced.Remove(wrap);
         }
     }
 }

@@ -8,7 +8,7 @@ using Hexa.NET.SDL3.Image;
 
 namespace XIVLauncher.Core;
 
-public class TextureWrap : IDisposable
+public class TextureWrap : IDisposable, IEquatable<TextureWrap>
 {
     public ImTextureRef ImGuiHandle { get; }
     private readonly unsafe ImTextureData* textureData;
@@ -61,6 +61,8 @@ public class TextureWrap : IDisposable
             }
             this.ImGuiHandle = new(this.textureData, this.deviceTexture);
         }
+
+        Program.ImGuiBindings.RefTexture(this);
     }
 
     public static TextureWrap Load(byte[] data) => new(data);
@@ -73,5 +75,27 @@ public class TextureWrap : IDisposable
             Marshal.FreeHGlobal((nint)this.textureData);
             SDL.DestroySurface(this.surface);
         }
+
+        Program.ImGuiBindings.DerefTexture(this);
+    }
+
+    public unsafe bool Equals(TextureWrap? other)
+    {
+        if (other is null) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return this.textureData == other.textureData && this.deviceTexture == other.deviceTexture && this.surface == other.surface && this.ImGuiHandle.Equals(other.ImGuiHandle);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return this.Equals((TextureWrap)obj);
+    }
+
+    public override unsafe int GetHashCode()
+    {
+        return HashCode.Combine(unchecked((int)(long)this.textureData), unchecked((int)(long)this.deviceTexture), unchecked((int)(long)this.surface), this.ImGuiHandle);
     }
 }

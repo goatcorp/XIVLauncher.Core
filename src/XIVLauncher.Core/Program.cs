@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 
 using Config.Net;
 
+using Hexa.NET.ImGui;
+using Hexa.NET.ImGui.Backends.SDL3;
 using Hexa.NET.SDL3;
 
 using Serilog;
@@ -27,6 +29,9 @@ using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
 using XIVLauncher.Core.Resources.Localization;
 using XIVLauncher.Core.Style;
+
+using SDLGPUDevice = Hexa.NET.SDL3.SDLGPUDevice;
+using SDLWindow = Hexa.NET.SDL3.SDLWindow;
 
 namespace XIVLauncher.Core;
 
@@ -322,6 +327,8 @@ sealed class Program
                 launcherApp.Draw();
                 guiBindings.Render();
             }
+
+            guiBindings.Dispose();
 
             SDL.ReleaseWindowFromGPUDevice(gpuDevice, window);
             SDL.DestroyGPUDevice(gpuDevice);
