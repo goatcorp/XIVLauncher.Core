@@ -7,6 +7,7 @@ public class NumericSettingsEntry : SettingsEntry<int>
     public int MinValue { get; set; }
     public int MaxValue { get; set; }
     public int Step { get; set; }
+    private readonly Guid id = Guid.NewGuid();
 
     public NumericSettingsEntry(string name, string description, Func<int> load, Action<int> save, int minValue = 0, int maxValue = int.MaxValue, int step = 1)
         : base(name, description, load, save)
@@ -22,7 +23,7 @@ public class NumericSettingsEntry : SettingsEntry<int>
 
         ImGuiHelpers.TextWrapped(this.Name);
 
-        if (ImGui.InputInt(string.Empty, ref nativeValue, Step))
+        if (ImGui.InputInt($"###{this.id:N}", ref nativeValue, Step))
         {
             this.InternalValue = Math.Max(this.MinValue, Math.Min(this.MaxValue, nativeValue));
         }
