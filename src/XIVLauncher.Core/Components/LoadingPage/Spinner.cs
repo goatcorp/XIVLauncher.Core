@@ -21,10 +21,10 @@ public class Spinner : Component
     {
         var framePadding = ImGui.GetStyle().FramePadding;
 
-        ImGui.Dummy(new Vector2(this.radius * 2) + (framePadding * 2));
-
         var pos = ImGui.GetCursorPos();
 
+        ImGui.Dummy(new Vector2(this.radius * 2) + (framePadding * 2));
+        
         var time = ImGui.GetTime() / 1.2;
 
         const int NUM_SEGMENTS = 30;
