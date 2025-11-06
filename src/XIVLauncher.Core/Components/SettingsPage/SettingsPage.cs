@@ -111,7 +111,9 @@ public class SettingsPage : Page
                     ImGui.EndTabItem();
                 }
             }
+            ImGui.EndTabBar();
         }
+
 
         ImGui.SetCursorPos(ImGuiHelpers.ViewportSize - new Vector2(60));
 
@@ -141,12 +143,12 @@ public class SettingsPage : Page
                     this.App.State = LauncherApp.LauncherState.Main;
                 }
             }
+
+            ImGui.PopStyleVar();
+            ImGui.PopFont();
         }
 
         ImGui.EndChild();
-
-        ImGui.PopStyleVar();
-        ImGui.PopFont();
 
         var vpSize = ImGuiHelpers.ViewportSize;
         ImGui.SetCursorPos(new Vector2(vpSize.X - 260, 4));
