@@ -103,7 +103,7 @@ public class OtpEntryPage : Page
         ImGui.SetNextWindowPos(new Vector2(vpSize.X / 2 - childSize.X / 2, vpSize.Y / 2 - childSize.Y / 2), ImGuiCond.Always);
         ImGui.SetNextWindowBgAlpha(0.4f);
 
-        if (ImGui.BeginChild("###otp", childSize, ImGuiChildFlags.AlwaysAutoResize))
+        if (ImGui.BeginChild("###otp", childSize, ImGuiChildFlags.AlwaysAutoResize | ImGuiChildFlags.AutoResizeY | ImGuiChildFlags.AutoResizeX))
         {
             ImGui.Dummy(new Vector2(40));
 
