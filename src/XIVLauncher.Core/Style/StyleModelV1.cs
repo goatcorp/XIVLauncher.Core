@@ -115,7 +115,7 @@ public class StyleModelV1 : StyleModel
             { "NavWindowingDimBg", new Vector4(0.8f, 0.8f, 0.8f, 0.2f) },
             { "ModalWindowDimBg", new Vector4(0.8f, 0.8f, 0.8f, 0.35f) },
             { "InputTextCursor", new Vector4(1, 1, 1, 1) },
-            { "TabSelected", new Vector4(0.08f, 0.08f, 0.08f, 0.94f) },
+            { "TabSelected", ImGuiColors.Blue },
             { "TabSelectedOverline", new Vector4(0.5f, 0.5f, 0.5f, 1) },
             { "TabDimmed", new Vector4(0.06f, 0.06f, 0.06f, 0.93f) },
             { "TabDimmedSelected", new Vector4(0.5f, 0.5f, 0.5f, 1) },
