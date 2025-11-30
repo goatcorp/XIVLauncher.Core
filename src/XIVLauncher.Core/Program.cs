@@ -109,7 +109,6 @@ sealed class Program
         Config.DpiAwareness ??= DpiAwareness.Unaware;
         Config.IsAutologin ??= false;
         Config.CompletedFts ??= false;
-        Config.DoVersionCheck ??= true;
         Config.FontPxSize ??= 22.0f;
 
         Config.IsEncryptArgs ??= true;
@@ -169,7 +168,7 @@ sealed class Program
         {
             runnerOverride = new FileInfo(Path.Combine(Config.DalamudManualInjectPath.FullName, DALAMUD_INJECTOR_NAME));
         }
-        return new DalamudUpdater(storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), storage.Root, null, null)
+        return new DalamudUpdater(storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), null, null)
         {
             Overlay = DalamudLoadInfo,
             RunnerOverride = runnerOverride
@@ -251,7 +250,7 @@ sealed class Program
         // Manual or auto injection setup.
         DalamudLoadInfo = new DalamudOverlayInfoProxy();
         DalamudUpdater = CreateDalamudUpdater();
-        DalamudUpdater.Run();
+        DalamudUpdater.Run(Config.DalamudBetaKind, Config.DalamudBetaKind);
 
         CreateCompatToolsInstance();
 
@@ -317,17 +316,10 @@ sealed class Program
         guiBindings.Dispose();
         commandList.Dispose();
         graphicsDevice.Dispose();
-
         HttpClient.Dispose();
-
         if (Patcher is not null)
         {
-            Patcher.CancelAllDownloads();
-            Task.Run(async () =>
-            {
-                await PatchManager.UnInitializeAcquisition().ConfigureAwait(false);
-                Environment.Exit(0);
-            });
+            Patcher.StartCancellation();
         }
     }
 
@@ -418,7 +410,7 @@ sealed class Program
         {
             DalamudLoadInfo = new DalamudOverlayInfoProxy();
             DalamudUpdater = CreateDalamudUpdater();
-            DalamudUpdater.Run();
+            DalamudUpdater.Run(Config.DalamudBetaKind, Config.DalamudBetaKey);
         }
     }
 

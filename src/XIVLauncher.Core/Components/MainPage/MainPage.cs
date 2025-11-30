@@ -167,8 +167,9 @@ public class MainPage : Page
         if (action == LoginAction.Fake)
         {
             IGameRunner gameRunner;
+            // FIXME: Should we really be passing a null DalamudLauncher to both of these?
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                gameRunner = new WindowsGameRunner(null, false, Program.DalamudUpdater.Runtime);
+                gameRunner = new WindowsGameRunner(null, false);
             else
                 gameRunner = new UnixGameRunner(Program.CompatibilityTools, null, false);
 
@@ -534,7 +535,7 @@ public class MainPage : Page
         switch (Environment.OSVersion.Platform)
         {
             case PlatformID.Win32NT:
-                dalamudRunner = new WindowsDalamudRunner();
+                dalamudRunner = new WindowsDalamudRunner(Program.DalamudUpdater.Runtime);
                 dalamudCompatCheck = new WindowsDalamudCompatibilityCheck();
                 break;
 
@@ -658,7 +659,7 @@ public class MainPage : Page
 
         if (Environment.OSVersion.Platform == PlatformID.Win32NT)
         {
-            runner = new WindowsGameRunner(dalamudLauncher, dalamudOk, Program.DalamudUpdater.Runtime);
+            runner = new WindowsGameRunner(dalamudLauncher, dalamudOk);
         }
         else if (Environment.OSVersion.Platform == PlatformID.Unix)
         {
@@ -672,7 +673,7 @@ public class MainPage : Page
                 else if (!File.Exists(Path.Combine(App.Settings.WineBinaryPath, "wine64")))
                     throw new InvalidOperationException("Custom wine binary path is invalid: no wine64 found at that location.\n" +
                                                         "Check path carefully for typos: " + App.Settings.WineBinaryPath);
-                
+
                 Log.Information("Using Custom Wine: " + App.Settings.WineBinaryPath);
             }
             else
@@ -896,7 +897,7 @@ public class MainPage : Page
             return false;
         }
 
-        using var installer = new PatchInstaller(App.Settings.KeepPatches ?? false);
+        using var installer = new PatchInstaller(App.Settings.GamePath, App.Settings.KeepPatches ?? false);
         Program.Patcher = new PatchManager(App.Settings.PatchAcquisitionMethod ?? AcquisitionMethod.Aria, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
             App.Settings.PatchPath, installer, App.Launcher, sid);
         Program.Patcher.OnFail += PatcherOnFail;
@@ -932,8 +933,8 @@ public class MainPage : Page
                     Thread.Sleep(30);
 
                     App.LoadingPage.Line2 = string.Format(Strings.WorkingOnStatus, Program.Patcher.CurrentInstallIndex, Program.Patcher.Downloads.Count);
-                    App.LoadingPage.Line3 = string.Format(Strings.LeftToDownloadStatus, ApiHelpers.BytesToString(Program.Patcher.AllDownloadsLength < 0 ? 0 : Program.Patcher.AllDownloadsLength),
-                        ApiHelpers.BytesToString(Program.Patcher.Speeds.Sum()));
+                    App.LoadingPage.Line3 = string.Format(Strings.LeftToDownloadStatus, MathHelpers.BytesToString(Program.Patcher.AllDownloadsLength < 0 ? 0 : Program.Patcher.AllDownloadsLength),
+                        MathHelpers.BytesToString(Program.Patcher.Speeds.Sum()));
 
                     App.LoadingPage.Progress = Program.Patcher.CurrentInstallIndex / (float)Program.Patcher.Downloads.Count;
                 }
@@ -963,19 +964,19 @@ public class MainPage : Page
                 case NotEnoughSpaceException.SpaceKind.Patches:
                     App.ShowMessageBlocking(
                         string.Format(Strings.NotEnoughSpacePatchesError,
-                            ApiHelpers.BytesToString(sex.BytesRequired), ApiHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
+                            MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
                     break;
 
                 case NotEnoughSpaceException.SpaceKind.AllPatches:
                     App.ShowMessageBlocking(
                         string.Format(Strings.NotEnoughSpaceAllPatchesError,
-                            ApiHelpers.BytesToString(sex.BytesRequired), ApiHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
+                            MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
                     break;
 
                 case NotEnoughSpaceException.SpaceKind.Game:
                     App.ShowMessageBlocking(
                         string.Format(Strings.NotEnoughSpaceGameError,
-                            ApiHelpers.BytesToString(sex.BytesRequired), ApiHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
+                            MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
                     break;
 
                 default:
@@ -1045,13 +1046,13 @@ public class MainPage : Page
                     // TODO: show more progress info here
                     case PatchVerifier.VerifyState.DownloadMeta:
                         this.App.LoadingPage.Line2 = $"{verify.CurrentFile}";
-                        this.App.LoadingPage.Line3 = $"{Math.Min(verify.PatchSetIndex + 1, verify.PatchSetCount)}/{verify.PatchSetCount} - {ApiHelpers.BytesToString(verify.Progress)}/{ApiHelpers.BytesToString(verify.Total)}";
+                        this.App.LoadingPage.Line3 = $"{Math.Min(verify.PatchSetIndex + 1, verify.PatchSetCount)}/{verify.PatchSetCount} - {MathHelpers.BytesToString(verify.Progress)}/{MathHelpers.BytesToString(verify.Total)}";
                         this.App.LoadingPage.Progress = (float)(verify.Total != 0 ? (float)verify.Progress / (float)verify.Total : 0.0);
                         break;
 
                     case PatchVerifier.VerifyState.VerifyAndRepair:
                         this.App.LoadingPage.Line2 = $"{verify.CurrentFile}";
-                        this.App.LoadingPage.Line3 = $"{Math.Min(verify.PatchSetIndex + 1, verify.PatchSetCount)}/{verify.PatchSetCount} - {Math.Min(verify.TaskIndex + 1, verify.TaskCount)}/{verify.TaskCount} - {ApiHelpers.BytesToString(verify.Progress)}/{ApiHelpers.BytesToString(verify.Total)}";
+                        this.App.LoadingPage.Line3 = $"{Math.Min(verify.PatchSetIndex + 1, verify.PatchSetCount)}/{verify.PatchSetCount} - {Math.Min(verify.TaskIndex + 1, verify.TaskCount)}/{verify.TaskCount} - {MathHelpers.BytesToString(verify.Progress)}/{MathHelpers.BytesToString(verify.Total)}";
                         this.App.LoadingPage.Progress = (float)(verify.Total != 0 ? (float)verify.Progress / (float)verify.Total : 0);
                         break;
 
