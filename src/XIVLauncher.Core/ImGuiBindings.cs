@@ -41,7 +41,7 @@ public class ImGuiBindings : IDisposable
     private unsafe SDLGPUDevice* device;
     private unsafe SDLGPUTransferBuffer* transferBuffer = null!;
     private uint uploadSize = 0;
-    private Vector4 clearColor = new(0.30f, 0.30f, 0.35f, 1.00f);
+    private Vector4 clearColor = new(0.1f, 0.1f, 0.1f, 1.0f);
 
     private IntPtr fontAtlasID = (IntPtr)1;
     private bool controlDown;
