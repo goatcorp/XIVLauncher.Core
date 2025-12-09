@@ -1,15 +1,17 @@
-using System.Numerics;
-using System.Runtime.InteropServices;
-
 using Config.Net;
 
 using Hexa.NET.SDL3;
 
 using Serilog;
+
+using System.Numerics;
+using System.Runtime.InteropServices;
+
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch;
 using XIVLauncher.Common.Game.Patch.Acquisition;
+using XIVLauncher.Common.Game.Patch.Acquisition.Aria;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Support;
 using XIVLauncher.Common.Unix;
@@ -321,6 +323,17 @@ sealed class Program
                 guiBindings.NewFrame();
                 launcherApp.Draw();
                 guiBindings.Render();
+            }
+
+            Patcher.StartCancellation();
+            // PatchManager.UnInitializeAcquisition() is private but the function bellow is the only call that is in the method and is public accessible
+            try
+            {
+                AriaHttpPatchAcquisition.UnInitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Could not uninitialize patch acquisition.");
             }
 
             guiBindings.Dispose();
