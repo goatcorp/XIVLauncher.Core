@@ -1,12 +1,8 @@
-using System.Globalization;
 using System.Numerics;
-using System.Resources;
 using System.Runtime.InteropServices;
 
 using Config.Net;
 
-using Hexa.NET.ImGui;
-using Hexa.NET.ImGui.Backends.SDL3;
 using Hexa.NET.SDL3;
 
 using Serilog;
@@ -27,7 +23,6 @@ using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
-using XIVLauncher.Core.Resources.Localization;
 using XIVLauncher.Core.Style;
 
 using SDLGPUDevice = Hexa.NET.SDL3.SDLGPUDevice;

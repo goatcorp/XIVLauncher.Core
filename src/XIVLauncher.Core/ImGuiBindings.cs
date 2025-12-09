@@ -4,11 +4,8 @@ using Hexa.NET.SDL3;
 
 using HexaGen.Runtime;
 
-using Serilog;
-
 using System.Diagnostics;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 using ImSDLEvent = Hexa.NET.ImGui.Backends.SDL3.SDLEvent;
@@ -19,7 +16,6 @@ using ImSDLWindow = Hexa.NET.ImGui.Backends.SDL3.SDLWindow;
 using SDLEvent = Hexa.NET.SDL3.SDLEvent;
 using SDLGPUDevice = Hexa.NET.SDL3.SDLGPUDevice;
 using SDLGPUGraphicsPipeline = Hexa.NET.ImGui.Backends.SDL3.SDLGPUGraphicsPipeline;
-using SDLRenderer = Hexa.NET.SDL3.SDLRenderer;
 using SDLWindow = Hexa.NET.SDL3.SDLWindow;
 
 
