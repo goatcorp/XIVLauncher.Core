@@ -1,4 +1,3 @@
-using Config.Net;
 
 using Hexa.NET.SDL3;
 
@@ -324,24 +323,27 @@ sealed class Program
                 launcherApp.Draw();
                 guiBindings.Render();
             }
-
-            Patcher.StartCancellation();
-            // PatchManager.UnInitializeAcquisition() is private but the function bellow is the only call that is in the method and is public accessible
-            try
-            {
-                AriaHttpPatchAcquisition.UnInitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Could not uninitialize patch acquisition.");
-            }
-
             guiBindings.Dispose();
 
             SDL.ReleaseWindowFromGPUDevice(gpuDevice, window);
             SDL.DestroyGPUDevice(gpuDevice);
             SDL.DestroyWindow(window);
             SDL.Quit();
+
+            if (Patcher is not null)
+            {
+                Patcher.StartCancellation();
+                // PatchManager.UnInitializeAcquisition() is private but the function bellow is the only call that is in the method and is public accessible
+                try
+                {
+                    AriaHttpPatchAcquisition.UnInitializeAsync().ConfigureAwait(false);
+                    Environment.Exit(0);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Could not uninitialize patch acquisition.");
+                }
+            }
         }
     }
 
