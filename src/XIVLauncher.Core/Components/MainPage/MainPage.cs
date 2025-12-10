@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Numerics;
 
 using Hexa.NET.ImGui;
+using Hexa.NET.SDL3;
 
 using Serilog;
 
@@ -149,7 +150,10 @@ public class MainPage : Page
 
             if (result)
             {
-                Environment.Exit(0);
+                var sdlEvent = new SDLEvent{
+                    Type = (int)SDLEventType.Quit
+                };
+                SDL.PushEvent(ref sdlEvent);
             }
             else
             {
