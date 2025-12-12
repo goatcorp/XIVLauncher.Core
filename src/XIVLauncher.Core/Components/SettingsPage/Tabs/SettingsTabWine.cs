@@ -86,6 +86,7 @@ public class SettingsTabWine : SettingsTab
     { 
         get
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) return false;
             if (feralGameModeFound != null) return feralGameModeFound ?? false;
             var handle = IntPtr.Zero;
             feralGameModeFound = (NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle));
