@@ -48,10 +48,8 @@ public class SettingsTabWine : SettingsTab
                 CheckVisibility = () => RuntimeInformation.IsOSPlatform(OSPlatform.Linux),
                 CheckValidity = b =>
                 {
-                    var handle = IntPtr.Zero;
-                    if (b == true && !NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle))
+                    if (b == true && FeralGameModeFound == false)
                         return Strings.EnableFeralGameModeNotFoundValidation;
-                    NativeLibrary.Free(handle);
                     return null;
                 }
             },
@@ -81,6 +79,21 @@ public class SettingsTabWine : SettingsTab
     public override bool IsUnixExclusive => true;
 
     public override string Title => Strings.WineTitle;
+
+    private bool? feralGameModeFound = null;
+
+    private bool FeralGameModeFound
+    { 
+        get
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) return false;
+            if (feralGameModeFound != null) return feralGameModeFound ?? false;
+            var handle = IntPtr.Zero;
+            feralGameModeFound = (NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle));
+            NativeLibrary.Free(handle);
+            return feralGameModeFound ?? false;            
+        }
+    }
 
     public override void Draw()
     {

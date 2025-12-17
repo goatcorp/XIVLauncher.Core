@@ -196,17 +196,22 @@ sealed class Program
         Secrets = GetSecretProvider(storage);
 
         Dictionary<uint, string> apps = [];
-        uint[] ignoredIds = [0, STEAM_APP_ID, STEAM_APP_ID_FT];
-        if (!ignoredIds.Contains(CoreEnvironmentSettings.SteamAppId))
+        if (CoreEnvironmentSettings.SteamAppId != 0)
         {
             apps.Add(CoreEnvironmentSettings.SteamAppId, "XLM");
         }
-        if (!ignoredIds.Contains(CoreEnvironmentSettings.AltAppID))
+        if (CoreEnvironmentSettings.AltAppID != 0)
         {
             apps.Add(CoreEnvironmentSettings.AltAppID, "XL_APPID");
         }
-        apps.Add(STEAM_APP_ID, "FFXIV Retail");
-        apps.Add(STEAM_APP_ID_FT, "FFXIV Free Trial");
+        if (!apps.ContainsKey(STEAM_APP_ID))
+        {
+            apps.Add(STEAM_APP_ID, "FFXIV Retail");
+        }
+        if (!apps.ContainsKey(STEAM_APP_ID_FT))
+        {
+            apps.Add(STEAM_APP_ID_FT, "FFXIV Free Trial");
+        }
         try
         {
             switch (Environment.OSVersion.Platform)
