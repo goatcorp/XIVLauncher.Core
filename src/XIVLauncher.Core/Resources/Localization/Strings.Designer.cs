@@ -327,15 +327,15 @@ namespace XIVLauncher.Core.Resources.Localization {
             }
         }
         
-        internal static string ForceUseSystemTZ {
+        internal static string ForceDontUseSystemTZ {
             get {
-                return ResourceManager.GetString("ForceUseSystemTZ", resourceCulture);
+                return ResourceManager.GetString("ForceDontUseSystemTZ", resourceCulture);
             }
         }
         
-        internal static string ForceUseSystemDescription {
+        internal static string ForceDontUseSystemDescription {
             get {
-                return ResourceManager.GetString("ForceUseSystemDescription", resourceCulture);
+                return ResourceManager.GetString("ForceDontUseSystemDescription", resourceCulture);
             }
         }
         
