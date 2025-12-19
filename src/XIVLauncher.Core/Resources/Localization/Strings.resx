@@ -164,6 +164,12 @@ It should be an absolute path to a folder containing wine64 and wineserver binar
     <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
         <value>Your locale is "{0}". You probably don't need this hack.</value>
     </data>
+    <data name="ForceUseSystemTZ" xml:space="preserve">
+        <value>Use system provided Timezone</value>
+    </data>
+    <data name="ForceUseSystemDescription" xml:space="preserve">
+        <value>Use the system's timezone value when launching the game</value>
+    </data>
     <data name="TroubleshootingTitle" xml:space="preserve">
         <value>Troubleshooting</value>
     </data>

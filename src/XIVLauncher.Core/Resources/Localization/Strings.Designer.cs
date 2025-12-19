@@ -327,6 +327,18 @@ namespace XIVLauncher.Core.Resources.Localization {
             }
         }
         
+        internal static string ForceUseSystemTZ {
+            get {
+                return ResourceManager.GetString("ForceUseSystemTZ", resourceCulture);
+            }
+        }
+        
+        internal static string ForceUseSystemDescription {
+            get {
+                return ResourceManager.GetString("ForceUseSystemDescription", resourceCulture);
+            }
+        }
+        
         internal static string TroubleshootingTitle {
             get {
                 return ResourceManager.GetString("TroubleshootingTitle", resourceCulture);
