@@ -1,3 +1,7 @@
+using System.Collections.ObjectModel;
+
+using Serilog;
+
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Core.Resources.Localization;
 
@@ -15,9 +19,8 @@ public class SettingsTabDalamud : SettingsTab
         {
 
             new SettingsEntry<bool>(Strings.EnableDalamudSetting, Strings.EnableDalamudSettingDescription, () => Program.Config.DalamudEnabled ?? true, b => Program.Config.DalamudEnabled = b),
-
             new SettingsEntry<DalamudLoadMethod>(Strings.LoadMethodSetting, Strings.LoadMethodSettingDescription, () => Program.Config.DalamudLoadMethod ?? DalamudLoadMethod.DllInject, method => Program.Config.DalamudLoadMethod = method),
-
+            new DalamudBranchMetaSettingsEntry("Dalamud Branch", "Change to a different version track", () => Program.Config.DalamudBetaKind ?? "release" , (track) => Program.Config.DalamudBetaKind = track),
             new NumericSettingsEntry(Strings.DalamudInjectionDelaySetting, Strings.DalamudInjectionDelaySettingDescription, () => Program.Config.DalamudLoadDelay, delay => Program.Config.DalamudLoadDelay = delay, 0, int.MaxValue, 1000),
 
             enableManualInjection = new SettingsEntry<bool>(Strings.DalamudManualInjectionEnableSetting, Strings.DalamudManualInjectionEnableSettingDescription, () => Program.Config.DalamudManualInjectionEnabled ?? false, (enabled) =>
