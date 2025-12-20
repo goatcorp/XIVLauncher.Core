@@ -1,7 +1,3 @@
-using System.Collections.ObjectModel;
-
-using Serilog;
-
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Core.Resources.Localization;
 
