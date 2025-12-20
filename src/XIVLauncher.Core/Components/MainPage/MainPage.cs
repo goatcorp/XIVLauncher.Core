@@ -627,12 +627,7 @@ public class MainPage : Page
         // again if the user really wants to.
         if (Environment.OSVersion.Platform == PlatformID.Unix && App.Settings.DontUseSystemTz == true)
         {
-            Log.Information($"Removing TZ environment variable: {this.App.Settings.DontUseSystemTz}");
             System.Environment.SetEnvironmentVariable("TZ", string.Empty);
-        }
-        else
-        {
-            Log.Information($"Keeping TZ environment variable: {this.App.Settings.DontUseSystemTz}");
         }
 
         // Deal with "Additional Arguments". VAR=value %command% -args
