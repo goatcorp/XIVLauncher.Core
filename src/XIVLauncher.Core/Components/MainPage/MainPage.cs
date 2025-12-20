@@ -630,7 +630,7 @@ public class MainPage : Page
         // The Timezone environment on Unix platforms tends to cause issues with in-game time display.
         // For now the best workaround is to unset it, although it can be specified with AdditionalArgs
         // again if the user really wants to.
-        if (Environment.OSVersion.Platform == PlatformID.Unix)
+        if (Environment.OSVersion.Platform == PlatformID.Unix && App.Settings.DontUseSystemTz == true)
         {
             System.Environment.SetEnvironmentVariable("TZ", string.Empty);
         }

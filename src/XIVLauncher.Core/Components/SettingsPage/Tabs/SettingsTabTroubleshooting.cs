@@ -35,6 +35,10 @@ public class SettingsTabTroubleshooting : SettingsTab
                 return null;
             },
         },
+        new SettingsEntry<bool>(Strings.ForceDontUseSystemTZ, Strings.ForceDontUseSystemDescription, () => Program.Config.DontUseSystemTz ?? true, x => Program.Config.DontUseSystemTz = x)
+        {
+            CheckVisibility = () => Environment.OSVersion.Platform == PlatformID.Unix
+        }
     };
     public override string Title => Strings.TroubleshootingTitle;
 
