@@ -17,6 +17,7 @@ using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch;
 using XIVLauncher.Common.Game.Patch.Acquisition;
+using XIVLauncher.Common.Game.Patch.Acquisition.Aria;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Support;
 using XIVLauncher.Common.Unix;
@@ -109,7 +110,6 @@ sealed class Program
         Config.DpiAwareness ??= DpiAwareness.Unaware;
         Config.IsAutologin ??= false;
         Config.CompletedFts ??= false;
-        Config.DoVersionCheck ??= true;
         Config.FontPxSize ??= 22.0f;
 
         Config.IsEncryptArgs ??= true;
@@ -170,7 +170,7 @@ sealed class Program
         {
             runnerOverride = new FileInfo(Path.Combine(Config.DalamudManualInjectPath.FullName, DALAMUD_INJECTOR_NAME));
         }
-        return new DalamudUpdater(storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), storage.Root, null, null)
+        return new DalamudUpdater(storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), null, null)
         {
             Overlay = DalamudLoadInfo,
             RunnerOverride = runnerOverride
@@ -257,7 +257,7 @@ sealed class Program
         // Manual or auto injection setup.
         DalamudLoadInfo = new DalamudOverlayInfoProxy();
         DalamudUpdater = CreateDalamudUpdater();
-        DalamudUpdater.Run();
+        DalamudUpdater.Run(Config.DalamudBetaKind, Config.DalamudBetaKey);
 
         CreateCompatToolsInstance();
 
@@ -323,17 +323,20 @@ sealed class Program
         guiBindings.Dispose();
         commandList.Dispose();
         graphicsDevice.Dispose();
-
         HttpClient.Dispose();
-
         if (Patcher is not null)
         {
-            Patcher.CancelAllDownloads();
-            Task.Run(async () =>
+            Patcher.StartCancellation();
+            // PatchManager.UnInitializeAcquisition() is private but the function bellow is the only call that is in the method and is public accessible
+            try
             {
-                await PatchManager.UnInitializeAcquisition().ConfigureAwait(false);
+                AriaHttpPatchAcquisition.UnInitializeAsync().ConfigureAwait(false);
                 Environment.Exit(0);
-            });
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Could not uninitialize patch acquisition.");
+            }
         }
     }
 
@@ -424,7 +427,7 @@ sealed class Program
         {
             DalamudLoadInfo = new DalamudOverlayInfoProxy();
             DalamudUpdater = CreateDalamudUpdater();
-            DalamudUpdater.Run();
+            DalamudUpdater.Run(Config.DalamudBetaKind, Config.DalamudBetaKey);
         }
     }
 
