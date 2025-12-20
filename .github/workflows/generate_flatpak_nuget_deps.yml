@@ -23,14 +23,14 @@ jobs:
           sudo apt update -y
           sudo apt install flatpak -y
           flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo 
-          flatpak install --user org.freedesktop.Sdk.Extension.dotnet8/x86_64/25.08 -y # Update this when needed.
+          flatpak install --user org.freedesktop.Sdk.Extension.dotnet9/x86_64/25.08 -y # Update this when needed.
           flatpak install --user org.freedesktop.Sdk/x86_64/25.08 -y # As well as this, if dependency generation is failing.
 
       - name: Generate nuget-dependencies.json
         working-directory: ./src/XIVLauncher.Core/
         run: |
           curl -LO https://raw.githubusercontent.com/flatpak/flatpak-builder-tools/master/dotnet/flatpak-dotnet-generator.py
-          python3 flatpak-dotnet-generator.py --dotnet 8 --freedesktop 25.08 nuget-dependencies.json XIVLauncher.Core.csproj
+          python3 flatpak-dotnet-generator.py --dotnet 9 --freedesktop 25.08 nuget-dependencies.json XIVLauncher.Core.csproj
 
       - name: Upload nuget-dependencies.json
         uses: actions/upload-artifact@v4

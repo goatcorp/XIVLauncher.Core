@@ -21,7 +21,7 @@
         <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="4.14.0"
             PrivateAssets="All" />
         <AdditionalFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis\BannedSymbols.txt" />
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0"
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.101"
             PrivateAssets="All" />
     </ItemGroup>
     <PropertyGroup Label="Code Analysis">
