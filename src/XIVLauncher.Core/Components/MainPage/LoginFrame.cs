@@ -69,10 +69,7 @@ public class LoginFrame : Component
             this.OnLogin?.Invoke(LoginAction.Game);
         }
 
-        this.loginInput = new Input(Strings.UsernameInput, Strings.UsernameInputHint, new Vector2(12f, 0f), 128)
-        {
-            TakeKeyboardFocus = true
-        };
+        this.loginInput = new Input(Strings.UsernameInput, Strings.UsernameInputHint, new Vector2(12f, 0f), 128);
         this.loginInput.Enter += TriggerLogin;
 
         this.passwordInput = new Input(Strings.PasswordInput, Strings.PasswordInputHint, new Vector2(12f, 0f), 128, flags: ImGuiInputTextFlags.Password | ImGuiInputTextFlags.NoUndoRedo);
