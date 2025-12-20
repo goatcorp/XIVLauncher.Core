@@ -9,18 +9,20 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Deterministic>true</Deterministic>
         <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     </PropertyGroup>
 
     <PropertyGroup>
-        <DefineConstants Condition=" '$(ExtraDefineConstants)' != '' ">$(DefineConstants);$(ExtraDefineConstants)</DefineConstants>
+        <DefineConstants Condition=" '$(ExtraDefineConstants)' != '' ">
+            $(DefineConstants);$(ExtraDefineConstants)</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
+        <ProjectReference
+            Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
     </ItemGroup>
 
     <PropertyGroup Label="Configuration" Condition="'$(Configuration)'=='Release'">

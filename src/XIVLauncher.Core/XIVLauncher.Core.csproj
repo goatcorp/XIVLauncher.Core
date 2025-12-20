@@ -9,7 +9,7 @@
         <LangVersion>latest</LangVersion>
         <ApplicationIcon>Resources\dalamud_icon.ico</ApplicationIcon>
 
-        <Version>1.2.1</Version>
+        <Version>1.3.0</Version>
         <FileVersion>$(Version)</FileVersion>
         <AssemblyVersion>$(Version)</AssemblyVersion>
 
@@ -17,11 +17,14 @@
         <PublishSingleFile>true</PublishSingleFile>
         <SelfContained>true</SelfContained>
 
-        <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
+        <IsWindows
+            Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
             true</IsWindows>
-        <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
+        <IsOSX
+            Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
             true</IsOSX>
-        <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">
+        <IsLinux
+            Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">
             true</IsLinux>
         <Configurations>Debug;Release</Configurations>
     </PropertyGroup>
@@ -47,10 +50,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="../XIVLauncher.VersionGenerator/XIVLauncher.VersionGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference
+            Include="../XIVLauncher.VersionGenerator/XIVLauncher.VersionGenerator.csproj"
+            OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <ProjectReference Include="..\XIVLauncher.Common.Unix\XIVLauncher.Common.Unix.csproj" />
-        <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common.Windows\XIVLauncher.Common.Windows.csproj" />
-        <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
+        <ProjectReference
+            Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common.Windows\XIVLauncher.Common.Windows.csproj" />
+        <ProjectReference
+            Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -78,16 +85,20 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources/fonts/FontAwesome5FreeSolid.otf" LogicalName="FontAwesome5FreeSolid.otf" />
-        <EmbeddedResource Include="Resources/fonts/NotoSansCJKjp-Regular.otf" LogicalName="NotoSansCJKjp-Regular.otf" />
+        <EmbeddedResource Include="Resources/fonts/FontAwesome5FreeSolid.otf"
+            LogicalName="FontAwesome5FreeSolid.otf" />
+        <EmbeddedResource Include="Resources/fonts/NotoSansCJKjp-Regular.otf"
+            LogicalName="NotoSansCJKjp-Regular.otf" />
 
         <EmbeddedResource Include="Resources/logo.png" LogicalName="logo.png" />
 
         <EmbeddedResource Include="Resources/bg_logo.png" LogicalName="bg_logo.png" />
 
         <EmbeddedResource Include="Resources/steamdeck_fts.png" LogicalName="steamdeck_fts.png" />
-        <EmbeddedResource Include="Resources/steamdeck_fterror.png" LogicalName="steamdeck_fterror.png" />
-        <EmbeddedResource Include="Resources/steamdeck_switchprompt.png" LogicalName="steamdeck_switchprompt.png" />
+        <EmbeddedResource Include="Resources/steamdeck_fterror.png"
+            LogicalName="steamdeck_fterror.png" />
+        <EmbeddedResource Include="Resources/steamdeck_switchprompt.png"
+            LogicalName="steamdeck_switchprompt.png" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win10-x64'">
@@ -112,7 +123,8 @@
             <VerFile>$(IntermediateOutputPath)gitver</VerFile>
         </PropertyGroup>
         <!-- write the hash to the temp file.-->
-        <Exec Command="git -C &quot;$(ProjectDir.Replace('\','\\'))&quot; describe --long --always --dirty &gt; $(VerFile)" />
+        <Exec
+            Command="git -C &quot;$(ProjectDir.Replace('\','\\'))&quot; describe --long --always --dirty &gt; $(VerFile)" />
         <!-- read the version into the GitVersion itemGroup-->
         <ReadLinesFromFile File="$(VerFile)">
             <Output TaskParameter="Lines" ItemName="GitVersion" />
@@ -144,7 +156,8 @@
             </AssemblyAttributes>
         </ItemGroup>
         <!-- writes the attribute to the customAssemblyInfo file -->
-        <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)" AssemblyAttributes="@(AssemblyAttributes)" />
+        <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)"
+            AssemblyAttributes="@(AssemblyAttributes)" />
     </Target>
 
 </Project>

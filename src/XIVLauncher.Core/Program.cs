@@ -1,12 +1,8 @@
-using Config.Net;
-
-using Hexa.NET.SDL3;
-
-using Serilog;
-
 using System.Numerics;
 using System.Runtime.InteropServices;
-
+using Config.Net;
+using Hexa.NET.SDL3;
+using Serilog;
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch;
@@ -26,7 +22,6 @@ using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
 using XIVLauncher.Core.Style;
-
 using SDLGPUDevice = Hexa.NET.SDL3.SDLGPUDevice;
 using SDLWindow = Hexa.NET.SDL3.SDLWindow;
 
@@ -105,7 +100,6 @@ sealed class Program
         Config.DpiAwareness ??= DpiAwareness.Unaware;
         Config.IsAutologin ??= false;
         Config.CompletedFts ??= false;
-        Config.DoVersionCheck ??= true;
         Config.FontPxSize ??= 22.0f;
 
         Config.IsEncryptArgs ??= true;
@@ -166,7 +160,7 @@ sealed class Program
         {
             runnerOverride = new FileInfo(Path.Combine(Config.DalamudManualInjectPath.FullName, DALAMUD_INJECTOR_NAME));
         }
-        return new DalamudUpdater(storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), storage.Root, null, null)
+        return new DalamudUpdater(storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), null, null)
         {
             Overlay = DalamudLoadInfo,
             RunnerOverride = runnerOverride
@@ -253,7 +247,7 @@ sealed class Program
         // Manual or auto injection setup.
         DalamudLoadInfo = new DalamudOverlayInfoProxy();
         DalamudUpdater = CreateDalamudUpdater();
-        DalamudUpdater.Run(null, null);
+        DalamudUpdater.Run(Config.DalamudBetaKind, Config.DalamudBetaKey);
 
         CreateCompatToolsInstance();
 
@@ -447,7 +441,7 @@ sealed class Program
         {
             DalamudLoadInfo = new DalamudOverlayInfoProxy();
             DalamudUpdater = CreateDalamudUpdater();
-            DalamudUpdater.Run(null, null);
+            DalamudUpdater.Run(Config.DalamudBetaKind, Config.DalamudBetaKey);
         }
     }
 

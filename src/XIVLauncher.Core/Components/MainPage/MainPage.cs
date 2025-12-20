@@ -150,7 +150,8 @@ public class MainPage : Page
 
             if (result)
             {
-                var sdlEvent = new SDLEvent{
+                var sdlEvent = new SDLEvent
+                {
                     Type = (int)SDLEventType.Quit
                 };
                 SDL.PushEvent(ref sdlEvent);
@@ -172,6 +173,7 @@ public class MainPage : Page
         if (action == LoginAction.Fake)
         {
             IGameRunner gameRunner;
+            // FIXME: Should we really be passing a null DalamudLauncher to both of these?
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 gameRunner = new WindowsGameRunner(null, false);
             else
@@ -685,7 +687,7 @@ public class MainPage : Page
                 else if (!File.Exists(Path.Combine(App.Settings.WineBinaryPath, "wine64")))
                     throw new InvalidOperationException("Custom wine binary path is invalid: no wine64 found at that location.\n" +
                                                         "Check path carefully for typos: " + App.Settings.WineBinaryPath);
-                
+
                 Log.Information("Using Custom Wine: " + App.Settings.WineBinaryPath);
             }
             else
@@ -946,7 +948,7 @@ public class MainPage : Page
 
                     App.LoadingPage.Line2 = string.Format(Strings.WorkingOnStatus, Program.Patcher.CurrentInstallIndex, Program.Patcher.Downloads.Count);
                     App.LoadingPage.Line3 = string.Format(Strings.LeftToDownloadStatus, MathHelpers.BytesToString(Program.Patcher.AllDownloadsLength < 0 ? 0 : Program.Patcher.AllDownloadsLength),
-                                                          MathHelpers.BytesToString(Program.Patcher.Speeds.Sum()));
+                        MathHelpers.BytesToString(Program.Patcher.Speeds.Sum()));
 
                     App.LoadingPage.Progress = Program.Patcher.CurrentInstallIndex / (float)Program.Patcher.Downloads.Count;
                 }
@@ -976,19 +978,19 @@ public class MainPage : Page
                 case NotEnoughSpaceException.SpaceKind.Patches:
                     App.ShowMessageBlocking(
                         string.Format(Strings.NotEnoughSpacePatchesError,
-                                      MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
+                            MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
                     break;
 
                 case NotEnoughSpaceException.SpaceKind.AllPatches:
                     App.ShowMessageBlocking(
                         string.Format(Strings.NotEnoughSpaceAllPatchesError,
-                                      MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
+                            MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
                     break;
 
                 case NotEnoughSpaceException.SpaceKind.Game:
                     App.ShowMessageBlocking(
                         string.Format(Strings.NotEnoughSpaceGameError,
-                                      MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
+                            MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
                     break;
 
                 default:
