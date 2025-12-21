@@ -162,6 +162,12 @@ Debería ser una ruta absoluta a una carpeta que contenga los binarios wine64 y 
   <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
         <value>Your locale is "{0}". You probably don't need this hack.</value>
     </data>
+  <data name="ForceDontUseSystemTZ" xml:space="preserve">
+        <value>Don't use system timezone</value>
+    </data>
+  <data name="ForceDontUseSystemDescription" xml:space="preserve">
+        <value>Unsets the TZ environment variable from system provided</value>
+    </data>
   <data name="TroubleshootingTitle" xml:space="preserve">
         <value>Troubleshooting</value>
     </data>

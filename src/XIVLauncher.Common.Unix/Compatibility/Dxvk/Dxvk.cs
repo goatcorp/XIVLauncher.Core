@@ -13,7 +13,7 @@ namespace XIVLauncher.Common.Unix.Compatibility.Dxvk;
 
 public enum DxvkVersion
 {
-    [SettingsDescription("Stable", "DXVK 2.6 with GPLAsync patches. For most graphics cards.")]
+    [SettingsDescription("Stable", "DXVK 2.7 with GPLAsync patches. For most graphics cards.")]
     Stable,
 
     [SettingsDescription("Legacy", "DXVK 1.10.3 with Async patches. For older graphics cards.")]

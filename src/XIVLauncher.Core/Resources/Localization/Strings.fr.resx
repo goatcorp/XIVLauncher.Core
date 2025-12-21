@@ -162,6 +162,12 @@ Le chemin doit être un chemin absolu vers un dossier contenant wine64 et les bi
   <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
         <value>Votre locale est «{0}». Vous n'avez probablement pas besoin de ce hack.</value>
     </data>
+  <data name="ForceDontUseSystemTZ" xml:space="preserve">
+        <value>Ne pas utiliser le fuseau horaire du système</value>
+    </data>
+  <data name="ForceDontUseSystemDescription" xml:space="preserve">
+        <value>Désélectionne la variable d'environnement de fuseau horaire du système</value>
+    </data>
   <data name="TroubleshootingTitle" xml:space="preserve">
         <value>Résolution de bugs</value>
     </data>

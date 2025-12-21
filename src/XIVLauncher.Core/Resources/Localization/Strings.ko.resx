@@ -162,6 +162,12 @@ wine64와 wineserver 바이너리를 포함하는 폴더의 절대경로여야 �
   <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
         <value>현재 로케일은 "{0}"입니다. 이 Hack이 필요하지 않을 것입니다.</value>
     </data>
+  <data name="ForceDontUseSystemTZ" xml:space="preserve">
+        <value>Don't use system timezone</value>
+    </data>
+  <data name="ForceDontUseSystemDescription" xml:space="preserve">
+        <value>Unsets the TZ environment variable from system provided</value>
+    </data>
   <data name="TroubleshootingTitle" xml:space="preserve">
         <value>트러블 슈팅</value>
     </data>
