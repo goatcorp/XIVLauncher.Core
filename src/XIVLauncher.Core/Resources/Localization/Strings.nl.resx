@@ -20,147 +20,153 @@
             Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EnterYourOTP" xml:space="preserve">
-        <value>Please enter your OTP</value>
+        <value>Voer uw OTP in</value>
     </data>
   <data name="OKLabel" xml:space="preserve">
         <value>OK</value>
     </data>
   <data name="CancelLabel" xml:space="preserve">
-        <value>Cancel</value>
+        <value>Annuleren</value>
     </data>
   <data name="SearchResults" xml:space="preserve">
-        <value>Search Results</value>
+        <value>Zoekresultaten</value>
     </data>
   <data name="NoResultsFound" xml:space="preserve">
-        <value>No results found...</value>
+        <value>Geen resultaten gevonden...</value>
     </data>
   <data name="SearchForSettings" xml:space="preserve">
-        <value>Search for settings...</value>
+        <value>Zoeken naar instellingen...</value>
     </data>
   <data name="AboutTitle" xml:space="preserve">
-        <value>About</value>
+        <value>Informatie</value>
     </data>
   <data name="WineInstallSetting" xml:space="preserve">
-        <value>WINE Install</value>
+        <value>WINE Installatie</value>
     </data>
   <data name="WineInstallSettingDescription" xml:space="preserve">
-        <value>Choose how XIVLauncher will start and manage your WINE installation.</value>
+        <value>Kies hoe XIVLauncher uw WINE-installatie start en beheert.</value>
     </data>
   <data name="WineVersionSetting" xml:space="preserve">
-        <value>WINE Version</value>
+        <value>WINE Versie</value>
     </data>
   <data name="WineVersionSettingDescription" xml:space="preserve">
-        <value>If you change WINE releases, you might have to clear your prefix (Troubleshooting tab)</value>
+        <value>Als u van WINE-release verandert, moet u mogelijk uw prefix wissen (tabblad Probleemoplossing)</value>
     </data>
   <data name="WineBinaryPathSetting" xml:space="preserve">
-        <value>WINE Binary Path</value>
+        <value>WINE Binaire Locate</value>
     </data>
   <data name="WineBinarySettingDescription" xml:space="preserve">
-        <value>Set the path XIVLauncher will use to run applications via WINE.
-It should be an absolute path to a folder containing wine64 and wineserver binaries.</value>
+        <value>Stel het locatie in dat XIVLauncher zal gebruiken om applicaties via WINE uit te voeren.
+Dit moet een absoluut locatie zijn naar een map die de binaire bestanden wine64 en wineserver bevat.</value>
     </data>
   <data name="DXVKVersionSetting" xml:space="preserve">
-        <value>DXVK Version</value>
+        <value>DXVK Versie</value>
     </data>
   <data name="DXVKVersionSettingDescription" xml:space="preserve">
-        <value>Choose which DXVK version to use.</value>
+        <value>Kies welke DXVK-versie u wilt gebruiken.</value>
     </data>
   <data name="DXVKEnableAsyncSetting" xml:space="preserve">
-        <value>Enable DXVK ASYNC</value>
+        <value>DXVK ASYNC inschakelen</value>
     </data>
   <data name="DXVKEnableAsyncSettingDescription" xml:space="preserve">
-        <value>Enable DXVK ASYNC patch.</value>
+        <value>Schakel de DXVK ASYNC-patch in.</value>
     </data>
   <data name="EnableFeralGameModeSetting" xml:space="preserve">
-        <value>Enable Feral's GameMode</value>
+        <value>Schakel Feral's GameMode in</value>
     </data>
   <data name="EnableFeralGameModeSettingDescription" xml:space="preserve">
-        <value>Enable launching with Feral Interactive's GameMode CPU optimizations.</value>
+        <value>Schakel het starten met Feral Interactive's GameMode CPU-optimalisaties in.</value>
     </data>
   <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
-        <value>GameMode was not detected on your system.</value>
+        <value>GameMode is niet gedetecteerd op uw systeem.</value>
     </data>
   <data name="EnableESyncSetting" xml:space="preserve">
-        <value>Enable ESync</value>
+        <value>ESync inschakelen</value>
     </data>
   <data name="EnableFSyncSetting" xml:space="preserve">
-        <value>Enable FSync</value>
+        <value>FSync inschakelen</value>
     </data>
   <data name="EnableESyncSettingDescription" xml:space="preserve">
-        <value>Enable eventfd-based synchronization.</value>
+        <value>Schakel eventfd-gebaseerde synchronisatie in.</value>
     </data>
   <data name="EnableFSyncSettingDescription" xml:space="preserve">
-        <value>Enable fast user mutex (futex2).</value>
+        <value>Snelle gebruikersmutex (futex2) inschakelen.</value>
     </data>
   <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
-        <value>Linux kernel 5.16 or higher is required for FSync.</value>
+        <value>Voor FSync is Linux-kernel 5.16 of hoger vereist.</value>
     </data>
   <data name="SetWindows7Setting" xml:space="preserve">
-        <value>Set Windows version to 7</value>
+        <value>Stel Windows-versie in op 7</value>
     </data>
   <data name="SetWindows7SettingDescription" xml:space="preserve">
-        <value>Default for WINE 8.1+ is Windows 10, but this causes issues with some Dalamud plugins. Windows 7 is recommended for now.</value>
+        <value>De standaardinstelling voor WINE 8.1+ is Windows 10, maar dit veroorzaakt problemen met sommige Dalamud-plugins. Voorlopig wordt Windows 7 aanbevolen.</value>
     </data>
   <data name="EnableDXVKOverlaySetting" xml:space="preserve">
         <value>DXVK Overlay</value>
     </data>
   <data name="EnableDXVKOverlaySettingDescription" xml:space="preserve">
-        <value>Configure how much of the DXVK overlay is to be shown.</value>
+        <value>Configureer hoeveel van de DXVK-overlay moet worden weergegeven.</value>
     </data>
   <data name="WineDebugAdditionalVarSetting" xml:space="preserve">
-        <value>WINEDEBUG Variables</value>
+        <value>WINEDEBUG Variabelen</value>
     </data>
   <data name="WineDebugAdditionalVarSettingDescription" xml:space="preserve">
-        <value>Configure debug logging for WINE. Useful for troubleshooting.</value>
+        <value>Configureer foutopsporingslogboekregistratie voor WINE. Handig voor het oplossen van problemen.</value>
     </data>
   <data name="WineTitle" xml:space="preserve">
         <value>WINE</value>
     </data>
   <data name="CompatibilityToolNotSetup" xml:space="preserve">
-        <value>Compatibility tool has not been set up yet, please ensure you have started the game at least once.</value>
+        <value>De compatibiliteitstool is nog niet ingesteld. Zorg ervoor dat u het spel minstens één keer hebt gestart.</value>
     </data>
   <data name="OpenWINEPrefix" xml:space="preserve">
         <value>Open WINE Prefix</value>
     </data>
   <data name="OpenWINEConfiguration" xml:space="preserve">
-        <value>Open WINE configuration</value>
+        <value>Open WINE-configuratie</value>
     </data>
   <data name="OpenWINEExplorer" xml:space="preserve">
-        <value>Open WINE explorer (run apps in prefix)</value>
+        <value>Open WINE Explorer (apps uitvoeren in prefix)</value>
     </data>
   <data name="KillAllWINEProcesses" xml:space="preserve">
-        <value>Kill all WINE processes</value>
+        <value>Dood alle WINE-processen</value>
     </data>
   <data name="DisableGameoverlayRendererHack" xml:space="preserve">
-        <value>Hack: Disable gameoverlayrenderer.so</value>
+        <value>Hack: Schakel gameoverlayrenderer.so uit</value>
     </data>
   <data name="DisableGameoverlayRendererHackDescription" xml:space="preserve">
-        <value>May fix black screen on launch (Steam Deck) and some stuttering issues after 40+ minutes.</value>
+        <value>Kan het zwarte scherm bij het opstarten (Steam Deck) en enkele haperingen na meer dan 40 minuten verhelpen.</value>
     </data>
   <data name="XModifiersHack" xml:space="preserve">
         <value>Hack: XMODIFIERS="@im=null"</value>
     </data>
   <data name="XModifiersHackDescription" xml:space="preserve">
-        <value>Fixes some mouse-related issues, some stuttering issues</value>
+        <value>Lost enkele muisgerelateerde problemen en enkele haperingen op.</value>
     </data>
   <data name="FixLibICUUCErrorHack" xml:space="preserve">
-        <value>Hack: Fix libicuuc Dalamud error</value>
+        <value>Hack: Libicuuc Dalamud-fout herstellen</value>
     </data>
   <data name="FixLibICUUCErrorHackDescription" xml:space="preserve">
-        <value>Fixes a specific "an internal Dalamud error has occurred." In the terminal you will see this text:
-"Cannot get symbol u_charsToUChars from libicuuc Error: 127"</value>
+        <value>Lost een specifieke “interne Dalamud-fout” op. In de terminal zie je deze tekst:
+“Kan symbool u_charsToUChars niet ophalen uit libicuuc fout: 127”</value>
     </data>
   <data name="ForceLocaleHack" xml:space="preserve">
-        <value>Hack: Force locale to {0}</value>
+        <value>Hack: Forceer locale naar {0}</value>
     </data>
   <data name="ForceLocaleHackCUTF8" xml:space="preserve">
-        <value>C.UTF-8 (exact value depends on distro)</value>
+        <value>C.UTF-8 (exacte waarde hangt af van distributie)</value>
     </data>
   <data name="ForceLocaleHackDescription" xml:space="preserve">
-        <value>Sets LC_ALL and LC_CTYPE to "{0}". This can fix some issues with non-Latin unicode characters in file paths if LANG is not a UTF-8 type</value>
+        <value>Stelt LC_ALL en LC_CTYPE naar “{0}”. Dit kan sommige problemen met niet-Latijnse unicode-tekens in bestandspaden oplossen als LANG geen UTF-8-type is</value>
     </data>
   <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
         <value>Your locale is "{0}". You probably don't need this hack.</value>
+    </data>
+  <data name="ForceDontUseSystemTZ" xml:space="preserve">
+        <value>Don't use system timezone</value>
+    </data>
+  <data name="ForceDontUseSystemDescription" xml:space="preserve">
+        <value>Unsets the TZ environment variable from system provided</value>
     </data>
   <data name="TroubleshootingTitle" xml:space="preserve">
         <value>Troubleshooting</value>

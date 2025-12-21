@@ -162,6 +162,12 @@
   <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
         <value>你的区域设置为 "{0}"，通常无需启用此 Hack。</value>
     </data>
+  <data name="ForceDontUseSystemTZ" xml:space="preserve">
+        <value>Don't use system timezone</value>
+    </data>
+  <data name="ForceDontUseSystemDescription" xml:space="preserve">
+        <value>Unsets the TZ environment variable from system provided</value>
+    </data>
   <data name="TroubleshootingTitle" xml:space="preserve">
         <value>故障排除</value>
     </data>
