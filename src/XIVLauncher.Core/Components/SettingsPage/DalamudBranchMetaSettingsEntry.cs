@@ -13,9 +13,8 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
     public DalamudBranchMetaSettingsEntry(string name, string description, Func<string> load, Action<string?> save)
         : base(name, description, load, save)
     {
-        var branchesTask = DalamudBranchMeta.FetchBranchesAsync();
-        this.BranchTask = branchesTask;
-        branchesTask.Result.ToList().ForEach(b => Branches.Add(b));
+        this.BranchTask = DalamudBranchMeta.FetchBranchesAsync();
+        this.BranchTask.Result.ToList().ForEach(b => Branches.Add(b));
     }
 
     public override void Draw()
