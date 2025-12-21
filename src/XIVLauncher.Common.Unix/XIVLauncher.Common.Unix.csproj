@@ -5,14 +5,15 @@
         <Description>Shared XIVLauncher platform-specific implementations for Unix-like systems.</Description>
         <VersionPrefix>1.0.0</VersionPrefix>
         <Nullable>disable</Nullable>
-    </PropertyGroup>
 
-    <PropertyGroup>
         <OutputType>Library</OutputType>
         <TargetFramework>net9.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Deterministic>true</Deterministic>
         <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+
+        <IsOSX Condition="'$(RuntimeIdentifier)' == 'osx-x64'">true</IsOSX>
+        <IsLinux Condition="'$(RuntimeIdentifier)' == 'linux-x64'">true</IsLinux>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -30,14 +31,14 @@
         <PathMap>$(AppOutputBase)=C:\goatsoft\xl\XIVLauncher.Common.Unix\</PathMap>
     </PropertyGroup>
 
-    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <ItemGroup Condition="'$(IsLinux)'=='true'">
         <None Remove="libsteam_api64.so" />
         <Content Include="libsteam_api64.so">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 
-    <ItemGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <ItemGroup Condition="'$(IsOSX)'=='true'">
         <None Remove="libsteam_api64.dylib" />
         <Content Include="libsteam_api64.dylib">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
