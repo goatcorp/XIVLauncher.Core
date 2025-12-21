@@ -41,7 +41,8 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
 
     public override void Save()
     {
+        Program.Config.DalamudBetaKind = SelectedBranch?.Track;
         Program.Config.DalamudBetaKey = SelectedBranch?.Key;
-        base.Save();
+        Program.DalamudUpdater.Run(Program.Config.DalamudBetaKind,  Program.Config.DalamudBetaKey);
     }
 }
