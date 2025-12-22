@@ -46,18 +46,18 @@ public class SettingsTabWine : SettingsTab
                 CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled
             },
 
-            new SettingsEntry<NvapiVersion>("Dxvk-Nvapi Version (Needed for DLSS)", "Choose which version of Dxvk-Nvapi to use. Does nothing if GPU doesn't support DLSS.", () => Program.Config.NvapiVersion ?? NvapiVersion.Stable, x => Program.Config.NvapiVersion = x)
+            new SettingsEntry<NvapiVersion>(Strings.NvapiVersionSetting, Strings.NvapiVersionSettingDescription, () => Program.Config.NvapiVersion ?? NvapiVersion.Stable, x => Program.Config.NvapiVersion = x)
             {
                 CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled,
                 CheckWarning = x =>
                 {
                     string warning = "";
                     if (dxvkVersionSetting.Value == DxvkVersion.Legacy)
-                        warning += "DLSS will not work with Legacy DXVK. Use Stable instead.\n";
+                        warning += Strings.NvapiLegacyDxvkWarning + "\n";
                     if (startupTypeSetting.Value == WineStartupType.Custom)
-                        warning += "DLSS may not work with custom wine versions. Make sure wine is >= 9.0";
+                        warning += Strings.NvapiCustomWineWarning;
                     else if (wineVersionSetting.Value == WineManagedVersion.Legacy)
-                        warning += "DLSS will not work with Legacy Wine. Use Stable instead, or Custom Wine >= 9.0";
+                        warning += Strings.NvapiLegacyWineWarning;
 
                     warning = warning.Trim();
                     

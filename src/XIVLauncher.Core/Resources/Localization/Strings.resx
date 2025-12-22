@@ -73,6 +73,21 @@ It should be an absolute path to a folder containing wine64 and wineserver binar
     <data name="DXVKEnableAsyncSettingDescription" xml:space="preserve">
         <value>Enable DXVK ASYNC patch.</value>
     </data>
+    <data name="NvapiVersionSetting" xml:space="preserve">
+        <value>Dxvk-Nvapi Version (Needed for DLSS)</value>
+    </data>
+    <data name="NvapiVersionSettingDescription" xml:space="preserve">
+        <value>Choose which version of Dxvk-Nvapi to use. Does nothing if GPU doesn't support DLSS.</value>
+    </data>
+    <data name="NvapiLegacyDxvkWarning" xml:space="preserve">
+        <value>DLSS will not work with Legacy DXVK. Use Stable instead.</value>
+    </data>
+    <data name="NvapiLegacyWineWarning" xml:space="preserve">
+        <value>DLSS will not work with Legacy Wine. Use Stable instead, or Custom Wine 9.0 or later</value>
+    </data>
+    <data name="NvapiCustomWineWarning" xml:space="preserve">
+        <value>DLSS may not work with custom wine versions. Make sure wine is 9.0 or later</value>
+    </data>
     <data name="EnableFeralGameModeSetting" xml:space="preserve">
         <value>Enable Feral's GameMode</value>
     </data>
@@ -272,6 +287,16 @@ It should be an absolute path to a folder containing wine64 and wineserver binar
     <data name="AdditionalGameArgsSettingDescription" xml:space="preserve">
         <value>Follows Steam conventions: VAR1=value VAR2=value %command% -arg1 -arg2.
 Can't pass programs (like gamescope -- %command%). Does not accept flatpak args (--parent-pid=1, etc.)</value>
+    </data>
+    <data name="ExtraWineDLLOverridesSetting" xml:space="preserve">
+        <value>Extra WINEDLLOVERRIDES</value>
+    </data>
+    <data name="ExtraWineDLLOverridesSettingDescription" xml:space="preserve">
+        <value>Add extra WINEDLLOVERRIDES. No spaces, semicolon separated.
+Do not use msquic, mscoree, d3d9, d3d10core, d3d11, or dxgi. These are already set.</value>
+    </data>
+    <data name="ExtraWineDLLOverridesInvalidError" xml:space="preserve">
+        <value>Not a valid WINEDLLOVERRIDE string</value>
     </data>
     <data name="GameLanguageSetting" xml:space="preserve">
         <value>Game Language</value>

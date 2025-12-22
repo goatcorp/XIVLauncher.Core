@@ -33,12 +33,12 @@ public class SettingsTabGame : SettingsTab
         },
 
         new SettingsEntry<string>(Strings.AdditionalGameArgsSetting, Strings.AdditionalGameArgsSettingDescription, () => Program.Config.AdditionalArgs, x => Program.Config.AdditionalArgs = x),
-        new SettingsEntry<string>("Extra WINEDLLOVERRIDES", "Add extra WINEDLLOVERRIDES. No spaces, semicolon separated.\nDo not use msquic, mscoree, d3d9, d3d10core, d3d11, or dxgi. These are already set.", () => Program.Config.WineDLLOverrides ?? "", s => Program.Config.WineDLLOverrides = s)
+        new SettingsEntry<string>(Strings.ExtraWineDLLOverridesSetting, Strings.ExtraWineDLLOverridesSettingDescription , () => Program.Config.WineDLLOverrides ?? "", s => Program.Config.WineDLLOverrides = s)
         {
             CheckValidity = s =>
             {
                 if (!WineSettings.WineDLLOverrideIsValid(s))
-                    return "Not a valid WINEDLLOVERRIDE string";
+                    return Strings.ExtraWineDLLOverridesInvalidError;
                 
                 return null;
             },
