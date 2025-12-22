@@ -705,6 +705,18 @@ namespace XIVLauncher.Core.Resources.Localization {
             }
         }
         
+        internal static string DalamudBranchSwitcher {
+            get {
+                return ResourceManager.GetString("DalamudBranchSwitcher", resourceCulture);
+            }
+        }
+        
+        internal static string DalamudBranchSwitcherDescription {
+            get {
+                return ResourceManager.GetString("DalamudBranchSwitcherDescription", resourceCulture);
+            }
+        }
+        
         internal static string OpenRepositoryButton {
             get {
                 return ResourceManager.GetString("OpenRepositoryButton", resourceCulture);
