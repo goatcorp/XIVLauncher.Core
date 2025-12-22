@@ -58,16 +58,30 @@ public static class Nvapi
 
     // In order for the nvngx dlls to work properly with wine-staging, they need to be in the game directory.
     // The prefix system32 folder will not work. If the dlls are only in system32, the game will hang on startup.
-    public static void CopyNvngx(DirectoryInfo gameDirectory)
+    public static void CopyNvngx(DirectoryInfo gameDirectory, DirectoryInfo prefix, bool installIntoPrefix = true)
     {
         var game = Path.Combine(gameDirectory.FullName, "game");
+        var system32 = Path.Combine(prefix.FullName, "drive_c", "windows", "system32");
+        var installedGame = false;
+        var installedPrefix = false;
         if (File.Exists(Path.Combine(game, "nvngx.dll")) && File.Exists(Path.Combine(game, "_nvngx.dll")))
         {
             // Already installed. Don't bother copying.
             Log.Verbose($"nvngx.dll installed in {game}: True");
-            return;
+            installedGame = true;
         }
-        Log.Verbose($"nvngx.dll installed in {game}: False");
+        else
+            Log.Verbose($"nvngx.dll installed in {game}: False");
+        if (File.Exists(Path.Combine(prefix.FullName, "nvngx.dll")) && File.Exists(Path.Combine(prefix.FullName, "_nvngx.dll")))
+        {
+            // Already installed. Don't bother copying.
+            Log.Verbose($"nvngx.dll installed in {system32}: True");
+            installedPrefix = true;
+        }
+        else
+            Log.Verbose($"nvngx.dll installed in {system32}: False");
+
+        if (installedGame && installedPrefix) return;
 
         var nvngxPath = NvidiaWineDLLPath();
         if (string.IsNullOrEmpty(nvngxPath))
@@ -83,7 +97,10 @@ public static class Nvapi
         // which may be needed in the future. So just copy all the files.
         foreach (var file in files)
         {
-            File.Copy(file, Path.Combine(game, Path.GetFileName(file)), true);
+            if (!installedGame)
+                File.Copy(file, Path.Combine(game, Path.GetFileName(file)), true);
+            if (!installedPrefix && installIntoPrefix)
+                File.Copy(file, Path.Combine(system32, Path.GetFileName(file)), true);
         }
     }
 

@@ -103,7 +103,7 @@ public class CompatibilityTools
         await Dxvk.Dxvk.InstallDxvk(Settings.Prefix, dxvkDirectory, dxvkVersion).ConfigureAwait(false);
         await Nvapi.Nvapi.InstallNvapi(Settings.Prefix, nvapiDirectory, nvapiVersion).ConfigureAwait(false);
         if (nvapiVersion != NvapiVersion.Disabled)
-            Nvapi.Nvapi.CopyNvngx(gameDirectory);
+            Nvapi.Nvapi.CopyNvngx(gameDirectory, Settings.Prefix);
 
         IsToolReady = true;
     }
