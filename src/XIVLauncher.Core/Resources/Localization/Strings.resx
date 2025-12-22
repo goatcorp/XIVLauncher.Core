@@ -354,6 +354,12 @@ Can't pass programs (like gamescope -- %command%). Does not accept flatpak args 
     <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
         <value>Dalamud.Injector.exe was not found inside of the provided directory.</value>
     </data>
+    <data name="DalamudBranchSwitcher" xml:space="preserve">
+        <value>Dalamud Branch</value>
+    </data>
+    <data name="DalamudBranchSwitcherDescription" xml:space="preserve">
+        <value>Change to a different branch of Dalamud. It is recommended to keep this on 'release'.</value>
+    </data>
     <data name="OpenRepositoryButton" xml:space="preserve">
         <value>Open Repository</value>
     </data>
