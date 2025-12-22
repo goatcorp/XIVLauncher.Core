@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -13,8 +13,10 @@ namespace XIVLauncher.Common.Unix.Compatibility.Dxvk;
 
 public enum DxvkVersion
 {
-    [SettingsDescription("Stable", "DXVK 2.7 with GPLAsync patches. For most graphics cards.")]
+    [SettingsDescription("Stable", "DXVK 2.7 with GPLAsync patches. For most graphics cards. AMD/Intel/NVK 25.1 or Nvidia 550")]
     Stable,
+    [SettingsDescription("PreviousStable", "DXVK 2.6.1 with GPLAsync patches. For AMD/Intel 24.0 or Nvidia 535")]
+    PreviousStable,
 
     [SettingsDescription("Legacy", "DXVK 1.10.3 with Async patches. For older graphics cards.")]
     Legacy,
@@ -46,6 +48,7 @@ public static class Dxvk
         IDxvkRelease release = version switch
         {
             DxvkVersion.Stable => new DxvkStableRelease(),
+            DxvkVersion.PreviousStable => new DxvkPreviousStableRelease(),
             DxvkVersion.Legacy => new DxvkLegacyRelease(),
             _ => throw new NotImplementedException(),
         };
