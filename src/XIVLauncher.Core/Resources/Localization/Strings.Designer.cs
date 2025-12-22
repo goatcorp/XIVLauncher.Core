@@ -392,6 +392,18 @@ namespace XIVLauncher.Core.Resources.Localization {
                 return ResourceManager.GetString("ClearManagedCompatToolsTroubleshooting", resourceCulture);
             }
         }
+
+        internal static string ClearNvngxTroubleshootingButton {
+            get {
+                return ResourceManager.GetString("ClearNvngxTroubleshootingButton", resourceCulture);
+            }
+        }
+
+        internal static string ClearNvngxTroubleshooting {
+            get {
+                return ResourceManager.GetString("ClearNvngxTroubleshooting", resourceCulture);
+            }
+        }
         
         internal static string ClearManagedCompatToolsTroubleshootingButton {
             get {

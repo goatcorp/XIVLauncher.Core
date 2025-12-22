@@ -75,11 +75,11 @@ public class SettingsTabTroubleshooting : SettingsTab
         }
         ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearManagedCompatToolsTroubleshooting);
 
-        if (ImGui.Button("Clear Nvngx"))
+        if (ImGui.Button(Strings.ClearNvngxTroubleshootingButton))
         {
             Program.ClearNvngx();
         }
-        ImGui.TextColored(ImGuiColors.DalamudGrey, "\nClear nvngx dlls from game folder");
+        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearNvngxTroubleshooting);
 
         if (ImGui.Button(Strings.ClearDalamudTroubleshootingButton))
         {

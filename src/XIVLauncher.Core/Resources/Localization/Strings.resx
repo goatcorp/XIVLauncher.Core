@@ -194,6 +194,12 @@ It should be an absolute path to a folder containing wine64 and wineserver binar
     <data name="ClearWINEPrefixTroubleshootingButton" xml:space="preserve">
         <value>Clear WINE Prefix</value>
     </data>
+    <data name="ClearNvngxTroubleshooting" xml:space="preserve">
+        <value>Clear nvngx dlls from game folder</value>
+    </data>
+    <data name="ClearNvngxTroubleshootingButton" xml:space="preserve">
+        <value>Clear Nvngx DLLs</value>
+    </data>
     <data name="ClearManagedCompatToolsTroubleshooting" xml:space="preserve">
         <value>Clear the managed WINE install and DXVK</value>
     </data>
