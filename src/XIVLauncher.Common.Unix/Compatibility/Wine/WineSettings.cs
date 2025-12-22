@@ -16,13 +16,13 @@ public enum WineStartupType
 
 public enum WineManagedVersion
 {
-    [SettingsDescription("Stable", "Based on WINE 10.8 - recommended for most users.")]
+    [SettingsDescription("Stable", "The most stable experience, based on WINE 10.8 - recommended for most users.")]
     Stable,
 
-    [SettingsDescription("Beta", "Testing ground for the newest wine changes. Based on WINE 10.8 with lsteamclient patches.")]
+    [SettingsDescription("Beta", "Testing ground for the newest wine changes, based on WINE 10.8 with lsteamclient patches.")]
     Beta,
 
-    [SettingsDescription("Legacy", "Based on WINE 8.5 - use for compatibility with some plugins.")]
+    [SettingsDescription("Legacy", "For older systems or compatibility, based on WINE 8.5.")]
     Legacy,
 }
 
