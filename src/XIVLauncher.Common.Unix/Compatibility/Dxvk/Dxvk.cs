@@ -13,7 +13,7 @@ namespace XIVLauncher.Common.Unix.Compatibility.Dxvk;
 
 public enum DxvkVersion
 {
-    [SettingsDescription("Stable", "DXVK 2.7 with GPLAsync patches. For most graphics cards. AMD/Intel/NVK 25.1 or Nvidia 550")]
+    [SettingsDescription("Stable", "DXVK 2.7 with GPLAsync patches. For most graphics cards. AMD/Intel 25.0 or NVK 25.1 or Nvidia 550")]
     Stable,
     [SettingsDescription("PreviousStable", "DXVK 2.6.1 with GPLAsync patches. For AMD/Intel 24.0 or Nvidia 535")]
     PreviousStable,
