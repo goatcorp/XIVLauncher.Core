@@ -1,7 +1,8 @@
 using System.Diagnostics;
 using System.Numerics;
 
-using ImGuiNET;
+using Hexa.NET.ImGui;
+using Hexa.NET.SDL3;
 
 using Serilog;
 
@@ -83,6 +84,7 @@ public class MainPage : Page
         this.AccountSwitcher.Draw();
 
         this.actionButtons.Draw();
+        ImGui.PopStyleVar();
     }
 
     public void ReloadNews() => this.newsFrame.ReloadNews();
@@ -148,7 +150,11 @@ public class MainPage : Page
 
             if (result)
             {
-                Environment.Exit(0);
+                var sdlEvent = new SDLEvent
+                {
+                    Type = (int)SDLEventType.Quit
+                };
+                SDL.PushEvent(ref sdlEvent);
             }
             else
             {

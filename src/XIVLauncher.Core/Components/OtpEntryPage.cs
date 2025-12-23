@@ -1,6 +1,6 @@
 using System.Numerics;
 
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 using Serilog;
 
@@ -103,7 +103,7 @@ public class OtpEntryPage : Page
         ImGui.SetNextWindowPos(new Vector2(vpSize.X / 2 - childSize.X / 2, vpSize.Y / 2 - childSize.Y / 2), ImGuiCond.Always);
         ImGui.SetNextWindowBgAlpha(0.4f);
 
-        if (ImGui.BeginChild("###otp", childSize, true, ImGuiWindowFlags.AlwaysAutoResize))
+        if (ImGui.BeginChild("###otp", childSize, ImGuiChildFlags.AlwaysAutoResize | ImGuiChildFlags.AutoResizeY | ImGuiChildFlags.AutoResizeX))
         {
             ImGui.Dummy(new Vector2(40));
 
@@ -120,7 +120,7 @@ public class OtpEntryPage : Page
                 this.appearing = false;
             }
 
-            var doEnter = ImGui.InputText("###otpInput", ref this.otp, 6, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.EnterReturnsTrue);
+            var doEnter = ImGui.InputText("###otpInput", ref this.otp, 7, ImGuiInputTextFlags.CharsDecimal | ImGuiInputTextFlags.EnterReturnsTrue);
 
             var buttonSize = new Vector2(INPUT_WIDTH / 2 - 4, 30);
             ImGuiHelpers.CenterCursorFor(INPUT_WIDTH);

@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Numerics;
 
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 using Serilog;
 
@@ -264,14 +264,12 @@ public class LauncherApp : Component
 
         ImGui.SetNextWindowPos(new Vector2(0, 0));
         ImGui.SetNextWindowSize(ImGuiHelpers.ViewportSize);
-
         if (ImGui.Begin("Background",
-                ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNavFocus
-                | ImGuiWindowFlags.NoNavInputs | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+                        ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNavFocus
+                        | ImGuiWindowFlags.NoNavInputs | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
             this.background.Draw();
 
-            ImGui.PushStyleColor(ImGuiCol.WindowBg, ImGuiColors.BlueShade0);
         }
 
         ImGui.End();
@@ -285,6 +283,8 @@ public class LauncherApp : Component
         ImGui.SetNextWindowSize(ImGuiHelpers.ViewportSize);
         ImGui.SetNextWindowBgAlpha(0.75f);
 
+        ImGui.PushStyleColor(ImGuiCol.WindowBg, ImGuiColors.BlueShade0);
+
         if (ImGui.Begin("XIVLauncher", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
             this.CurrentPage.Draw();
@@ -294,6 +294,7 @@ public class LauncherApp : Component
         ImGui.End();
 
         ImGui.PopStyleVar(2);
+        ImGui.PopStyleColor();
 
         this.DrawModal();
     }
