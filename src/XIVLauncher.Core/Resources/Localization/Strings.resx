@@ -358,7 +358,7 @@ Can't pass programs (like gamescope -- %command%). Does not accept flatpak args 
         <value>Dalamud Branch</value>
     </data>
     <data name="DalamudBranchSwitcherDescription" xml:space="preserve">
-        <value>Change to a different branch of Dalamud. It is recommended to keep this on 'release'.</value>
+        <value>Change to a different branch of Dalamud. It is recommended you use the stable branch.</value>
     </data>
     <data name="OpenRepositoryButton" xml:space="preserve">
         <value>Open Repository</value>
