@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:element name="root" msdata:IsDataSet="true">
 
-        </xsd:element>
+    </xsd:element>
   </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
@@ -13,11 +14,11 @@
   </resheader>
   <resheader name="reader">
     <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0,
-            Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+      Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0,
-            Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+      Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EnterYourOTP" xml:space="preserve">
         <value>Por favor introduce tu OTP</value>
@@ -163,7 +164,7 @@ Debería ser una ruta absoluta a una carpeta que contenga los binarios wine64 y 
         <value>Your locale is "{0}". You probably don't need this hack.</value>
     </data>
   <data name="ForceDontUseSystemTZ" xml:space="preserve">
-        <value>Don't use system timezone</value>
+        <value>Hack: Don't use system timezone.</value>
     </data>
   <data name="ForceDontUseSystemDescription" xml:space="preserve">
         <value>Unsets the TZ environment variable from system provided</value>
