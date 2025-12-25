@@ -22,7 +22,7 @@ internal class AddonListParser : ITypeParser
     {
         if (t == typeof(List<AddonEntry>))
         {
-            result = JsonConvert.DeserializeObject<List<AddonEntry>>(value);
+            result = JsonConvert.DeserializeObject<List<AddonEntry>>(value)!;
             return true;
         }
 

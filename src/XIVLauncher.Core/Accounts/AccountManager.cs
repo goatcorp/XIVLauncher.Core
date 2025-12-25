@@ -92,11 +92,10 @@ public class AccountManager
             Save();
             return;
         }
-
-        Accounts = JsonConvert.DeserializeObject<ObservableCollection<XivAccount>>(File.ReadAllText(this.configFile.FullName));
-
-        // If the file is corrupted, this will be null anyway
-        Accounts ??= new ObservableCollection<XivAccount>();
+        
+        var accounts = JsonConvert.DeserializeObject<ObservableCollection<XivAccount>>(File.ReadAllText(this.configFile.FullName));
+        accounts ??= new ObservableCollection<XivAccount>();
+        Accounts = accounts;
     }
 
     #endregion

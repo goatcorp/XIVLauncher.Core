@@ -15,7 +15,7 @@ public static partial class AppUtil
             throw new ArgumentException($"Resource {resourceName} not found", nameof(resourceName));
 
         var ret = new byte[s.Length];
-        s.Read(ret, 0, (int)s.Length);
+        s.ReadExactly(ret, 0, (int)s.Length);
         return ret;
     }
 
