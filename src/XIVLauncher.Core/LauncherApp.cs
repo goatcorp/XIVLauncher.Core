@@ -138,7 +138,7 @@ public class LauncherApp : Component
 
         if (!EnvironmentSettings.IsNoKillswitch && !string.IsNullOrEmpty(cutOffBootver))
         {
-            var bootver = SeVersion.Parse(Repository.Boot.GetVer(Program.Config.GamePath));
+            var bootver = SeVersion.Parse(Repository.Boot.GetVer(Program.Config.GamePath!));
             var cutoff = SeVersion.Parse(cutOffBootver);
 
             if (bootver > cutoff)

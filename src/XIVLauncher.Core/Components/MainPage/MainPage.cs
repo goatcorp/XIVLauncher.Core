@@ -129,7 +129,7 @@ public class MainPage : Page
                 return;
             }
 
-            if (Repository.Ffxiv.GetVer(App.Settings.GamePath) == Constants.BASE_GAME_VERSION &&
+            if (Repository.Ffxiv.GetVer(App.Settings.GamePath!) == Constants.BASE_GAME_VERSION &&
                 App.Settings.IsUidCacheEnabled == true)
             {
                 App.ShowMessageBlocking(
@@ -168,6 +168,7 @@ public class MainPage : Page
         {
             IGameRunner gameRunner;
             // FIXME: Should we really be passing a null DalamudLauncher to both of these?
+            // This might need a sort of launcher stub to pass all checks but perform no actions
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 gameRunner = new WindowsGameRunner(null, false);
             else
@@ -350,6 +351,8 @@ public class MainPage : Page
 #endif
 
         Debug.Assert(loginResult.State == Launcher.LoginState.Ok);
+        Debug.Assert(loginResult.UniqueId != null);
+        Debug.Assert(loginResult.OauthLogin != null);
 
         while (true)
         {
@@ -551,7 +554,7 @@ public class MainPage : Page
         Troubleshooting.LogTroubleshooting();
 
         var dalamudLauncher = new DalamudLauncher(dalamudRunner, Program.DalamudUpdater,
-            App.Settings.DalamudLoadMethod.GetValueOrDefault(DalamudLoadMethod.DllInject), App.Settings.GamePath,
+            App.Settings.DalamudLoadMethod.GetValueOrDefault(DalamudLoadMethod.DllInject), App.Settings.GamePath!,
             App.Storage.Root, App.Storage.GetFolder("logs"), App.Settings.ClientLanguage ?? ClientLanguage.English,
             App.Settings.DalamudLoadDelay, false, noPlugins, noThird, Troubleshooting.GetTroubleshootingJson());
 
@@ -575,7 +578,7 @@ public class MainPage : Page
             try
             {
                 App.StartLoading(Strings.WaitingForDalamud, Strings.PleaseBePatient);
-                dalamudOk = dalamudLauncher.HoldForUpdate(App.Settings.GamePath) == DalamudLauncher.DalamudInstallState.Ok;
+                dalamudOk = dalamudLauncher.HoldForUpdate(App.Settings.GamePath!) == DalamudLauncher.DalamudInstallState.Ok;
             }
             catch (DalamudRunnerException ex)
             {
@@ -738,12 +741,12 @@ public class MainPage : Page
 
         // We won't do any sanity checks here anymore, since that should be handled in StartLogin
         var launchedProcess = App.Launcher.LaunchGame(runner,
-            loginResult.UniqueId,
-            loginResult.OauthLogin.Region,
+            loginResult.UniqueId!,
+            loginResult.OauthLogin!.Region,
             loginResult.OauthLogin.MaxExpansion,
             isSteam,
             gameArgs,
-            App.Settings.GamePath,
+            App.Settings.GamePath!,
             App.Settings.ClientLanguage.GetValueOrDefault(ClientLanguage.English),
             App.Settings.IsEncryptArgs.GetValueOrDefault(true),
             App.Settings.DpiAwareness.GetValueOrDefault(DpiAwareness.Unaware));
@@ -880,6 +883,7 @@ public class MainPage : Page
             "loginResult.State == Launcher.LoginState.NeedsPatchGame ASSERTION FAILED");
 
         Debug.Assert(loginResult.PendingPatches != null, "loginResult.PendingPatches != null ASSERTION FAILED");
+        Debug.Assert(loginResult.UniqueId != null, "loginResult.UniqueId != null ASSERTION FAILED");
 
         return TryHandlePatchAsync(Repository.Ffxiv, loginResult.PendingPatches, loginResult.UniqueId);
     }
@@ -905,9 +909,9 @@ public class MainPage : Page
             return false;
         }
 
-        using var installer = new PatchInstaller(App.Settings.GamePath, App.Settings.KeepPatches ?? false);
-        Program.Patcher = new PatchManager(App.Settings.PatchAcquisitionMethod ?? AcquisitionMethod.Aria, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
-            App.Settings.PatchPath, installer, App.Launcher, sid);
+        using var installer = new PatchInstaller(App.Settings.GamePath!, App.Settings.KeepPatches ?? false);
+        Program.Patcher = new PatchManager(App.Settings.PatchAcquisitionMethod ?? AcquisitionMethod.Aria, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath!,
+            App.Settings.PatchPath!, installer, App.Launcher, sid);
         Program.Patcher.OnFail += PatcherOnFail;
         installer.OnFail += this.InstallerOnFail;
 
@@ -1035,6 +1039,7 @@ public class MainPage : Page
 
         Debug.Assert(loginResult.PendingPatches != null, "loginResult.PendingPatches != null ASSERTION FAILED");
         Debug.Assert(loginResult.PendingPatches.Length != 0, "loginResult.PendingPatches.Length != 0 ASSERTION FAILED");
+        Debug.Assert(loginResult.OauthLogin != null, "loginResult.OauthLogin != null ASSERTION FAILED");
 
         Log.Information("STARTING REPAIR");
 

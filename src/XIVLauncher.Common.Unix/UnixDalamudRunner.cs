@@ -23,7 +23,7 @@ public class UnixDalamudRunner : IDalamudRunner
         this.dotnetRuntime = dotnetRuntime;
     }
 
-    public Process? Run(FileInfo runner, bool fakeLogin, bool noPlugins, bool noThirdPlugins, FileInfo gameExe, string gameArgs, IDictionary<string, string> environment, DalamudLoadMethod loadMethod, DalamudStartInfo startInfo)
+    public Process Run(FileInfo runner, bool fakeLogin, bool noPlugins, bool noThirdPlugins, FileInfo gameExe, string gameArgs, IDictionary<string, string> environment, DalamudLoadMethod loadMethod, DalamudStartInfo startInfo)
     {
         var gameExePath = "";
         var dotnetRuntimePath = "";
