@@ -22,7 +22,7 @@ public class UnixGameRunner : IGameRunner
         this.dalamudOk = dalamudOk;
     }
 
-    public Process? Start(string path, string workingDirectory, string arguments, IDictionary<string, string> environment, DpiAwareness dpiAwareness)
+    public Process Start(string path, string workingDirectory, string arguments, IDictionary<string, string> environment, DpiAwareness dpiAwareness)
     {
         if (dalamudOk)
         {
@@ -36,9 +36,6 @@ public class UnixGameRunner : IGameRunner
             }
             return this.dalamudLauncher.Run(new FileInfo(path), arguments, environment);
         }
-        else
-        {
-            return compatibility.RunInPrefix($"\"{path}\" {arguments}", workingDirectory, environment, writeLog: true);
-        }
+        return compatibility.RunInPrefix($"\"{path}\" {arguments}", workingDirectory, environment, writeLog: true);
     }
 }
