@@ -352,6 +352,12 @@ Impossible de passer des programmes (comme le gamescope -- %command%). N'accepte
   <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
         <value>Dalamud.Injector.exe n'a pas été trouvé dans le répertoire fourni.</value>
     </data>
+  <data name="DalamudBranchSwitcher" xml:space="preserve">
+        <value>Branche de Dalamud</value>
+    </data>
+  <data name="DalamudBranchSwitcherDescription" xml:space="preserve">
+        <value>Passer vers une autre branche de Dalamud. Il est recommandé de garder ceci sur "Stable".</value>
+    </data>
   <data name="OpenRepositoryButton" xml:space="preserve">
         <value>Ouvrir le dépôt du projet</value>
     </data>
