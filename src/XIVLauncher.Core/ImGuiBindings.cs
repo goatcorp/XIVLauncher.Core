@@ -30,8 +30,6 @@ namespace XIVLauncher.Core;
 /// </summary>
 public class ImGuiBindings : IDisposable
 {
-    private bool frameBegun;
-
     // Hexa.NET objects
     private unsafe SDLWindow* window;
     private unsafe SDLGPUDevice* device;
@@ -39,29 +37,10 @@ public class ImGuiBindings : IDisposable
     private uint uploadSize = 0;
     private Vector4 clearColor = new(0.1f, 0.1f, 0.1f, 1.0f);
 
-    private IntPtr fontAtlasID = (IntPtr)1;
-    private bool controlDown;
-    private bool shiftDown;
-    private bool altDown;
-    private bool winKeyDown;
-
     private IntPtr iniPathPtr;
-
-    private int windowWidth;
-    private int windowHeight;
-    private Vector2 scaleFactor = Vector2.One;
 
     private readonly List<Tuple<Pointer<SDLGPUTexture>, Pointer<SDLSurface>>> texturesToBind = [];
     private readonly List<TextureWrap> texturesReferenced = [];
-    private int lastAssignedID = 100;
-
-    private delegate void SetClipboardTextDelegate(IntPtr userData, string text);
-
-    private delegate string GetClipboardTextDelegate();
-
-    // variables because they need to exist for the program duration without being gc'd
-    private SetClipboardTextDelegate setText;
-    private GetClipboardTextDelegate getText;
 
     /// <summary>
     /// Constructs a new ImGuiController.

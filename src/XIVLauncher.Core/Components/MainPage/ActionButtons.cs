@@ -1,6 +1,6 @@
-using System.Numerics;
-
 using Hexa.NET.ImGui;
+
+using System.Numerics;
 
 using XIVLauncher.Core.Resources.Localization;
 
@@ -15,7 +15,7 @@ public class ActionButtons : Component
     public override void Draw()
     {
         var btnSize = new Vector2(80) * ImGuiHelpers.GlobalScale;
-        
+
         ImGui.PushFont(FontManager.IconFont, 0.0f);
         ImGui.BeginDisabled(this.OnAccountButtonClicked == null);
         if (ImGui.Button(FontAwesomeIcon.User.ToIconString(), btnSize))

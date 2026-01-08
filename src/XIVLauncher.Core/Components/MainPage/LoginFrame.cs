@@ -1,6 +1,6 @@
-using System.Numerics;
-
 using Hexa.NET.ImGui;
+
+using System.Numerics;
 
 using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.Common;
@@ -173,7 +173,7 @@ public class LoginFrame : Component
 
                 ImGui.Dummy(new Vector2(15));
             }
-        
+
             ImGui.PushFont(FontManager.IconFont, 0.0f);
 
             var extraButtonSize = new Vector2(45) * ImGuiHelpers.GlobalScale;

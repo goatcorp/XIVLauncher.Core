@@ -1,13 +1,15 @@
+using Config.Net;
+
+using Hexa.NET.SDL3;
+
+using Serilog;
+
 using System.Numerics;
 using System.Runtime.InteropServices;
-using Config.Net;
-using Hexa.NET.SDL3;
-using Serilog;
+
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch;
-using XIVLauncher.Common.Game.Patch.Acquisition;
-using XIVLauncher.Common.Game.Patch.Acquisition.Aria;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Support;
 using XIVLauncher.Common.Unix;
@@ -22,6 +24,7 @@ using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Configuration;
 using XIVLauncher.Core.Configuration.Parsers;
 using XIVLauncher.Core.Style;
+
 using SDLGPUDevice = Hexa.NET.SDL3.SDLGPUDevice;
 using SDLWindow = Hexa.NET.SDL3.SDLWindow;
 

@@ -1,7 +1,7 @@
 
-using System.Net.Http.Json;
-
 using Serilog;
+
+using System.Net.Http.Json;
 
 namespace XIVLauncher.Core;
 

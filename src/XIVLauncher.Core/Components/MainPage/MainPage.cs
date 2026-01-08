@@ -1,10 +1,10 @@
-using System.Diagnostics;
-using System.Numerics;
-
 using Hexa.NET.ImGui;
 using Hexa.NET.SDL3;
 
 using Serilog;
+
+using System.Diagnostics;
+using System.Numerics;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Addon;

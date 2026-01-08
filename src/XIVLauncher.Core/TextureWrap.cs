@@ -1,10 +1,9 @@
-using System.Numerics;
-
-using System.Runtime.InteropServices;
-
 using Hexa.NET.ImGui;
 using Hexa.NET.SDL3;
 using Hexa.NET.SDL3.Image;
+
+using System.Numerics;
+using System.Runtime.InteropServices;
 
 namespace XIVLauncher.Core;
 
@@ -18,7 +17,7 @@ public class TextureWrap : IDisposable, IEquatable<TextureWrap>
 
     public unsafe uint Width => (uint)this.surface->W;
 
-    public unsafe uint Height =>(uint)this.surface->H;
+    public unsafe uint Height => (uint)this.surface->H;
 
     public Vector2 Size => new(this.Width, this.Height);
 

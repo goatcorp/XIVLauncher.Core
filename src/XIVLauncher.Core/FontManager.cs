@@ -1,6 +1,6 @@
-using System.Runtime.InteropServices;
-
 using Hexa.NET.ImGui;
+
+using System.Runtime.InteropServices;
 
 namespace XIVLauncher.Core;
 
@@ -56,7 +56,7 @@ public class FontManager
             pxSize,
             fontConfig,
             (uint*)iconRangeHandle.AddrOfPinnedObject());
-        
+
         fontConfig.Destroy();
         japaneseRangeHandle.Free();
         iconRangeHandle.Free();

@@ -1,6 +1,6 @@
-using System.Numerics;
-
 using Hexa.NET.ImGui;
+
+using System.Numerics;
 
 namespace XIVLauncher.Core.Components.LoadingPage;
 
@@ -24,7 +24,7 @@ public class Spinner : Component
         var pos = ImGui.GetCursorPos();
 
         ImGui.Dummy(new Vector2(this.radius * 2) + (framePadding * 2));
-        
+
         var time = ImGui.GetTime() / 1.2;
 
         const int NUM_SEGMENTS = 30;

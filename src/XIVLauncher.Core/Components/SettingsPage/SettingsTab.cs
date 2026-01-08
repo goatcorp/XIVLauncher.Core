@@ -1,6 +1,6 @@
-using System.Numerics;
-
 using Hexa.NET.ImGui;
+
+using System.Numerics;
 
 namespace XIVLauncher.Core.Components.SettingsPage;
 
