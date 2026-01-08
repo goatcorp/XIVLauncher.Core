@@ -1,7 +1,6 @@
 using XIVLauncher.Common;
 using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
-using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
 
@@ -48,8 +47,6 @@ public interface ILauncherConfig
     public DirectoryInfo? PatchPath { get; set; }
 
     public bool? KeepPatches { get; set; }
-
-    public AcquisitionMethod? PatchAcquisitionMethod { get; set; }
 
     public long PatchSpeedLimit { get; set; }
 

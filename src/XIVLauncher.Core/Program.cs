@@ -107,7 +107,6 @@ sealed class Program
         Config.IsIgnoringSteam = CoreEnvironmentSettings.UseSteam.HasValue ? !CoreEnvironmentSettings.UseSteam.Value : Config.IsIgnoringSteam ?? false;
 
         Config.PatchPath ??= storage.GetFolder("patch");
-        Config.PatchAcquisitionMethod ??= AcquisitionMethod.Aria;
 
         Config.DalamudEnabled ??= true;
         Config.DalamudLoadMethod ??= DalamudLoadMethod.EntryPoint;
@@ -337,7 +336,6 @@ sealed class Program
                 // PatchManager.UnInitializeAcquisition() is private but the function bellow is the only call that is in the method and is public accessible
                 try
                 {
-                    AriaHttpPatchAcquisition.UnInitializeAsync().ConfigureAwait(false);
                     Environment.Exit(0);
                 }
                 catch (Exception ex)

@@ -12,7 +12,7 @@ using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game;
 using XIVLauncher.Common.Game.Exceptions;
 using XIVLauncher.Common.Game.Patch;
-using XIVLauncher.Common.Game.Patch.Acquisition;
+using XIVLauncher.Common.Game.Patch.Acquisition.Aria;
 using XIVLauncher.Common.Game.Patch.PatchList;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Unix;
@@ -239,11 +239,12 @@ public class MainPage : Page
         {
             var enableUidCache = App.Settings.IsUidCacheEnabled ?? false;
             var gamePath = App.Settings.GamePath!;
+            var language = App.Settings.ClientLanguage ?? ClientLanguage.English;
 
             if (action == LoginAction.Repair)
-                return await App.Launcher.Login(username, password, otp, isSteam, false, gamePath, true, isFreeTrial).ConfigureAwait(false);
+                return await App.Launcher.Login(username, password, otp, isSteam, false, gamePath, true, isFreeTrial, language).ConfigureAwait(false);
             else
-                return await App.Launcher.Login(username, password, otp, isSteam, enableUidCache, gamePath, false, isFreeTrial).ConfigureAwait(false);
+                return await App.Launcher.Login(username, password, otp, isSteam, enableUidCache, gamePath, false, isFreeTrial, language).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -912,8 +913,9 @@ public class MainPage : Page
         }
 
         using var installer = new PatchInstaller(App.Settings.GamePath, App.Settings.KeepPatches ?? false);
-        Program.Patcher = new PatchManager(App.Settings.PatchAcquisitionMethod ?? AcquisitionMethod.Aria, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
-            App.Settings.PatchPath, installer, App.Launcher, sid);
+        using var acquisition = new AriaPatchAcquisition(new FileInfo(Path.Combine(App.Storage.GetFolder("logs").FullName, "aria2.log")));
+        Program.Patcher = new PatchManager(acquisition, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
+                                           App.Settings.PatchPath, installer, App.Launcher, sid);
         Program.Patcher.OnFail += PatcherOnFail;
         installer.OnFail += this.InstallerOnFail;
 
@@ -956,8 +958,7 @@ public class MainPage : Page
 
             try
             {
-                var aria2LogFile = new FileInfo(Path.Combine(App.Storage.GetFolder("logs").FullName, "launcher.log"));
-                await Program.Patcher.PatchAsync(aria2LogFile, false).ConfigureAwait(false);
+                await Program.Patcher.PatchAsync(false).ConfigureAwait(false);
             }
             finally
             {
@@ -1045,7 +1046,7 @@ public class MainPage : Page
         Log.Information("STARTING REPAIR");
 
         // TODO: bundle the PatchInstaller with xl-core on Windows and run this remotely
-        using var verify = new PatchVerifier(Program.CommonSettings, loginResult, TimeSpan.FromMilliseconds(100), loginResult.OauthLogin.MaxExpansion, false);
+        using var verify = new PatchVerifier(Program.Config.GamePath!, Program.Config.PatchPath!, loginResult, TimeSpan.FromMilliseconds(100), loginResult.OauthLogin.MaxExpansion, false);
 
         for (var doVerify = true; doVerify;)
         {
