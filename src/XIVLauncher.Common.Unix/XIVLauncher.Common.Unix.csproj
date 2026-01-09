@@ -31,20 +31,6 @@
         <PathMap>$(AppOutputBase)=C:\goatsoft\xl\XIVLauncher.Common.Unix\</PathMap>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(IsLinux)'=='true'">
-        <None Remove="libsteam_api64.so" />
-        <Content Include="libsteam_api64.so">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(IsOSX)'=='true'">
-        <None Remove="libsteam_api64.dylib" />
-        <Content Include="libsteam_api64.dylib">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-
     <ItemGroup>
         <!-- Custom steamworks, based on the chippy branch of Facepunch.Steamworks -->
         <PackageReference Include="goaaats.Steamworks" Version="2.3.4" />
