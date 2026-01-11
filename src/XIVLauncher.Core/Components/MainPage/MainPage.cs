@@ -146,7 +146,11 @@ public class MainPage : Page
 
             App.Settings.IsAutologin = this.loginFrame.IsAutoLogin;
 
+            Log.Information($"Logging into game");
+
             var result = await Login(loginFrame.Username, loginFrame.Password, loginFrame.IsOtp, loginFrame.IsSteam, loginFrame.IsFreeTrial, false, action).ConfigureAwait(false);
+
+            Log.Information($"Login returned with state: {result}");
 
             if (result)
             {
