@@ -146,11 +146,7 @@ public class MainPage : Page
 
             App.Settings.IsAutologin = this.loginFrame.IsAutoLogin;
 
-            Log.Information($"Logging into game");
-
             var result = await Login(loginFrame.Username, loginFrame.Password, loginFrame.IsOtp, loginFrame.IsSteam, loginFrame.IsFreeTrial, false, action).ConfigureAwait(false);
-
-            Log.Information($"Login returned with state: {result}");
 
             if (result)
             {
@@ -158,7 +154,11 @@ public class MainPage : Page
                 {
                     Type = (int)SDLEventType.Quit
                 };
-                SDL.PushEvent(ref sdlEvent);
+                if (SDL.PushEvent(ref sdlEvent))
+                {
+                    Log.Error($"Failed to push event to SDL queue: {SDL.GetErrorS()}\n\tRequesting hard shutoff outside of SDL systems.");
+                    Program.HardRequestStop = true;
+                }
             }
             else
             {

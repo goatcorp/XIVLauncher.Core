@@ -57,6 +57,7 @@ sealed class Program
     public static Storage storage = null!;
     public static DirectoryInfo DotnetRuntime => storage.GetFolder("runtime");
     public static string CType = CoreEnvironmentSettings.GetCType();
+    public static bool HardRequestStop = false;
 
     // TODO: We don't have the steamworks api for this yet.
     public static bool IsSteamDeckHardware => CoreEnvironmentSettings.IsDeck.HasValue ?
@@ -312,10 +313,7 @@ sealed class Program
             Log.Information("Starting Rendering");
             while (!done)
             {
-                if (guiBindings.ProcessExit())
-                {
-                    done = true;
-                }
+                done = guiBindings.ProcessExit() || HardRequestStop;
 
                 if ((SDL.GetWindowFlags(window) & SDLWindowFlags.Minimized) != 0)
                 {
