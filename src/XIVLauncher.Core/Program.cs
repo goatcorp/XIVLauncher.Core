@@ -387,6 +387,7 @@ sealed class Program
 
             case "KEYRING":
                 {
+                    Log.Information("Loading keyring secret provider...");
                     var keyChain = new KeychainSecretProvider();
 
                     if (!keyChain.IsAvailable)
