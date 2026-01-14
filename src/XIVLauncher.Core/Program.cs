@@ -57,7 +57,6 @@ sealed class Program
     public static Storage storage = null!;
     public static DirectoryInfo DotnetRuntime => storage.GetFolder("runtime");
     public static string CType = CoreEnvironmentSettings.GetCType();
-    public static bool HardRequestStop = false;
 
     // TODO: We don't have the steamworks api for this yet.
     public static bool IsSteamDeckHardware => CoreEnvironmentSettings.IsDeck.HasValue ?
@@ -310,10 +309,9 @@ sealed class Program
             SDL.ShowWindow(window);
 
             var done = false;
-            Log.Information("Starting Rendering");
             while (!done)
             {
-                done = guiBindings.ProcessExit() || HardRequestStop;
+                done = guiBindings.ProcessExit();
 
                 if ((SDL.GetWindowFlags(window) & (SDLWindowFlags.Minimized | SDLWindowFlags.Hidden)) != 0)
                 {
@@ -325,16 +323,10 @@ sealed class Program
                 launcherApp.Draw();
                 guiBindings.Render();
             }
-            Log.Information("Stopping Rendering and starting exit");
             guiBindings.Dispose();
-
-            Log.Information("Releasing Window from GPU Device");
             SDL.ReleaseWindowFromGPUDevice(gpuDevice, window);
-            Log.Information("Destoying GPU Device");
             SDL.DestroyGPUDevice(gpuDevice);
-            Log.Information("Destroying Window");
             SDL.DestroyWindow(window);
-            Log.Information("Quiting SDL");
             SDL.Quit();
 
             if (Patcher is not null)

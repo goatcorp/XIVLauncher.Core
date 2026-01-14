@@ -156,8 +156,7 @@ public class MainPage : Page
                 };
                 if (SDL.PushEvent(ref sdlEvent))
                 {
-                    Log.Error($"Failed to push event to SDL queue: {SDL.GetErrorS()}\n\tRequesting hard shutoff outside of SDL systems.");
-                    Program.HardRequestStop = true;
+                    Log.Error($"Failed to push event to SDL queue: {SDL.GetErrorS()}");
                 }
             }
             else
