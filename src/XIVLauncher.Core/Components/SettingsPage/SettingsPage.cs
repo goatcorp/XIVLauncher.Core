@@ -117,7 +117,7 @@ public class SettingsPage : Page
 
         ImGui.SetCursorPos(ImGuiHelpers.ViewportSize - new Vector2(60));
 
-        if (ImGui.BeginChild("###settingsFinishButton"))
+        if (ImGui.BeginChild("###settingsFinishButton", ImGuiChildFlags.NavFlattened))
         {
             ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 100f);
             ImGui.PushFont(FontManager.IconFont, 0.0f);
