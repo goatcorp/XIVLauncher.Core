@@ -1,8 +1,8 @@
+using System.Numerics;
+
 using Hexa.NET.ImGui;
 
 using Serilog;
-
-using System.Numerics;
 
 namespace XIVLauncher.Core.Components.Common;
 
@@ -92,7 +92,7 @@ public class Input : Component
             ImGui.BeginDisabled();
             isDisabled = true;
         }
-            
+
 
         var ww = ImGui.GetWindowWidth();
         ImGui.SetNextItemWidth(ww);

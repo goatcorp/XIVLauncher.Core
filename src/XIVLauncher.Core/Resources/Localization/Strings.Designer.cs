@@ -164,46 +164,10 @@ namespace XIVLauncher.Core.Resources.Localization {
                 return ResourceManager.GetString("EnableFeralGameModeNotFoundValidation", resourceCulture);
             }
         }
-        
-        internal static string EnableESyncSetting {
-            get {
-                return ResourceManager.GetString("EnableESyncSetting", resourceCulture);
-            }
-        }
-        
-        internal static string EnableFSyncSetting {
-            get {
-                return ResourceManager.GetString("EnableFSyncSetting", resourceCulture);
-            }
-        }
-        
-        internal static string EnableESyncSettingDescription {
-            get {
-                return ResourceManager.GetString("EnableESyncSettingDescription", resourceCulture);
-            }
-        }
-        
-        internal static string EnableFSyncSettingDescription {
-            get {
-                return ResourceManager.GetString("EnableFSyncSettingDescription", resourceCulture);
-            }
-        }
-        
+
         internal static string EnableFSyncSettingMinKernelValidation {
             get {
                 return ResourceManager.GetString("EnableFSyncSettingMinKernelValidation", resourceCulture);
-            }
-        }
-        
-        internal static string SetWindows7Setting {
-            get {
-                return ResourceManager.GetString("SetWindows7Setting", resourceCulture);
-            }
-        }
-        
-        internal static string SetWindows7SettingDescription {
-            get {
-                return ResourceManager.GetString("SetWindows7SettingDescription", resourceCulture);
             }
         }
         

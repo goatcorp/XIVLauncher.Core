@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
+
 using Steamworks;
+
 using XIVLauncher.Common.PlatformAbstractions;
 
 namespace XIVLauncher.Common.Unix
