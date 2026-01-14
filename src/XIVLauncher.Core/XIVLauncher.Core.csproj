@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -17,15 +17,10 @@
         <PublishSingleFile>true</PublishSingleFile>
         <SelfContained>true</SelfContained>
 
-        <IsWindows
-            Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
-            true</IsWindows>
-        <IsOSX
-            Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">
-            true</IsOSX>
-        <IsLinux
-            Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">
-            true</IsLinux>
+        <IsWindows Condition="'$(RuntimeIdentifier)' == 'win-x64'">true</IsWindows>
+        <IsOSX Condition="'$(RuntimeIdentifier)' == 'osx-x64'">true</IsOSX>
+        <IsLinux Condition="'$(RuntimeIdentifier)' == 'linux-x64'">true</IsLinux>
+        <Configurations>Debug;Release</Configurations>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -48,16 +43,25 @@
         <PathMap>$(AppOutputBase)=C:\goatsoft\xl\XIVLauncher.Core\</PathMap>
     </PropertyGroup>
 
+    <ItemGroup Condition="'$(IsLinux)'=='true'">
+        <None Remove="libsteam_api64.so" />
+        <Content Include="libsteam_api64.so">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(IsOSX)'=='true'">
+        <None Remove="libsteam_api64.dylib" />
+        <Content Include="libsteam_api64.dylib">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
     <ItemGroup>
-        <ProjectReference
-            Include="../XIVLauncher.VersionGenerator/XIVLauncher.VersionGenerator.csproj"
-            OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-        <ProjectReference
-            Include="..\XIVLauncher.Common.Unix\XIVLauncher.Common.Unix.csproj" />
-        <ProjectReference
-            Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common.Windows\XIVLauncher.Common.Windows.csproj" />
-        <ProjectReference
-            Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
+        <ProjectReference Include="../XIVLauncher.VersionGenerator/XIVLauncher.VersionGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\XIVLauncher.Common.Unix\XIVLauncher.Common.Unix.csproj" />
+        <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common.Windows\XIVLauncher.Common.Windows.csproj" />
+        <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -66,32 +70,18 @@
 
     <ItemGroup>
         <PackageReference Include="Config.Net" Version="4.19.0" />
-        <PackageReference Include="ImGui.NET" Version="1.87.2" />
         <PackageReference Include="KeySharp" Version="1.0.5" />
         <PackageReference Include="Serilog" Version="4.3.0" />
         <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-        <PackageReference Include="Veldrid" Version="4.9.0" />
-        <PackageReference Include="Veldrid.ImageSharp" Version="4.9.0" />
-        <PackageReference Include="Veldrid.SDL2" Version="4.9.0" />
-        <PackageReference Include="Veldrid.StartupUtilities" Version="4.9.0" />
+        <PackageReference Include="Hexa.NET.ImGui" Version="2.2.9" />
+        <PackageReference Include="Hexa.NET.ImGui.Backends.SDL3" Version="1.0.18" />
+        <PackageReference Include="Hexa.NET.SDL3" Version="1.2.16" />
+        <PackageReference Include="Hexa.NET.SDL3.Image" Version="1.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Shaders/GLSL/imgui-vertex.glsl" LogicalName="imgui-vertex.glsl" />
-        <EmbeddedResource Include="Shaders/GLSL/imgui-frag.glsl" LogicalName="imgui-frag.glsl" />
-        <EmbeddedResource Include="Shaders/HLSL/imgui-vertex.hlsl.bytes"
-            LogicalName="imgui-vertex.hlsl.bytes" />
-        <EmbeddedResource Include="Shaders/HLSL/imgui-frag.hlsl.bytes"
-            LogicalName="imgui-frag.hlsl.bytes" />
-        <EmbeddedResource Include="Shaders/SPIR-V/imgui-vertex.spv" LogicalName="imgui-vertex.spv" />
-        <EmbeddedResource Include="Shaders/SPIR-V/imgui-frag.spv" LogicalName="imgui-frag.spv" />
-        <EmbeddedResource Include="Shaders/Metal/imgui-vertex.metallib"
-            LogicalName="imgui-vertex.metallib" />
-        <EmbeddedResource Include="Shaders/Metal/imgui-frag.metallib"
-            LogicalName="imgui-frag.metallib" />
         <EmbeddedResource Update="Resources\Localization\Strings.resx">
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Strings.Designer.cs</LastGenOutput>
@@ -99,20 +89,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources/fonts/FontAwesome5FreeSolid.otf"
-            LogicalName="FontAwesome5FreeSolid.otf" />
-        <EmbeddedResource Include="Resources/fonts/NotoSansCJKjp-Regular.otf"
-            LogicalName="NotoSansCJKjp-Regular.otf" />
+        <EmbeddedResource Include="Resources/fonts/FontAwesome5FreeSolid.otf" LogicalName="FontAwesome5FreeSolid.otf" />
+        <EmbeddedResource Include="Resources/fonts/NotoSansCJKjp-Regular.otf" LogicalName="NotoSansCJKjp-Regular.otf" />
 
         <EmbeddedResource Include="Resources/logo.png" LogicalName="logo.png" />
 
         <EmbeddedResource Include="Resources/bg_logo.png" LogicalName="bg_logo.png" />
 
         <EmbeddedResource Include="Resources/steamdeck_fts.png" LogicalName="steamdeck_fts.png" />
-        <EmbeddedResource Include="Resources/steamdeck_fterror.png"
-            LogicalName="steamdeck_fterror.png" />
-        <EmbeddedResource Include="Resources/steamdeck_switchprompt.png"
-            LogicalName="steamdeck_switchprompt.png" />
+        <EmbeddedResource Include="Resources/steamdeck_fterror.png" LogicalName="steamdeck_fterror.png" />
+        <EmbeddedResource Include="Resources/steamdeck_switchprompt.png" LogicalName="steamdeck_switchprompt.png" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(RuntimeIdentifier)' == 'win10-x64'">
@@ -137,8 +123,7 @@
             <VerFile>$(IntermediateOutputPath)gitver</VerFile>
         </PropertyGroup>
         <!-- write the hash to the temp file.-->
-        <Exec
-            Command="git -C &quot;$(ProjectDir.Replace('\','\\'))&quot; describe --long --always --dirty &gt; $(VerFile)" />
+        <Exec Command="git -C &quot;$(ProjectDir.Replace('\','\\'))&quot; describe --long --always --dirty &gt; $(VerFile)" />
         <!-- read the version into the GitVersion itemGroup-->
         <ReadLinesFromFile File="$(VerFile)">
             <Output TaskParameter="Lines" ItemName="GitVersion" />
@@ -170,8 +155,7 @@
             </AssemblyAttributes>
         </ItemGroup>
         <!-- writes the attribute to the customAssemblyInfo file -->
-        <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)"
-            AssemblyAttributes="@(AssemblyAttributes)" />
+        <WriteCodeFragment Language="C#" OutputFile="$(CustomAssemblyInfoFile)" AssemblyAttributes="@(AssemblyAttributes)" />
     </Target>
 
 </Project>

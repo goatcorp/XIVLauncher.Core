@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29215.179
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36603.0 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XIVLauncher.Common", "..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj", "{24916430-532C-4D4D-93FF-861076E8F63C}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XIVLauncher.Common.Unix", "XIVLauncher.Common.Unix\XIVLauncher.Common.Unix.csproj", "{08CE4E78-7C47-43D6-98CB-68655DEAF66A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XIVLauncher.VersionGenerator", "XIVLauncher.VersionGenerator\XIVLauncher.VersionGenerator.csproj", "{1F476606-D4C4-4808-8A41-FC22326B7D30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XIVLauncher.Aria", "..\lib\FFXIVQuickLauncher\src\XIVLauncher.Aria\XIVLauncher.Aria.csproj", "{431C8894-9279-57F6-5EE0-2F84FB4CC995}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +58,12 @@ Global
 		{1F476606-D4C4-4808-8A41-FC22326B7D30}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1F476606-D4C4-4808-8A41-FC22326B7D30}.ReleaseNoUpdate|Any CPU.ActiveCfg = Debug|Any CPU
 		{1F476606-D4C4-4808-8A41-FC22326B7D30}.ReleaseNoUpdate|Any CPU.Build.0 = Debug|Any CPU
+		{431C8894-9279-57F6-5EE0-2F84FB4CC995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{431C8894-9279-57F6-5EE0-2F84FB4CC995}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{431C8894-9279-57F6-5EE0-2F84FB4CC995}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{431C8894-9279-57F6-5EE0-2F84FB4CC995}.Release|Any CPU.Build.0 = Release|Any CPU
+		{431C8894-9279-57F6-5EE0-2F84FB4CC995}.ReleaseNoUpdate|Any CPU.ActiveCfg = Release|Any CPU
+		{431C8894-9279-57F6-5EE0-2F84FB4CC995}.ReleaseNoUpdate|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

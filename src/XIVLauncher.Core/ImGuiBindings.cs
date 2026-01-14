@@ -1,13 +1,23 @@
+using Hexa.NET.ImGui;
+using Hexa.NET.ImGui.Backends.SDL3;
+using Hexa.NET.SDL3;
+
+using HexaGen.Runtime;
+
+using System.Diagnostics;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-using ImGuiNET;
+using ImSDLEvent = Hexa.NET.ImGui.Backends.SDL3.SDLEvent;
+using ImSDLGPUCommandBuffer = Hexa.NET.ImGui.Backends.SDL3.SDLGPUCommandBuffer;
+using ImSDLGPUDevice = Hexa.NET.ImGui.Backends.SDL3.SDLGPUDevice;
+using ImSDLGPURenderPass = Hexa.NET.ImGui.Backends.SDL3.SDLGPURenderPass;
+using ImSDLWindow = Hexa.NET.ImGui.Backends.SDL3.SDLWindow;
+using SDLEvent = Hexa.NET.SDL3.SDLEvent;
+using SDLGPUDevice = Hexa.NET.SDL3.SDLGPUDevice;
+using SDLGPUGraphicsPipeline = Hexa.NET.ImGui.Backends.SDL3.SDLGPUGraphicsPipeline;
+using SDLWindow = Hexa.NET.SDL3.SDLWindow;
 
-using Serilog;
-
-using Veldrid;
-using Veldrid.Sdl2;
 
 // Veldrid objects are setup in method called by constructor
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -20,616 +30,254 @@ namespace XIVLauncher.Core;
 /// </summary>
 public class ImGuiBindings : IDisposable
 {
-    private GraphicsDevice gd;
-    private bool frameBegun;
-
-    // Veldrid objects
-    private DeviceBuffer vertexBuffer;
-    private DeviceBuffer indexBuffer;
-    private DeviceBuffer projMatrixBuffer;
-    private Texture fontTexture;
-    private TextureView fontTextureView;
-    private Shader vertexShader;
-    private Shader fragmentShader;
-    private ResourceLayout layout;
-    private ResourceLayout textureLayout;
-    private Pipeline pipeline;
-    private ResourceSet mainResourceSet;
-    private ResourceSet fontTextureResourceSet;
-
-    private IntPtr fontAtlasID = (IntPtr)1;
-    private bool controlDown;
-    private bool shiftDown;
-    private bool altDown;
-    private bool winKeyDown;
+    // Hexa.NET objects
+    private unsafe SDLWindow* window;
+    private unsafe SDLGPUDevice* device;
+    private unsafe SDLGPUTransferBuffer* transferBuffer = null!;
+    private uint uploadSize = 0;
+    private Vector4 clearColor = new(0.1f, 0.1f, 0.1f, 1.0f);
 
     private IntPtr iniPathPtr;
 
-    private int windowWidth;
-    private int windowHeight;
-    private Vector2 scaleFactor = Vector2.One;
-
-    // Image trackers
-    private readonly Dictionary<TextureView, ResourceSetInfo> setsByView
-        = new Dictionary<TextureView, ResourceSetInfo>();
-
-    private readonly Dictionary<Texture, TextureView> autoViewsByTexture
-        = new Dictionary<Texture, TextureView>();
-
-    private readonly Dictionary<IntPtr, ResourceSetInfo> viewsById = new Dictionary<IntPtr, ResourceSetInfo>();
-    private readonly List<IDisposable> ownedResources = new List<IDisposable>();
-    private int lastAssignedID = 100;
-
-    private delegate void SetClipboardTextDelegate(IntPtr userData, string text);
-
-    private delegate string GetClipboardTextDelegate();
-
-    // variables because they need to exist for the program duration without being gc'd
-    private SetClipboardTextDelegate setText;
-    private GetClipboardTextDelegate getText;
+    private readonly List<Tuple<Pointer<SDLGPUTexture>, Pointer<SDLSurface>>> texturesToBind = [];
+    private readonly List<TextureWrap> texturesReferenced = [];
 
     /// <summary>
     /// Constructs a new ImGuiController.
     /// </summary>
-    public ImGuiBindings(GraphicsDevice gd, OutputDescription outputDescription, int width, int height, FileInfo iniPath, float fontPxSize)
+    public unsafe ImGuiBindings(SDLWindow* window, SDLGPUDevice* device, FileInfo iniPath, float fontPxSize, float mainScale)
     {
-        this.gd = gd;
-        windowWidth = width;
-        windowHeight = height;
-
-        IntPtr context = ImGui.CreateContext();
-        ImGui.SetCurrentContext(context);
-        var fonts = ImGui.GetIO().Fonts;
-        ImGui.GetIO().Fonts.AddFontDefault();
-
-        ImGui.GetIO().ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard | ImGuiConfigFlags.NavEnableGamepad;
-        ImGui.GetIO().BackendFlags |= ImGuiBackendFlags.HasGamepad;
-
-        SetIniPath(iniPath.FullName);
-
-        setText = new SetClipboardTextDelegate(SetClipboardText);
-        getText = new GetClipboardTextDelegate(GetClipboardText);
-
+        this.window = window;
+        this.device = device;
+        var ctx = ImGui.CreateContext();
+        ImGui.SetCurrentContext(ctx);
         var io = ImGui.GetIO();
-        io.SetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(setText);
-        io.GetClipboardTextFn = Marshal.GetFunctionPointerForDelegate(getText);
-        io.ClipboardUserData = IntPtr.Zero;
+        io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard | ImGuiConfigFlags.NavEnableGamepad;
+        io.BackendFlags |= ImGuiBackendFlags.HasGamepad;
+#if DEBUG
+        io.ConfigDebugIsDebuggerPresent = Debugger.IsAttached;
+        io.ConfigErrorRecovery = true;
+        io.ConfigErrorRecoveryEnableAssert = false;
+        io.ConfigErrorRecoveryEnableDebugLog = false;
+        io.ConfigErrorRecoveryEnableTooltip = true;
+#endif
+        this.SetIniPath(iniPath.FullName);
+        var platformIo = ImGui.GetPlatformIO();
+        platformIo.PlatformSetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(SetClipboardText);
+        platformIo.PlatformGetClipboardTextFn = (void*)Marshal.GetFunctionPointerForDelegate(GetClipboardText);
+        platformIo.PlatformClipboardUserData = (void*)IntPtr.Zero;
 
-        CreateDeviceResources(gd, outputDescription, fontPxSize);
-        SetKeyMappings();
+        var style = ImGui.GetStyle();
+        style.ScaleAllSizes(mainScale);
+        style.FontScaleDpi = mainScale;
+        io.ConfigDpiScaleFonts = true;
+        io.ConfigDpiScaleViewports = true;
 
-        SetPerFrameImGuiData(1f / 60f);
+        if ((io.ConfigFlags & ImGuiConfigFlags.ViewportsEnable) != 0)
+        {
+            style.WindowRounding = 0;
+            style.Colors[(int)ImGuiCol.WindowBg].W = 1;
+        }
 
-        ImGui.NewFrame();
-        frameBegun = true;
+        ImGuiImplSDL3.SetCurrentContext(ctx);
+        ImGuiImplSDL3.InitForSDLGPU((ImSDLWindow*)window);
+
+        ImGuiImplSDLGPU3InitInfo initInfo = new()
+        {
+            Device = (ImSDLGPUDevice*)device,
+            ColorTargetFormat = (int)SDL.GetGPUSwapchainTextureFormat(device, window),
+            MSAASamples = (int)SDLGPUSampleCount.Samplecount1
+        };
+        ImGuiImplSDL3.SDLGPU3Init(&initInfo);
+
+        var fontMr = new FontManager();
+        fontMr.SetupFonts(fontPxSize);
     }
 
     private void SetIniPath(string iniPath)
     {
-        if (iniPathPtr != IntPtr.Zero)
+        if (this.iniPathPtr != IntPtr.Zero)
         {
-            Marshal.FreeHGlobal(iniPathPtr);
+            Marshal.FreeHGlobal(this.iniPathPtr);
         }
 
-        iniPathPtr = Marshal.StringToHGlobalAnsi(iniPath);
+        this.iniPathPtr = Marshal.StringToHGlobalAnsi(iniPath);
 
         unsafe
         {
-            ImGui.GetIO().NativePtr->IniFilename = (byte*)iniPathPtr.ToPointer();
+            var io = ImGui.GetIO();
+            io.IniFilename = (byte*)this.iniPathPtr.ToPointer();
         }
     }
 
-    private static void SetClipboardText(IntPtr userData, string text)
+
+    private static unsafe void SetClipboardText(ImGuiContext* ctx, byte* text)
     {
-        // text always seems to have an extra newline, but I'll leave it for now
-        Sdl2Native.SDL_SetClipboardText(text);
+        SDL.SetClipboardText(text);
     }
 
-    private static string GetClipboardText()
+    private static unsafe string GetClipboardText(ImGuiContext* ctx)
     {
-        return Sdl2Native.SDL_GetClipboardText();
+        return SDL.GetClipboardTextS();
     }
 
-    public void WindowResized(int width, int height)
+    public unsafe void Dispose()
     {
-        windowWidth = width;
-        windowHeight = height;
-    }
-
-    public void DestroyDeviceObjects()
-    {
-        Dispose();
-    }
-
-    public void CreateDeviceResources(GraphicsDevice gd, OutputDescription outputDescription, float fontPxSize)
-    {
-        this.gd = gd;
-        ResourceFactory factory = gd.ResourceFactory;
-        vertexBuffer = factory.CreateBuffer(new BufferDescription(10000, BufferUsage.VertexBuffer | BufferUsage.Dynamic));
-        vertexBuffer.Name = "ImGui.NET Vertex Buffer";
-        indexBuffer = factory.CreateBuffer(new BufferDescription(2000, BufferUsage.IndexBuffer | BufferUsage.Dynamic));
-        indexBuffer.Name = "ImGui.NET Index Buffer";
-
-        var fontMr = new FontManager();
-        fontMr.SetupFonts(fontPxSize);
-        RecreateFontDeviceTexture(gd);
-        Log.Debug("Fonts OK!");
-
-        projMatrixBuffer = factory.CreateBuffer(new BufferDescription(64, BufferUsage.UniformBuffer | BufferUsage.Dynamic));
-        projMatrixBuffer.Name = "ImGui.NET Projection Buffer";
-
-        byte[] vertexShaderBytes = LoadEmbeddedShaderCode(gd.ResourceFactory, "imgui-vertex", ShaderStages.Vertex);
-        byte[] fragmentShaderBytes = LoadEmbeddedShaderCode(gd.ResourceFactory, "imgui-frag", ShaderStages.Fragment);
-        vertexShader = factory.CreateShader(new ShaderDescription(ShaderStages.Vertex, vertexShaderBytes, gd.BackendType == GraphicsBackend.Metal ? "VS" : "main"));
-        fragmentShader = factory.CreateShader(new ShaderDescription(ShaderStages.Fragment, fragmentShaderBytes, gd.BackendType == GraphicsBackend.Metal ? "FS" : "main"));
-
-        VertexLayoutDescription[] vertexLayouts = new VertexLayoutDescription[]
+        lock (this.texturesReferenced)
         {
-            new VertexLayoutDescription(
-                new VertexElementDescription("in_position", VertexElementSemantic.Position, VertexElementFormat.Float2),
-                new VertexElementDescription("in_texCoord", VertexElementSemantic.TextureCoordinate, VertexElementFormat.Float2),
-                new VertexElementDescription("in_color", VertexElementSemantic.Color, VertexElementFormat.Byte4_Norm))
-        };
-
-        layout = factory.CreateResourceLayout(new ResourceLayoutDescription(
-            new ResourceLayoutElementDescription("ProjectionMatrixBuffer", ResourceKind.UniformBuffer, ShaderStages.Vertex),
-            new ResourceLayoutElementDescription("MainSampler", ResourceKind.Sampler, ShaderStages.Fragment)));
-        textureLayout = factory.CreateResourceLayout(new ResourceLayoutDescription(
-            new ResourceLayoutElementDescription("MainTexture", ResourceKind.TextureReadOnly, ShaderStages.Fragment)));
-
-        GraphicsPipelineDescription pd = new GraphicsPipelineDescription(
-            BlendStateDescription.SingleAlphaBlend,
-            new DepthStencilStateDescription(false, false, ComparisonKind.Always),
-            new RasterizerStateDescription(FaceCullMode.None, PolygonFillMode.Solid, FrontFace.Clockwise, false, true),
-            PrimitiveTopology.TriangleList,
-            new ShaderSetDescription(vertexLayouts, new[] { vertexShader, fragmentShader }),
-            new ResourceLayout[] { layout, textureLayout },
-            outputDescription,
-            ResourceBindingModel.Default);
-        pipeline = factory.CreateGraphicsPipeline(ref pd);
-
-        mainResourceSet = factory.CreateResourceSet(new ResourceSetDescription(layout,
-            projMatrixBuffer,
-            gd.PointSampler));
-
-        fontTextureResourceSet = factory.CreateResourceSet(new ResourceSetDescription(textureLayout, fontTextureView));
-    }
-
-    /// <summary>
-    /// Gets or creates a handle for a texture to be drawn with ImGui.
-    /// Pass the returned handle to Image() or ImageButton().
-    /// </summary>
-    public IntPtr GetOrCreateImGuiBinding(ResourceFactory factory, TextureView textureView)
-    {
-        if (!setsByView.TryGetValue(textureView, out ResourceSetInfo rsi))
-        {
-            ResourceSet resourceSet = factory.CreateResourceSet(new ResourceSetDescription(textureLayout, textureView));
-            rsi = new ResourceSetInfo(GetNextImGuiBindingID(), resourceSet);
-
-            setsByView.Add(textureView, rsi);
-            viewsById.Add(rsi.ImGuiBinding, rsi);
-            ownedResources.Add(resourceSet);
+            var textures = this.texturesReferenced.ToArray();
+            foreach (var texture in textures)
+            {
+                texture.Dispose();
+            }
         }
 
-        return rsi.ImGuiBinding;
+        SDL.WaitForGPUIdle(this.device);
+        ImGuiImplSDL3.Shutdown();
+        ImGuiImplSDL3.SDLGPU3Shutdown();
+        ImGui.DestroyContext();
     }
 
-    private IntPtr GetNextImGuiBindingID()
+    public unsafe bool ProcessExit()
     {
-        int newID = lastAssignedID++;
-        return (IntPtr)newID;
-    }
-
-    /// <summary>
-    /// Gets or creates a handle for a texture to be drawn with ImGui.
-    /// Pass the returned handle to Image() or ImageButton().
-    /// </summary>
-    public IntPtr GetOrCreateImGuiBinding(ResourceFactory factory, Texture texture)
-    {
-        if (!autoViewsByTexture.TryGetValue(texture, out var textureView))
+        SDLEvent e;
+        while (SDL.PollEvent(&e))
         {
-            textureView = factory.CreateTextureView(texture);
-            autoViewsByTexture.Add(texture, textureView);
-            ownedResources.Add(textureView);
+            ImGuiImplSDL3.ProcessEvent((ImSDLEvent*)&e);
+            var type = (SDLEventType)e.Type;
+            if (type == SDLEventType.Quit || (type == SDLEventType.WindowCloseRequested &&
+                                              e.Window.WindowID == SDL.GetWindowID(this.window)))
+                return true;
         }
 
-        return GetOrCreateImGuiBinding(factory, textureView);
+        return false;
     }
 
-    /// <summary>
-    /// Retrieves the shader texture binding for the given helper handle.
-    /// </summary>
-    public ResourceSet GetImageResourceSet(IntPtr imGuiBinding)
+    public void NewFrame()
     {
-        if (!viewsById.TryGetValue(imGuiBinding, out ResourceSetInfo tvi))
-        {
-            throw new InvalidOperationException("No registered ImGui binding with id " + imGuiBinding.ToString());
-        }
-
-        return tvi.ResourceSet;
-    }
-
-    public void ClearCachedImageResources()
-    {
-        foreach (IDisposable resource in ownedResources)
-        {
-            resource.Dispose();
-        }
-
-        ownedResources.Clear();
-        setsByView.Clear();
-        viewsById.Clear();
-        autoViewsByTexture.Clear();
-        lastAssignedID = 100;
-    }
-
-    private byte[] LoadEmbeddedShaderCode(ResourceFactory factory, string name, ShaderStages stage)
-    {
-        switch (factory.BackendType)
-        {
-            case GraphicsBackend.Direct3D11:
-                {
-                    string resourceName = name + ".hlsl.bytes";
-                    return AppUtil.GetEmbeddedResourceBytes(resourceName);
-                }
-
-            case GraphicsBackend.OpenGL:
-                {
-                    string resourceName = name + ".glsl";
-                    return AppUtil.GetEmbeddedResourceBytes(resourceName);
-                }
-
-            case GraphicsBackend.Vulkan:
-                {
-                    string resourceName = name + ".spv";
-                    return AppUtil.GetEmbeddedResourceBytes(resourceName);
-                }
-
-            case GraphicsBackend.Metal:
-                {
-                    string resourceName = name + ".metallib";
-                    return AppUtil.GetEmbeddedResourceBytes(resourceName);
-                }
-
-            default:
-                throw new NotImplementedException();
-        }
-    }
-
-    /// <summary>
-    /// Recreates the device texture used to render text.
-    /// </summary>
-    public void RecreateFontDeviceTexture(GraphicsDevice gd)
-    {
-        ImGuiIOPtr io = ImGui.GetIO();
-        // Build
-        IntPtr pixels;
-        int width, height, bytesPerPixel;
-        io.Fonts.GetTexDataAsRGBA32(out pixels, out width, out height, out bytesPerPixel);
-        // Store our identifier
-        io.Fonts.SetTexID(fontAtlasID);
-
-        fontTexture = gd.ResourceFactory.CreateTexture(TextureDescription.Texture2D(
-            (uint)width,
-            (uint)height,
-            1,
-            1,
-            PixelFormat.R8_G8_B8_A8_UNorm,
-            TextureUsage.Sampled));
-        fontTexture.Name = "ImGui.NET Font Texture";
-        gd.UpdateTexture(
-            fontTexture,
-            pixels,
-            (uint)(bytesPerPixel * width * height),
-            0,
-            0,
-            0,
-            (uint)width,
-            (uint)height,
-            1,
-            0,
-            0);
-        fontTextureView = gd.ResourceFactory.CreateTextureView(fontTexture);
-
-        io.Fonts.ClearTexData();
-    }
-
-    /// <summary>
-    /// Renders the ImGui draw list data.
-    /// This method requires a <see cref="GraphicsDevice"/> because it may create new DeviceBuffers if the size of vertex
-    /// or index data has increased beyond the capacity of the existing buffers.
-    /// A <see cref="CommandList"/> is needed to submit drawing and resource update commands.
-    /// </summary>
-    public void Render(GraphicsDevice gd, CommandList cl)
-    {
-        if (frameBegun)
-        {
-            frameBegun = false;
-            ImGui.Render();
-            RenderImDrawData(ImGui.GetDrawData(), gd, cl);
-        }
-    }
-
-    /// <summary>
-    /// Updates ImGui input and IO configuration state.
-    /// </summary>
-    public void Update(float deltaSeconds, InputSnapshot snapshot)
-    {
-        if (frameBegun)
-        {
-            ImGui.Render();
-        }
-
-        SetPerFrameImGuiData(deltaSeconds);
-        UpdateImGuiInput(snapshot);
-
-        frameBegun = true;
+        ImGuiImplSDL3.SDLGPU3NewFrame();
+        ImGuiImplSDL3.NewFrame();
         ImGui.NewFrame();
     }
 
-    /// <summary>
-    /// Sets per-frame data based on the associated window.
-    /// This is called by Update(float).
-    /// </summary>
-    private void SetPerFrameImGuiData(float deltaSeconds)
+    private unsafe void CreateTransferBuffer(uint size)
     {
-        ImGuiIOPtr io = ImGui.GetIO();
-        io.DisplaySize = new Vector2(
-            windowWidth / scaleFactor.X,
-            windowHeight / scaleFactor.Y);
-        io.DisplayFramebufferScale = scaleFactor;
-        io.DeltaTime = deltaSeconds; // DeltaTime is in seconds.
+        if (this.transferBuffer != null)
+            SDL.ReleaseGPUTransferBuffer(this.device, this.transferBuffer);
+        this.uploadSize = size;
+        var transferCreateInfo = new SDLGPUTransferBufferCreateInfo
+        {
+            Size = this.uploadSize,
+            Props = 0,
+            Usage = SDLGPUTransferBufferUsage.Upload
+        };
+
+        this.transferBuffer = SDL.CreateGPUTransferBuffer(this.device, &transferCreateInfo);
     }
 
-    private void UpdateImGuiInput(InputSnapshot snapshot)
+    public unsafe void Render()
     {
-        ImGuiIOPtr io = ImGui.GetIO();
+        ImGui.Render();
+        ImDrawData* drawData = ImGui.GetDrawData();
+        var isMinimized = drawData->DisplaySize.X <= 0 || drawData->DisplaySize.Y <= 0;
 
-        Vector2 mousePosition = snapshot.MousePosition;
-
-        // Determine if any of the mouse buttons were pressed during this snapshot period, even if they are no longer held.
-        bool leftPressed = false;
-        bool middlePressed = false;
-        bool rightPressed = false;
-
-        foreach (MouseEvent me in snapshot.MouseEvents)
+        var commandBuffer = SDL.AcquireGPUCommandBuffer(this.device);
+        lock (this.texturesToBind)
         {
-            if (me.Down)
+            var copyPass = SDL.BeginGPUCopyPass(commandBuffer);
+            foreach (var (texture, surface) in this.texturesToBind)
             {
-                switch (me.MouseButton)
+                var size = (uint)(surface.Handle->Pitch * surface.Handle->H);
+                if (this.uploadSize < size)
+                    this.CreateTransferBuffer(size);
+                var transferBufferPtr = SDL.MapGPUTransferBuffer(Program.GPUDevice, this.transferBuffer, true);
+                new Span<byte>(surface.Handle->Pixels, (int)size).CopyTo(new Span<byte>(transferBufferPtr, (int)size));
+                SDL.UnmapGPUTransferBuffer(Program.GPUDevice, this.transferBuffer);
+                var transferInfo = new SDLGPUTextureTransferInfo
                 {
-                    case MouseButton.Left:
-                        leftPressed = true;
-                        break;
-
-                    case MouseButton.Middle:
-                        middlePressed = true;
-                        break;
-
-                    case MouseButton.Right:
-                        rightPressed = true;
-                        break;
-                }
-            }
-        }
-
-        io.MouseDown[0] = leftPressed || snapshot.IsMouseDown(MouseButton.Left);
-        io.MouseDown[1] = rightPressed || snapshot.IsMouseDown(MouseButton.Right);
-        io.MouseDown[2] = middlePressed || snapshot.IsMouseDown(MouseButton.Middle);
-        io.MousePos = mousePosition;
-        io.MouseWheel = snapshot.WheelDelta;
-
-        IReadOnlyList<char> keyCharPresses = snapshot.KeyCharPresses;
-
-        for (int i = 0; i < keyCharPresses.Count; i++)
-        {
-            char c = keyCharPresses[i];
-            io.AddInputCharacter(c);
-        }
-
-        IReadOnlyList<KeyEvent> keyEvents = snapshot.KeyEvents;
-
-        for (int i = 0; i < keyEvents.Count; i++)
-        {
-            KeyEvent keyEvent = keyEvents[i];
-            io.KeysDown[(int)keyEvent.Key] = keyEvent.Down;
-
-            if (keyEvent.Key == Key.ControlLeft)
-            {
-                controlDown = keyEvent.Down;
-            }
-
-            if (keyEvent.Key == Key.ShiftLeft)
-            {
-                shiftDown = keyEvent.Down;
-            }
-
-            if (keyEvent.Key == Key.AltLeft)
-            {
-                altDown = keyEvent.Down;
-            }
-
-            if (keyEvent.Key == Key.WinLeft)
-            {
-                winKeyDown = keyEvent.Down;
-            }
-        }
-
-        io.KeyCtrl = controlDown;
-        io.KeyAlt = altDown;
-        io.KeyShift = shiftDown;
-        io.KeySuper = winKeyDown;
-    }
-
-    private static void SetKeyMappings()
-    {
-        ImGuiIOPtr io = ImGui.GetIO();
-        io.KeyMap[(int)ImGuiKey.Tab] = (int)Key.Tab;
-        io.KeyMap[(int)ImGuiKey.LeftArrow] = (int)Key.Left;
-        io.KeyMap[(int)ImGuiKey.RightArrow] = (int)Key.Right;
-        io.KeyMap[(int)ImGuiKey.UpArrow] = (int)Key.Up;
-        io.KeyMap[(int)ImGuiKey.DownArrow] = (int)Key.Down;
-        io.KeyMap[(int)ImGuiKey.PageUp] = (int)Key.PageUp;
-        io.KeyMap[(int)ImGuiKey.PageDown] = (int)Key.PageDown;
-        io.KeyMap[(int)ImGuiKey.Home] = (int)Key.Home;
-        io.KeyMap[(int)ImGuiKey.End] = (int)Key.End;
-        io.KeyMap[(int)ImGuiKey.Delete] = (int)Key.Delete;
-        io.KeyMap[(int)ImGuiKey.Backspace] = (int)Key.BackSpace;
-        io.KeyMap[(int)ImGuiKey.Enter] = (int)Key.Enter;
-        io.KeyMap[(int)ImGuiKey.Escape] = (int)Key.Escape;
-        io.KeyMap[(int)ImGuiKey.Space] = (int)Key.Space;
-        io.KeyMap[(int)ImGuiKey.KeypadEnter] = (int)Key.KeypadEnter;
-        io.KeyMap[(int)ImGuiKey.A] = (int)Key.A;
-        io.KeyMap[(int)ImGuiKey.C] = (int)Key.C;
-        io.KeyMap[(int)ImGuiKey.V] = (int)Key.V;
-        io.KeyMap[(int)ImGuiKey.X] = (int)Key.X;
-        io.KeyMap[(int)ImGuiKey.Y] = (int)Key.Y;
-        io.KeyMap[(int)ImGuiKey.Z] = (int)Key.Z;
-    }
-
-    private void RenderImDrawData(ImDrawDataPtr drawData, GraphicsDevice gd, CommandList cl)
-    {
-        uint vertexOffsetInVertices = 0;
-        uint indexOffsetInElements = 0;
-
-        if (drawData.CmdListsCount == 0)
-        {
-            return;
-        }
-
-        uint totalVbSize = (uint)(drawData.TotalVtxCount * Unsafe.SizeOf<ImDrawVert>());
-
-        if (totalVbSize > vertexBuffer.SizeInBytes)
-        {
-            gd.DisposeWhenIdle(vertexBuffer);
-            vertexBuffer = gd.ResourceFactory.CreateBuffer(new BufferDescription((uint)(totalVbSize * 1.5f), BufferUsage.VertexBuffer | BufferUsage.Dynamic));
-        }
-
-        uint totalIbSize = (uint)(drawData.TotalIdxCount * sizeof(ushort));
-
-        if (totalIbSize > indexBuffer.SizeInBytes)
-        {
-            gd.DisposeWhenIdle(indexBuffer);
-            indexBuffer = gd.ResourceFactory.CreateBuffer(new BufferDescription((uint)(totalIbSize * 1.5f), BufferUsage.IndexBuffer | BufferUsage.Dynamic));
-        }
-
-        for (int i = 0; i < drawData.CmdListsCount; i++)
-        {
-            ImDrawListPtr cmdList = drawData.CmdListsRange[i];
-
-            cl.UpdateBuffer(
-                vertexBuffer,
-                vertexOffsetInVertices * (uint)Unsafe.SizeOf<ImDrawVert>(),
-                cmdList.VtxBuffer.Data,
-                (uint)(cmdList.VtxBuffer.Size * Unsafe.SizeOf<ImDrawVert>()));
-
-            cl.UpdateBuffer(
-                indexBuffer,
-                indexOffsetInElements * sizeof(ushort),
-                cmdList.IdxBuffer.Data,
-                (uint)(cmdList.IdxBuffer.Size * sizeof(ushort)));
-
-            vertexOffsetInVertices += (uint)cmdList.VtxBuffer.Size;
-            indexOffsetInElements += (uint)cmdList.IdxBuffer.Size;
-        }
-
-        // Setup orthographic projection matrix into our constant buffer
-        ImGuiIOPtr io = ImGui.GetIO();
-        Matrix4x4 mvp = Matrix4x4.CreateOrthographicOffCenter(
-            0f,
-            io.DisplaySize.X,
-            io.DisplaySize.Y,
-            0.0f,
-            -1.0f,
-            1.0f);
-
-        this.gd.UpdateBuffer(this.projMatrixBuffer, 0, ref mvp);
-
-        cl.SetVertexBuffer(0, vertexBuffer);
-        cl.SetIndexBuffer(indexBuffer, IndexFormat.UInt16);
-        cl.SetPipeline(pipeline);
-        cl.SetGraphicsResourceSet(0, mainResourceSet);
-
-        drawData.ScaleClipRects(io.DisplayFramebufferScale);
-
-        // Render command lists
-        int globalIdxOffset = 0;
-        int globalVtxOffset = 0;
-
-        for (int n = 0; n < drawData.CmdListsCount; n++)
-        {
-            ImDrawListPtr cmdList = drawData.CmdListsRange[n];
-
-            for (int cmdI = 0; cmdI < cmdList.CmdBuffer.Size; cmdI++)
-            {
-                ImDrawCmdPtr pcmd = cmdList.CmdBuffer[cmdI];
-
-                if (pcmd.UserCallback != IntPtr.Zero)
+                    TransferBuffer = this.transferBuffer,
+                    PixelsPerRow = 0,
+                    RowsPerLayer = 0
+                };
+                var textureRegion = new SDLGPUTextureRegion
                 {
-                    throw new NotImplementedException();
-                }
-                else
-                {
-                    if (pcmd.TextureId != IntPtr.Zero)
-                    {
-                        if (pcmd.TextureId == fontAtlasID)
-                        {
-                            cl.SetGraphicsResourceSet(1, fontTextureResourceSet);
-                        }
-                        else
-                        {
-                            cl.SetGraphicsResourceSet(1, GetImageResourceSet(pcmd.TextureId));
-                        }
-                    }
-
-                    cl.SetScissorRect(
-                        0,
-                        (uint)pcmd.ClipRect.X,
-                        (uint)pcmd.ClipRect.Y,
-                        (uint)(pcmd.ClipRect.Z - pcmd.ClipRect.X),
-                        (uint)(pcmd.ClipRect.W - pcmd.ClipRect.Y));
-
-                    cl.DrawIndexed(pcmd.ElemCount, 1, pcmd.IdxOffset + (uint)globalIdxOffset, (int)pcmd.VtxOffset + globalVtxOffset, 0);
-                }
+                    Texture = texture,
+                    X = 0,
+                    Y = 0,
+                    W = (uint)surface.Handle->W,
+                    H = (uint)surface.Handle->H,
+                    Z = 0,
+                    D = 1,
+                    Layer = 0,
+                    MipLevel = 0
+                };
+                SDL.UploadToGPUTexture(copyPass, &transferInfo, &textureRegion, true);
             }
+            SDL.EndGPUCopyPass(copyPass);
+            this.texturesToBind.Clear();
+        }
 
-            globalIdxOffset += cmdList.IdxBuffer.Size;
-            globalVtxOffset += cmdList.VtxBuffer.Size;
+        SDLGPUTexture* swapTexture;
+        SDL.AcquireGPUSwapchainTexture(commandBuffer, this.window, &swapTexture, null, null);
+
+        if (swapTexture != null && !isMinimized)
+        {
+            ImGuiImplSDL3.SDLGPU3PrepareDrawData(drawData, (ImSDLGPUCommandBuffer*)commandBuffer);
+
+            SDLGPUColorTargetInfo targetInfo = new()
+            {
+                Texture = swapTexture,
+                ClearColor = new SDLFColor
+                {
+                    R = this.clearColor.X,
+                    G = this.clearColor.Y,
+                    B = this.clearColor.Z,
+                    A = this.clearColor.W
+                },
+                LoadOp = SDLGPULoadOp.Clear,
+                StoreOp = SDLGPUStoreOp.Store,
+                MipLevel = 0,
+                LayerOrDepthPlane = 0,
+                Cycle = 0
+            };
+
+            var renderPass = SDL.BeginGPURenderPass(commandBuffer, &targetInfo, 1, null);
+            ImGuiImplSDL3.SDLGPU3RenderDrawData(drawData, (ImSDLGPUCommandBuffer*)commandBuffer, (ImSDLGPURenderPass*)renderPass, (SDLGPUGraphicsPipeline*)null);
+            SDL.EndGPURenderPass(renderPass);
+        }
+
+        var io = ImGui.GetIO();
+
+        if ((io.ConfigFlags & ImGuiConfigFlags.ViewportsEnable) != 0)
+        {
+            ImGui.UpdatePlatformWindows();
+            ImGui.RenderPlatformWindowsDefault();
+        }
+
+        SDL.SubmitGPUCommandBuffer(commandBuffer);
+    }
+
+    public unsafe void AddTextureCreator(SDLGPUTexture* gpuTexture, SDLSurface* surface)
+    {
+        lock (this.texturesToBind)
+        {
+            this.texturesToBind.Add(Tuple.Create(new Pointer<SDLGPUTexture>(gpuTexture), new Pointer<SDLSurface>(surface)));
         }
     }
 
-    /// <summary>
-    /// Frees all graphics resources used by the renderer.
-    /// </summary>
-    public void Dispose()
+    public void RefTexture(TextureWrap wrap)
     {
-        vertexBuffer.Dispose();
-        indexBuffer.Dispose();
-        projMatrixBuffer.Dispose();
-        fontTexture.Dispose();
-        fontTextureView.Dispose();
-        vertexShader.Dispose();
-        fragmentShader.Dispose();
-        layout.Dispose();
-        textureLayout.Dispose();
-        pipeline.Dispose();
-        mainResourceSet.Dispose();
-
-        foreach (IDisposable resource in ownedResources)
+        lock (this.texturesReferenced)
         {
-            resource.Dispose();
+            this.texturesReferenced.Add(wrap);
         }
     }
 
-    private struct ResourceSetInfo
+    public void DerefTexture(TextureWrap wrap)
     {
-        public readonly IntPtr ImGuiBinding;
-        public readonly ResourceSet ResourceSet;
-
-        public ResourceSetInfo(IntPtr imGuiBinding, ResourceSet resourceSet)
+        lock (this.texturesReferenced)
         {
-            ImGuiBinding = imGuiBinding;
-            ResourceSet = resourceSet;
+            this.texturesReferenced.Remove(wrap);
         }
     }
 }
