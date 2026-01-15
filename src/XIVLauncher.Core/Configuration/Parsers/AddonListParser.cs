@@ -22,8 +22,12 @@ internal class AddonListParser : ITypeParser
     {
         if (t == typeof(List<AddonEntry>))
         {
-            result = JsonConvert.DeserializeObject<List<AddonEntry>>(value);
-            return true;
+            var deserialized = JsonConvert.DeserializeObject<List<AddonEntry>>(value);
+            if (deserialized != null)
+            {
+                result = deserialized;
+                return true;
+            }
         }
 
         result = null!;
