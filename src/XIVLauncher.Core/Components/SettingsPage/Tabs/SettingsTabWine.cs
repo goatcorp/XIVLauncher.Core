@@ -92,6 +92,18 @@ public class SettingsTabWine : SettingsTab
             new SettingsEntry<bool>(Strings.SetWindows7Setting, Strings.SetWindows7SettingDescription, () => Program.Config.SetWin7 ?? true, b => Program.Config.SetWin7 = b),
 
             new SettingsEntry<DxvkHudType>(Strings.EnableDXVKOverlaySetting, Strings.EnableDXVKOverlaySettingDescription, () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type),
+            
+            new SettingsEntry<string>(Strings.ExtraWineDLLOverridesSetting, Strings.ExtraWineDLLOverridesSettingDescription , () => Program.Config.WineDLLOverrides ?? "", s => Program.Config.WineDLLOverrides = s)
+            {
+                CheckValidity = s =>
+                {
+                    if (!WineSettings.WineDLLOverrideIsValid(s))
+                        return Strings.ExtraWineDLLOverridesInvalidError;
+                    
+                    return null;
+                },
+            },
+
             new SettingsEntry<string>(Strings.WineDebugAdditionalVarSetting, Strings.WineDebugAdditionalVarSettingDescription, () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s)
         };
     }

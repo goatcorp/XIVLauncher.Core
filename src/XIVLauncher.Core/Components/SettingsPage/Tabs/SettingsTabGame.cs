@@ -2,7 +2,6 @@ using Hexa.NET.ImGui;
 
 using XIVLauncher.Common;
 using XIVLauncher.Core.Resources.Localization;
-using XIVLauncher.Common.Unix.Compatibility.Wine;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -33,16 +32,6 @@ public class SettingsTabGame : SettingsTab
         },
 
         new SettingsEntry<string>(Strings.AdditionalGameArgsSetting, Strings.AdditionalGameArgsSettingDescription, () => Program.Config.AdditionalArgs, x => Program.Config.AdditionalArgs = x),
-        new SettingsEntry<string>(Strings.ExtraWineDLLOverridesSetting, Strings.ExtraWineDLLOverridesSettingDescription , () => Program.Config.WineDLLOverrides ?? "", s => Program.Config.WineDLLOverrides = s)
-        {
-            CheckValidity = s =>
-            {
-                if (!WineSettings.WineDLLOverrideIsValid(s))
-                    return Strings.ExtraWineDLLOverridesInvalidError;
-                
-                return null;
-            },
-        },
         new SettingsEntry<ClientLanguage>(Strings.GameLanguageSetting, Strings.GameLanguageSettingDescription, () => Program.Config.ClientLanguage ?? ClientLanguage.English, x => Program.Config.ClientLanguage = x),
         new SettingsEntry<DpiAwareness>(Strings.GameDPIAwarenessSetting, Strings.GameDPIAwarenessSettingDescription, () => Program.Config.DpiAwareness ?? DpiAwareness.Unaware, x => Program.Config.DpiAwareness = x),
         new SettingsEntry<bool>(Strings.UseXLAuthMacrosSetting, Strings.UseXLAuthMacrosSettingDescription, () => Program.Config.IsOtpServer ?? false, x => Program.Config.IsOtpServer = x),
