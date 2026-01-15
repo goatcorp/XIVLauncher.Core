@@ -78,26 +78,25 @@ public class CompatibilityTools
             wineSettings.Prefix.Create();
     }
 
-    public async Task EnsureTool(DirectoryInfo tempPath)
+    public async Task EnsureTool(HttpClient httpClient, DirectoryInfo tempPath)
     {
         if (!File.Exists(Wine64Path))
         {
-            Log.Information($"Compatibility tool does not exist, downloading {Settings.Release.DownloadUrl}");
-            await DownloadTool(tempPath).ConfigureAwait(false);
+            Log.Information($"Compatibility tool does not exist, downloading {Settings.WineRelease.DownloadUrl}");
+            await DownloadTool(httpClient, tempPath).ConfigureAwait(false);
         }
 
         EnsurePrefix();
-        await Dxvk.Dxvk.InstallDxvk(Settings.Prefix, dxvkDirectory, dxvkVersion).ConfigureAwait(false);
+        await Dxvk.Dxvk.InstallDxvk(httpClient, Settings.Prefix, dxvkDirectory, dxvkVersion).ConfigureAwait(false);
 
         IsToolReady = true;
     }
 
-    private async Task DownloadTool(DirectoryInfo tempPath)
+    private async Task DownloadTool(HttpClient httpClient, DirectoryInfo tempPath)
     {
-        using var client = new HttpClient();
         var tempFilePath = Path.Combine(tempPath.FullName, $"{Guid.NewGuid()}");
-        await File.WriteAllBytesAsync(tempFilePath, await client.GetByteArrayAsync(Settings.Release.DownloadUrl).ConfigureAwait(false)).ConfigureAwait(false);
-        if (!CompatUtil.EnsureChecksumMatch(tempFilePath, Settings.Release.Checksums))
+        await File.WriteAllBytesAsync(tempFilePath, await httpClient.GetByteArrayAsync(Settings.WineRelease.DownloadUrl).ConfigureAwait(false)).ConfigureAwait(false);
+        if (!CompatUtil.EnsureChecksumMatch(tempFilePath, Settings.WineRelease.Checksums))
         {
             throw new InvalidDataException("SHA512 checksum verification failed");
         }

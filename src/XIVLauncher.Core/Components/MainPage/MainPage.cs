@@ -706,7 +706,7 @@ public class MainPage : Page
             var _ = Task.Run(async () =>
             {
                 var tempPath = App.Storage.GetFolder("temp");
-                await Program.CompatibilityTools.EnsureTool(tempPath).ConfigureAwait(false);
+                await Program.CompatibilityTools.EnsureTool(Program.HttpClient, tempPath).ConfigureAwait(false);
             }).ContinueWith(t =>
             {
                 isFailed = t.IsFaulted || t.IsCanceled;

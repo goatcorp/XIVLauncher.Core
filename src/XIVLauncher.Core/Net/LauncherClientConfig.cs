@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 
 using Serilog;
 
-namespace XIVLauncher.Core;
+namespace XIVLauncher.Core.Net;
 
 
 /// <summary>
