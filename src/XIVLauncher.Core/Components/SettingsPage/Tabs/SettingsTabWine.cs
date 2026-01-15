@@ -34,14 +34,14 @@ public class SettingsTabWine : SettingsTab
             {
                 CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Custom
             },
-            new SettingsEntry<WineSyncType>("WINE Sync Method", "How Wine synchronizes multi-threaded operations.", () => Program.Config.WineSyncType ?? WineSyncType.FSync, x => Program.Config.WineSyncType = x)
+            new SettingsEntry<WineSyncType>(Strings.WineSyncMethodSetting, Strings.WineSyncMethodSettingDescription, () => Program.Config.WineSyncType ?? WineSyncType.FSync, x => Program.Config.WineSyncType = x)
             {
                 CheckValidity = b =>
                 {
                     switch (WineUtility.SystemFsyncSupport())
                     {
                         case FsyncSupport.UnsupportedPlatform:
-                            return "FSync is only available on Linux";
+                            return Strings.EnableFsyncSettingUnsupportedPlatformValidation;
                         case FsyncSupport.OutdatedKernel:
                             return Strings.EnableFSyncSettingMinKernelValidation;
                         case FsyncSupport.Supported:

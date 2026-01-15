@@ -164,7 +164,7 @@ namespace XIVLauncher.Core.Resources.Localization {
                 return ResourceManager.GetString("EnableFeralGameModeNotFoundValidation", resourceCulture);
             }
         }
-
+        
         internal static string EnableFSyncSettingMinKernelValidation {
             get {
                 return ResourceManager.GetString("EnableFSyncSettingMinKernelValidation", resourceCulture);
@@ -1044,6 +1044,24 @@ namespace XIVLauncher.Core.Resources.Localization {
         internal static string RepairFailureError {
             get {
                 return ResourceManager.GetString("RepairFailureError", resourceCulture);
+            }
+        }
+        
+        internal static string WineSyncMethodSetting {
+            get {
+                return ResourceManager.GetString("WineSyncMethodSetting", resourceCulture);
+            }
+        }
+        
+        internal static string WineSyncMethodSettingDescription {
+            get {
+                return ResourceManager.GetString("WineSyncMethodSettingDescription", resourceCulture);
+            }
+        }
+        
+        internal static string EnableFsyncSettingUnsupportedPlatformValidation {
+            get {
+                return ResourceManager.GetString("EnableFsyncSettingUnsupportedPlatformValidation", resourceCulture);
             }
         }
     }
