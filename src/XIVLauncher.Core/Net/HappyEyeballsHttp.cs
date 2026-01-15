@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,81 +11,64 @@ using System.Threading.Tasks;
 
 using Serilog;
 
-// Taken directly from https://slugcat.systems/post/24-06-16-ipv6-is-hard-happy-eyeballs-dotnet-httpclient/
-// licensed under MIT
+namespace XIVLauncher.Core.Net;
+
+// Source: https://slugcat.systems/post/24-06-16-ipv6-is-hard-happy-eyeballs-dotnet-httpclient/
+//
+// Copyright (c) 2019 Space Station 14 Contributors
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 
 public static class HappyEyeballsHttp
 {
     private const int ConnectionAttemptDelay = 250;
 
-#if DEBUG
-
-    private const int SlowIpv6 = 0;
-    private const bool BrokenIpv6 = false;
-
-#endif
-
-    // .NET does not implement Happy Eyeballs at the time of writing.
-    // https://github.com/space-wizards/SS14.Launcher/issues/38
-    // This is the workaround.
-    //
-    // What's Happy Eyeballs? It makes the launcher try both IPv6 and IPv4,
-    // the former with priority, so that if IPv6 is broken your launcher still works.
-    //
-    // Implementation originally based on,
-    // rewritten as to be nigh-impossible to recognize https://github.com/ppy/osu-framework/pull/4191/files
-    //
-    // This is a simple implementation. It does not fully implement RFC 8305:
-    // * We do not separately handle parallel A and AAAA DNS requests as optimization.
-    // * We don't sort IPs as specified in RFC 6724. I can't tell if GetHostEntryAsync does.
-    // * Look I wanted to keep this simple OK?
-    //   We don't do any fancy shit like statefulness or incremental sorting
-    //   or incremental DNS updates who cares about that.
-    public static HttpClient CreateHttpClient(bool autoRedirect = true)
-    {
-        var handler = new SocketsHttpHandler
+    public static HttpClient CreateHttpClient(bool autoRedirect = true) =>
+        new HttpClient(new SocketsHttpHandler
         {
             ConnectCallback = OnConnect,
             AutomaticDecompression = DecompressionMethods.All,
             AllowAutoRedirect = autoRedirect,
-            // PooledConnectionLifetime = TimeSpan.FromSeconds(1)
+            // PooledConnectionLifetime = TimeSpan.FromSeconds(1)     
+        })
+        {
+            Timeout = TimeSpan.FromSeconds(10)
         };
-
-        return new HttpClient(handler);
-    }
 
     private static async ValueTask<Stream> OnConnect(
         SocketsHttpConnectionContext context,
         CancellationToken cancellationToken)
     {
         // Get IPs via DNS.
-        // Note that we do not attempt to exclude IPv6 if the user doesn't have IPv6.
-        // According to the docs, GetHostEntryAsync will not return them if there's no address.
-        // BUT! I tested and that's a lie at least on Linux.
-        // Regardless, if you don't have IPv6,
-        // an attempt to connect to an IPv6 socket *should* immediately give a "network unreachable" socket error.
-        // This will cause the code to immediately try the next address,
-        // so IPv6 just gets "skipped over" if you don't have it.
-        // I could find no other robust way to check "is there a chance in hell IPv6 works" other than "try it",
-        // so... try it we will.
         var endPoint = context.DnsEndPoint;
         var resolvedAddresses = await GetIpsForHost(endPoint, cancellationToken).ConfigureAwait(false);
         if (resolvedAddresses.Length == 0)
-            throw new Exception($"Host {context.DnsEndPoint.Host} resolved to no IPs!");
-
+            throw new HttpRequestException($"Host {context.DnsEndPoint.Host} resolved to no IPs");
         // Sort as specified in the RFC, interleaving.
         var ips = SortInterleaved(resolvedAddresses);
-
         Debug.Assert(ips.Length > 0);
-
         var (socket, index) = await ParallelTask(
             ips.Length,
             (i, cancel) => AttemptConnection(i, ips[i], endPoint.Port, cancel),
             TimeSpan.FromMilliseconds(ConnectionAttemptDelay),
-            cancellationToken);
-
+            cancellationToken).ConfigureAwait(false);
         Log.Verbose("Successfully connected {EndPoint} to address: {Address}", endPoint, ips[index]);
-
         return new NetworkStream(socket, ownsSocket: true);
     }
 
@@ -97,26 +79,14 @@ public static class HappyEyeballsHttp
         CancellationToken cancel)
     {
         Log.Verbose("Trying IP {Address} for happy eyeballs [{Index}]", address, index);
-
         // The following socket constructor will create a dual-mode socket on systems where IPV6 is available.
         var socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp)
         {
             // Turn off Nagle's algorithm since it degrades performance in most HttpClient scenarios.
             NoDelay = true
         };
-
         try
         {
-#if DEBUG
-            if (address.AddressFamily == AddressFamily.InterNetworkV6)
-            {
-                await Task.Delay(SlowIpv6, cancel).ConfigureAwait(false);
-
-                if (BrokenIpv6)
-                    throw new Exception("Oh no I can't reach the network this is SO SAD.");
-            }
-#endif
-
             await socket.ConnectAsync(new IPEndPoint(address, port), cancel).ConfigureAwait(false);
             return socket;
         }
@@ -224,7 +194,7 @@ public static class HappyEyeballsHttp
 
             if (completedTask.IsCompletedSuccessfully)
             {
-                // We did it. We have success.
+                // Success.
                 successTask = completedTask;
                 break;
             }
@@ -242,7 +212,7 @@ public static class HappyEyeballsHttp
 
         if (successTask == null)
         {
-            // We didn't get a single successful connection. Well heck.
+            // We didn't get a single successful connection.
             throw new AggregateException(
                 allTasks.Where(x => x.IsFaulted).SelectMany(x => x.Exception!.InnerExceptions));
         }
