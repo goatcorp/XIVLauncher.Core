@@ -1,7 +1,6 @@
 using XIVLauncher.Common;
 using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
-using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
 using XIVLauncher.Common.Unix.Compatibility.Nvapi;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
@@ -50,8 +49,6 @@ public interface ILauncherConfig
 
     public bool? KeepPatches { get; set; }
 
-    public AcquisitionMethod? PatchAcquisitionMethod { get; set; }
-
     public long PatchSpeedLimit { get; set; }
 
     #endregion
@@ -89,8 +86,8 @@ public interface ILauncherConfig
     public bool? FixError127 { get; set; }
 
     public bool? SetWin7 { get; set; }
-    
-    public bool? DontUseSystemTz {get; set;}
+
+    public bool? DontUseSystemTz { get; set; }
 
     public string? WineDLLOverrides { get; set; }
 

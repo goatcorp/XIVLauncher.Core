@@ -1,4 +1,4 @@
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 using XIVLauncher.Common;
 using XIVLauncher.Core.Resources.Localization;

@@ -1,8 +1,8 @@
-using System.Collections.ObjectModel;
-
 using Newtonsoft.Json;
 
 using Serilog;
+
+using System.Collections.ObjectModel;
 
 namespace XIVLauncher.Core.Accounts;
 

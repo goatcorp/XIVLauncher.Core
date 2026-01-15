@@ -1,6 +1,6 @@
-using System.Runtime.InteropServices;
+using Hexa.NET.ImGui;
 
-using ImGuiNET;
+using System.Runtime.InteropServices;
 
 namespace XIVLauncher.Core;
 
@@ -19,7 +19,7 @@ public class FontManager
 
         ImGui.GetIO().Fonts.Clear();
 
-        ImFontConfigPtr fontConfig = ImGuiNative.ImFontConfig_ImFontConfig();
+        var fontConfig = ImGui.ImFontConfig();
         fontConfig.PixelSnapH = true;
 
         var fontDataText = AppUtil.GetEmbeddedResourceBytes(TEXT_FONT_NAME);
@@ -33,7 +33,12 @@ public class FontManager
 
         var japaneseRangeHandle = GCHandle.Alloc(GlyphRangesJapanese.GlyphRanges, GCHandleType.Pinned);
 
-        TextFont = ioFonts.AddFontFromMemoryTTF(fontDataTextPtr, fontDataText.Length, pxSize, null, japaneseRangeHandle.AddrOfPinnedObject());
+        TextFont = ioFonts.AddFontFromMemoryTTF(
+            (void*)fontDataTextPtr,
+            fontDataText.Length,
+            pxSize,
+            null,
+            (uint*)japaneseRangeHandle.AddrOfPinnedObject());
 
         var iconRangeHandle = GCHandle.Alloc(
             new ushort[]
@@ -44,17 +49,13 @@ public class FontManager
             },
             GCHandleType.Pinned);
 
-        IconFont = ioFonts.AddFontFromMemoryTTF(fontDataIconsPtr, fontDataIcons.Length, pxSize, fontConfig, iconRangeHandle.AddrOfPinnedObject());
+        IconFont = ioFonts.AddFontFromMemoryTTF(
 
-        ioFonts.Build();
-
-        if (Math.Abs(FONT_GAMMA - 1.0f) >= 0.001)
-        {
-            // Gamma correction (stbtt/FreeType would output in linear space whereas most real world usages will apply 1.4 or 1.8 gamma; Windows/XIV prebaked uses 1.4)
-            ioFonts.GetTexDataAsRGBA32(out byte* texPixels, out var texWidth, out var texHeight);
-            for (int i = 3, j = texWidth * texHeight * 4; i < j; i += 4)
-                texPixels[i] = (byte)(Math.Pow(texPixels[i] / 255.0f, 1.0f / FONT_GAMMA) * 255.0f);
-        }
+            (void*)fontDataIconsPtr,
+            fontDataIcons.Length,
+            pxSize,
+            fontConfig,
+            (uint*)iconRangeHandle.AddrOfPinnedObject());
 
         fontConfig.Destroy();
         japaneseRangeHandle.Free();

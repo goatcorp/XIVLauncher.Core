@@ -1,7 +1,7 @@
+using Hexa.NET.ImGui;
+
 using System.Numerics;
 using System.Runtime.InteropServices;
-
-using ImGuiNET;
 
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
 using XIVLauncher.Common.Unix.Compatibility.Nvapi;
@@ -105,7 +105,7 @@ public class SettingsTabWine : SettingsTab
     private bool? feralGameModeFound = null;
 
     private bool FeralGameModeFound
-    { 
+    {
         get
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) return false;
@@ -113,7 +113,7 @@ public class SettingsTabWine : SettingsTab
             var handle = IntPtr.Zero;
             feralGameModeFound = (NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle));
             NativeLibrary.Free(handle);
-            return feralGameModeFound ?? false;            
+            return feralGameModeFound ?? false;
         }
     }
 

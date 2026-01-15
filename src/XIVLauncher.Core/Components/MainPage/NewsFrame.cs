@@ -1,6 +1,6 @@
-using System.Numerics;
+using Hexa.NET.ImGui;
 
-using ImGuiNET;
+using System.Numerics;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Game;
@@ -87,7 +87,7 @@ public class NewsFrame : Component
                 {
                     if (!string.IsNullOrEmpty(newsEntry.Url))
                     {
-                        if (ImGui.Selectable(newsEntry.Title, default, default, ImGui.CalcTextSize(newsEntry.Title)) && !string.IsNullOrEmpty(newsEntry.Url))
+                        if (ImGui.Selectable($"{newsEntry.Title}##{newsEntry.Id}", false, default, ImGui.CalcTextSize(newsEntry.Title)) && !string.IsNullOrEmpty(newsEntry.Url))
                         {
                             AppUtil.OpenBrowser(newsEntry.Url);
                         }
