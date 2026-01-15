@@ -1,6 +1,8 @@
+using Hexa.NET.ImGui;
+
 using System.Numerics;
 
-using ImGuiNET;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.MainPage;
 
@@ -14,14 +16,14 @@ public class ActionButtons : Component
     {
         var btnSize = new Vector2(80) * ImGuiHelpers.GlobalScale;
 
-        ImGui.PushFont(FontManager.IconFont);
+        ImGui.PushFont(FontManager.IconFont, 0.0f);
         ImGui.BeginDisabled(this.OnAccountButtonClicked == null);
         if (ImGui.Button(FontAwesomeIcon.User.ToIconString(), btnSize))
         {
             this.OnAccountButtonClicked?.Invoke();
         }
-        ImGui.PushFont(FontManager.TextFont);
-        ImGuiHelpers.AddTooltip("My Account");
+        ImGui.PushFont(FontManager.TextFont, 0.0f);
+        ImGuiHelpers.AddTooltip(Strings.MyAccount);
         ImGui.PopFont();
         ImGui.EndDisabled();
 
@@ -32,8 +34,8 @@ public class ActionButtons : Component
         {
             this.OnStatusButtonClicked?.Invoke();
         }
-        ImGui.PushFont(FontManager.TextFont);
-        ImGuiHelpers.AddTooltip("Service Status");
+        ImGui.PushFont(FontManager.TextFont, 0.0f);
+        ImGuiHelpers.AddTooltip(Strings.ServiceStatus);
         ImGui.PopFont();
         ImGui.EndDisabled();
 
@@ -44,8 +46,8 @@ public class ActionButtons : Component
         {
             this.OnSettingsButtonClicked?.Invoke();
         }
-        ImGui.PushFont(FontManager.TextFont);
-        ImGuiHelpers.AddTooltip("Launcher Settings");
+        ImGui.PushFont(FontManager.TextFont, 0.0f);
+        ImGuiHelpers.AddTooltip(Strings.LauncherSettings);
         ImGui.PopFont();
         ImGui.EndDisabled();
 

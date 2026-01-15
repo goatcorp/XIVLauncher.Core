@@ -1,13 +1,15 @@
+using Hexa.NET.ImGui;
+
 using System.Collections;
 
-using ImGuiNET;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabDebug : SettingsTab
 {
     public override SettingsEntry[] Entries => Array.Empty<SettingsEntry>();
-    public override string Title => "Debug";
+    public override string Title => Strings.DebugTitle;
 
     public override void Draw()
     {

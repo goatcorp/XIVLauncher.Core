@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:element name="root" msdata:IsDataSet="true">
+
+        </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0,
+            Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0,
+            Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="EnterYourOTP" xml:space="preserve">
+        <value>Kétlépcsős azonosítási kód megadása</value>
+    </data>
+  <data name="OKLabel" xml:space="preserve">
+        <value>OK</value>
+    </data>
+  <data name="CancelLabel" xml:space="preserve">
+        <value>Mégse</value>
+    </data>
+  <data name="SearchResults" xml:space="preserve">
+        <value>Keresési eredmények</value>
+    </data>
+  <data name="NoResultsFound" xml:space="preserve">
+        <value>Nincs találat…</value>
+    </data>
+  <data name="SearchForSettings" xml:space="preserve">
+        <value>Beállítások keresése…</value>
+    </data>
+  <data name="AboutTitle" xml:space="preserve">
+        <value>Névjegy</value>
+    </data>
+  <data name="WineInstallSetting" xml:space="preserve">
+        <value>Telepített WINE</value>
+    </data>
+  <data name="WineInstallSettingDescription" xml:space="preserve">
+        <value>A WINE indításának és kezelésének személyre szabása.</value>
+    </data>
+  <data name="WineVersionSetting" xml:space="preserve">
+        <value>WINE-verzió</value>
+    </data>
+  <data name="WineVersionSettingDescription" xml:space="preserve">
+        <value>Ha megváltoztatod a használandó WINE-kiadást, akkor lehetséges, hogy törölnöd kell az előtagot (a Hibaelhárítás fülön)</value>
+    </data>
+  <data name="WineBinaryPathSetting" xml:space="preserve">
+        <value>A WINE elérési útja</value>
+    </data>
+  <data name="WineBinarySettingDescription" xml:space="preserve">
+        <value>A XIVLauncher által használandó WINE-elérési útvonal.
+Ez egy abszolút útvonal, amely egy olyan könyvtárra mutat, ami egy wine64- és egy wineserver fájlt tartalmaz.</value>
+    </data>
+  <data name="DXVKVersionSetting" xml:space="preserve">
+        <value>DXVK-verzió</value>
+    </data>
+  <data name="DXVKVersionSettingDescription" xml:space="preserve">
+        <value>A használandó DXVK-verzió megadása.</value>
+    </data>
+  <data name="DXVKEnableAsyncSetting" xml:space="preserve">
+        <value>DXVK ASYNC engedélyezése</value>
+    </data>
+  <data name="DXVKEnableAsyncSettingDescription" xml:space="preserve">
+        <value>DXVK ASYNC-javítás engedélyezése.</value>
+    </data>
+  <data name="EnableFeralGameModeSetting" xml:space="preserve">
+        <value>Feral GameMode engedélyezése</value>
+    </data>
+  <data name="EnableFeralGameModeSettingDescription" xml:space="preserve">
+        <value>A Feral Interactive „GameMode” CPU-optimalizálásainak használata.</value>
+    </data>
+  <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
+        <value>A GameMode nem észlelhető ezen a rendszeren.</value>
+    </data>
+  <data name="EnableESyncSetting" xml:space="preserve">
+        <value>ESync engedélyezése</value>
+    </data>
+  <data name="EnableFSyncSetting" xml:space="preserve">
+        <value>FSync engedélyezése</value>
+    </data>
+  <data name="EnableESyncSettingDescription" xml:space="preserve">
+        <value>Eventfd-alapú szinkronizáció engedélyezése.</value>
+    </data>
+  <data name="EnableFSyncSettingDescription" xml:space="preserve">
+        <value>Futex2 (fast user mutex) engedélyezése.</value>
+    </data>
+  <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
+        <value>Az FSync használatához a Linux kernel 5.16-os vagy újabb verziója szükséges.</value>
+    </data>
+  <data name="SetWindows7Setting" xml:space="preserve">
+        <value>Futtatás, mint Windows 7</value>
+    </data>
+  <data name="SetWindows7SettingDescription" xml:space="preserve">
+        <value>A WINE 8.1 és újabb verziói alapértelmezésből Windows 10-ként futtatnak programokat, de ez bizonyos Dalamud-bővítményekkel hibákat okoz. Az ajánlott verzió egyelőre Windows 7.</value>
+    </data>
+  <data name="EnableDXVKOverlaySetting" xml:space="preserve">
+        <value>DXVK-átfedés</value>
+    </data>
+  <data name="EnableDXVKOverlaySettingDescription" xml:space="preserve">
+        <value>A DXVK-átfedés elemei megjelenítésének testreszabása.</value>
+    </data>
+  <data name="WineDebugAdditionalVarSetting" xml:space="preserve">
+        <value>WINEDEBUG-változók</value>
+    </data>
+  <data name="WineDebugAdditionalVarSettingDescription" xml:space="preserve">
+        <value>A WINE naplózásának beállítása. Hibakereséshez hasznos lehet.</value>
+    </data>
+  <data name="WineTitle" xml:space="preserve">
+        <value>WINE</value>
+    </data>
+  <data name="CompatibilityToolNotSetup" xml:space="preserve">
+        <value>A kompatibilitási eszközök még nincsenek beállítva. A beállításhoz indítsd el a játékot legalább egyszer.</value>
+    </data>
+  <data name="OpenWINEPrefix" xml:space="preserve">
+        <value>WINE-előtag megnyitása</value>
+    </data>
+  <data name="OpenWINEConfiguration" xml:space="preserve">
+        <value>WINE-beállítások megnyitása</value>
+    </data>
+  <data name="OpenWINEExplorer" xml:space="preserve">
+        <value>WINE-intéző megnyitása (alkalmazások futtatása az előtagban)</value>
+    </data>
+  <data name="KillAllWINEProcesses" xml:space="preserve">
+        <value>Minden WINE-folyamat kilövése</value>
+    </data>
+  <data name="DisableGameoverlayRendererHack" xml:space="preserve">
+        <value>Kerülőmegoldás: gameoverlayrenderer.so letiltása</value>
+    </data>
+  <data name="DisableGameoverlayRendererHackDescription" xml:space="preserve">
+        <value>Bizonyos esetekben kijavíthatja az olyan problémákat, mint az indításkori fekete képernyő (Steam Decken) és a 40 percnyi játék után bekövetkező akadozás.</value>
+    </data>
+  <data name="XModifiersHack" xml:space="preserve">
+        <value>Kerülőmegoldás: XMODIFIERS="@im=null"</value>
+    </data>
+  <data name="XModifiersHackDescription" xml:space="preserve">
+        <value>Kijavíthat bizonyos egérrel vagy akadozással kapcsolatos hibákat.</value>
+    </data>
+  <data name="FixLibICUUCErrorHack" xml:space="preserve">
+        <value>Kerülőmegoldás: libicuuc Dalamud-hiba javítása</value>
+    </data>
+  <data name="FixLibICUUCErrorHackDescription" xml:space="preserve">
+        <value>Kijavíthat egy bizonyos belső Dalamud-hibát. Ilyenkor a terminálban az alábbi szöveg jelenik meg:
+„Cannot get symbol u_charsToUChars from libicuuc Error: 127”</value>
+    </data>
+  <data name="ForceLocaleHack" xml:space="preserve">
+        <value>Kerülőmegoldás: területi beállítások átállítása a következőre: {0}</value>
+    </data>
+  <data name="ForceLocaleHackCUTF8" xml:space="preserve">
+        <value>C.UTF-8 (a pontos érték disztribúciófüggő)</value>
+    </data>
+  <data name="ForceLocaleHackDescription" xml:space="preserve">
+        <value>LC_ALL és LC_CTYPE átállítása a következőre: {0}. Ez olyan hibákat javíthat ki, amikor a fájlok elérési útjában nem latin karakterek fordulnak elő és a LANG értéke nem egy UTF-8-típusú nyelv.</value>
+    </data>
+  <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
+        <value>A rendszer területi beállításai a következőre vannak beállítva: {0}. Erre a javításra valószínűleg nincs szükséged.</value>
+    </data>
+  <data name="ForceDontUseSystemTZ" xml:space="preserve">
+        <value>A rendszer időzónájának figyelmen kívül hagyása</value>
+    </data>
+  <data name="ForceDontUseSystemDescription" xml:space="preserve">
+        <value>A rendszer és a program időzónájainak szétválasztása</value>
+    </data>
+  <data name="TroubleshootingTitle" xml:space="preserve">
+        <value>Hibaelhárítás</value>
+    </data>
+  <data name="ClearWINEPrefixTroubleshooting" xml:space="preserve">
+        <value>A WINE-előtag kiürítése.</value>
+    </data>
+  <data name="ClearWINEPrefixTroubleshootingButton" xml:space="preserve">
+        <value>WINE-előtag ürítése</value>
+    </data>
+  <data name="ClearManagedCompatToolsTroubleshooting" xml:space="preserve">
+        <value>A kezelés alatt álló WINE-példány és a DXVK kiürítése.</value>
+    </data>
+  <data name="ClearManagedCompatToolsTroubleshootingButton" xml:space="preserve">
+        <value>WINE és DXVK ürítése</value>
+    </data>
+  <data name="ClearDalamudTroubleshooting" xml:space="preserve">
+        <value>A Dalamudhoz tartozó összes fájl és könyvtár törlése. A beállítások megmaradnak, de minden bővítmény – beleértve az egyéni adattárakból származókat is – eltávolításra kerül.</value>
+    </data>
+  <data name="ClearDalamudTroubleshootingButton" xml:space="preserve">
+        <value>Dalamud ürítése</value>
+    </data>
+  <data name="ClearAllLogsTroubleshooting" xml:space="preserve">
+        <value>Minden naplófájl törlése.</value>
+    </data>
+  <data name="ClearAllLogsTroubleshootingButton" xml:space="preserve">
+        <value>Naplók ürítése</value>
+    </data>
+  <data name="ResetSettingsTroubleshooting" xml:space="preserve">
+        <value>Minden beállítás visszaállítása alaphelyzetbe.</value>
+    </data>
+  <data name="ResetSettingsTroubleshootingButton" xml:space="preserve">
+        <value>Alaphelyzet</value>
+    </data>
+  <data name="ResetAllTroubleshooting" xml:space="preserve">
+        <value>Összes kijelölése.</value>
+    </data>
+  <data name="GenerateTSPackTroubleshooting" xml:space="preserve">
+        <value>Hibaelhárítási csomag előállítása a hivatalos Discord-csatornához</value>
+    </data>
+  <data name="GenerateTSPackTroubleshootingButton" xml:space="preserve">
+        <value>TSPack (hibaelhárító csomag) előállítása</value>
+    </data>
+  <data name="ResetAllTroubleshootingButton" xml:space="preserve">
+        <value>Minden törlése</value>
+    </data>
+  <data name="PatchPathSetting" xml:space="preserve">
+        <value>Frissítések elérési útja</value>
+    </data>
+  <data name="PatchPathSettingDescription" xml:space="preserve">
+        <value>Az a könyvtár, ahova a program a játék frissítéseit tölti le.</value>
+    </data>
+  <data name="PatchPathSettingNotSetValidation" xml:space="preserve">
+        <value>A frissítések elérési útja nincs beállítva!</value>
+    </data>
+  <data name="PatchDownloadMethodSetting" xml:space="preserve">
+        <value>Frissítések letöltési módszere</value>
+    </data>
+  <data name="PatchDownloadMethodSettingDescription" xml:space="preserve">
+        <value>Az a módszer, amellyel a program a játékfrissítéseket tölti le.</value>
+    </data>
+  <data name="MaximumSpeedSetting" xml:space="preserve">
+        <value>Letöltési sebességkorlát</value>
+    </data>
+  <data name="MaximumSpeedSettingDescription" xml:space="preserve">
+        <value>A maximális letöltési sebesség, bájt/s-ban megadva. A korlát feloldásához állítsd 0-ra.</value>
+    </data>
+  <data name="KeepPatchesSetting" xml:space="preserve">
+        <value>Frissítések fájljainak megtartása</value>
+    </data>
+  <data name="KeepPatchesSettingDescription" xml:space="preserve">
+        <value>Játékfrissítések fájljainak megtartása a lemezen telepítés után.</value>
+    </data>
+  <data name="PatchingTitle" xml:space="preserve">
+        <value>Frissítés</value>
+    </data>
+  <data name="GamePathSetting" xml:space="preserve">
+        <value>A játék elérési útja</value>
+    </data>
+  <data name="GamePathSettingDescription" xml:space="preserve">
+        <value>A játék jelenlegi elérési útja vagy a kívánt telepítési könyvtár.</value>
+    </data>
+  <data name="GamePathSettingNotSetValidation" xml:space="preserve">
+        <value>A játék elérési útja nincs beállítva!</value>
+    </data>
+  <data name="GamePathSettingInvalidValidationj" xml:space="preserve">
+        <value>Azt a mappát add meg, amelyben a „game” és a „boot” almappák találhatók; nem pedig magukat az almappákat!</value>
+    </data>
+  <data name="GameConfigurationPathSetting" xml:space="preserve">
+        <value>A játék beállításainak könyvtára</value>
+    </data>
+  <data name="GameConfigurationPathSettingDescription" xml:space="preserve">
+        <value>A felhasználói beállítási fájlokat tartalmazó könyvtár.</value>
+    </data>
+  <data name="GameConfigurationPathNotSetValidation" xml:space="preserve">
+        <value>A játék beállításainak útja nincs beállítva!</value>
+    </data>
+  <data name="AdditionalGameArgsSetting" xml:space="preserve">
+        <value>Indítási opciók</value>
+    </data>
+  <data name="AdditionalGameArgsSettingDescription" xml:space="preserve">
+        <value>Megegyezik a Steam szokásaival; pl.: VÁLTOZÓ1=érték VÁLTOZÓ2=érték %command% -arg1 -arg2.
+Külső programok nem futtathatók (pl.: gamescope -- %command%). Flatpak argumentumok nem használhatók (--parent-pid=1, stb.).</value>
+    </data>
+  <data name="GameLanguageSetting" xml:space="preserve">
+        <value>A játék nyelve</value>
+    </data>
+  <data name="GameLanguageSettingDescription" xml:space="preserve">
+        <value>A játék nyelvének megadása.</value>
+    </data>
+  <data name="GameDPIAwarenessSetting" xml:space="preserve">
+        <value>DPI-figyelés</value>
+    </data>
+  <data name="GameDPIAwarenessSettingDescription" xml:space="preserve">
+        <value>A játék DPI-figyelésének módosítása. Ezt állítsd át, ha a a játék méretezése nem megfelelő.</value>
+    </data>
+  <data name="UseXLAuthMacrosSetting" xml:space="preserve">
+        <value>XIVLauncher Authenticator alkalmazás / kétlépcsős azonosítási makró használata</value>
+    </data>
+  <data name="UseXLAuthMacrosSettingDescription" xml:space="preserve">
+        <value>Ezt kapcsold be, ha szeretnéd használni a XIVLauncher Authenticator alkalmazást vagy a makrókat.</value>
+    </data>
+  <data name="IgnoreSteamSetting" xml:space="preserve">
+        <value>Steam figyelmen kívül hagyása</value>
+    </data>
+  <data name="IgnoreSteamSettingDescription" xml:space="preserve">
+        <value>A XIVLauncher és a Steam közötti kommunikáció letiltása (a program újraindítása szükséges).</value>
+    </data>
+  <data name="UseUIDCacheSetting" xml:space="preserve">
+        <value>Kísérleti UID-gyorsítótár használata</value>
+    </data>
+  <data name="UseUIDCacheSettingDescription" xml:space="preserve">
+        <value>Bejelentkezési jogkivonat elmentése és többszöri felhasználása. Lehetséges, hogy a második használatig a jogkivonat lejár.</value>
+    </data>
+  <data name="GameTitle" xml:space="preserve">
+        <value>Játék</value>
+    </data>
+  <data name="ResetUIDCacheInfo" xml:space="preserve">
+        <value>UID-gyorsítótár alaphelyzetbe állítása. Javasolt, ha a FFXIV 1012-es vagy 500X-es hibát jelent.</value>
+    </data>
+  <data name="ResetUIDCacheButton" xml:space="preserve">
+        <value>UID-gyorsítótár alaphelyzetbe állítása</value>
+    </data>
+  <data name="DebugTitle" xml:space="preserve">
+        <value>Hibakeresés</value>
+    </data>
+  <data name="DalamudTitle" xml:space="preserve">
+        <value>Dalamud</value>
+    </data>
+  <data name="EnableDalamudSetting" xml:space="preserve">
+        <value>A Dalamud engedélyezése</value>
+    </data>
+  <data name="EnableDalamudSettingDescription" xml:space="preserve">
+        <value>Dalamud-bővítmények engedélyezése</value>
+    </data>
+  <data name="LoadMethodSetting" xml:space="preserve">
+        <value>Betöltési módszer</value>
+    </data>
+  <data name="LoadMethodSettingDescription" xml:space="preserve">
+        <value>A Dalamud betöltési módszerének megadása.</value>
+    </data>
+  <data name="DalamudInjectionDelaySetting" xml:space="preserve">
+        <value>Befecskendezési késleltetés (ms-ban megadva)</value>
+    </data>
+  <data name="DalamudInjectionDelaySettingDescription" xml:space="preserve">
+        <value>A befecskendezés további késleltetése a játék betöltése után.</value>
+    </data>
+  <data name="DalamudManualInjectionEnableSetting" xml:space="preserve">
+        <value>Helyi Dalamud-példány használata</value>
+    </data>
+  <data name="DalamudManualInjectionEnableSettingDescription" xml:space="preserve">
+        <value>A Dalamud helyi összeállításának használata az automatikusan beszerzett helyett (csak fejlesztőknek!)</value>
+    </data>
+  <data name="DalamudLocalInjectionPathSetting" xml:space="preserve">
+        <value>Helyi Dalamud elérési útja</value>
+    </data>
+  <data name="DalamudLocalInjectionPathSettingDescription" xml:space="preserve">
+        <value>A Dalamud helyi változatának elérési útja – az a könyvtár, ahol a Dalamud.Injector.exe található.</value>
+    </data>
+  <data name="DalamudLocalInjectionPathSettingNoDirValidation" xml:space="preserve">
+        <value>Nincs könyvtár megadott elérési úton.</value>
+    </data>
+  <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
+        <value>Nem található Dalamud.Injector.exe a megadott elérési úton.</value>
+    </data>
+  <data name="OpenRepositoryButton" xml:space="preserve">
+        <value>Adattár megnyitása</value>
+    </data>
+  <data name="JoinDiscordButton" xml:space="preserve">
+        <value>Csatlakozás a Discord-szerverhez</value>
+    </data>
+  <data name="SeeSoftwareLicensesButton" xml:space="preserve">
+        <value>Szoftverlicencek megtekintése</value>
+    </data>
+  <data name="XLCoreCreatedBy" xml:space="preserve">
+        <value>Szerző: {0} és további közreműködők.</value>
+    </data>
+  <data name="NewsCaption" xml:space="preserve">
+        <value>Hírek</value>
+    </data>
+  <data name="TopicsCaption" xml:space="preserve">
+        <value>Témakörök</value>
+    </data>
+  <data name="NewsLoading" xml:space="preserve">
+        <value>Hírek betöltése folyamatban…</value>
+    </data>
+  <data name="XLElevatedWarning" xml:space="preserve">
+        <value>A XIVLauncher jelenleg rendszergazdai/root-jogosultságokkal fut.
+Ez számos problémát okozhat, pl.: a bővítmények indításának meghiúsulását vagy a billentyűkombinációk nem működését.
+
+Ne futtasd meg a XIVLaunchert megemelt jogosultságokkal!</value>
+    </data>
+  <data name="LoggingIn" xml:space="preserve">
+        <value>Bejelentkezés folyamatban…</value>
+    </data>
+  <data name="RepairOfficialLauncherOpenError" xml:space="preserve">
+        <value>A játék és/vagy a hivatalos indítókliens jelenleg fut. A XIVLauncher így nem tudja megjavítani a játékfájlokat.
+Zárd be a játékot, majd próbáld újra.</value>
+    </data>
+  <data name="XIVLauncherError" xml:space="preserve">
+        <value>XIVLauncher-hiba</value>
+    </data>
+  <data name="ReinstallUIDCacheError" xml:space="preserve">
+        <value>Engedélyezted az UID-gyorsítótárat a beállításokban.
+Amíg ez a funkció aktív, addig nem telepítheted újra a FFXIV-t.
+
+Ha szeretnéd újratelepíteni a FFXIV-t, akkor először ki kell kapcsolnod az UID-gyorsítótárat.</value>
+    </data>
+  <data name="LoginNoServiceAccountError" xml:space="preserve">
+        <value>A felhasználói fiók vagy előfizetés nem található</value>
+    </data>
+  <data name="LoginTermsNotAcceptedError" xml:space="preserve">
+        <value>A felhasználási feltételek még nincsenek elfogadva</value>
+    </data>
+  <data name="UpdateCheckFinished" xml:space="preserve">
+        <value>A frissítések keresése befejeződött és a függőben lévő frissítések telepítésre kerültek.</value>
+    </data>
+  <data name="WaitingForDalamud" xml:space="preserve">
+        <value>Várakozás a Dalamud előkészítésére…</value>
+    </data>
+  <data name="PleaseBePatient" xml:space="preserve">
+        <value>Ez hosszabb időt is igénybe vehet – légy türelemmel.</value>
+    </data>
+  <data name="DisableAutoLoginButton" xml:space="preserve">
+        <value>Automatikus bejelentkezés letiltása</value>
+    </data>
+  <data name="AutoLoginDisabledNextStart" xml:space="preserve">
+        <value>A következő indításnál a XIVLauncher nem fog automatikusan bejelentkezni.</value>
+    </data>
+  <data name="NoSavedAccounts" xml:space="preserve">
+        <value>Nincsenek elmentett fiókok.</value>
+    </data>
+  <data name="MyAccount" xml:space="preserve">
+        <value>Saját fiók</value>
+    </data>
+  <data name="ServiceStatus" xml:space="preserve">
+        <value>Szolgáltatás állapota</value>
+    </data>
+  <data name="LauncherSettings" xml:space="preserve">
+        <value>Az indító beállításai</value>
+    </data>
+  <data name="UsernameInput" xml:space="preserve">
+        <value>Felhasználónév</value>
+    </data>
+  <data name="UsernameInputHint" xml:space="preserve">
+        <value>Felhasználónév megadása</value>
+    </data>
+  <data name="PasswordInput" xml:space="preserve">
+        <value>Jelszó</value>
+    </data>
+  <data name="PasswordInputHint" xml:space="preserve">
+        <value>Jelszó megadása</value>
+    </data>
+  <data name="UseOneTimePasswordCheckbox" xml:space="preserve">
+        <value>Kétlépcsős azonosítás használata</value>
+    </data>
+  <data name="UseSteamServiceAccount" xml:space="preserve">
+        <value>Steam-fiók</value>
+    </data>
+  <data name="FreeTrialAccountCheckbox" xml:space="preserve">
+        <value>Próbaverziós fiók</value>
+    </data>
+  <data name="LogInAutomaticCheckbox" xml:space="preserve">
+        <value>Automatikus bejelentkezés</value>
+    </data>
+  <data name="LoginButton" xml:space="preserve">
+        <value>Bejelentkezés</value>
+    </data>
+  <data name="LaunchWithoutDalamudButton" xml:space="preserve">
+        <value>A játék indítása Dalamud nélkül</value>
+    </data>
+  <data name="LaunchWithoutPluginsButton" xml:space="preserve">
+        <value>A játék indítása bővítmények nélkül</value>
+    </data>
+  <data name="LaunchWithNoCustomPluginsButton" xml:space="preserve">
+        <value>A játék indítása egyéni adattáras bővítmények nélkül</value>
+    </data>
+  <data name="PatchWithoutLaunchingButton" xml:space="preserve">
+        <value>A játék frissítése indítás nélkül</value>
+    </data>
+  <data name="RepairGameFilesButton" xml:space="preserve">
+        <value>Játékfájlok épségének ellenőrzése</value>
+    </data>
+  <data name="NoSecretsProviderWarning" xml:space="preserve">
+        <value>Figyelem! Ez a rendszer nem rendelkezik titokszolgáltatóval, vagy az nincs helyesen beállítva, ezért a XIVLauncher nem képes megjegyezni a jelszavakat.</value>
+    </data>
+  <data name="TroubleshootingDestructiveActionWarning" xml:space="preserve">
+        <value>Légy óvatos! Az alábbi beállítások roncsoló mellékhatásokkal bírhatnak.</value>
+    </data>
+  <data name="PreparingForCompatTool" xml:space="preserve">
+        <value>Szükséges kompatibilitási eszközök előkészítése folyamatban</value>
+    </data>
+  <data name="StartingGame" xml:space="preserve">
+        <value>A játék indítása folyamatban…</value>
+    </data>
+  <data name="HaveFun" xml:space="preserve">
+        <value>Jó szórakozást!</value>
+    </data>
+  <data name="CannotGetBootVerError" xml:space="preserve">
+        <value>A játék verziójának ellenőrzése meghiúsult. Lehetséges, hogy a játék éppen karbantartás alatt áll vagy a verzióhitelesítési kiszolgáló nem található. Ha képes vagy bejelentkezni a hivatalos indítóklienssel, de a XIVLauncherrel nem, kérjük jelentsd a hibát.</value>
+    </data>
+  <data name="CannotPatchGameOpenError" xml:space="preserve">
+        <value>A játék és/vagy a hivatalos indítókliens jelenleg fut. A XIVLauncher így nem tudja frissíteni a játékot.
+Zárd be a hivatalos indítóklienst, majd próbáld újra.</value>
+    </data>
+  <data name="NowPatching" xml:space="preserve">
+        <value>{0} frissítése folyamatban…</value>
+    </data>
+  <data name="WorkingOnStatus" xml:space="preserve">
+        <value>{1}/{0}. elem feldolgozása folyamatban…</value>
+    </data>
+  <data name="LeftToDownloadStatus" xml:space="preserve">
+        <value>{0} maradt. Sebesség: {1}/s</value>
+    </data>
+  <data name="NotEnoughSpacePatchesError" xml:space="preserve">
+        <value>Nincs elég szabad hely a frissítések letöltéséhez.
+
+Ha kell, a frissítések letöltési mappáját a beállításokban változtathatod meg.
+
+Szükséges hely: {0}
+Szabad hely: {1}</value>
+    </data>
+  <data name="PatchInstallerStartFailError" xml:space="preserve">
+        <value>A frissítő elindítása meghiúsult.
+{0}
+
+Ha megtagadtad a hozzáférést, próbáld újra. Ha a probléma továbbra is fennáll, vedd fel velünk a kapcsolatot Discordon.</value>
+    </data>
+  <data name="NotEnoughSpaceAllPatchesError" xml:space="preserve">
+        <value>Nincs elég szabad hely az összes frissítés letöltéséhez.
+
+Ha kell, a frissítések letöltési mappáját a XIVLauncher beállításaiban változtathatod meg.
+
+Szükséges hely: {0}
+Szabad hely: {1}</value>
+    </data>
+  <data name="NotEnoughSpaceGameError" xml:space="preserve">
+        <value>Nincs elég szabad hely a frissítések telepítéséhez.
+
+Ha kell, a játék mappáját a beállításokban változtathatod meg.
+
+Szükséges hely: {0}
+Szabad hely: {1}</value>
+    </data>
+  <data name="CannotVerifyGameFilesError" xml:space="preserve">
+        <value>A XIVLauncher nem tudta ellenőrizni a játékfájlok épségét. Indítsd újra az alkalmazást, majd próbáld újra.
+
+Ez a hiba általában az internetkapcsolat megszakadásából ered.
+Ha a probléma továbbra is fennáll, javasoljuk egy Japánba bújtatott VPN használatát.
+
+További információ: {0}
+{1}</value>
+    </data>
+  <data name="PatchInstallerGenericError" xml:space="preserve">
+        <value>A frissítő hibába ütközött.
+Kérjük, jelentsd ezt a hibát!
+
+Próbáld újra vagy használd a hivatalos indítóklienst a játékhoz.</value>
+    </data>
+  <data name="NowRepairingFiles" xml:space="preserve">
+        <value>Javítás folyamatban…</value>
+    </data>
+  <data name="RepairAllFilesValid" xml:space="preserve">
+        <value>A játékfájlok épek.</value>
+    </data>
+  <data name="RepairFixedSingularFile" xml:space="preserve">
+        <value>A XIVLauncher sikeresen kijavított 1 játékfájlt.</value>
+    </data>
+  <data name="RepairFixedPluralFiles" xml:space="preserve">
+        <value>A XIVLauncher sikeresen kijavított {0} játékfájlt.</value>
+    </data>
+  <data name="RepairSingleFileMoved" xml:space="preserve">
+        <value>Emellett találtunk 1 olyan fájlt, ami nem a játék része. Ez a következő helyre lett áthelyezve: {0}.
+Ha korábban a ReShade-et használtad, akkor azt újra kell telepítened.</value>
+    </data>
+  <data name="RepairPluralFilesMoved" xml:space="preserve">
+        <value>Emellett találtunk {0} olyan fájlt, ami nem a játék része. Ez a következő helyre lett áthelyezve: {1}.
+Ha korábban a ReShade-et használtad, akkor azt újra kell telepítened.</value>
+    </data>
+  <data name="RepairGameVerUnsupportedError" xml:space="preserve">
+        <value>A játék jelenlegi verzióját még nem képes a XIVLauncher megjavítani, mert a referenciaadatok még nem állnak rendelkezésre.
+Próbáld újra később.</value>
+    </data>
+  <data name="RepairFailureError" xml:space="preserve">
+        <value>Hiba történt a fájlok ellenőrzése közben.
+Lehetséges, hogy újra kell telepítened a játékot.</value>
+    </data>
+</root>

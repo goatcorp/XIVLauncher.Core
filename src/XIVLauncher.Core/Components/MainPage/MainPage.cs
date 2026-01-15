@@ -1,11 +1,10 @@
-using System.Diagnostics;
-using System.Numerics;
-
-using CheapLoc;
-
-using ImGuiNET;
+using Hexa.NET.ImGui;
+using Hexa.NET.SDL3;
 
 using Serilog;
+
+using System.Diagnostics;
+using System.Numerics;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Addon;
@@ -13,7 +12,7 @@ using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game;
 using XIVLauncher.Common.Game.Exceptions;
 using XIVLauncher.Common.Game.Patch;
-using XIVLauncher.Common.Game.Patch.Acquisition;
+using XIVLauncher.Common.Game.Patch.Acquisition.Aria;
 using XIVLauncher.Common.Game.Patch.PatchList;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Unix;
@@ -21,6 +20,7 @@ using XIVLauncher.Common.Unix.Compatibility.Wine;
 using XIVLauncher.Common.Util;
 using XIVLauncher.Common.Windows;
 using XIVLauncher.Core.Accounts;
+using XIVLauncher.Core.Resources.Localization;
 using XIVLauncher.Core.Support;
 
 namespace XIVLauncher.Core.Components.MainPage;
@@ -56,7 +56,7 @@ public class MainPage : Page
         if (savedAccount != null) this.SwitchAccount(savedAccount, false);
 
         if (PlatformHelpers.IsElevated())
-            App.ShowMessage("XIVLauncher is running as administrator/root user.\nThis can cause various issues, including but not limited to addons failing to launch and hotkey applications failing to respond.\n\nPlease take care to avoid running XIVLauncher with elevated privileges", "XIVLauncher");
+            App.ShowMessage(Strings.XLElevatedWarning, "XIVLauncher");
 
         Troubleshooting.LogTroubleshooting();
     }
@@ -84,6 +84,7 @@ public class MainPage : Page
         this.AccountSwitcher.Draw();
 
         this.actionButtons.Draw();
+        ImGui.PopStyleVar();
     }
 
     public void ReloadNews() => this.newsFrame.ReloadNews();
@@ -115,7 +116,7 @@ public class MainPage : Page
         if (this.IsLoggingIn)
             return;
 
-        this.App.StartLoading("Logging in...", canDisableAutoLogin: true);
+        this.App.StartLoading(Strings.LoggingIn, canDisableAutoLogin: true);
 
         // if (Program.UsesFallbackSteamAppId && this.loginFrame.IsSteam)
         //     throw new Exception("Doesn't own Steam AppId on this account.");
@@ -124,7 +125,7 @@ public class MainPage : Page
         {
             if (GameHelpers.CheckIsGameOpen() && action == LoginAction.Repair)
             {
-                App.ShowMessageBlocking("The game and/or the official launcher are open. XIVLauncher cannot repair the game if this is the case.\nPlease close them and try again.", "XIVLauncher");
+                App.ShowMessageBlocking(Strings.RepairOfficialLauncherOpenError, Strings.XIVLauncherError);
 
                 Reactivate();
                 return;
@@ -134,8 +135,8 @@ public class MainPage : Page
                 App.Settings.IsUidCacheEnabled == true)
             {
                 App.ShowMessageBlocking(
-                    "You enabled the UID cache in the patcher settings.\nThis setting does not allow you to reinstall FFXIV.\n\nIf you want to reinstall FFXIV, please take care to disable it first.",
-                    "XIVLauncher Error");
+                    Strings.ReinstallUIDCacheError,
+                    Strings.XIVLauncherError);
 
                 this.Reactivate();
                 return;
@@ -149,7 +150,14 @@ public class MainPage : Page
 
             if (result)
             {
-                Environment.Exit(0);
+                var sdlEvent = new SDLEvent
+                {
+                    Type = (int)SDLEventType.Quit
+                };
+                if (SDL.PushEvent(ref sdlEvent))
+                {
+                    Log.Error($"Failed to push event to SDL queue: {SDL.GetErrorS()}");
+                }
             }
             else
             {
@@ -168,8 +176,9 @@ public class MainPage : Page
         if (action == LoginAction.Fake)
         {
             IGameRunner gameRunner;
+            // FIXME: Should we really be passing a null DalamudLauncher to both of these?
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                gameRunner = new WindowsGameRunner(null, false, Program.DalamudUpdater.Runtime);
+                gameRunner = new WindowsGameRunner(null, false);
             else
                 gameRunner = new UnixGameRunner(Program.CompatibilityTools, null, false);
 
@@ -233,11 +242,12 @@ public class MainPage : Page
         {
             var enableUidCache = App.Settings.IsUidCacheEnabled ?? false;
             var gamePath = App.Settings.GamePath!;
+            var language = App.Settings.ClientLanguage ?? ClientLanguage.English;
 
             if (action == LoginAction.Repair)
-                return await App.Launcher.Login(username, password, otp, isSteam, false, gamePath, true, isFreeTrial).ConfigureAwait(false);
+                return await App.Launcher.Login(username, password, otp, isSteam, false, gamePath, true, isFreeTrial, language).ConfigureAwait(false);
             else
-                return await App.Launcher.Login(username, password, otp, isSteam, enableUidCache, gamePath, false, isFreeTrial).ConfigureAwait(false);
+                return await App.Launcher.Login(username, password, otp, isSteam, enableUidCache, gamePath, false, isFreeTrial, language).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -254,12 +264,12 @@ public class MainPage : Page
 
         if (loginResult.State == Launcher.LoginState.NoService)
         {
-            throw new OauthLoginException(preErrorMsg + "No service account or subscription" + postErrorMsg);
+            throw new OauthLoginException(preErrorMsg + Strings.LoginNoServiceAccountError + postErrorMsg);
         }
 
         if (loginResult.State == Launcher.LoginState.NoTerms)
         {
-            throw new OauthLoginException(preErrorMsg + "Need to accept terms of use" + postErrorMsg);
+            throw new OauthLoginException(preErrorMsg + Strings.LoginTermsNotAcceptedError + postErrorMsg);
         }
 
         /*
@@ -276,13 +286,6 @@ public class MainPage : Page
          */
         if (loginResult.State == Launcher.LoginState.NeedsPatchBoot)
         {
-            /*
-            CustomMessageBox.Show(
-                Loc.Localize("EverythingIsFuckedMessage",
-                    "Certain essential game files were modified/broken by a third party and the game can neither update nor start.\nYou have to reinstall the game to continue.\n\nIf this keeps happening, please contact us via Discord."),
-                "Error", MessageBoxButton.OK, MessageBoxImage.Error, parentWindow: _window);
-                */
-
             throw new OauthLoginException(preErrorMsg + "Boot conflict, need reinstall" + postErrorMsg);
         }
 
@@ -299,12 +302,6 @@ public class MainPage : Page
                 }
                 else
                 {
-                    /*
-                    CustomMessageBox.Show(
-                        Loc.Localize("LoginRepairResponseIsNotNeedsPatchGame",
-                            "The server sent an incorrect response - the repair cannot proceed."),
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Error, parentWindow: _window);
-                        */
                     throw new OauthLoginException(preErrorMsg + "Repair login state not NeedsPatchGame" + postErrorMsg);
                 }
             }
@@ -333,9 +330,7 @@ public class MainPage : Page
 
         if (action == LoginAction.GameNoLaunch)
         {
-            App.ShowMessageBlocking(
-                Loc.Localize("LoginNoStartOk",
-                    "An update check was executed and any pending updates were installed."), "XIVLauncher");
+            App.ShowMessageBlocking(Strings.UpdateCheckFinished, "XIVLauncher");
 
             return false;
         }
@@ -368,8 +363,6 @@ public class MainPage : Page
 
         while (true)
         {
-            List<Exception> exceptions = new();
-
             try
             {
                 using var process = await StartGameAndAddon(loginResult, isSteam, action == LoginAction.GameNoDalamud, action == LoginAction.GameNoPlugins, action == LoginAction.GameNoThirdparty).ConfigureAwait(false);
@@ -380,71 +373,18 @@ public class MainPage : Page
                 if (process.ExitCode != 0 && (App.Settings.TreatNonZeroExitCodeAsFailure ?? false))
                 {
                     throw new InvalidOperationException("Game exited with non-zero exit code");
-
-                    /*
-                    switch (new CustomMessageBox.Builder()
-                            .WithTextFormatted(
-                                Loc.Localize("LaunchGameNonZeroExitCode",
-                                    "It looks like the game has exited with a fatal error. Do you want to relaunch the game?\n\nExit code: 0x{0:X8}"),
-                                (uint)process.ExitCode)
-                            .WithImage(MessageBoxImage.Exclamation)
-                            .WithShowHelpLinks(true)
-                            .WithShowDiscordLink(true)
-                            .WithShowNewGitHubIssue(true)
-                            .WithButtons(MessageBoxButton.YesNoCancel)
-                            .WithDefaultResult(MessageBoxResult.Yes)
-                            .WithCancelResult(MessageBoxResult.No)
-                            .WithYesButtonText(Loc.Localize("LaunchGameRelaunch", "_Relaunch"))
-                            .WithNoButtonText(Loc.Localize("LaunchGameClose", "_Close"))
-                            .WithCancelButtonText(Loc.Localize("LaunchGameDoNotAskAgain", "_Don't ask again"))
-                            .WithParentWindow(_window)
-                            .Show())
-                    {
-                        case MessageBoxResult.Yes:
-                            continue;
-
-                        case MessageBoxResult.No:
-                            return true;
-
-                        case MessageBoxResult.Cancel:
-                            App.Settings.TreatNonZeroExitCodeAsFailure = false;
-                            return true;
-                    }
-                    */
                 }
 
                 return true;
             }
-            /*
-            catch (AggregateException ex)
-            {
-                Log.Error(ex, "StartGameAndError resulted in one or more exceptions.");
-
-                exceptions.Add(ex.Flatten().InnerException);
-            }
-            */
             catch (Exception ex)
             {
                 Log.Error(ex, "StartGameAndError resulted in an exception.");
-
-                exceptions.Add(ex);
                 throw;
             }
 
-            /*
-            var builder = new CustomMessageBox.Builder()
-                          .WithImage(MessageBoxImage.Error)
-                          .WithShowHelpLinks(true)
-                          .WithShowDiscordLink(true)
-                          .WithShowNewGitHubIssue(true)
-                          .WithButtons(MessageBoxButton.YesNo)
-                          .WithDefaultResult(MessageBoxResult.No)
-                          .WithCancelResult(MessageBoxResult.No)
-                          .WithYesButtonText(Loc.Localize("LaunchGameRetry", "_Try again"))
-                          .WithNoButtonText(Loc.Localize("LaunchGameClose", "_Close"))
-                          .WithParentWindow(_window);
-
             //NOTE(goat): This HAS to handle all possible exceptions from StartGameAndAddon!!!!!
+            /*
             List<string> summaries = new();
             List<string> actionables = new();
             List<string> descriptions = new();
@@ -605,7 +545,7 @@ public class MainPage : Page
         switch (Environment.OSVersion.Platform)
         {
             case PlatformID.Win32NT:
-                dalamudRunner = new WindowsDalamudRunner();
+                dalamudRunner = new WindowsDalamudRunner(Program.DalamudUpdater.Runtime);
                 dalamudCompatCheck = new WindowsDalamudCompatibilityCheck();
                 break;
 
@@ -632,52 +572,25 @@ public class MainPage : Page
         catch (IDalamudCompatibilityCheck.NoRedistsException ex)
         {
             Log.Error(ex, "No Dalamud Redists found");
-
             throw;
-            /*
-            CustomMessageBox.Show(
-                Loc.Localize("DalamudVc2019RedistError",
-                    "The XIVLauncher in-game addon needs the Microsoft Visual C++ 2015-2019 redistributable to be installed to continue. Please install it from the Microsoft homepage."),
-                "XIVLauncher", MessageBoxButton.OK, MessageBoxImage.Exclamation, parentWindow: _window);
-                */
         }
         catch (IDalamudCompatibilityCheck.ArchitectureNotSupportedException ex)
         {
             Log.Error(ex, "Architecture not supported");
-
             throw;
-            /*
-            CustomMessageBox.Show(
-                Loc.Localize("DalamudArchError",
-                    "Dalamud cannot run your computer's architecture. Please make sure that you are running a 64-bit version of Windows.\nIf you are using Windows on ARM, please make sure that x64-Emulation is enabled for XIVLauncher."),
-                "XIVLauncher", MessageBoxButton.OK, MessageBoxImage.Exclamation, parentWindow: _window);
-                */
         }
 
         if (App.Settings.DalamudEnabled.GetValueOrDefault(true) && !forceNoDalamud)
         {
             try
             {
-                App.StartLoading("Waiting for Dalamud to be ready...", "This may take a little while. Please hold!");
+                App.StartLoading(Strings.WaitingForDalamud, Strings.PleaseBePatient);
                 dalamudOk = dalamudLauncher.HoldForUpdate(App.Settings.GamePath) == DalamudLauncher.DalamudInstallState.Ok;
             }
             catch (DalamudRunnerException ex)
             {
                 Log.Error(ex, "Couldn't ensure Dalamud runner");
-
-                var runnerErrorMessage = Loc.Localize("DalamudRunnerError",
-                    "Could not launch Dalamud successfully. This might be caused by your antivirus.\nTo prevent this, please add an exception for the folder \"%AppData%\\XIVLauncher\\addons\".");
-
                 throw;
-                /*
-                CustomMessageBox.Builder
-                                .NewFrom(runnerErrorMessage)
-                                .WithImage(MessageBoxImage.Error)
-                                .WithButtons(MessageBoxButton.OK)
-                                .WithShowHelpLinks()
-                                .WithParentWindow(_window)
-                                .Show();
-                                */
             }
         }
 
@@ -720,6 +633,14 @@ public class MainPage : Page
             System.Environment.SetEnvironmentVariable("DOTNET_SYSTEM_GLOBALIZATION_USENLS", "true");
         }
 
+        // The Timezone environment on Unix platforms tends to cause issues with in-game time display.
+        // For now the best workaround is to unset it, although it can be specified with AdditionalArgs
+        // again if the user really wants to.
+        if (Environment.OSVersion.Platform == PlatformID.Unix && App.Settings.DontUseSystemTz == true)
+        {
+            System.Environment.SetEnvironmentVariable("TZ", string.Empty);
+        }
+
         // Deal with "Additional Arguments". VAR=value %command% -args
         var launchOptions = (App.Settings.AdditionalArgs ?? string.Empty).Split("%command%", 2);
         var launchEnv = "";
@@ -756,7 +677,7 @@ public class MainPage : Page
 
         if (Environment.OSVersion.Platform == PlatformID.Win32NT)
         {
-            runner = new WindowsGameRunner(dalamudLauncher, dalamudOk, Program.DalamudUpdater.Runtime);
+            runner = new WindowsGameRunner(dalamudLauncher, dalamudOk);
         }
         else if (Environment.OSVersion.Platform == PlatformID.Unix)
         {
@@ -770,7 +691,14 @@ public class MainPage : Page
                 else if (!File.Exists(Path.Combine(App.Settings.WineBinaryPath, "wine64")))
                     throw new InvalidOperationException("Custom wine binary path is invalid: no wine64 found at that location.\n" +
                                                         "Check path carefully for typos: " + App.Settings.WineBinaryPath);
+
+                Log.Information("Using Custom Wine: " + App.Settings.WineBinaryPath);
             }
+            else
+            {
+                Log.Information("Using Managed Wine: " + App.Settings.WineManagedVersion.ToString());
+            }
+            Log.Information("Using Dxvk Version: " + App.Settings.DxvkVersion.ToString());
 
             var signal = new ManualResetEvent(false);
             var isFailed = false;
@@ -792,14 +720,14 @@ public class MainPage : Page
                 signal.Set();
             });
 
-            App.StartLoading("Ensuring compatibility tool...", "This may take a little while. Please hold!");
+            App.StartLoading(Strings.PreparingForCompatTool, Strings.PleaseBePatient);
             signal.WaitOne();
             signal.Dispose();
 
             if (isFailed)
                 return null!;
 
-            App.StartLoading("Starting game...", "Have fun!");
+            App.StartLoading(Strings.StartingGame, Strings.HaveFun);
 
             runner = new UnixGameRunner(Program.CompatibilityTools, dalamudLauncher, dalamudOk);
 
@@ -860,18 +788,7 @@ public class MainPage : Page
         }
         catch (Exception)
         {
-            /*
-            CustomMessageBox.Builder
-                            .NewFrom(ex, "Addons")
-                            .WithAppendText("\n\n")
-                            .WithAppendText(Loc.Localize("AddonLoadError",
-                                "This could be caused by your antivirus, please check its logs and add any needed exclusions."))
-                            .WithParentWindow(_window)
-                            .Show();
-                            */
-
             IsLoggingIn = false;
-
             addonMgr.StopAddons();
             throw;
         }
@@ -948,10 +865,7 @@ public class MainPage : Page
             catch (Exception ex)
             {
                 Log.Error(ex, "Unable to check boot version");
-                App.ShowMessage(
-                    Loc.Localize("CheckBootVersionError",
-                        "XIVLauncher was not able to check the boot version for the select game installation. This can happen if a maintenance is currently in progress or if your connection to the version check server is not available. Please report this error if you are able to login with the official launcher, but not XIVLauncher."),
-                    "XIVLauncher");
+                App.ShowMessage(Strings.CannotGetBootVerError, "XIVLauncher");
 
                 return false;
             }
@@ -988,8 +902,7 @@ public class MainPage : Page
 
         if (!mutex.WaitOne(0, false))
         {
-            App.ShowMessageBlocking(Loc.Localize("PatcherAlreadyInProgress", "XIVLauncher is already patching your game in another instance. Please check if XIVLauncher is still open."),
-                "XIVLauncher");
+            App.ShowMessageBlocking( "XIVLauncher is already patching your game in another instance. Please check if XIVLauncher is still open.", "XIVLauncher");
             Environment.Exit(0);
             return false; // This line will not be run.
         }
@@ -997,17 +910,15 @@ public class MainPage : Page
 
         if (GameHelpers.CheckIsGameOpen())
         {
-            App.ShowMessageBlocking(
-                Loc.Localize("GameIsOpenError",
-                    "The game and/or the official launcher are open. XIVLauncher cannot patch the game if this is the case.\nPlease close the official launcher and try again."),
-                "XIVLauncher");
+            App.ShowMessageBlocking(Strings.CannotPatchGameOpenError, "XIVLauncher");
 
             return false;
         }
 
-        using var installer = new PatchInstaller(App.Settings.KeepPatches ?? false);
-        Program.Patcher = new PatchManager(App.Settings.PatchAcquisitionMethod ?? AcquisitionMethod.Aria, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
-            App.Settings.PatchPath, installer, App.Launcher, sid);
+        using var installer = new PatchInstaller(App.Settings.GamePath, App.Settings.KeepPatches ?? false);
+        using var acquisition = new AriaPatchAcquisition(new FileInfo(Path.Combine(App.Storage.GetFolder("logs").FullName, "aria2.log")));
+        Program.Patcher = new PatchManager(acquisition, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
+                                           App.Settings.PatchPath, installer, App.Launcher, sid);
         Program.Patcher.OnFail += PatcherOnFail;
         installer.OnFail += this.InstallerOnFail;
 
@@ -1025,7 +936,7 @@ public class MainPage : Page
         });
         */
 
-        this.App.StartLoading($"Now patching {repository.ToString().ToLowerInvariant()}...", canCancel: false, isIndeterminate: false);
+        this.App.StartLoading(string.Format(Strings.NowPatching, repository.ToString().ToLowerInvariant()), canCancel: false, isIndeterminate: false);
 
         try
         {
@@ -1040,9 +951,9 @@ public class MainPage : Page
                 {
                     Thread.Sleep(30);
 
-                    App.LoadingPage.Line2 = string.Format("Working on {0}/{1}", Program.Patcher.CurrentInstallIndex, Program.Patcher.Downloads.Count);
-                    App.LoadingPage.Line3 = string.Format("{0} left to download at {1}/s", ApiHelpers.BytesToString(Program.Patcher.AllDownloadsLength < 0 ? 0 : Program.Patcher.AllDownloadsLength),
-                        ApiHelpers.BytesToString(Program.Patcher.Speeds.Sum()));
+                    App.LoadingPage.Line2 = string.Format(Strings.WorkingOnStatus, Program.Patcher.CurrentInstallIndex, Program.Patcher.Downloads.Count);
+                    App.LoadingPage.Line3 = string.Format(Strings.LeftToDownloadStatus, MathHelpers.BytesToString(Program.Patcher.AllDownloadsLength < 0 ? 0 : Program.Patcher.AllDownloadsLength),
+                        MathHelpers.BytesToString(Program.Patcher.Speeds.Sum()));
 
                     App.LoadingPage.Progress = Program.Patcher.CurrentInstallIndex / (float)Program.Patcher.Downloads.Count;
                 }
@@ -1050,8 +961,7 @@ public class MainPage : Page
 
             try
             {
-                var aria2LogFile = new FileInfo(Path.Combine(App.Storage.GetFolder("logs").FullName, "launcher.log"));
-                await Program.Patcher.PatchAsync(aria2LogFile, false).ConfigureAwait(false);
+                await Program.Patcher.PatchAsync(false).ConfigureAwait(false);
             }
             finally
             {
@@ -1063,10 +973,7 @@ public class MainPage : Page
         }
         catch (PatchInstallerException ex)
         {
-            var message = Loc.Localize("PatchManNoInstaller",
-                "The patch installer could not start correctly.\n{0}\n\nIf you have denied access to it, please try again. If this issue persists, please contact us via Discord.");
-
-            App.ShowMessageBlocking(string.Format(message, ex.Message), "XIVLauncher Error");
+            App.ShowMessageBlocking(string.Format(Strings.PatchInstallerStartFailError, ex.Message), Strings.XIVLauncherError);
         }
         catch (NotEnoughSpaceException sex)
         {
@@ -1074,26 +981,20 @@ public class MainPage : Page
             {
                 case NotEnoughSpaceException.SpaceKind.Patches:
                     App.ShowMessageBlocking(
-                        string.Format(
-                            Loc.Localize("FreeSpaceError",
-                                "There is not enough space on your drive to download patches.\n\nYou can change the location patches are downloaded to in the settings.\n\nRequired:{0}\nFree:{1}"),
-                            ApiHelpers.BytesToString(sex.BytesRequired), ApiHelpers.BytesToString(sex.BytesFree)), "XIVLauncher Error");
+                        string.Format(Strings.NotEnoughSpacePatchesError,
+                            MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
                     break;
 
                 case NotEnoughSpaceException.SpaceKind.AllPatches:
                     App.ShowMessageBlocking(
-                        string.Format(
-                            Loc.Localize("FreeSpaceErrorAll",
-                                "There is not enough space on your drive to download all patches.\n\nYou can change the location patches are downloaded to in the XIVLauncher settings.\n\nRequired:{0}\nFree:{1}"),
-                            ApiHelpers.BytesToString(sex.BytesRequired), ApiHelpers.BytesToString(sex.BytesFree)), "XIVLauncher Error");
+                        string.Format(Strings.NotEnoughSpaceAllPatchesError,
+                            MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
                     break;
 
                 case NotEnoughSpaceException.SpaceKind.Game:
                     App.ShowMessageBlocking(
-                        string.Format(
-                            Loc.Localize("FreeSpaceGameError",
-                                "There is not enough space on your drive to install patches.\n\nYou can change the location the game is installed to in the settings.\n\nRequired:{0}\nFree:{1}"),
-                            ApiHelpers.BytesToString(sex.BytesRequired), ApiHelpers.BytesToString(sex.BytesFree)), "XIVLauncher Error");
+                        string.Format(Strings.NotEnoughSpaceGameError,
+                            MathHelpers.BytesToString(sex.BytesRequired), MathHelpers.BytesToString(sex.BytesFree)), Strings.XIVLauncherError);
                     break;
 
                 default:
@@ -1116,20 +1017,13 @@ public class MainPage : Page
 
     private void PatcherOnFail(PatchListEntry patch, string context)
     {
-        var dlFailureLoc = Loc.Localize("PatchManDlFailure",
-            "XIVLauncher could not verify the downloaded game files. Please restart and try again.\n\nThis usually indicates a problem with your internet connection.\nIf this error persists, try using a VPN set to Japan.\n\nContext: {0}\n{1}");
-
-        App.ShowMessageBlocking(string.Format(dlFailureLoc, context, patch.VersionId), "XIVLauncher Error");
-
+        App.ShowMessageBlocking(string.Format(Strings.CannotVerifyGameFilesError, context, patch.VersionId), Strings.XIVLauncherError);
         Environment.Exit(0);
     }
 
     private void InstallerOnFail()
     {
-        App.ShowMessageBlocking(
-            Loc.Localize("PatchInstallerInstallFailed", "The patch installer ran into an error.\nPlease report this error.\n\nPlease try again or use the official launcher."),
-            "XIVLauncher Error");
-
+        App.ShowMessageBlocking(Strings.PatchInstallerGenericError, Strings.XIVLauncherError);
         Environment.Exit(0);
     }
 
@@ -1143,8 +1037,7 @@ public class MainPage : Page
 
         if (!mutex.WaitOne(0, false))
         {
-            App.ShowMessageBlocking(Loc.Localize("PatcherAlreadyInProgress", "XIVLauncher is already patching your game in another instance. Please check if XIVLauncher is still open."),
-                "XIVLauncher");
+            App.ShowMessageBlocking("XIVLauncher is already patching your game in another instance. Please check if XIVLauncher is still open.", "XIVLauncher");
             Environment.Exit(0);
             return false; // This line will not be run.
         }
@@ -1156,11 +1049,11 @@ public class MainPage : Page
         Log.Information("STARTING REPAIR");
 
         // TODO: bundle the PatchInstaller with xl-core on Windows and run this remotely
-        using var verify = new PatchVerifier(Program.CommonSettings, loginResult, TimeSpan.FromMilliseconds(100), loginResult.OauthLogin.MaxExpansion, false);
+        using var verify = new PatchVerifier(Program.Config.GamePath!, Program.Config.PatchPath!, loginResult, TimeSpan.FromMilliseconds(100), loginResult.OauthLogin.MaxExpansion, false);
 
-        for (bool doVerify = true; doVerify;)
+        for (var doVerify = true; doVerify;)
         {
-            this.App.StartLoading($"Now repairing...", canCancel: false, isIndeterminate: false);
+            this.App.StartLoading(Strings.NowRepairingFiles, canCancel: false, isIndeterminate: false);
 
             verify.Start();
 
@@ -1171,13 +1064,13 @@ public class MainPage : Page
                     // TODO: show more progress info here
                     case PatchVerifier.VerifyState.DownloadMeta:
                         this.App.LoadingPage.Line2 = $"{verify.CurrentFile}";
-                        this.App.LoadingPage.Line3 = $"{Math.Min(verify.PatchSetIndex + 1, verify.PatchSetCount)}/{verify.PatchSetCount} - {ApiHelpers.BytesToString(verify.Progress)}/{ApiHelpers.BytesToString(verify.Total)}";
+                        this.App.LoadingPage.Line3 = $"{Math.Min(verify.PatchSetIndex + 1, verify.PatchSetCount)}/{verify.PatchSetCount} - {MathHelpers.BytesToString(verify.Progress)}/{MathHelpers.BytesToString(verify.Total)}";
                         this.App.LoadingPage.Progress = (float)(verify.Total != 0 ? (float)verify.Progress / (float)verify.Total : 0.0);
                         break;
 
                     case PatchVerifier.VerifyState.VerifyAndRepair:
                         this.App.LoadingPage.Line2 = $"{verify.CurrentFile}";
-                        this.App.LoadingPage.Line3 = $"{Math.Min(verify.PatchSetIndex + 1, verify.PatchSetCount)}/{verify.PatchSetCount} - {Math.Min(verify.TaskIndex + 1, verify.TaskCount)}/{verify.TaskCount} - {ApiHelpers.BytesToString(verify.Progress)}/{ApiHelpers.BytesToString(verify.Total)}";
+                        this.App.LoadingPage.Line3 = $"{Math.Min(verify.PatchSetIndex + 1, verify.PatchSetCount)}/{verify.PatchSetCount} - {Math.Min(verify.TaskIndex + 1, verify.TaskCount)}/{verify.TaskCount} - {MathHelpers.BytesToString(verify.Progress)}/{MathHelpers.BytesToString(verify.Total)}";
                         this.App.LoadingPage.Progress = (float)(verify.Total != 0 ? (float)verify.Progress / (float)verify.Total : 0);
                         break;
 
@@ -1199,12 +1092,22 @@ public class MainPage : Page
             {
                 case PatchVerifier.VerifyState.Done:
                     // TODO: ask the user if they want to login or rerun after repair
-                    App.ShowMessageBlocking(verify.NumBrokenFiles switch
+
+                    var mainText = verify.NumBrokenFiles switch
                     {
-                        0 => Loc.Localize("GameRepairSuccess0", "All game files seem to be valid."),
-                        1 => Loc.Localize("GameRepairSuccess1", "XIVLauncher has successfully repaired 1 game file."),
-                        _ => string.Format(Loc.Localize("GameRepairSuccessPlural", "XIVLauncher has successfully repaired {0} game files."), verify.NumBrokenFiles),
-                    });
+                        0 => Strings.RepairAllFilesValid,
+                        1 => Strings.RepairFixedSingularFile,
+                        _ => string.Format(Strings.RepairFixedPluralFiles, verify.NumBrokenFiles),
+                    };
+
+                    var additionalText = verify.MovedFiles.Count switch
+                    {
+                        0 => "",
+                        1 => "\n\n" + string.Format(Strings.RepairSingleFileMoved, verify.MovedFileToDir),
+                        _ => "\n\n" + string.Format(Strings.RepairPluralFilesMoved, verify.MovedFiles.Count, verify.MovedFileToDir),
+                    };
+
+                    App.ShowMessageBlocking(mainText + additionalText);
 
                     doVerify = false;
                     break;
@@ -1214,12 +1117,11 @@ public class MainPage : Page
 
                     if (verify.LastException is NoVersionReferenceException)
                     {
-                        App.ShowMessageBlocking(Loc.Localize("NoVersionReferenceError",
-                                                        "The version of the game you are on cannot be repaired by XIVLauncher yet, as reference information is not yet available.\nPlease try again later."));
+                        App.ShowMessageBlocking(Strings.RepairGameVerUnsupportedError);
                     }
                     else
                     {
-                        App.ShowMessageBlocking(verify.LastException + "\n\n" + Loc.Localize("GameRepairError", "An error occurred while repairing the game files.\nYou may have to reinstall the game."));
+                        App.ShowMessageBlocking(verify.LastException + "\n\n" + Strings.RepairFailureError);
                     }
 
                     doVerify = false;

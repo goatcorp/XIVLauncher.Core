@@ -1,0 +1,38 @@
+name: Update localization
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  '0 0 * * *'
+
+jobs:
+  synchronize-with-crowdin:
+    if: github.repository_owner == 'goatcorp'
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: write
+      pull-requests: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Update localization
+      uses: crowdin/github-action@0749939f635900a2521aa6aac7a3766642b2dc71
+      with:
+          upload_sources: true
+          upload_translations: false
+          download_translations: true
+          
+          # We should put this to true when every language has someone that can approve
+          export_only_approved: false
+          
+          push_translations: true
+          commit_message: 'Update localization'
+          create_pull_request: true
+          pull_request_title: 'Update localization'
+          pull_request_body: 'Update localization with latest translations from crowdin'
+          config: '.github/crowdin.yml'
+      env:
+        CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+        CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

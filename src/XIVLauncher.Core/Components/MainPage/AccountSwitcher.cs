@@ -1,8 +1,9 @@
+using Hexa.NET.ImGui;
+
 using System.Numerics;
 
-using ImGuiNET;
-
 using XIVLauncher.Core.Accounts;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.MainPage;
 
@@ -34,7 +35,7 @@ public class AccountSwitcher : Component
         {
             if (this.manager.Accounts.Count == 0)
             {
-                ImGui.Text("No saved accounts...");
+                ImGui.Text(Strings.NoSavedAccounts);
             }
 
             foreach (XivAccount account in this.manager.Accounts)

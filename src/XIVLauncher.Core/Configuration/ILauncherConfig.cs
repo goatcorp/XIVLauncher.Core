@@ -1,7 +1,6 @@
 using XIVLauncher.Common;
 using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
-using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
 
@@ -10,8 +9,6 @@ namespace XIVLauncher.Core.Configuration;
 public interface ILauncherConfig
 {
     public bool? CompletedFts { get; set; }
-
-    public bool? DoVersionCheck { get; set; }
 
     public float? FontPxSize { get; set; }
 
@@ -51,8 +48,6 @@ public interface ILauncherConfig
 
     public bool? KeepPatches { get; set; }
 
-    public AcquisitionMethod? PatchAcquisitionMethod { get; set; }
-
     public long PatchSpeedLimit { get; set; }
 
     #endregion
@@ -89,6 +84,8 @@ public interface ILauncherConfig
 
     public bool? SetWin7 { get; set; }
 
+    public bool? DontUseSystemTz { get; set; }
+
     #endregion
 
     #region Dalamud
@@ -98,6 +95,8 @@ public interface ILauncherConfig
     public DalamudLoadMethod? DalamudLoadMethod { get; set; }
     public bool? DalamudManualInjectionEnabled { get; set; }
     public DirectoryInfo? DalamudManualInjectPath { get; set; }
+    public string? DalamudBetaKind { get; set; }
+    public string? DalamudBetaKey { get; set; }
 
     public int DalamudLoadDelay { get; set; }
 

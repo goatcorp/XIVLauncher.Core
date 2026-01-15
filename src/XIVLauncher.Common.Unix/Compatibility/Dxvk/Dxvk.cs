@@ -1,22 +1,26 @@
-﻿using System;
+using System;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 using Serilog;
 
 using XIVLauncher.Common.Unix.Compatibility.Dxvk.Releases;
+using XIVLauncher.Common.Unix.Compatibility.Wine;
 using XIVLauncher.Common.Util;
 
 namespace XIVLauncher.Common.Unix.Compatibility.Dxvk;
 
 public enum DxvkVersion
 {
-    [SettingsDescription("Stable", "Dxvk 2.6 with GPLAsync patches. For most graphics cards.")]
+
+    [SettingsDescription("Stable", "DXVK 2.6.1 with GPLAsync patches. Requires Mesa 24.0 or Nvidia 535 drivers. Ideal for graphics cards.")]
     Stable,
 
-    [SettingsDescription("Legacy", "Dxvk 1.10.3 with Async patches. For older graphics cards.")]
+    [SettingsDescription("Beta", "DXVK 2.7 with GPLAsync patches. Requires Mesa 25.0 or Nvidia 550 drivers. Ideal for modern graphics cards.")]
+    Beta,
+
+    [SettingsDescription("Legacy", "DXVK 1.10.3 with Async patches. Requires Mesa 22.0 or Nvidia 470 drivers. Ideal for older graphics card.")]
     Legacy,
 
     [SettingsDescription("Disabled", "Use OpenGL/WineD3D instead. Slow, and might not work with Dalamud.")]
@@ -46,6 +50,7 @@ public static class Dxvk
         IDxvkRelease release = version switch
         {
             DxvkVersion.Stable => new DxvkStableRelease(),
+            DxvkVersion.Beta => new DxvkBetaRelease(),
             DxvkVersion.Legacy => new DxvkLegacyRelease(),
             _ => throw new NotImplementedException(),
         };
@@ -54,7 +59,7 @@ public static class Dxvk
         if (!Directory.Exists(dxvkPath))
         {
             Log.Information("DXVK does not exist, downloading");
-            await DownloadDxvk(installDirectory, release.DownloadUrl).ConfigureAwait(false);
+            await DownloadDxvk(installDirectory, release.DownloadUrl, release.Checksum).ConfigureAwait(false);
         }
 
         var system32 = Path.Combine(prefix.FullName, "drive_c", "windows", "system32");
@@ -66,12 +71,18 @@ public static class Dxvk
         }
     }
 
-    private static async Task DownloadDxvk(DirectoryInfo installDirectory, string url)
+    private static async Task DownloadDxvk(DirectoryInfo installDirectory, string url, string checksum)
     {
         using var client = new HttpClient();
         var tempPath = PlatformHelpers.GetTempFileName();
 
         File.WriteAllBytes(tempPath, await client.GetByteArrayAsync(url).ConfigureAwait(false));
+
+        if (!CompatUtil.EnsureChecksumMatch(tempPath, [checksum]))
+        {
+            throw new InvalidDataException("SHA512 checksum verification failed");
+        }
+
         PlatformHelpers.Untar(tempPath, installDirectory.FullName);
 
         File.Delete(tempPath);
