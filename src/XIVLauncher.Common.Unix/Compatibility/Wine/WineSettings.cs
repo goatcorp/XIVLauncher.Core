@@ -7,22 +7,22 @@ namespace XIVLauncher.Common.Unix.Compatibility.Wine;
 
 public enum WineStartupType
 {
-    [SettingsDescription("Managed by XIVLauncher", "Wine setup is managed by XIVLauncher - you can leave it up to us.")]
+    [SettingsDescription("Managed by XIVLauncher", "WINE setup is managed by XIVLauncher - you can leave it up to us.")]
     Managed,
 
-    [SettingsDescription("Custom", "Point XIVLauncher to a custom location containing wine binaries to run the game with.")]
+    [SettingsDescription("Custom", "Point XIVLauncher to a custom location containing WINE binaries to run the game with.")]
     Custom,
 }
 
 public enum WineManagedVersion
 {
-    [SettingsDescription("Stable", "Based on Wine 10.8 - recommended for most users.")]
+    [SettingsDescription("Stable", "The most stable experience, based on WINE 10.8 - recommended for most users.")]
     Stable,
 
-    [SettingsDescription("Beta", "Testing ground for the newest wine changes. Based on Wine 10.8 with lsteamclient patches.")]
+    [SettingsDescription("Beta", "Testing ground for the newest wine changes, based on WINE 10.8 with lsteamclient patches.")]
     Beta,
 
-    [SettingsDescription("Legacy", "Based on Wine 8.5 - use for compatibility with some plugins.")]
+    [SettingsDescription("Legacy", "For older systems or compatibility, based on WINE 8.5.")]
     Legacy,
 }
 
@@ -42,21 +42,18 @@ public class WineSettings
     {
         this.StartupType = startupType;
 
-        var wineDistroId = CompatUtil.GetWineIdForDistro();
-        switch (managedWine)
+        if (startupType == WineStartupType.Managed)
         {
-            case WineManagedVersion.Stable:
-                this.WineRelease = new WineStableRelease(wineDistroId);
-                break;
-            case WineManagedVersion.Beta:
-                this.WineRelease = new WineBetaRelease(wineDistroId);
-                break;
-            case WineManagedVersion.Legacy:
-                this.WineRelease = new WineLegacyRelease(wineDistroId);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(managedWine.ToString());
+            var wineDistroId = CompatUtil.GetWineIdForDistro();
+            this.WineRelease = managedWine switch
+            {
+                WineManagedVersion.Stable => new WineStableRelease(wineDistroId),
+                WineManagedVersion.Beta => new WineBetaRelease(wineDistroId),
+                WineManagedVersion.Legacy => new WineLegacyRelease(wineDistroId),
+                _ => throw new ArgumentOutOfRangeException(managedWine.ToString())
+            };
         }
+
         this.CustomBinPath = customBinPath;
         this.EsyncOn = esyncOn ? "1" : "0";
         this.FsyncOn = fsyncOn ? "1" : "0";

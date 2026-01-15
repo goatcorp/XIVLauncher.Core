@@ -1,8 +1,8 @@
-using System.Text;
-
 using Newtonsoft.Json;
 
 using Serilog;
+
+using System.Text;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;

@@ -12,21 +12,27 @@ public enum WineReleaseDistro
     ubuntu,
     fedora,
     arch,
+    macOS
 }
 
 public static class CompatUtil
 {
-    private const string OS_RELEASE_PATH = "/etc/os-release";
-
     public static WineReleaseDistro GetWineIdForDistro()
     {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            return WineReleaseDistro.macOS;
+        }
+        
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            throw new InvalidOperationException("GetWineIdForDistro can only be called on the Linux platform");
+            throw new InvalidOperationException("GetWineIdForDistro called on unsupported platform");
         }
 
         try
         {
+            const string OS_RELEASE_PATH = "/etc/os-release";
+
             if (!File.Exists(OS_RELEASE_PATH))
             {
                 return WineReleaseDistro.ubuntu;
@@ -41,10 +47,6 @@ public static class CompatUtil
                 else
                     osInfo.Add(keyValue[0], keyValue[1]);
             }
-
-            var name = (osInfo.ContainsKey("NAME") ? osInfo["NAME"] : "").Trim('"');
-            var pretty = (osInfo.ContainsKey("PRETTY_NAME") ? osInfo["PRETTY_NAME"] : "").Trim('"');
-            name = pretty == "" ? (name == "" ? "Unknown distribution" : name) : pretty;
 
             // Check for flatpak or snap
             if (osInfo.ContainsKey("ID"))
@@ -65,19 +67,17 @@ public static class CompatUtil
             // Check for values in osInfo.
             foreach (var kvp in osInfo)
             {
-                if (kvp.Value.ToLower().Contains("fedora"))
+                if (kvp.Value.ToLower().Contains("fedora") || kvp.Value.ToLower().Contains("tumbleweed"))
                 {
                     return WineReleaseDistro.fedora;
                 }
-                else if (kvp.Value.ToLower().Contains("tumbleweed"))
-                {
-                    return WineReleaseDistro.fedora;
-                }
-                else if (kvp.Value.ToLower().Contains("arch"))
+
+                if (kvp.Value.ToLower().Contains("arch"))
                 {
                     return WineReleaseDistro.arch;
                 }
-                else if (kvp.Value.ToLower().Contains("ubuntu") || kvp.Value.ToLower().Contains("debian"))
+
+                if (kvp.Value.ToLower().Contains("ubuntu") || kvp.Value.ToLower().Contains("debian"))
                 {
                     return WineReleaseDistro.ubuntu;
                 }

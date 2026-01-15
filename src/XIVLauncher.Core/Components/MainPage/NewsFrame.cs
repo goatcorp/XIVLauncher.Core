@@ -1,9 +1,10 @@
-using System.Numerics;
+using Hexa.NET.ImGui;
 
-using ImGuiNET;
+using System.Numerics;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Game;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.MainPage;
 
@@ -15,7 +16,7 @@ public class NewsFrame : Component
     private readonly Timer bannerTimer;
 
     private Headlines? headlines;
-    private TextureWrap[] banners = { };
+    private TextureWrap[] banners = [];
 
     private IReadOnlyList<Banner> bannerList = new List<Banner>();
 
@@ -86,7 +87,7 @@ public class NewsFrame : Component
                 {
                     if (!string.IsNullOrEmpty(newsEntry.Url))
                     {
-                        if (ImGui.Selectable(newsEntry.Title, default, default, ImGui.CalcTextSize(newsEntry.Title)) && !string.IsNullOrEmpty(newsEntry.Url))
+                        if (ImGui.Selectable($"{newsEntry.Title}##{newsEntry.Id}", false, default, ImGui.CalcTextSize(newsEntry.Title)) && !string.IsNullOrEmpty(newsEntry.Url))
                         {
                             AppUtil.OpenBrowser(newsEntry.Url);
                         }
@@ -99,7 +100,7 @@ public class NewsFrame : Component
 
                 if (this.headlines is not null)
                 {
-                    ImGui.TextDisabled("News");
+                    ImGui.TextDisabled(Strings.NewsCaption);
 
                     foreach (News newsEntry in this.headlines.News)
                     {
@@ -108,7 +109,7 @@ public class NewsFrame : Component
 
                     ImGui.Spacing();
 
-                    ImGui.TextDisabled("Topics");
+                    ImGui.TextDisabled(Strings.TopicsCaption);
                     foreach (News topic in this.headlines.Topics)
                     {
                         ShowNewsEntry(topic);
@@ -117,7 +118,7 @@ public class NewsFrame : Component
             }
             else
             {
-                ImGui.Text("News is loading...");
+                ImGui.Text(Strings.NewsLoading);
             }
 
             ImGui.PopStyleVar();

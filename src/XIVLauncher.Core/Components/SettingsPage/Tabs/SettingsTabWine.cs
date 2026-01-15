@@ -1,11 +1,12 @@
+using Hexa.NET.ImGui;
+
 using System.Numerics;
 using System.Runtime.InteropServices;
-
-using ImGuiNET;
 
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
 using XIVLauncher.Common.Util;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -19,59 +20,57 @@ public class SettingsTabWine : SettingsTab
     {
         Entries = new SettingsEntry[]
         {
-            startupTypeSetting = new SettingsEntry<WineStartupType>("Wine Install", "Choose how XIVLauncher will start and manage your wine installation.",
+            startupTypeSetting = new SettingsEntry<WineStartupType>(Strings.WineInstallSetting, Strings.WineInstallSettingDescription,
                 () => Program.Config.WineStartupType ?? WineStartupType.Managed, x => Program.Config.WineStartupType = x),
 
-            new SettingsEntry<WineManagedVersion>("Wine Version", "If you change wine releases, you might have to clear your prefix (Troubleshooting tab)", () => Program.Config.WineManagedVersion ?? WineManagedVersion.Stable,
+            new SettingsEntry<WineManagedVersion>(Strings.WineVersionSetting, Strings.WineVersionSettingDescription, () => Program.Config.WineManagedVersion ?? WineManagedVersion.Stable,
                 x => Program.Config.WineManagedVersion = x )
             {
                 CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Managed
             },
 
-            new SettingsEntry<string>("Wine Binary Path",
-                "Set the path XIVLauncher will use to run applications via wine.\nIt should be an absolute path to a folder containing wine64 and wineserver binaries.",
+            new SettingsEntry<string>(Strings.WineBinaryPathSetting,
+                Strings.WineBinarySettingDescription,
                 () => Program.Config.WineBinaryPath, s => Program.Config.WineBinaryPath = s)
             {
                 CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Custom
             },
 
-            dxvkVersionSetting = new SettingsEntry<DxvkVersion>("Dxvk Version", "Choose which Dxvk version to use.", () => Program.Config.DxvkVersion ?? DxvkVersion.Stable, x => Program.Config.DxvkVersion = x),
+            dxvkVersionSetting = new SettingsEntry<DxvkVersion>(Strings.DXVKVersionSetting, Strings.DXVKVersionSettingDescription, () => Program.Config.DxvkVersion ?? DxvkVersion.Stable, x => Program.Config.DxvkVersion = x),
 
-            new SettingsEntry<bool>("Enable DXVK ASYNC", "Enable DXVK ASYNC patch.", () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
+            new SettingsEntry<bool>(Strings.DXVKEnableAsyncSetting, Strings.DXVKEnableAsyncSettingDescription, () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
             {
                 CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled
             },
 
-            new SettingsEntry<bool>("Enable Feral's GameMode", "Enable launching with Feral Interactive's GameMode CPU optimizations.", () => Program.Config.GameModeEnabled ?? true, b => Program.Config.GameModeEnabled = b)
+            new SettingsEntry<bool>(Strings.EnableFeralGameModeSetting, Strings.EnableFeralGameModeSettingDescription, () => Program.Config.GameModeEnabled ?? true, b => Program.Config.GameModeEnabled = b)
             {
                 CheckVisibility = () => RuntimeInformation.IsOSPlatform(OSPlatform.Linux),
                 CheckValidity = b =>
                 {
-                    var handle = IntPtr.Zero;
-                    if (b == true && !NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle))
-                        return "GameMode was not detected on your system.";
-                    NativeLibrary.Free(handle);
+                    if (b == true && FeralGameModeFound == false)
+                        return Strings.EnableFeralGameModeNotFoundValidation;
                     return null;
                 }
             },
 
-            new SettingsEntry<bool>("Enable ESync", "Enable eventfd-based synchronization.", () => Program.Config.ESyncEnabled ?? true, b => Program.Config.ESyncEnabled = b),
-            new SettingsEntry<bool>("Enable FSync", "Enable fast user mutex (futex2).", () => Program.Config.FSyncEnabled ?? true, b => Program.Config.FSyncEnabled = b)
+            new SettingsEntry<bool>(Strings.EnableESyncSetting, Strings.EnableESyncSettingDescription, () => Program.Config.ESyncEnabled ?? true, b => Program.Config.ESyncEnabled = b),
+            new SettingsEntry<bool>(Strings.EnableFSyncSetting, Strings.EnableFSyncSettingDescription, () => Program.Config.FSyncEnabled ?? true, b => Program.Config.FSyncEnabled = b)
             {
                 CheckVisibility = () => RuntimeInformation.IsOSPlatform(OSPlatform.Linux),
                 CheckValidity = b =>
                 {
                     if (b == true && (Environment.OSVersion.Version.Major < 5 && (Environment.OSVersion.Version.Minor < 16 || Environment.OSVersion.Version.Major < 6)))
-                        return "Linux kernel 5.16 or higher is required for FSync.";
+                        return Strings.EnableFSyncSettingMinKernelValidation;
 
                     return null;
                 }
             },
 
-            new SettingsEntry<bool>("Set Windows version to 7", "Default for Wine 8.1+ is Windows 10, but this causes issues with some Dalamud plugins. Windows 7 is recommended for now.", () => Program.Config.SetWin7 ?? true, b => Program.Config.SetWin7 = b),
+            new SettingsEntry<bool>(Strings.SetWindows7Setting, Strings.SetWindows7SettingDescription, () => Program.Config.SetWin7 ?? true, b => Program.Config.SetWin7 = b),
 
-            new SettingsEntry<DxvkHudType>("DXVK Overlay", "Configure how much of the DXVK overlay is to be shown.", () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type),
-            new SettingsEntry<string>("WINEDEBUG Variables", "Configure debug logging for wine. Useful for troubleshooting.", () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s)
+            new SettingsEntry<DxvkHudType>(Strings.EnableDXVKOverlaySetting, Strings.EnableDXVKOverlaySettingDescription, () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type),
+            new SettingsEntry<string>(Strings.WineDebugAdditionalVarSetting, Strings.WineDebugAdditionalVarSettingDescription, () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s)
         };
     }
 
@@ -79,7 +78,22 @@ public class SettingsTabWine : SettingsTab
 
     public override bool IsUnixExclusive => true;
 
-    public override string Title => "Wine";
+    public override string Title => Strings.WineTitle;
+
+    private bool? feralGameModeFound = null;
+
+    private bool FeralGameModeFound
+    {
+        get
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) return false;
+            if (feralGameModeFound != null) return feralGameModeFound ?? false;
+            var handle = IntPtr.Zero;
+            feralGameModeFound = (NativeLibrary.TryLoad("libgamemodeauto.so.0", out handle));
+            NativeLibrary.Free(handle);
+            return feralGameModeFound ?? false;
+        }
+    }
 
     public override void Draw()
     {
@@ -88,31 +102,31 @@ public class SettingsTabWine : SettingsTab
         if (!Program.CompatibilityTools.IsToolDownloaded)
         {
             ImGui.BeginDisabled();
-            ImGui.Text("Compatibility tool isn't set up. Please start the game at least once.");
+            ImGui.Text(Strings.CompatibilityToolNotSetup);
 
             ImGui.Dummy(new Vector2(10));
         }
 
-        if (ImGui.Button("Open prefix"))
+        if (ImGui.Button(Strings.OpenWINEPrefix))
         {
             PlatformHelpers.OpenBrowser(Program.CompatibilityTools.Settings.Prefix.FullName);
         }
 
         ImGui.SameLine();
 
-        if (ImGui.Button("Open Wine configuration"))
+        if (ImGui.Button(Strings.OpenWINEConfiguration))
         {
             Program.CompatibilityTools.RunInPrefix("winecfg");
         }
 
         ImGui.SameLine();
 
-        if (ImGui.Button("Open Wine explorer (run apps in prefix)"))
+        if (ImGui.Button(Strings.OpenWINEExplorer))
         {
             Program.CompatibilityTools.RunInPrefix("explorer");
         }
 
-        if (ImGui.Button("Kill all wine processes"))
+        if (ImGui.Button(Strings.KillAllWINEProcesses))
         {
             Program.CompatibilityTools.Kill();
         }

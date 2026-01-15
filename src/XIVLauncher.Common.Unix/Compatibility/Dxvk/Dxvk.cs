@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -14,10 +13,14 @@ namespace XIVLauncher.Common.Unix.Compatibility.Dxvk;
 
 public enum DxvkVersion
 {
-    [SettingsDescription("Stable", "Dxvk 2.6 with GPLAsync patches. For most graphics cards.")]
+
+    [SettingsDescription("Stable", "DXVK 2.6.1 with GPLAsync patches. Requires Mesa 24.0 or Nvidia 535 drivers. Ideal for graphics cards.")]
     Stable,
 
-    [SettingsDescription("Legacy", "Dxvk 1.10.3 with Async patches. For older graphics cards.")]
+    [SettingsDescription("Beta", "DXVK 2.7 with GPLAsync patches. Requires Mesa 25.0 or Nvidia 550 drivers. Ideal for modern graphics cards.")]
+    Beta,
+
+    [SettingsDescription("Legacy", "DXVK 1.10.3 with Async patches. Requires Mesa 22.0 or Nvidia 470 drivers. Ideal for older graphics card.")]
     Legacy,
 
     [SettingsDescription("Disabled", "Use OpenGL/WineD3D instead. Slow, and might not work with Dalamud.")]
@@ -47,6 +50,7 @@ public static class Dxvk
         IDxvkRelease release = version switch
         {
             DxvkVersion.Stable => new DxvkStableRelease(),
+            DxvkVersion.Beta => new DxvkBetaRelease(),
             DxvkVersion.Legacy => new DxvkLegacyRelease(),
             _ => throw new NotImplementedException(),
         };

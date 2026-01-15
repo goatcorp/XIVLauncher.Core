@@ -1,8 +1,10 @@
+using Hexa.NET.ImGui;
+
+using System.Collections.Immutable;
 using System.Numerics;
 
-using ImGuiNET;
-
 using XIVLauncher.Core.Components.SettingsPage.Tabs;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage;
 
@@ -51,7 +53,8 @@ public class SettingsPage : Page
 
                     if (ImGui.BeginTabItem(settingsTab.Title))
                     {
-                        if (ImGui.BeginChild($"###settings_scrolling_{settingsTab.Title}", new Vector2(-1, -1), false))
+
+                        if (ImGui.BeginChild($"###settings_scrolling_{settingsTab.Title}", new Vector2(-1, -1)))
                         {
                             settingsTab.Draw();
                         }
@@ -63,7 +66,7 @@ public class SettingsPage : Page
             }
             else
             {
-                if (ImGui.BeginTabItem("Search Results"))
+                if (ImGui.BeginTabItem(Strings.SearchResults))
                 {
                     var any = false;
 
@@ -74,7 +77,8 @@ public class SettingsPage : Page
 
                         var eligible = settingsTab.Entries
                             .Where(x => x.Name.Contains(this.searchInput.Trim(),
-                                StringComparison.InvariantCultureIgnoreCase));
+                                StringComparison.InvariantCultureIgnoreCase))
+                            .ToImmutableArray();
 
                         if (!eligible.Any())
                             continue;
@@ -102,19 +106,21 @@ public class SettingsPage : Page
                     }
 
                     if (!any)
-                        ImGui.TextColored(ImGuiColors.DalamudGrey, "No results found...");
+                        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.NoResultsFound);
 
                     ImGui.EndTabItem();
                 }
             }
+            ImGui.EndTabBar();
         }
+
 
         ImGui.SetCursorPos(ImGuiHelpers.ViewportSize - new Vector2(60));
 
-        if (ImGui.BeginChild("###settingsFinishButton"))
+        if (ImGui.BeginChild("###settingsFinishButton", ImGuiChildFlags.NavFlattened))
         {
             ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 100f);
-            ImGui.PushFont(FontManager.IconFont);
+            ImGui.PushFont(FontManager.IconFont, 0.0f);
 
             var invalid = this.tabs.Any(x => x.Entries.Any(y => y.IsVisible && !y.IsValid));
             if (invalid)
@@ -137,17 +143,17 @@ public class SettingsPage : Page
                     this.App.State = LauncherApp.LauncherState.Main;
                 }
             }
+
+            ImGui.PopStyleVar();
+            ImGui.PopFont();
         }
 
         ImGui.EndChild();
 
-        ImGui.PopStyleVar();
-        ImGui.PopFont();
-
         var vpSize = ImGuiHelpers.ViewportSize;
         ImGui.SetCursorPos(new Vector2(vpSize.X - 260, 4));
         ImGui.SetNextItemWidth(250);
-        ImGui.InputTextWithHint("###searchInput", "Search for settings...", ref this.searchInput, 100);
+        ImGui.InputTextWithHint("###searchInput", Strings.SearchForSettings, ref this.searchInput, 100);
 
         base.Draw();
     }

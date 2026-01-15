@@ -1,6 +1,7 @@
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 using XIVLauncher.Common;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
@@ -8,40 +9,40 @@ public class SettingsTabGame : SettingsTab
 {
     public override SettingsEntry[] Entries { get; } =
     {
-        new SettingsEntry<DirectoryInfo>("Game Path", "Where the game is or will be installed.", () => Program.Config.GamePath, x => Program.Config.GamePath = x)
+        new SettingsEntry<DirectoryInfo>(Strings.GamePathSetting, Strings.GamePathSettingDescription, () => Program.Config.GamePath, x => Program.Config.GamePath = x)
         {
             CheckValidity = x =>
             {
                 if (string.IsNullOrWhiteSpace(x?.FullName))
-                    return "Game path is not set.";
+                    return Strings.GamePathSettingNotSetValidation;
 
-                if (x.Name == "game" || x.Name == "boot")
-                    return "Please select the path containing the folders \"game\" and \"boot\", not the folders itself.";
+                if (x.Name is "game" or "boot")
+                    return Strings.GamePathSettingInvalidValidationj;
 
                 return null;
             }
         },
 
-        new SettingsEntry<DirectoryInfo>("Game Configuration Path", "Where your user config files will be stored.", () => Program.Config.GameConfigPath, x => Program.Config.GameConfigPath = x)
+        new SettingsEntry<DirectoryInfo>(Strings.GameConfigurationPathSetting, Strings.GameConfigurationPathSettingDescription, () => Program.Config.GameConfigPath, x => Program.Config.GameConfigPath = x)
         {
-            CheckValidity = x => string.IsNullOrWhiteSpace(x?.FullName) ? "Game Config Path is not set." : null,
+            CheckValidity = x => string.IsNullOrWhiteSpace(x?.FullName) ? Strings.GameConfigurationPathNotSetValidation : null,
 
             // TODO: We should also support this on Windows
             CheckVisibility = () => Environment.OSVersion.Platform == PlatformID.Unix,
         },
 
-        new SettingsEntry<string>("Additional Game Arguments", "Follows Steam conventions: VAR1=value VAR2=value %command% -arg1 -arg2.\nCan't pass programs (like gamescope -- %command%). Does not accept flatpak args (--parent-pid=1, etc.)", () => Program.Config.AdditionalArgs, x => Program.Config.AdditionalArgs = x),
-        new SettingsEntry<ClientLanguage>("Game Language", "Select the game's language.", () => Program.Config.ClientLanguage ?? ClientLanguage.English, x => Program.Config.ClientLanguage = x),
-        new SettingsEntry<DpiAwareness>("Game DPI Awareness", "Select the game's DPI Awareness. Change this if the game's scaling looks wrong.", () => Program.Config.DpiAwareness ?? DpiAwareness.Unaware, x => Program.Config.DpiAwareness = x),
-        new SettingsEntry<bool>("Use XIVLauncher authenticator/OTP macros", "Check this if you want to use the XIVLauncher authenticator app or macros.", () => Program.Config.IsOtpServer ?? false, x => Program.Config.IsOtpServer = x),
-        new SettingsEntry<bool>("Ignore Steam", "Check this if you do not want XIVLauncher to communicate with Steam (Requires Restart).", () => Program.Config.IsIgnoringSteam ?? false, x => Program.Config.IsIgnoringSteam = x)
+        new SettingsEntry<string>(Strings.AdditionalGameArgsSetting, Strings.AdditionalGameArgsSettingDescription, () => Program.Config.AdditionalArgs, x => Program.Config.AdditionalArgs = x),
+        new SettingsEntry<ClientLanguage>(Strings.GameLanguageSetting, Strings.GameLanguageSettingDescription, () => Program.Config.ClientLanguage ?? ClientLanguage.English, x => Program.Config.ClientLanguage = x),
+        new SettingsEntry<DpiAwareness>(Strings.GameDPIAwarenessSetting, Strings.GameDPIAwarenessSettingDescription, () => Program.Config.DpiAwareness ?? DpiAwareness.Unaware, x => Program.Config.DpiAwareness = x),
+        new SettingsEntry<bool>(Strings.UseXLAuthMacrosSetting, Strings.UseXLAuthMacrosSettingDescription, () => Program.Config.IsOtpServer ?? false, x => Program.Config.IsOtpServer = x),
+        new SettingsEntry<bool>(Strings.IgnoreSteamSetting, Strings.IgnoreSteamSettingDescription, () => Program.Config.IsIgnoringSteam ?? false, x => Program.Config.IsIgnoringSteam = x)
         {
             CheckVisibility = () => !CoreEnvironmentSettings.IsSteamCompatTool,
         },
-        new SettingsEntry<bool>("Use Experimental UID Cache", "Tries to save your login token for the next start. Can result in launching with expired sessions.", () => Program.Config.IsUidCacheEnabled ?? false, x => Program.Config.IsUidCacheEnabled = x),
+        new SettingsEntry<bool>(Strings.UseUIDCacheSetting, Strings.UseUIDCacheSettingDescription, () => Program.Config.IsUidCacheEnabled ?? false, x => Program.Config.IsUidCacheEnabled = x),
     };
 
-    public override string Title => "Game";
+    public override string Title => Strings.GameTitle;
 
     public override void Draw()
     {
@@ -49,8 +50,8 @@ public class SettingsTabGame : SettingsTab
 
         if (Program.Config.IsUidCacheEnabled == true)
         {
-            ImGui.Text("Reset the UID cache; use if you are getting FFXIV error 1012 or 500X.");
-            if (ImGui.Button("Reset UID Cache"))
+            ImGui.Text(Strings.ResetUIDCacheInfo);
+            if (ImGui.Button(Strings.ResetUIDCacheButton))
             {
                 Program.ResetUIDCache();
             }
