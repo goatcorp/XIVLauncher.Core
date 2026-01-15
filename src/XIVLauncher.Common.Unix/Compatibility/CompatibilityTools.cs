@@ -101,7 +101,7 @@ public class CompatibilityTools
 
         EnsurePrefix();
         await Dxvk.Dxvk.InstallDxvk(httpClient, Settings.Prefix, dxvkDirectory, dxvkVersion).ConfigureAwait(false);
-        await Nvapi.Nvapi.InstallNvapi(Settings.Prefix, nvapiDirectory, nvapiVersion).ConfigureAwait(false);
+        await Nvapi.Nvapi.InstallNvapi(httpClient, Settings.Prefix, nvapiDirectory, nvapiVersion).ConfigureAwait(false);
         if (nvapiVersion != NvapiVersion.Disabled)
             Nvapi.Nvapi.CopyNvngx(gameDirectory, Settings.Prefix);
 
