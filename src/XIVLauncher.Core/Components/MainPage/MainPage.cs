@@ -1,10 +1,10 @@
+using System.Diagnostics;
+using System.Numerics;
+
 using Hexa.NET.ImGui;
 using Hexa.NET.SDL3;
 
 using Serilog;
-
-using System.Diagnostics;
-using System.Numerics;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Addon;
@@ -708,7 +708,7 @@ public class MainPage : Page
                 var tempPath = App.Storage.GetFolder("temp");
                 var winver = (App.Settings.SetWin7 ?? true) ? "win7" : "win10";
 
-                await Program.CompatibilityTools.EnsureTool(tempPath).ConfigureAwait(false);
+                await Program.CompatibilityTools.EnsureTool(Program.HttpClient, tempPath).ConfigureAwait(false);
                 Program.CompatibilityTools.RunInPrefix($"winecfg /v {winver}");
             }).ContinueWith(t =>
             {
