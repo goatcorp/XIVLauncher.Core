@@ -82,7 +82,7 @@ public class CompatibilityTools
     {
         if (!File.Exists(Wine64Path))
         {
-            Log.Information($"Compatibility tool does not exist, downloading {Settings.WineRelease.DownloadUrl}");
+            Log.Information($"Compatibility tool does not exist, downloading {Settings.Release.DownloadUrl}");
             await DownloadTool(httpClient, tempPath).ConfigureAwait(false);
         }
 
@@ -95,8 +95,8 @@ public class CompatibilityTools
     private async Task DownloadTool(HttpClient httpClient, DirectoryInfo tempPath)
     {
         var tempFilePath = Path.Combine(tempPath.FullName, $"{Guid.NewGuid()}");
-        await File.WriteAllBytesAsync(tempFilePath, await httpClient.GetByteArrayAsync(Settings.WineRelease.DownloadUrl).ConfigureAwait(false)).ConfigureAwait(false);
-        if (!CompatUtil.EnsureChecksumMatch(tempFilePath, Settings.WineRelease.Checksums))
+        await File.WriteAllBytesAsync(tempFilePath, await httpClient.GetByteArrayAsync(Settings.Release.DownloadUrl).ConfigureAwait(false)).ConfigureAwait(false);
+        if (!CompatUtil.EnsureChecksumMatch(tempFilePath, Settings.Release.Checksums))
         {
             throw new InvalidDataException("SHA512 checksum verification failed");
         }
