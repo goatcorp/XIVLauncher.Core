@@ -75,6 +75,12 @@ public class SettingsTabTroubleshooting : SettingsTab
         }
         ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearManagedCompatToolsTroubleshooting);
 
+        if (ImGui.Button(Strings.ClearNvngxTroubleshootingButton))
+        {
+            Program.ClearNvngx();
+        }
+        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearNvngxTroubleshooting);
+
         if (ImGui.Button(Strings.ClearDalamudTroubleshootingButton))
         {
             Program.ClearPlugins(true);
