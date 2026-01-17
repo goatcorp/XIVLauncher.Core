@@ -131,7 +131,7 @@ public class MainPage : Page
                 return;
             }
 
-            if (Repository.Ffxiv.GetVer(App.Settings.GamePath) == Constants.BASE_GAME_VERSION &&
+            if (Repository.Ffxiv.GetVer(App.Settings.GamePath!) == Constants.BASE_GAME_VERSION &&
                 App.Settings.IsUidCacheEnabled == true)
             {
                 App.ShowMessageBlocking(
@@ -246,8 +246,7 @@ public class MainPage : Page
 
             if (action == LoginAction.Repair)
                 return await App.Launcher.Login(username, password, otp, isSteam, false, gamePath, true, isFreeTrial, language).ConfigureAwait(false);
-            else
-                return await App.Launcher.Login(username, password, otp, isSteam, enableUidCache, gamePath, false, isFreeTrial, language).ConfigureAwait(false);
+            return await App.Launcher.Login(username, password, otp, isSteam, enableUidCache, gamePath, false, isFreeTrial, language).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -561,7 +560,7 @@ public class MainPage : Page
         Troubleshooting.LogTroubleshooting();
 
         var dalamudLauncher = new DalamudLauncher(dalamudRunner, Program.DalamudUpdater,
-            App.Settings.DalamudLoadMethod.GetValueOrDefault(DalamudLoadMethod.DllInject), App.Settings.GamePath,
+            App.Settings.DalamudLoadMethod.GetValueOrDefault(DalamudLoadMethod.DllInject), App.Settings.GamePath!,
             App.Storage.Root, App.Storage.GetFolder("logs"), App.Settings.ClientLanguage ?? ClientLanguage.English,
             App.Settings.DalamudLoadDelay, false, noPlugins, noThird, Troubleshooting.GetTroubleshootingJson());
 
@@ -585,7 +584,7 @@ public class MainPage : Page
             try
             {
                 App.StartLoading(Strings.WaitingForDalamud, Strings.PleaseBePatient);
-                dalamudOk = dalamudLauncher.HoldForUpdate(App.Settings.GamePath) == DalamudLauncher.DalamudInstallState.Ok;
+                dalamudOk = dalamudLauncher.HoldForUpdate(App.Settings.GamePath!) == DalamudLauncher.DalamudInstallState.Ok;
             }
             catch (DalamudRunnerException ex)
             {
@@ -748,12 +747,12 @@ public class MainPage : Page
 
         // We won't do any sanity checks here anymore, since that should be handled in StartLogin
         var launchedProcess = App.Launcher.LaunchGame(runner,
-            loginResult.UniqueId,
-            loginResult.OauthLogin.Region,
+            loginResult.UniqueId!,
+            loginResult.OauthLogin!.Region,
             loginResult.OauthLogin.MaxExpansion,
             isSteam,
             gameArgs,
-            App.Settings.GamePath,
+            App.Settings.GamePath!,
             App.Settings.ClientLanguage.GetValueOrDefault(ClientLanguage.English),
             App.Settings.IsEncryptArgs.GetValueOrDefault(true),
             App.Settings.DpiAwareness.GetValueOrDefault(DpiAwareness.Unaware));
@@ -891,7 +890,7 @@ public class MainPage : Page
 
         Debug.Assert(loginResult.PendingPatches != null, "loginResult.PendingPatches != null ASSERTION FAILED");
 
-        return TryHandlePatchAsync(Repository.Ffxiv, loginResult.PendingPatches, loginResult.UniqueId);
+        return TryHandlePatchAsync(Repository.Ffxiv, loginResult.PendingPatches, loginResult.UniqueId!);
     }
 
     private async Task<bool> TryHandlePatchAsync(Repository repository, PatchListEntry[] pendingPatches, string sid)
@@ -915,10 +914,10 @@ public class MainPage : Page
             return false;
         }
 
-        using var installer = new PatchInstaller(App.Settings.GamePath, App.Settings.KeepPatches ?? false);
+        using var installer = new PatchInstaller(App.Settings.GamePath!, App.Settings.KeepPatches ?? false);
         using var acquisition = new AriaPatchAcquisition(new FileInfo(Path.Combine(App.Storage.GetFolder("logs").FullName, "aria2.log")));
-        Program.Patcher = new PatchManager(acquisition, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
-                                           App.Settings.PatchPath, installer, App.Launcher, sid);
+        Program.Patcher = new PatchManager(acquisition, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath!,
+                                           App.Settings.PatchPath!, installer, App.Launcher, sid);
         Program.Patcher.OnFail += PatcherOnFail;
         installer.OnFail += this.InstallerOnFail;
 
@@ -951,7 +950,7 @@ public class MainPage : Page
                 {
                     Thread.Sleep(30);
 
-                    App.LoadingPage.Line2 = string.Format(Strings.WorkingOnStatus, Program.Patcher.CurrentInstallIndex, Program.Patcher.Downloads.Count);
+                    App.LoadingPage.Line2 = string.Format(Strings.WorkingOnStatus, Program.Patcher!.CurrentInstallIndex, Program.Patcher.Downloads.Count);
                     App.LoadingPage.Line3 = string.Format(Strings.LeftToDownloadStatus, MathHelpers.BytesToString(Program.Patcher.AllDownloadsLength < 0 ? 0 : Program.Patcher.AllDownloadsLength),
                         MathHelpers.BytesToString(Program.Patcher.Speeds.Sum()));
 
@@ -1049,7 +1048,7 @@ public class MainPage : Page
         Log.Information("STARTING REPAIR");
 
         // TODO: bundle the PatchInstaller with xl-core on Windows and run this remotely
-        using var verify = new PatchVerifier(Program.Config.GamePath!, Program.Config.PatchPath!, loginResult, TimeSpan.FromMilliseconds(100), loginResult.OauthLogin.MaxExpansion, false);
+        using var verify = new PatchVerifier(Program.Config.GamePath!, Program.Config.PatchPath!, loginResult, TimeSpan.FromMilliseconds(100), loginResult.OauthLogin!.MaxExpansion, false);
 
         for (var doVerify = true; doVerify;)
         {

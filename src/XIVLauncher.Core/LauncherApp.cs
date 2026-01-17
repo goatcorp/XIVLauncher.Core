@@ -129,7 +129,7 @@ public class LauncherApp : Component
         this.Accounts = new AccountManager(this.Storage.GetFile("accounts.json"));
         this.UniqueIdCache = new CommonUniqueIdCache(this.Storage.GetFile("uidCache.json"));
 
-        this.Launcher = new Launcher(Program.Steam, UniqueIdCache, frontierUrl, Program.Config.AcceptLanguage ?? ApiHelpers.GenerateAcceptLanguage());
+        this.Launcher = new Launcher(Program.Steam, UniqueIdCache, frontierUrl, this.Settings.AcceptLanguage ?? ApiHelpers.GenerateAcceptLanguage());
 
         this.mainPage = new MainPage(this);
         this.setPage = new SettingsPage(this);
@@ -140,10 +140,10 @@ public class LauncherApp : Component
 
         if (!EnvironmentSettings.IsNoKillswitch && !string.IsNullOrEmpty(cutOffBootver))
         {
-            var bootver = SeVersion.Parse(Repository.Boot.GetVer(Program.Config.GamePath));
+            var bootVersion = SeVersion.Parse(Repository.Boot.GetVer(this.Settings.GamePath!));
             var cutoff = SeVersion.Parse(cutOffBootver);
 
-            if (bootver > cutoff)
+            if (bootVersion > cutoff)
             {
                 this.ShowMessage("XIVLauncher is unavailable at this time as there were changes to the login process during a recent patch." +
                                 "\n\nWe need to adjust to these changes and verify that our adjustments are safe before we can re-enable the launcher." +
