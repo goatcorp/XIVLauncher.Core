@@ -168,7 +168,27 @@ sealed class Program
     private static void Main(string[] args)
     {
         mainArgs = args;
-        storage = new Storage(APP_NAME);
+
+        bool badxlpath = false;
+        var badxlpathex = new Exception();
+        string? useAltPath = Environment.GetEnvironmentVariable("XL_USERDIR");
+        try 
+        {
+            storage = new Storage(APP_NAME, useAltPath);
+        }
+        catch (Exception e)
+        {
+            storage = new Storage(APP_NAME);
+            badxlpath = true;
+            badxlpathex = e;
+        }
+
+        SetupLogging(mainArgs);
+
+        if (badxlpath)
+        {
+            Log.Error(badxlpathex, $"Bad value for XL_PATH: {useAltPath}. Using ~/.xlcore instead.");
+        }
 
         if (CoreEnvironmentSettings.ClearAll)
         {
@@ -183,7 +203,6 @@ sealed class Program
             if (CoreEnvironmentSettings.ClearLogs) ClearLogs();
         }
 
-        SetupLogging(mainArgs);
         LoadConfig(storage);
 
         Secrets = GetSecretProvider(storage);
