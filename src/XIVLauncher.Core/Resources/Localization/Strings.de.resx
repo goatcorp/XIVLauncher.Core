@@ -1,355 +1,356 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:element name="root" msdata:IsDataSet="true">
+    <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+        <xsd:element name="root" msdata:IsDataSet="true">
 
         </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>1.3</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0,
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0,
             Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0,
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0,
             Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="EnterYourOTP" xml:space="preserve">
+    </resheader>
+    <data name="EnterYourOTP" xml:space="preserve">
         <value>Please enter your OTP</value>
     </data>
-  <data name="OKLabel" xml:space="preserve">
+    <data name="OKLabel" xml:space="preserve">
         <value>OK</value>
     </data>
-  <data name="CancelLabel" xml:space="preserve">
+    <data name="CancelLabel" xml:space="preserve">
         <value>Cancel</value>
     </data>
-  <data name="SearchResults" xml:space="preserve">
+    <data name="SearchResults" xml:space="preserve">
         <value>Search Results</value>
     </data>
-  <data name="NoResultsFound" xml:space="preserve">
+    <data name="NoResultsFound" xml:space="preserve">
         <value>No results found...</value>
     </data>
-  <data name="SearchForSettings" xml:space="preserve">
+    <data name="SearchForSettings" xml:space="preserve">
         <value>Search for settings...</value>
     </data>
-  <data name="AboutTitle" xml:space="preserve">
+    <data name="AboutTitle" xml:space="preserve">
         <value>About</value>
     </data>
-  <data name="WineInstallSetting" xml:space="preserve">
+    <data name="WineInstallSetting" xml:space="preserve">
         <value>WINE Install</value>
     </data>
-  <data name="WineInstallSettingDescription" xml:space="preserve">
+    <data name="WineInstallSettingDescription" xml:space="preserve">
         <value>Choose how XIVLauncher will start and manage your WINE installation.</value>
     </data>
-  <data name="WineVersionSetting" xml:space="preserve">
+    <data name="WineVersionSetting" xml:space="preserve">
         <value>WINE Version</value>
     </data>
-  <data name="WineVersionSettingDescription" xml:space="preserve">
+    <data name="WineVersionSettingDescription" xml:space="preserve">
         <value>If you change WINE releases, you might have to clear your prefix (Troubleshooting tab)</value>
     </data>
-  <data name="WineBinaryPathSetting" xml:space="preserve">
+    <data name="WineBinaryPathSetting" xml:space="preserve">
         <value>WINE Binary Path</value>
     </data>
-  <data name="WineBinarySettingDescription" xml:space="preserve">
+    <data name="WineBinarySettingDescription" xml:space="preserve">
         <value>Set the path XIVLauncher will use to run applications via WINE.
 It should be an absolute path to a folder containing wine64 and wineserver binaries.</value>
     </data>
-  <data name="DXVKVersionSetting" xml:space="preserve">
+    <data name="DXVKVersionSetting" xml:space="preserve">
         <value>DXVK Version</value>
     </data>
-  <data name="DXVKVersionSettingDescription" xml:space="preserve">
+    <data name="DXVKVersionSettingDescription" xml:space="preserve">
         <value>Choose which DXVK version to use.</value>
     </data>
-  <data name="DXVKEnableAsyncSetting" xml:space="preserve">
+    <data name="DXVKEnableAsyncSetting" xml:space="preserve">
         <value>Enable DXVK ASYNC</value>
     </data>
-  <data name="DXVKEnableAsyncSettingDescription" xml:space="preserve">
+    <data name="DXVKEnableAsyncSettingDescription" xml:space="preserve">
         <value>Enable DXVK ASYNC patch.</value>
     </data>
-  <data name="EnableFeralGameModeSetting" xml:space="preserve">
+    <data name="EnableFeralGameModeSetting" xml:space="preserve">
         <value>Enable Feral's GameMode</value>
     </data>
-  <data name="EnableFeralGameModeSettingDescription" xml:space="preserve">
+    <data name="EnableFeralGameModeSettingDescription" xml:space="preserve">
         <value>Enable launching with Feral Interactive's GameMode CPU optimizations.</value>
     </data>
-  <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
+    <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
         <value>GameMode was not detected on your system.</value>
     </data>
-  <data name="EnableESyncSetting" xml:space="preserve">
+    <data name="EnableESyncSetting" xml:space="preserve">
         <value>Enable ESync</value>
     </data>
-  <data name="EnableFSyncSetting" xml:space="preserve">
+    <data name="EnableFSyncSetting" xml:space="preserve">
         <value>Enable FSync</value>
     </data>
-  <data name="EnableESyncSettingDescription" xml:space="preserve">
+    <data name="EnableESyncSettingDescription" xml:space="preserve">
         <value>Enable eventfd-based synchronization.</value>
     </data>
-  <data name="EnableFSyncSettingDescription" xml:space="preserve">
+    <data name="EnableFSyncSettingDescription" xml:space="preserve">
         <value>Enable fast user mutex (futex2).</value>
     </data>
-  <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
+    <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
         <value>Linux kernel 5.16 or higher is required for FSync.</value>
     </data>
-  <data name="SetWindows7Setting" xml:space="preserve">
+    <data name="SetWindows7Setting" xml:space="preserve">
         <value>Set Windows version to 7</value>
     </data>
-  <data name="SetWindows7SettingDescription" xml:space="preserve">
+    <data name="SetWindows7SettingDescription" xml:space="preserve">
         <value>Default for WINE 8.1+ is Windows 10, but this causes issues with some Dalamud plugins. Windows 7 is recommended for now.</value>
     </data>
-  <data name="EnableDXVKOverlaySetting" xml:space="preserve">
+    <data name="EnableDXVKOverlaySetting" xml:space="preserve">
         <value>DXVK Overlay</value>
     </data>
-  <data name="EnableDXVKOverlaySettingDescription" xml:space="preserve">
+    <data name="EnableDXVKOverlaySettingDescription" xml:space="preserve">
         <value>Configure how much of the DXVK overlay is to be shown.</value>
     </data>
-  <data name="WineDebugAdditionalVarSetting" xml:space="preserve">
+    <data name="WineDebugAdditionalVarSetting" xml:space="preserve">
         <value>WINEDEBUG Variables</value>
     </data>
-  <data name="WineDebugAdditionalVarSettingDescription" xml:space="preserve">
+    <data name="WineDebugAdditionalVarSettingDescription" xml:space="preserve">
         <value>Configure debug logging for WINE. Useful for troubleshooting.</value>
     </data>
-  <data name="WineTitle" xml:space="preserve">
+    <data name="WineTitle" xml:space="preserve">
         <value>WINE</value>
     </data>
-  <data name="CompatibilityToolNotSetup" xml:space="preserve">
+    <data name="CompatibilityToolNotSetup" xml:space="preserve">
         <value>Compatibility tool has not been set up yet, please ensure you have started the game at least once.</value>
     </data>
-  <data name="OpenWINEPrefix" xml:space="preserve">
+    <data name="OpenWINEPrefix" xml:space="preserve">
         <value>Open WINE Prefix</value>
     </data>
-  <data name="OpenWINEConfiguration" xml:space="preserve">
+    <data name="OpenWINEConfiguration" xml:space="preserve">
         <value>Open WINE configuration</value>
     </data>
-  <data name="OpenWINEExplorer" xml:space="preserve">
+    <data name="OpenWINEExplorer" xml:space="preserve">
         <value>Open WINE explorer (run apps in prefix)</value>
     </data>
-  <data name="KillAllWINEProcesses" xml:space="preserve">
+    <data name="KillAllWINEProcesses" xml:space="preserve">
         <value>Kill all WINE processes</value>
     </data>
-  <data name="DisableGameoverlayRendererHack" xml:space="preserve">
+    <data name="DisableGameoverlayRendererHack" xml:space="preserve">
         <value>Hack: Disable gameoverlayrenderer.so</value>
     </data>
-  <data name="DisableGameoverlayRendererHackDescription" xml:space="preserve">
+    <data name="DisableGameoverlayRendererHackDescription" xml:space="preserve">
         <value>May fix black screen on launch (Steam Deck) and some stuttering issues after 40+ minutes.</value>
     </data>
-  <data name="XModifiersHack" xml:space="preserve">
+    <data name="XModifiersHack" xml:space="preserve">
         <value>Hack: XMODIFIERS="@im=null"</value>
     </data>
-  <data name="XModifiersHackDescription" xml:space="preserve">
+    <data name="XModifiersHackDescription" xml:space="preserve">
         <value>Fixes some mouse-related issues, some stuttering issues</value>
     </data>
-  <data name="FixLibICUUCErrorHack" xml:space="preserve">
+    <data name="FixLibICUUCErrorHack" xml:space="preserve">
         <value>Hack: Fix libicuuc Dalamud error</value>
     </data>
-  <data name="FixLibICUUCErrorHackDescription" xml:space="preserve">
+    <data name="FixLibICUUCErrorHackDescription" xml:space="preserve">
         <value>Fixes a specific "an internal Dalamud error has occurred." In the terminal you will see this text:
 "Cannot get symbol u_charsToUChars from libicuuc Error: 127"</value>
     </data>
-  <data name="ForceLocaleHack" xml:space="preserve">
+    <data name="ForceLocaleHack" xml:space="preserve">
         <value>Hack: Force locale to {0}</value>
     </data>
-  <data name="ForceLocaleHackCUTF8" xml:space="preserve">
+    <data name="ForceLocaleHackCUTF8" xml:space="preserve">
         <value>C.UTF-8 (exact value depends on distro)</value>
     </data>
-  <data name="ForceLocaleHackDescription" xml:space="preserve">
+    <data name="ForceLocaleHackDescription" xml:space="preserve">
         <value>Sets LC_ALL and LC_CTYPE to "{0}". This can fix some issues with non-Latin unicode characters in file paths if LANG is not a UTF-8 type</value>
     </data>
-  <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
+    <data name="ForceLocaleHackUTFValidation" xml:space="preserve">
         <value>Your locale is "{0}". You probably don't need this hack.</value>
     </data>
-  <data name="ForceDontUseSystemTZ" xml:space="preserve">
-        <value>Don't use system timezone</value>
+    <data name="ForceDontUseSystemTZ" xml:space="preserve">
+        <value>Hack: Don't use system timezone.</value>
     </data>
-  <data name="ForceDontUseSystemDescription" xml:space="preserve">
+    <data name="ForceDontUseSystemDescription" xml:space="preserve">
         <value>Unsets the TZ environment variable from system provided</value>
     </data>
-  <data name="TroubleshootingTitle" xml:space="preserve">
+    <data name="TroubleshootingTitle" xml:space="preserve">
         <value>Troubleshooting</value>
     </data>
-  <data name="ClearWINEPrefixTroubleshooting" xml:space="preserve">
+    <data name="ClearWINEPrefixTroubleshooting" xml:space="preserve">
         <value>Clear the WINE Prefix.</value>
     </data>
-  <data name="ClearWINEPrefixTroubleshootingButton" xml:space="preserve">
+    <data name="ClearWINEPrefixTroubleshootingButton" xml:space="preserve">
         <value>Clear WINE Prefix</value>
     </data>
-  <data name="ClearManagedCompatToolsTroubleshooting" xml:space="preserve">
+    <data name="ClearManagedCompatToolsTroubleshooting" xml:space="preserve">
         <value>Clear the managed WINE install and DXVK</value>
     </data>
-  <data name="ClearManagedCompatToolsTroubleshootingButton" xml:space="preserve">
+    <data name="ClearManagedCompatToolsTroubleshootingButton" xml:space="preserve">
         <value>Clear WINE &amp; DXVK Installs</value>
     </data>
-  <data name="ClearDalamudTroubleshooting" xml:space="preserve">
+    <data name="ClearDalamudTroubleshooting" xml:space="preserve">
         <value>Clear all the files and folders related to Dalamud. Your settings will not be touched, but all your plugins will be uninstalled, including custom repos.</value>
     </data>
-  <data name="ClearDalamudTroubleshootingButton" xml:space="preserve">
+    <data name="ClearDalamudTroubleshootingButton" xml:space="preserve">
         <value>Clear Dalamud</value>
     </data>
-  <data name="ClearAllLogsTroubleshooting" xml:space="preserve">
+    <data name="ClearAllLogsTroubleshooting" xml:space="preserve">
         <value>Clear all the log files.</value>
     </data>
-  <data name="ClearAllLogsTroubleshootingButton" xml:space="preserve">
+    <data name="ClearAllLogsTroubleshootingButton" xml:space="preserve">
         <value>Clear Logs</value>
     </data>
-  <data name="ResetSettingsTroubleshooting" xml:space="preserve">
+    <data name="ResetSettingsTroubleshooting" xml:space="preserve">
         <value>Reset settings to default.</value>
     </data>
-  <data name="ResetSettingsTroubleshootingButton" xml:space="preserve">
+    <data name="ResetSettingsTroubleshootingButton" xml:space="preserve">
         <value>Clear Settings</value>
     </data>
-  <data name="ResetAllTroubleshooting" xml:space="preserve">
+    <data name="ResetAllTroubleshooting" xml:space="preserve">
         <value>Do all of the above.</value>
     </data>
-  <data name="GenerateTSPackTroubleshooting" xml:space="preserve">
+    <data name="GenerateTSPackTroubleshooting" xml:space="preserve">
         <value>Generate a troubleshooting pack to upload to the official Discord channel</value>
     </data>
-  <data name="GenerateTSPackTroubleshootingButton" xml:space="preserve">
+    <data name="GenerateTSPackTroubleshootingButton" xml:space="preserve">
         <value>Generate TSPack</value>
     </data>
-  <data name="ResetAllTroubleshootingButton" xml:space="preserve">
+    <data name="ResetAllTroubleshootingButton" xml:space="preserve">
         <value>Clear Everything</value>
     </data>
-  <data name="PatchPathSetting" xml:space="preserve">
+    <data name="PatchPathSetting" xml:space="preserve">
         <value>Patch Path</value>
     </data>
-  <data name="PatchPathSettingDescription" xml:space="preserve">
+    <data name="PatchPathSettingDescription" xml:space="preserve">
         <value>Where patches should be downloaded to.</value>
     </data>
-  <data name="PatchPathSettingNotSetValidation" xml:space="preserve">
+    <data name="PatchPathSettingNotSetValidation" xml:space="preserve">
         <value>Patch path is not set.</value>
     </data>
-  <data name="PatchDownloadMethodSetting" xml:space="preserve">
+    <data name="PatchDownloadMethodSetting" xml:space="preserve">
         <value>Patch Download Method</value>
     </data>
-  <data name="PatchDownloadMethodSettingDescription" xml:space="preserve">
+    <data name="PatchDownloadMethodSettingDescription" xml:space="preserve">
         <value>How patches should be downloaded.</value>
     </data>
-  <data name="MaximumSpeedSetting" xml:space="preserve">
+    <data name="MaximumSpeedSetting" xml:space="preserve">
         <value>Maximum Speed</value>
     </data>
-  <data name="MaximumSpeedSettingDescription" xml:space="preserve">
+    <data name="MaximumSpeedSettingDescription" xml:space="preserve">
         <value>Maximum download speed in bytes per second. Set to 0 for unlimited.</value>
     </data>
-  <data name="KeepPatchesSetting" xml:space="preserve">
+    <data name="KeepPatchesSetting" xml:space="preserve">
         <value>Keep Patches</value>
     </data>
-  <data name="KeepPatchesSettingDescription" xml:space="preserve">
+    <data name="KeepPatchesSettingDescription" xml:space="preserve">
         <value>Keep patches on disk after installing.</value>
     </data>
-  <data name="PatchingTitle" xml:space="preserve">
+    <data name="PatchingTitle" xml:space="preserve">
         <value>Patching</value>
     </data>
-  <data name="GamePathSetting" xml:space="preserve">
+    <data name="GamePathSetting" xml:space="preserve">
         <value>Game Path</value>
     </data>
-  <data name="GamePathSettingDescription" xml:space="preserve">
+    <data name="GamePathSettingDescription" xml:space="preserve">
         <value>Where the game is or will be installed.</value>
     </data>
-  <data name="GamePathSettingNotSetValidation" xml:space="preserve">
+    <data name="GamePathSettingNotSetValidation" xml:space="preserve">
         <value>Game path is not set.</value>
     </data>
-  <data name="GamePathSettingInvalidValidationj" xml:space="preserve">
+    <data name="GamePathSettingInvalidValidationj" xml:space="preserve">
         <value>Please select the path containing the folders "game" and "boot", not the folders itself.</value>
     </data>
-  <data name="GameConfigurationPathSetting" xml:space="preserve">
+    <data name="GameConfigurationPathSetting" xml:space="preserve">
         <value>Game Configuration Path</value>
     </data>
-  <data name="GameConfigurationPathSettingDescription" xml:space="preserve">
+    <data name="GameConfigurationPathSettingDescription" xml:space="preserve">
         <value>Where your user config files will be stored.</value>
     </data>
-  <data name="GameConfigurationPathNotSetValidation" xml:space="preserve">
+    <data name="GameConfigurationPathNotSetValidation" xml:space="preserve">
         <value>Game Config Path is not set.</value>
     </data>
-  <data name="AdditionalGameArgsSetting" xml:space="preserve">
+    <data name="AdditionalGameArgsSetting" xml:space="preserve">
         <value>Additional Game Arguments</value>
     </data>
-  <data name="AdditionalGameArgsSettingDescription" xml:space="preserve">
+    <data name="AdditionalGameArgsSettingDescription" xml:space="preserve">
         <value>Follows Steam conventions: VAR1=value VAR2=value %command% -arg1 -arg2.
 Can't pass programs (like gamescope -- %command%). Does not accept flatpak args (--parent-pid=1, etc.)</value>
     </data>
-  <data name="GameLanguageSetting" xml:space="preserve">
+    <data name="GameLanguageSetting" xml:space="preserve">
         <value>Game Language</value>
     </data>
-  <data name="GameLanguageSettingDescription" xml:space="preserve">
+    <data name="GameLanguageSettingDescription" xml:space="preserve">
         <value>Select the game's language.</value>
     </data>
-  <data name="GameDPIAwarenessSetting" xml:space="preserve">
+    <data name="GameDPIAwarenessSetting" xml:space="preserve">
         <value>Game DPI Awareness</value>
     </data>
-  <data name="GameDPIAwarenessSettingDescription" xml:space="preserve">
+    <data name="GameDPIAwarenessSettingDescription" xml:space="preserve">
         <value>Select the game's DPI Awareness. Change this if the game's scaling looks wrong.</value>
     </data>
-  <data name="UseXLAuthMacrosSetting" xml:space="preserve">
+    <data name="UseXLAuthMacrosSetting" xml:space="preserve">
         <value>Use XIVLauncher authenticator/OTP macros</value>
     </data>
-  <data name="UseXLAuthMacrosSettingDescription" xml:space="preserve">
+    <data name="UseXLAuthMacrosSettingDescription" xml:space="preserve">
         <value>Check this if you want to use the XIVLauncher authenticator app or macros.</value>
     </data>
-  <data name="IgnoreSteamSetting" xml:space="preserve">
+    <data name="IgnoreSteamSetting" xml:space="preserve">
         <value>Ignore Steam</value>
     </data>
-  <data name="IgnoreSteamSettingDescription" xml:space="preserve">
+    <data name="IgnoreSteamSettingDescription" xml:space="preserve">
         <value>Check this if you do not want XIVLauncher to communicate with Steam (Requires Restart).</value>
     </data>
-  <data name="UseUIDCacheSetting" xml:space="preserve">
+    <data name="UseUIDCacheSetting" xml:space="preserve">
         <value>Use Experimental UID Cache</value>
     </data>
-  <data name="UseUIDCacheSettingDescription" xml:space="preserve">
+    <data name="UseUIDCacheSettingDescription" xml:space="preserve">
         <value>Tries to save your login token for the next start. Can result in launching with expired sessions.</value>
     </data>
-  <data name="GameTitle" xml:space="preserve">
+    <data name="GameTitle" xml:space="preserve">
         <value>Game</value>
     </data>
-  <data name="ResetUIDCacheInfo" xml:space="preserve">
+    <data name="ResetUIDCacheInfo" xml:space="preserve">
         <value>Reset the UID cache; use if you are getting FFXIV error 1012 or 500X.</value>
     </data>
-  <data name="ResetUIDCacheButton" xml:space="preserve">
+    <data name="ResetUIDCacheButton" xml:space="preserve">
         <value>Reset UID Cache</value>
     </data>
-  <data name="DebugTitle" xml:space="preserve">
+    <data name="DebugTitle" xml:space="preserve">
         <value>Debug</value>
     </data>
-  <data name="DalamudTitle" xml:space="preserve">
+    <data name="DalamudTitle" xml:space="preserve">
         <value>Dalamud</value>
     </data>
-  <data name="EnableDalamudSetting" xml:space="preserve">
+    <data name="EnableDalamudSetting" xml:space="preserve">
         <value>Enable Dalamud</value>
     </data>
-  <data name="EnableDalamudSettingDescription" xml:space="preserve">
+    <data name="EnableDalamudSettingDescription" xml:space="preserve">
         <value>Enable the Dalamud plugin system</value>
     </data>
-  <data name="LoadMethodSetting" xml:space="preserve">
+    <data name="LoadMethodSetting" xml:space="preserve">
         <value>Load Method</value>
     </data>
-  <data name="LoadMethodSettingDescription" xml:space="preserve">
+    <data name="LoadMethodSettingDescription" xml:space="preserve">
         <value>Choose how Dalamud is loaded.</value>
     </data>
-  <data name="DalamudInjectionDelaySetting" xml:space="preserve">
+    <data name="DalamudInjectionDelaySetting" xml:space="preserve">
         <value>Injection Delay (ms)</value>
     </data>
-  <data name="DalamudInjectionDelaySettingDescription" xml:space="preserve">
+    <data name="DalamudInjectionDelaySettingDescription" xml:space="preserve">
         <value>Choose how long to wait after the game has loaded before injecting.</value>
     </data>
-  <data name="DalamudManualInjectionEnableSetting" xml:space="preserve">
+    <data name="DalamudManualInjectionEnableSetting" xml:space="preserve">
         <value>Use Local Dalamud</value>
     </data>
-  <data name="DalamudManualInjectionEnableSettingDescription" xml:space="preserve">
+    <data name="DalamudManualInjectionEnableSettingDescription" xml:space="preserve">
         <value>Use a local build of Dalamud instead of the automatically provided one (For developers only!)</value>
     </data>
-  <data name="DalamudLocalInjectionPathSetting" xml:space="preserve">
+    <data name="DalamudLocalInjectionPathSetting" xml:space="preserve">
         <value>Local Dalamud Injector Path</value>
     </data>
-  <data name="DalamudLocalInjectionPathSettingDescription" xml:space="preserve">
+    <data name="DalamudLocalInjectionPathSettingDescription" xml:space="preserve">
         <value>The path to the local version of Dalamud where Dalamud.Injector.exe is located</value>
     </data>
-  <data name="DalamudLocalInjectionPathSettingNoDirValidation" xml:space="preserve">
+    <data name="DalamudLocalInjectionPathSettingNoDirValidation" xml:space="preserve">
         <value>There is no directory at that path.</value>
     </data>
-  <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
+    <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
         <value>Dalamud.Injector.exe was not found inside of the provided directory.</value>
     </data>
   <data name="DalamudBranchSwitcher" xml:space="preserve">
@@ -361,153 +362,153 @@ Can't pass programs (like gamescope -- %command%). Does not accept flatpak args 
   <data name="OpenRepositoryButton" xml:space="preserve">
         <value>Open Repository</value>
     </data>
-  <data name="JoinDiscordButton" xml:space="preserve">
+    <data name="JoinDiscordButton" xml:space="preserve">
         <value>Join our Discord</value>
     </data>
-  <data name="SeeSoftwareLicensesButton" xml:space="preserve">
+    <data name="SeeSoftwareLicensesButton" xml:space="preserve">
         <value>See Software Licenses</value>
     </data>
-  <data name="XLCoreCreatedBy" xml:space="preserve">
+    <data name="XLCoreCreatedBy" xml:space="preserve">
         <value>By {0} and other contributors.</value>
     </data>
-  <data name="NewsCaption" xml:space="preserve">
+    <data name="NewsCaption" xml:space="preserve">
         <value>News</value>
     </data>
-  <data name="TopicsCaption" xml:space="preserve">
+    <data name="TopicsCaption" xml:space="preserve">
         <value>Topics</value>
     </data>
-  <data name="NewsLoading" xml:space="preserve">
+    <data name="NewsLoading" xml:space="preserve">
         <value>News is loading...</value>
     </data>
-  <data name="XLElevatedWarning" xml:space="preserve">
+    <data name="XLElevatedWarning" xml:space="preserve">
         <value>XIVLauncher is running as administrator/root user.
 This can cause various issues, including but not limited to addons failing to launch and hotkey applications failing to respond.
 
 Please take care to avoid running XIVLauncher with elevated privileges</value>
     </data>
-  <data name="LoggingIn" xml:space="preserve">
+    <data name="LoggingIn" xml:space="preserve">
         <value>Logging in...</value>
     </data>
-  <data name="RepairOfficialLauncherOpenError" xml:space="preserve">
+    <data name="RepairOfficialLauncherOpenError" xml:space="preserve">
         <value>The game and/or the official launcher are open. XIVLauncher cannot repair the game if this is the case.
 Please close them and try again.</value>
     </data>
-  <data name="XIVLauncherError" xml:space="preserve">
+    <data name="XIVLauncherError" xml:space="preserve">
         <value>XIVLauncher Error</value>
     </data>
-  <data name="ReinstallUIDCacheError" xml:space="preserve">
+    <data name="ReinstallUIDCacheError" xml:space="preserve">
         <value>You enabled the UID cache in the patcher settings.
 This setting does not allow you to reinstall FFXIV.
 
 If you want to reinstall FFXIV, please take care to disable it first.</value>
     </data>
-  <data name="LoginNoServiceAccountError" xml:space="preserve">
+    <data name="LoginNoServiceAccountError" xml:space="preserve">
         <value>No service account or subscription</value>
     </data>
-  <data name="LoginTermsNotAcceptedError" xml:space="preserve">
+    <data name="LoginTermsNotAcceptedError" xml:space="preserve">
         <value>Need to accept terms of use</value>
     </data>
-  <data name="UpdateCheckFinished" xml:space="preserve">
+    <data name="UpdateCheckFinished" xml:space="preserve">
         <value>An update check was executed and any pending updates were installed.</value>
     </data>
-  <data name="WaitingForDalamud" xml:space="preserve">
+    <data name="WaitingForDalamud" xml:space="preserve">
         <value>Waiting for Dalamud to be ready...</value>
     </data>
-  <data name="PleaseBePatient" xml:space="preserve">
+    <data name="PleaseBePatient" xml:space="preserve">
         <value>This may take a little while, please be patient.</value>
     </data>
-  <data name="DisableAutoLoginButton" xml:space="preserve">
+    <data name="DisableAutoLoginButton" xml:space="preserve">
         <value>Disable auto login</value>
     </data>
-  <data name="AutoLoginDisabledNextStart" xml:space="preserve">
+    <data name="AutoLoginDisabledNextStart" xml:space="preserve">
         <value>Auto login disabled on next start!</value>
     </data>
-  <data name="NoSavedAccounts" xml:space="preserve">
+    <data name="NoSavedAccounts" xml:space="preserve">
         <value>No saved accounts...</value>
     </data>
-  <data name="MyAccount" xml:space="preserve">
+    <data name="MyAccount" xml:space="preserve">
         <value>My Account</value>
     </data>
-  <data name="ServiceStatus" xml:space="preserve">
+    <data name="ServiceStatus" xml:space="preserve">
         <value>Service Status</value>
     </data>
-  <data name="LauncherSettings" xml:space="preserve">
+    <data name="LauncherSettings" xml:space="preserve">
         <value>Launcher Settings</value>
     </data>
-  <data name="UsernameInput" xml:space="preserve">
+    <data name="UsernameInput" xml:space="preserve">
         <value>Username</value>
     </data>
-  <data name="UsernameInputHint" xml:space="preserve">
+    <data name="UsernameInputHint" xml:space="preserve">
         <value>Enter your Username</value>
     </data>
-  <data name="PasswordInput" xml:space="preserve">
+    <data name="PasswordInput" xml:space="preserve">
         <value>Password</value>
     </data>
-  <data name="PasswordInputHint" xml:space="preserve">
+    <data name="PasswordInputHint" xml:space="preserve">
         <value>Enter your password</value>
     </data>
-  <data name="UseOneTimePasswordCheckbox" xml:space="preserve">
+    <data name="UseOneTimePasswordCheckbox" xml:space="preserve">
         <value>Use one-time password</value>
     </data>
-  <data name="UseSteamServiceAccount" xml:space="preserve">
+    <data name="UseSteamServiceAccount" xml:space="preserve">
         <value>Steam service account</value>
     </data>
-  <data name="FreeTrialAccountCheckbox" xml:space="preserve">
+    <data name="FreeTrialAccountCheckbox" xml:space="preserve">
         <value>Free trial account</value>
     </data>
-  <data name="LogInAutomaticCheckbox" xml:space="preserve">
+    <data name="LogInAutomaticCheckbox" xml:space="preserve">
         <value>Log in automatically</value>
     </data>
-  <data name="LoginButton" xml:space="preserve">
+    <data name="LoginButton" xml:space="preserve">
         <value>Login</value>
     </data>
-  <data name="LaunchWithoutDalamudButton" xml:space="preserve">
+    <data name="LaunchWithoutDalamudButton" xml:space="preserve">
         <value>Launch without Dalamud</value>
     </data>
-  <data name="LaunchWithoutPluginsButton" xml:space="preserve">
+    <data name="LaunchWithoutPluginsButton" xml:space="preserve">
         <value>Launch without any plugins</value>
     </data>
-  <data name="LaunchWithNoCustomPluginsButton" xml:space="preserve">
+    <data name="LaunchWithNoCustomPluginsButton" xml:space="preserve">
         <value>Launch without custom repo plugins</value>
     </data>
-  <data name="PatchWithoutLaunchingButton" xml:space="preserve">
+    <data name="PatchWithoutLaunchingButton" xml:space="preserve">
         <value>Patch without launching</value>
     </data>
-  <data name="RepairGameFilesButton" xml:space="preserve">
+    <data name="RepairGameFilesButton" xml:space="preserve">
         <value>Repair game files</value>
     </data>
-  <data name="NoSecretsProviderWarning" xml:space="preserve">
+    <data name="NoSecretsProviderWarning" xml:space="preserve">
         <value>Take care! No secrets provider is installed or configured. Passwords can't be saved.</value>
     </data>
-  <data name="TroubleshootingDestructiveActionWarning" xml:space="preserve">
+    <data name="TroubleshootingDestructiveActionWarning" xml:space="preserve">
         <value>Actions here are potentially destructive, take care.</value>
     </data>
-  <data name="PreparingForCompatTool" xml:space="preserve">
+    <data name="PreparingForCompatTool" xml:space="preserve">
         <value>Preparing required compatibility tools</value>
     </data>
-  <data name="StartingGame" xml:space="preserve">
+    <data name="StartingGame" xml:space="preserve">
         <value>Starting game...</value>
     </data>
-  <data name="HaveFun" xml:space="preserve">
+    <data name="HaveFun" xml:space="preserve">
         <value>Have fun!</value>
     </data>
-  <data name="CannotGetBootVerError" xml:space="preserve">
+    <data name="CannotGetBootVerError" xml:space="preserve">
         <value>XIVLauncher was not able to check the boot version for the select game installation. This can happen if a maintenance is currently in progress or if your connection to the version check server is not available. Please report this error if you are able to login with the official launcher, but not XIVLauncher.</value>
     </data>
-  <data name="CannotPatchGameOpenError" xml:space="preserve">
+    <data name="CannotPatchGameOpenError" xml:space="preserve">
         <value>The game and/or the official launcher are open. XIVLauncher cannot patch the game if this is the case.
 Please close the official launcher and try again.</value>
     </data>
-  <data name="NowPatching" xml:space="preserve">
+    <data name="NowPatching" xml:space="preserve">
         <value>Now patching {0}...</value>
     </data>
-  <data name="WorkingOnStatus" xml:space="preserve">
+    <data name="WorkingOnStatus" xml:space="preserve">
         <value>Working on {0}/{1}</value>
     </data>
-  <data name="LeftToDownloadStatus" xml:space="preserve">
+    <data name="LeftToDownloadStatus" xml:space="preserve">
         <value>{0} left to download at {1}/s</value>
     </data>
-  <data name="NotEnoughSpacePatchesError" xml:space="preserve">
+    <data name="NotEnoughSpacePatchesError" xml:space="preserve">
         <value>There is not enough space on your drive to download patches.
 
 You can change the location patches are downloaded to in the settings.
@@ -515,13 +516,13 @@ You can change the location patches are downloaded to in the settings.
 Required:{0}
 Free:{1}</value>
     </data>
-  <data name="PatchInstallerStartFailError" xml:space="preserve">
+    <data name="PatchInstallerStartFailError" xml:space="preserve">
         <value>The patch installer could not start correctly.
 {0}
 
 If you have denied access to it, please try again. If this issue persists, please contact us via Discord.</value>
     </data>
-  <data name="NotEnoughSpaceAllPatchesError" xml:space="preserve">
+    <data name="NotEnoughSpaceAllPatchesError" xml:space="preserve">
         <value>There is not enough space on your drive to download all patches.
 
 You can change the location patches are downloaded to in the XIVLauncher settings.
@@ -529,7 +530,7 @@ You can change the location patches are downloaded to in the XIVLauncher setting
 Required:{0}
 Free:{1}</value>
     </data>
-  <data name="NotEnoughSpaceGameError" xml:space="preserve">
+    <data name="NotEnoughSpaceGameError" xml:space="preserve">
         <value>There is not enough space on your drive to install patches.
 
 You can change the location the game is installed to in the settings.
@@ -537,7 +538,7 @@ You can change the location the game is installed to in the settings.
 Required:{0}
 Free:{1}</value>
     </data>
-  <data name="CannotVerifyGameFilesError" xml:space="preserve">
+    <data name="CannotVerifyGameFilesError" xml:space="preserve">
         <value>XIVLauncher could not verify the downloaded game files. Please restart and try again.
 
 This usually indicates a problem with your internet connection.
@@ -546,37 +547,37 @@ If this error persists, try using a VPN set to Japan.
 Context: {0}
 {1}</value>
     </data>
-  <data name="PatchInstallerGenericError" xml:space="preserve">
+    <data name="PatchInstallerGenericError" xml:space="preserve">
         <value>The patch installer ran into an error.
 Please report this error.
 
 Please try again or use the official launcher.</value>
     </data>
-  <data name="NowRepairingFiles" xml:space="preserve">
+    <data name="NowRepairingFiles" xml:space="preserve">
         <value>Now repairing...</value>
     </data>
-  <data name="RepairAllFilesValid" xml:space="preserve">
+    <data name="RepairAllFilesValid" xml:space="preserve">
         <value>All game files seem to be valid.</value>
     </data>
-  <data name="RepairFixedSingularFile" xml:space="preserve">
+    <data name="RepairFixedSingularFile" xml:space="preserve">
         <value>XIVLauncher has successfully repaired 1 game file.</value>
     </data>
-  <data name="RepairFixedPluralFiles" xml:space="preserve">
+    <data name="RepairFixedPluralFiles" xml:space="preserve">
         <value>XIVLauncher has successfully repaired {0} game files.</value>
     </data>
-  <data name="RepairSingleFileMoved" xml:space="preserve">
+    <data name="RepairSingleFileMoved" xml:space="preserve">
         <value>Additionally, 1 file that did not come with the original game installation has been moved to {0}.
 If you were using ReShade, you will have to reinstall it.</value>
     </data>
-  <data name="RepairPluralFilesMoved" xml:space="preserve">
+    <data name="RepairPluralFilesMoved" xml:space="preserve">
         <value>Additionally, {0} files that did not come with the original game installation have been moved to {1}.
 If you were using ReShade, you will have to reinstall it.</value>
     </data>
-  <data name="RepairGameVerUnsupportedError" xml:space="preserve">
+    <data name="RepairGameVerUnsupportedError" xml:space="preserve">
         <value>The version of the game you are on cannot be repaired by XIVLauncher yet, as reference information is not yet available.
 Please try again later.</value>
     </data>
-  <data name="RepairFailureError" xml:space="preserve">
+    <data name="RepairFailureError" xml:space="preserve">
         <value>An error occurred while repairing the game files.
 You may have to reinstall the game.</value>
     </data>
