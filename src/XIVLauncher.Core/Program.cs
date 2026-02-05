@@ -168,7 +168,7 @@ sealed class Program
     private static void Main(string[] args)
     {
         mainArgs = args;
-        storage = new Storage(APP_NAME);
+        storage = new Storage(APP_NAME, CoreEnvironmentSettings.StoragePath);
 
         if (CoreEnvironmentSettings.ClearAll)
         {
