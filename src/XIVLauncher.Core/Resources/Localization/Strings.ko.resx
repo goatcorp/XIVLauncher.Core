@@ -163,10 +163,10 @@ wine64와 wineserver 바이너리를 포함하는 폴더의 절대경로여야 �
         <value>현재 로케일은 "{0}"입니다. 이 Hack이 필요하지 않을 것입니다.</value>
     </data>
   <data name="ForceDontUseSystemTZ" xml:space="preserve">
-        <value>Don't use system timezone</value>
+        <value>시스템 타임존 사용 안함</value>
     </data>
   <data name="ForceDontUseSystemDescription" xml:space="preserve">
-        <value>Unsets the TZ environment variable from system provided</value>
+        <value>시스템이 제공한 TZ 환경 변수 해제</value>
     </data>
   <data name="TroubleshootingTitle" xml:space="preserve">
         <value>트러블 슈팅</value>
@@ -351,6 +351,12 @@ wine64와 wineserver 바이너리를 포함하는 폴더의 절대경로여야 �
     </data>
   <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
         <value>제공된 경로에서 Dalamud.Injector.exe를 찾을 수 없습니다.</value>
+    </data>
+  <data name="DalamudBranchSwitcher" xml:space="preserve">
+        <value>Dalamud 브랜치</value>
+    </data>
+  <data name="DalamudBranchSwitcherDescription" xml:space="preserve">
+        <value>Dalamud의 다른 브랜치로 바꿀 수 있습니다. 'release'로 두는 것을 권장합니다.</value>
     </data>
   <data name="OpenRepositoryButton" xml:space="preserve">
         <value>저장소 열기</value>
