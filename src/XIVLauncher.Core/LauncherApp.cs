@@ -1,13 +1,14 @@
 using System.Diagnostics;
 using System.Numerics;
 
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 using Serilog;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Game;
 using XIVLauncher.Common.PlatformAbstractions;
+using XIVLauncher.Common.Util;
 using XIVLauncher.Core.Accounts;
 using XIVLauncher.Core.Components;
 using XIVLauncher.Core.Components.LoadingPage;
@@ -127,7 +128,8 @@ public class LauncherApp : Component
 
         this.Accounts = new AccountManager(this.Storage.GetFile("accounts.json"));
         this.UniqueIdCache = new CommonUniqueIdCache(this.Storage.GetFile("uidCache.json"));
-        this.Launcher = new Launcher(Program.Steam, UniqueIdCache, Program.CommonSettings, frontierUrl);
+
+        this.Launcher = new Launcher(Program.Steam, UniqueIdCache, frontierUrl, Program.Config.AcceptLanguage ?? ApiHelpers.GenerateAcceptLanguage());
 
         this.mainPage = new MainPage(this);
         this.setPage = new SettingsPage(this);
@@ -264,14 +266,12 @@ public class LauncherApp : Component
 
         ImGui.SetNextWindowPos(new Vector2(0, 0));
         ImGui.SetNextWindowSize(ImGuiHelpers.ViewportSize);
-
         if (ImGui.Begin("Background",
-                ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNavFocus
-                | ImGuiWindowFlags.NoNavInputs | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
+                        ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNavFocus
+                        | ImGuiWindowFlags.NoNavInputs | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
             this.background.Draw();
 
-            ImGui.PushStyleColor(ImGuiCol.WindowBg, ImGuiColors.BlueShade0);
         }
 
         ImGui.End();
@@ -285,6 +285,8 @@ public class LauncherApp : Component
         ImGui.SetNextWindowSize(ImGuiHelpers.ViewportSize);
         ImGui.SetNextWindowBgAlpha(0.75f);
 
+        ImGui.PushStyleColor(ImGuiCol.WindowBg, ImGuiColors.BlueShade0);
+
         if (ImGui.Begin("XIVLauncher", ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse))
         {
             this.CurrentPage.Draw();
@@ -294,6 +296,7 @@ public class LauncherApp : Component
         ImGui.End();
 
         ImGui.PopStyleVar(2);
+        ImGui.PopStyleColor();
 
         this.DrawModal();
     }

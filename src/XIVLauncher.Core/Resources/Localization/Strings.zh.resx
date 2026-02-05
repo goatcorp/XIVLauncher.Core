@@ -164,10 +164,10 @@
         <value>你的区域设置为 "{0}"，通常无需启用此 Hack。</value>
     </data>
   <data name="ForceDontUseSystemTZ" xml:space="preserve">
-        <value>Hack: Don't use system timezone.</value>
+        <value>不使用系统时区</value>
     </data>
   <data name="ForceDontUseSystemDescription" xml:space="preserve">
-        <value>Unsets the TZ environment variable from system provided</value>
+        <value>取消设置系统提供的TZ (时区) 环境变量</value>
     </data>
   <data name="TroubleshootingTitle" xml:space="preserve">
         <value>故障排除</value>
@@ -352,6 +352,12 @@
     </data>
   <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
         <value>在指定目录中未找到 Dalamud.Injector.exe。</value>
+    </data>
+  <data name="DalamudBranchSwitcher" xml:space="preserve">
+        <value>Dalamud 分支</value>
+    </data>
+  <data name="DalamudBranchSwitcherDescription" xml:space="preserve">
+        <value>切换至 Dalamud 的其他分支。建议保持使用 'release' (发布版)。</value>
     </data>
   <data name="OpenRepositoryButton" xml:space="preserve">
         <value>打开仓库</value>

@@ -1,7 +1,6 @@
 using XIVLauncher.Common;
 using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
-using XIVLauncher.Common.Game.Patch.Acquisition;
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
 
@@ -49,8 +48,6 @@ public interface ILauncherConfig
 
     public bool? KeepPatches { get; set; }
 
-    public AcquisitionMethod? PatchAcquisitionMethod { get; set; }
-
     public long PatchSpeedLimit { get; set; }
 
     #endregion
@@ -58,9 +55,8 @@ public interface ILauncherConfig
     #region Linux
 
     public WineStartupType? WineStartupType { get; set; }
-
     public WineManagedVersion? WineManagedVersion { get; set; }
-
+    public WineSyncType? WineSyncType { get; set; }
     public string? WineBinaryPath { get; set; }
 
     public bool? GameModeEnabled { get; set; }
@@ -68,10 +64,6 @@ public interface ILauncherConfig
     public DxvkVersion? DxvkVersion { get; set; }
 
     public bool? DxvkAsyncEnabled { get; set; }
-
-    public bool? ESyncEnabled { get; set; }
-
-    public bool? FSyncEnabled { get; set; }
 
     public DxvkHudType DxvkHudType { get; set; }
 
@@ -85,9 +77,7 @@ public interface ILauncherConfig
 
     public bool? FixError127 { get; set; }
 
-    public bool? SetWin7 { get; set; }
-    
-    public bool? DontUseSystemTz {get; set;}
+    public bool? DontUseSystemTz { get; set; }
 
     #endregion
 

@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Numerics;
 
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 using XIVLauncher.Core.Components.SettingsPage.Tabs;
 using XIVLauncher.Core.Resources.Localization;
@@ -53,7 +53,8 @@ public class SettingsPage : Page
 
                     if (ImGui.BeginTabItem(settingsTab.Title))
                     {
-                        if (ImGui.BeginChild($"###settings_scrolling_{settingsTab.Title}", new Vector2(-1, -1), false))
+
+                        if (ImGui.BeginChild($"###settings_scrolling_{settingsTab.Title}", new Vector2(-1, -1)))
                         {
                             settingsTab.Draw();
                         }
@@ -110,14 +111,16 @@ public class SettingsPage : Page
                     ImGui.EndTabItem();
                 }
             }
+            ImGui.EndTabBar();
         }
+
 
         ImGui.SetCursorPos(ImGuiHelpers.ViewportSize - new Vector2(60));
 
-        if (ImGui.BeginChild("###settingsFinishButton"))
+        if (ImGui.BeginChild("###settingsFinishButton", ImGuiChildFlags.NavFlattened))
         {
             ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 100f);
-            ImGui.PushFont(FontManager.IconFont);
+            ImGui.PushFont(FontManager.IconFont, 0.0f);
 
             var invalid = this.tabs.Any(x => x.Entries.Any(y => y.IsVisible && !y.IsValid));
             if (invalid)
@@ -140,12 +143,12 @@ public class SettingsPage : Page
                     this.App.State = LauncherApp.LauncherState.Main;
                 }
             }
+
+            ImGui.PopStyleVar();
+            ImGui.PopFont();
         }
 
         ImGui.EndChild();
-
-        ImGui.PopStyleVar();
-        ImGui.PopFont();
 
         var vpSize = ImGuiHelpers.ViewportSize;
         ImGui.SetCursorPos(new Vector2(vpSize.X - 260, 4));

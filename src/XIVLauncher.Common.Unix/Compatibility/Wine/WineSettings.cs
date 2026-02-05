@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 using XIVLauncher.Common.Unix.Compatibility.Wine.Releases;
@@ -26,26 +26,36 @@ public enum WineManagedVersion
     Legacy,
 }
 
-public class WineSettings
+public enum WineSyncType
 {
-    public WineStartupType StartupType { get; private set; }
-    public IWineRelease WineRelease { get; private set; }
+    [SettingsDescription("ESync", "Eventfd-based synchronization - recommended for older systems.")]
+    ESync,
+    [SettingsDescription("FSync", "Fast user mutex (futex2)-based synchronization, requires Linux Kernel 5.16+ - recommended for most users.")]
+    FSync,
+}
 
-    public string CustomBinPath { get; private set; }
-    public string EsyncOn { get; private set; }
-    public string FsyncOn { get; private set; }
-    public string DebugVars { get; private set; }
-    public FileInfo LogFile { get; private set; }
-    public DirectoryInfo Prefix { get; private set; }
+public readonly struct WineSettings
+{
+    public WineStartupType StartupType { get; init; }
+    public IWineRelease Release { get; init; }
+    public WineSyncType SyncType { get; init; }
+    public string CustomBinPath { get; init; }
+    public string DebugVars { get; init; }
+    public FileInfo LogFile { get; init; }
+    public DirectoryInfo Prefix { get; init; }
 
-    public WineSettings(WineStartupType startupType, WineManagedVersion managedWine, string customBinPath, string debugVars, FileInfo logFile, DirectoryInfo prefix, bool esyncOn, bool fsyncOn)
+    public WineSettings(WineStartupType startupType, WineManagedVersion managedWine, string customBinPath, string debugVars, FileInfo logFile, DirectoryInfo prefix, WineSyncType wineSyncType)
     {
         this.StartupType = startupType;
-
+        this.SyncType = wineSyncType;
+        this.CustomBinPath = customBinPath;
+        this.DebugVars = debugVars;
+        this.LogFile = logFile;
+        this.Prefix = prefix;
         if (startupType == WineStartupType.Managed)
         {
             var wineDistroId = CompatUtil.GetWineIdForDistro();
-            this.WineRelease = managedWine switch
+            this.Release = managedWine switch
             {
                 WineManagedVersion.Stable => new WineStableRelease(wineDistroId),
                 WineManagedVersion.Beta => new WineBetaRelease(wineDistroId),
@@ -53,12 +63,5 @@ public class WineSettings
                 _ => throw new ArgumentOutOfRangeException(managedWine.ToString())
             };
         }
-
-        this.CustomBinPath = customBinPath;
-        this.EsyncOn = esyncOn ? "1" : "0";
-        this.FsyncOn = fsyncOn ? "1" : "0";
-        this.DebugVars = debugVars;
-        this.LogFile = logFile;
-        this.Prefix = prefix;
     }
 }

@@ -1,6 +1,6 @@
 using System.Numerics;
 
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 using Newtonsoft.Json;
 
@@ -114,6 +114,15 @@ public class StyleModelV1 : StyleModel
             { "NavWindowingHighlight", new Vector4(1, 1, 1, 0.7f) },
             { "NavWindowingDimBg", new Vector4(0.8f, 0.8f, 0.8f, 0.2f) },
             { "ModalWindowDimBg", new Vector4(0.8f, 0.8f, 0.8f, 0.35f) },
+            { "InputTextCursor", new Vector4(1, 1, 1, 1) },
+            { "TabSelected", ImGuiColors.Blue },
+            { "TabSelectedOverline", new Vector4(0.5f, 0.5f, 0.5f, 1) },
+            { "TabDimmed", new Vector4(0.06f, 0.06f, 0.06f, 0.93f) },
+            { "TabDimmedSelected", new Vector4(0.5f, 0.5f, 0.5f, 1) },
+            { "TabDimmedSelectedOverline", new Vector4(0.54f, 0.54f, 0.54f, 0.4f) },
+            { "TextLink", new Vector4(0.08f, 0.08f, 0.08f, 0.94f) },
+            { "TreeLines", new Vector4(0.06f, 0.06f, 0.06f, 0.93f) },
+            { "NavCursor", new Vector4(0.54f, 0.54f, 0.54f, 0.4f) }
         },
     };
 
@@ -354,7 +363,7 @@ public class StyleModelV1 : StyleModel
 
         foreach (var imGuiCol in Enum.GetValues<ImGuiCol>())
         {
-            if (imGuiCol == ImGuiCol.COUNT)
+            if (imGuiCol == ImGuiCol.Count)
             {
                 continue;
             }
@@ -403,7 +412,7 @@ public class StyleModelV1 : StyleModel
 
         foreach (var imGuiCol in Enum.GetValues<ImGuiCol>())
         {
-            if (imGuiCol == ImGuiCol.COUNT)
+            if (imGuiCol == ImGuiCol.Count)
             {
                 continue;
             }

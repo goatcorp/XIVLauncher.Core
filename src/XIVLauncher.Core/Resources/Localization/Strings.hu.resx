@@ -352,6 +352,12 @@ Külső programok nem futtathatók (pl.: gamescope -- %command%). Flatpak argume
   <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
         <value>Nem található Dalamud.Injector.exe a megadott elérési úton.</value>
     </data>
+  <data name="DalamudBranchSwitcher" xml:space="preserve">
+        <value>Dalamud-ág</value>
+    </data>
+  <data name="DalamudBranchSwitcherDescription" xml:space="preserve">
+        <value>Váltás egy másik Dalamud-ágra. Javasolt a „release” ágon maradni.</value>
+    </data>
   <data name="OpenRepositoryButton" xml:space="preserve">
         <value>Adattár megnyitása</value>
     </data>
