@@ -1,6 +1,6 @@
 using System.Numerics;
 
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 using Serilog;
 
@@ -85,8 +85,14 @@ public class Input : Component
 
         ImGui.Text(Label);
 
+        var isDisabled = false;
+
         if (!this.IsEnabled || this.isSteamDeckInputActive)
+        {
             ImGui.BeginDisabled();
+            isDisabled = true;
+        }
+
 
         var ww = ImGui.GetWindowWidth();
         ImGui.SetNextItemWidth(ww);
@@ -108,7 +114,7 @@ public class Input : Component
 
         ImGui.Dummy(Spacing);
 
-        if (!this.IsEnabled || this.isSteamDeckInputActive)
+        if (isDisabled)
             ImGui.EndDisabled();
 
         ImGui.PopStyleVar(2);

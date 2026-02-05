@@ -1,6 +1,6 @@
 using System.Numerics;
 
-using ImGuiNET;
+using Hexa.NET.ImGui;
 
 namespace XIVLauncher.Core.Components.LoadingPage;
 
@@ -22,6 +22,8 @@ public class Spinner : Component
         var framePadding = ImGui.GetStyle().FramePadding;
 
         var pos = ImGui.GetCursorPos();
+
+        ImGui.Dummy(new Vector2(this.radius * 2) + (framePadding * 2));
 
         var time = ImGui.GetTime() / 1.2;
 
