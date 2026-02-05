@@ -1,6 +1,6 @@
-using Hexa.NET.ImGui;
-
 using System.Numerics;
+
+using Hexa.NET.ImGui;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Game;

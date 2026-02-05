@@ -1,9 +1,9 @@
+using System.Diagnostics;
+using System.Numerics;
+
 using Hexa.NET.ImGui;
 
 using Serilog;
-
-using System.Diagnostics;
-using System.Numerics;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Game;

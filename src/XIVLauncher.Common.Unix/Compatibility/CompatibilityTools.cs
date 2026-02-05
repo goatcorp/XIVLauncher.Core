@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -26,7 +26,7 @@ public class CompatibilityTools
     private readonly StreamWriter logWriter;
 
     private string WineBinPath => Settings.StartupType == WineStartupType.Managed ?
-                                    Path.Combine(wineDirectory.FullName, Settings.WineRelease.Name, "bin") :
+                                    Path.Combine(wineDirectory.FullName, Settings.Release.Name, "bin") :
                                     Settings.CustomBinPath;
     private string Wine64Path => Path.Combine(WineBinPath, "wine64");
     private string WineServerPath => Path.Combine(WineBinPath, "wineserver");
@@ -82,7 +82,7 @@ public class CompatibilityTools
     {
         if (!File.Exists(Wine64Path))
         {
-            Log.Information($"Compatibility tool does not exist, downloading {Settings.WineRelease.DownloadUrl}");
+            Log.Information($"Compatibility tool does not exist, downloading {Settings.Release.DownloadUrl}");
             await DownloadTool(httpClient, tempPath).ConfigureAwait(false);
         }
 
@@ -95,8 +95,8 @@ public class CompatibilityTools
     private async Task DownloadTool(HttpClient httpClient, DirectoryInfo tempPath)
     {
         var tempFilePath = Path.Combine(tempPath.FullName, $"{Guid.NewGuid()}");
-        await File.WriteAllBytesAsync(tempFilePath, await httpClient.GetByteArrayAsync(Settings.WineRelease.DownloadUrl).ConfigureAwait(false)).ConfigureAwait(false);
-        if (!CompatUtil.EnsureChecksumMatch(tempFilePath, Settings.WineRelease.Checksums))
+        await File.WriteAllBytesAsync(tempFilePath, await httpClient.GetByteArrayAsync(Settings.Release.DownloadUrl).ConfigureAwait(false)).ConfigureAwait(false);
+        if (!CompatUtil.EnsureChecksumMatch(tempFilePath, Settings.Release.Checksums))
         {
             throw new InvalidDataException("SHA512 checksum verification failed");
         }
@@ -181,9 +181,15 @@ public class CompatibilityTools
 
         wineEnviromentVariables.Add("DXVK_HUD", dxvkHud);
         wineEnviromentVariables.Add("DXVK_ASYNC", dxvkAsyncOn);
-        wineEnviromentVariables.Add("WINEESYNC", Settings.EsyncOn);
-        wineEnviromentVariables.Add("WINEFSYNC", Settings.FsyncOn);
-
+        switch (Settings.SyncType)
+        {
+            case WineSyncType.ESync:
+                wineEnviromentVariables.Add("WINEESYNC", "1");
+                break;
+            case WineSyncType.FSync:
+                wineEnviromentVariables.Add("WINEFSYNC", "1");
+                break;
+        }
         wineEnviromentVariables.Add("LD_PRELOAD", ldPreload);
 
         MergeDictionaries(psi.EnvironmentVariables, wineEnviromentVariables);

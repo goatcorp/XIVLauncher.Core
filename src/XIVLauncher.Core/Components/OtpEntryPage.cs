@@ -1,8 +1,8 @@
+using System.Numerics;
+
 using Hexa.NET.ImGui;
 
 using Serilog;
-
-using System.Numerics;
 
 using XIVLauncher.Common.Http;
 using XIVLauncher.Core.Resources.Localization;
