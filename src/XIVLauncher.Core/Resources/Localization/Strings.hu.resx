@@ -80,26 +80,8 @@ Ez egy abszolút útvonal, amely egy olyan könyvtárra mutat, ami egy wine64- �
   <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
         <value>A GameMode nem észlelhető ezen a rendszeren.</value>
     </data>
-  <data name="EnableESyncSetting" xml:space="preserve">
-        <value>ESync engedélyezése</value>
-    </data>
-  <data name="EnableFSyncSetting" xml:space="preserve">
-        <value>FSync engedélyezése</value>
-    </data>
-  <data name="EnableESyncSettingDescription" xml:space="preserve">
-        <value>Eventfd-alapú szinkronizáció engedélyezése.</value>
-    </data>
-  <data name="EnableFSyncSettingDescription" xml:space="preserve">
-        <value>Futex2 (fast user mutex) engedélyezése.</value>
-    </data>
   <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
         <value>Az FSync használatához a Linux kernel 5.16-os vagy újabb verziója szükséges.</value>
-    </data>
-  <data name="SetWindows7Setting" xml:space="preserve">
-        <value>Futtatás, mint Windows 7</value>
-    </data>
-  <data name="SetWindows7SettingDescription" xml:space="preserve">
-        <value>A WINE 8.1 és újabb verziói alapértelmezésből Windows 10-ként futtatnak programokat, de ez bizonyos Dalamud-bővítményekkel hibákat okoz. Az ajánlott verzió egyelőre Windows 7.</value>
     </data>
   <data name="EnableDXVKOverlaySetting" xml:space="preserve">
         <value>DXVK-átfedés</value>
@@ -163,7 +145,7 @@ Ez egy abszolút útvonal, amely egy olyan könyvtárra mutat, ami egy wine64- �
         <value>A rendszer területi beállításai a következőre vannak beállítva: {0}. Erre a javításra valószínűleg nincs szükséged.</value>
     </data>
   <data name="ForceDontUseSystemTZ" xml:space="preserve">
-        <value>A rendszer időzónájának figyelmen kívül hagyása</value>
+        <value>A rendszer időzónájának figyelmen kívül hagyása.</value>
     </data>
   <data name="ForceDontUseSystemDescription" xml:space="preserve">
         <value>A rendszer és a program időzónájainak szétválasztása</value>
@@ -356,7 +338,7 @@ Külső programok nem futtathatók (pl.: gamescope -- %command%). Flatpak argume
         <value>Dalamud-ág</value>
     </data>
   <data name="DalamudBranchSwitcherDescription" xml:space="preserve">
-        <value>Váltás egy másik Dalamud-ágra. Javasolt a „release” ágon maradni.</value>
+        <value>Váltás egy másik Dalamud-ágra. Javasolt a „stable” ágon maradni.</value>
     </data>
   <data name="OpenRepositoryButton" xml:space="preserve">
         <value>Adattár megnyitása</value>
@@ -579,5 +561,14 @@ Próbáld újra később.</value>
   <data name="RepairFailureError" xml:space="preserve">
         <value>Hiba történt a fájlok ellenőrzése közben.
 Lehetséges, hogy újra kell telepítened a játékot.</value>
+    </data>
+  <data name="WineSyncMethodSetting" xml:space="preserve">
+        <value>WINE szinkronizálási módszer</value>
+    </data>
+  <data name="WineSyncMethodSettingDescription" xml:space="preserve">
+        <value>A WINE többszálas műveleteinek szinkronizálási módszere.</value>
+    </data>
+  <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
+        <value>Az FSync csak Linuxon használható.</value>
     </data>
 </root>
