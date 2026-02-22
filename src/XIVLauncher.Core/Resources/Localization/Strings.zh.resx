@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:element name="root" msdata:IsDataSet="true">
 
-    </xsd:element>
+        </xsd:element>
   </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
@@ -14,11 +13,11 @@
   </resheader>
   <resheader name="reader">
     <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0,
-      Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+            Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0,
-      Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+            Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EnterYourOTP" xml:space="preserve">
         <value>请输入你的动态密码 (OTP)</value>
@@ -81,26 +80,8 @@
   <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
         <value>未在你的系统上检测到 GameMode。</value>
     </data>
-  <data name="EnableESyncSetting" xml:space="preserve">
-        <value>启用 ESync</value>
-    </data>
-  <data name="EnableFSyncSetting" xml:space="preserve">
-        <value>启用 FSync</value>
-    </data>
-  <data name="EnableESyncSettingDescription" xml:space="preserve">
-        <value>启用基于 eventfd 的同步。</value>
-    </data>
-  <data name="EnableFSyncSettingDescription" xml:space="preserve">
-        <value>启用快速用户互斥锁 (futex2)。</value>
-    </data>
   <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
         <value>FSync 需要 Linux 内核 5.16 或以上。</value>
-    </data>
-  <data name="SetWindows7Setting" xml:space="preserve">
-        <value>将 Windows 版本设置为 Win7</value>
-    </data>
-  <data name="SetWindows7SettingDescription" xml:space="preserve">
-        <value>WINE 8.1 及以上版本默认使用 Windows 10 模式，但该模式可能导致部分 Dalamud 插件出现问题，建议暂时设置为 Windows 7 模式。</value>
     </data>
   <data name="EnableDXVKOverlaySetting" xml:space="preserve">
         <value>DXVK 叠加层</value>
@@ -164,7 +145,7 @@
         <value>你的区域设置为 "{0}"，通常无需启用此 Hack。</value>
     </data>
   <data name="ForceDontUseSystemTZ" xml:space="preserve">
-        <value>不使用系统时区</value>
+        <value>Hack: 不使用系统时区。</value>
     </data>
   <data name="ForceDontUseSystemDescription" xml:space="preserve">
         <value>取消设置系统提供的TZ (时区) 环境变量</value>
@@ -581,5 +562,14 @@
   <data name="RepairFailureError" xml:space="preserve">
         <value>修复游戏文件时发生错误。
 你可能需要重新安装游戏。</value>
+    </data>
+  <data name="WineSyncMethodSetting" xml:space="preserve">
+        <value>WINE 同步方式</value>
+    </data>
+  <data name="WineSyncMethodSettingDescription" xml:space="preserve">
+        <value>Wine 多线程操作同步方式。</value>
+    </data>
+  <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
+        <value>FSync 仅在 Linux 系统可用</value>
     </data>
 </root>

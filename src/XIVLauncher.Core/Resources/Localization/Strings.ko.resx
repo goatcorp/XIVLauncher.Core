@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
     <xsd:element name="root" msdata:IsDataSet="true">
 
-    </xsd:element>
+        </xsd:element>
   </xsd:schema>
   <resheader name="resmimetype">
     <value>text/microsoft-resx</value>
@@ -14,11 +13,11 @@
   </resheader>
   <resheader name="reader">
     <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0,
-      Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+            Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0,
-      Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+            Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="EnterYourOTP" xml:space="preserve">
         <value>OTP 키를 입력해주세요</value>
@@ -81,26 +80,8 @@ wine64와 wineserver 바이너리를 포함하는 폴더의 절대경로여야 �
   <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
         <value>GameMode를 당신의 시스템에서 찾을 수 없습니다.</value>
     </data>
-  <data name="EnableESyncSetting" xml:space="preserve">
-        <value>ESync 활성화</value>
-    </data>
-  <data name="EnableFSyncSetting" xml:space="preserve">
-        <value>FSync 활성화</value>
-    </data>
-  <data name="EnableESyncSettingDescription" xml:space="preserve">
-        <value>eventfd 기반 동기화를 활성화 합니다.</value>
-    </data>
-  <data name="EnableFSyncSettingDescription" xml:space="preserve">
-        <value>fast user mutex를 활성화 합니다. (futex2).</value>
-    </data>
   <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
         <value>FSync를 사용하려면 Linux 커널 5.16 이상이 필요합니다.</value>
-    </data>
-  <data name="SetWindows7Setting" xml:space="preserve">
-        <value>Windows 버전을 Windows 7로 설정</value>
-    </data>
-  <data name="SetWindows7SettingDescription" xml:space="preserve">
-        <value>WINE 8.1+의 기본 설정은 Windows 10이지만, 이는 일부 Dalamud 플러그인에서 문제를 일으킬 수 있습니다. Windows 7 사용을 권장합니다.</value>
     </data>
   <data name="EnableDXVKOverlaySetting" xml:space="preserve">
         <value>DXVK 오버레이</value>
@@ -164,7 +145,7 @@ wine64와 wineserver 바이너리를 포함하는 폴더의 절대경로여야 �
         <value>현재 로케일은 "{0}"입니다. 이 Hack이 필요하지 않을 것입니다.</value>
     </data>
   <data name="ForceDontUseSystemTZ" xml:space="preserve">
-        <value>시스템 타임존 사용 안함</value>
+        <value>Hack: Don't use system timezone.</value>
     </data>
   <data name="ForceDontUseSystemDescription" xml:space="preserve">
         <value>시스템이 제공한 TZ 환경 변수 해제</value>
@@ -357,7 +338,7 @@ wine64와 wineserver 바이너리를 포함하는 폴더의 절대경로여야 �
         <value>Dalamud 브랜치</value>
     </data>
   <data name="DalamudBranchSwitcherDescription" xml:space="preserve">
-        <value>Dalamud의 다른 브랜치로 바꿀 수 있습니다. 'release'로 두는 것을 권장합니다.</value>
+        <value>Change to a different branch of Dalamud. It is recommended you use the stable branch.</value>
     </data>
   <data name="OpenRepositoryButton" xml:space="preserve">
         <value>저장소 열기</value>
@@ -580,5 +561,14 @@ ReShade를 사용 중이었다면, 다시 설치해야 합니다.</value>
   <data name="RepairFailureError" xml:space="preserve">
         <value>게임 파일 복구 중 오류가 발생했습니다.
 게임을 다시 설치해야 할 수 있습니다.</value>
+    </data>
+  <data name="WineSyncMethodSetting" xml:space="preserve">
+        <value>WINE Sync Method</value>
+    </data>
+  <data name="WineSyncMethodSettingDescription" xml:space="preserve">
+        <value>How Wine synchronizes multi-threaded operations.</value>
+    </data>
+  <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
+        <value>FSync is only available on Linux</value>
     </data>
 </root>

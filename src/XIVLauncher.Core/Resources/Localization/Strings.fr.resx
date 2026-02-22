@@ -80,26 +80,8 @@ Le chemin doit être un chemin absolu vers un dossier contenant wine64 et les bi
   <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
         <value>GameMode n'a pas été détecté sur votre système.</value>
     </data>
-  <data name="EnableESyncSetting" xml:space="preserve">
-        <value>Activer ESync</value>
-    </data>
-  <data name="EnableFSyncSetting" xml:space="preserve">
-        <value>Activer FSync</value>
-    </data>
-  <data name="EnableESyncSettingDescription" xml:space="preserve">
-        <value>Activer la synchronisation basée sur eventfd.</value>
-    </data>
-  <data name="EnableFSyncSettingDescription" xml:space="preserve">
-        <value>Activer le mutex rapide en espace utilisateur (futex2).</value>
-    </data>
   <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
         <value>Un noyau Linux 5.16 ou supérieur est requis pour FSync.</value>
-    </data>
-  <data name="SetWindows7Setting" xml:space="preserve">
-        <value>Définir la version de Windows à 7</value>
-    </data>
-  <data name="SetWindows7SettingDescription" xml:space="preserve">
-        <value>La valeur par défaut pour WINE 8.1+ est Windows 10, mais cela pose problème avec certains plugins Dalamud. Windows 7 est recommandé pour l'instant.</value>
     </data>
   <data name="EnableDXVKOverlaySetting" xml:space="preserve">
         <value>Overlay DXVK</value>
@@ -163,7 +145,7 @@ Le chemin doit être un chemin absolu vers un dossier contenant wine64 et les bi
         <value>Votre locale est «{0}». Vous n'avez probablement pas besoin de ce hack.</value>
     </data>
   <data name="ForceDontUseSystemTZ" xml:space="preserve">
-        <value>Ne pas utiliser le fuseau horaire du système</value>
+        <value>Astuce : N'utilisez pas le fuseau horaire du système.</value>
     </data>
   <data name="ForceDontUseSystemDescription" xml:space="preserve">
         <value>Désélectionne la variable d'environnement de fuseau horaire du système</value>
@@ -356,7 +338,7 @@ Impossible de passer des programmes (comme le gamescope -- %command%). N'accepte
         <value>Branche de Dalamud</value>
     </data>
   <data name="DalamudBranchSwitcherDescription" xml:space="preserve">
-        <value>Passer vers une autre branche de Dalamud. Il est recommandé de garder ceci sur "Stable".</value>
+        <value>Passer à une branche différente de Dalamud. Il est recommandé d'utiliser la branche stable.</value>
     </data>
   <data name="OpenRepositoryButton" xml:space="preserve">
         <value>Ouvrir le dépôt du projet</value>
@@ -579,5 +561,14 @@ Veuillez réessayer plus tard.</value>
   <data name="RepairFailureError" xml:space="preserve">
         <value>Une erreur est survenue lors de la réparation des fichiers du jeu.
 Vous allez peut-être devoir réinstaller le jeu.</value>
+    </data>
+  <data name="WineSyncMethodSetting" xml:space="preserve">
+        <value>Méthode de synchronisation de WINE</value>
+    </data>
+  <data name="WineSyncMethodSettingDescription" xml:space="preserve">
+        <value>Comment WINE synchronise les opérations multi-threads.</value>
+    </data>
+  <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
+        <value>FSync n'est disponible que sur Linux</value>
     </data>
 </root>
