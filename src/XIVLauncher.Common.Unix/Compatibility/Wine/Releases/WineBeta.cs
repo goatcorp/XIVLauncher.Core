@@ -2,11 +2,11 @@ namespace XIVLauncher.Common.Unix.Compatibility.Wine.Releases;
 
 public sealed class WineBetaRelease(WineReleaseDistro wineDistroId) : IWineRelease
 {
-    public string Name { get; } = $"wine-xiv-staging-fsync-git-10.8.r0.g47f77594";
-    public string DownloadUrl { get; } = $"https://github.com/goatcorp/wine-xiv-git/releases/download/10.8.r0.g47f77594/wine-xiv-staging-fsync-git-{wineDistroId}-10.8.r0.g47f77594.tar.xz";
+    public string Name { get; } = $"wine-xiv-staging-fsync-git-10.8.r0.a2ca9e4";
+    public string DownloadUrl { get; } = $"https://github.com/goatcorp/wine-xiv-git/releases/download/10.8.r0.a2ca9e4/wine-xiv-staging-fsync-git-{wineDistroId}-10.8.r0.a2ca9e4.tar.xz";
     public string[] Checksums { get; } = [
-        "fac545a5d8ee219bf622903adb7a5ca6f2f968d9a2307da3f0ec394dde08c4d4f956487f4b326ef1cfc92eaface463f270f590695ad8874d5c88028fac8f6250", // wine-xiv-staging-fsync-git-arch-10.8.r0.g47f77594.tar.xz
-        "c6857467ea3da9d7071164c89c87838dd1ff6006406e2ba24516bef3ea0c701386b26f68752b20710464410d62846ceea1c69f78caf777dbafc611daa7fba6c9",  // wine-xiv-staging-fsync-git-fedora-10.8.r0.g47f77594.tar.xz
-        "fb0bf85190ec9d001e39135537f27f82e8bd0ab1f222c008012128fbb6f6d8c8547f1315d09d909e7219fe2c221005a5b98927bfb95a24a36c5fca526ae0e95b" // wine-xiv-staging-fsync-git-ubuntu-10.8.r0.g47f77594.tar.xz
+        "f5ca302bab5d4fc321800333da76daff6d18230dc24c36fc2f7eda4d918407c3ebbb9c5684c43c1d1110ff28b93503fbdc1b2bc9ad7109462884dcdc415dd5cc", // wine-xiv-staging-fsync-git-arch-10.8.r0.a2ca9e4.tar.xz
+        "eed98e8eeb176626689f77683620d323ace87662a79ef206394508742be6f1a1a581bcdaae08b1c19c1b8da2b077ec5b2dcb0b4937dd384d1d34b2f573040f8f",  // wine-xiv-staging-fsync-git-fedora-10.8.r0.a2ca9e4.tar.xz
+        "675a694f8a66c33222da3b713772f22801dff4e39d803df37e2116c6fe2d519083d307cbcfcc54e062e667bd811b50b5328f6d42b8e2d85c5efec7666c4bf5e2" // wine-xiv-staging-fsync-git-ubuntu-10.8.r0.a2ca9e4.tar.xz
     ];
 }
