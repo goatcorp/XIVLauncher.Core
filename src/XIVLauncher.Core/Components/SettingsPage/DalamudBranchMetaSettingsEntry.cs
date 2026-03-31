@@ -18,7 +18,7 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
 
     private async Task<IEnumerable<DalamudBranchMeta.Branch>> LoadBranchesAsync()
     {
-        var branches = await DalamudBranchMeta.FetchBranchesAsync().ConfigureAwait(false);
+        var branches = await DalamudBranchMeta.FetchBranchesAsync(Program.HttpClient).ConfigureAwait(false);
         this.Branches = [.. branches];
         return branches;
     }

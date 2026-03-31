@@ -1,3 +1,4 @@
+using System.Net;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
@@ -10,6 +11,7 @@ using Serilog;
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch;
+using XIVLauncher.Common.Http.HappyEyeballs;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Support;
 using XIVLauncher.Common.Unix;
@@ -50,7 +52,18 @@ sealed class Program
     public static DalamudOverlayInfoProxy DalamudLoadInfo { get; private set; } = null!;
     public static CompatibilityTools CompatibilityTools { get; private set; } = null!;
     public static ISecretProvider Secrets { get; private set; } = null!;
-    public static HttpClient HttpClient { get; private set; } = HappyEyeballsHttp.CreateHttpClient();
+    public static HttpClient HttpClient { get; private set; } = new HttpClient(new SocketsHttpHandler
+    {
+        ConnectCallback = new SocketsHttpHandler
+        {
+            UseCookies = false,
+            ConnectCallback = new HappyEyeballsCallback().ConnectCallback,
+        }.ConnectCallback,
+        AutomaticDecompression = DecompressionMethods.All,
+        AllowAutoRedirect = true,
+        MaxAutomaticRedirections = 4,
+    });
+
     public static PatchManager? Patcher { get; set; } = null;
     public static Storage storage = null!;
     public static DirectoryInfo DotnetRuntime => storage.GetFolder("runtime");
@@ -158,7 +171,7 @@ sealed class Program
         {
             runnerOverride = new FileInfo(Path.Combine(Config.DalamudManualInjectPath.FullName, DALAMUD_INJECTOR_NAME));
         }
-        return new DalamudUpdater(storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), null, null)
+        return new DalamudUpdater(HttpClient, storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), null, null)
         {
             Overlay = DalamudLoadInfo,
             RunnerOverride = runnerOverride
