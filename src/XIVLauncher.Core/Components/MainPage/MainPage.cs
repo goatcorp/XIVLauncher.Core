@@ -200,7 +200,7 @@ public class MainPage : Page
         if (isOtp && !App.UniqueIdCache.HasValidCache(username))
         {
             App.AskForOtp();
-            otp = App.WaitForOtp();
+            otp = await App.WaitForOtpAsync().ConfigureAwait(false);
 
             // Make sure we are loading again
             App.State = LauncherApp.LauncherState.Loading;
