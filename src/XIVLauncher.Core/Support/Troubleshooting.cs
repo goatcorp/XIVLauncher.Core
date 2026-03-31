@@ -82,7 +82,7 @@ namespace XIVLauncher.Core.Support
                 }
                 else
                 {
-                    var result = IntegrityCheck.CompareIntegrityAsync(null, gamePath, true).Result;
+                    var result = IntegrityCheck.CompareIntegrityAsync(Program.HttpClient, null, gamePath, true).Result;
 
                     integrity = result.compareResult switch
                     {
