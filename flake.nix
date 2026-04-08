@@ -17,14 +17,15 @@
       {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
-            dotnet-sdk_9
-            SDL2
+            dotnet-sdk_10
+            sdl3
+            libdecor
           ];
 
           env = {
             LD_LIBRARY_PATH = "${
               pkgs.lib.makeLibraryPath [
-                pkgs.SDL2
+                pkgs.sdl3
               ]
             }:$LD_LIBRARY_PATH";
           };
