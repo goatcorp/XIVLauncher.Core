@@ -291,3 +291,6 @@ src/XIVLauncher.Core/build
 flatpak-dotnet-generator.py
 nuget-dep*.json
 tmp*/
+
+# Direnv
+.direnv/

@@ -1,35 +1,56 @@
 {
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    flake-utils.url = "github:numtide/flake-utils";
-  };
-  outputs =
-    {
-      self,
-      nixpkgs,
-      flake-utils,
-    }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-      {
-        devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            dotnet-sdk_10
-            sdl3
-            libdecor
-          ];
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-          env = {
-            LD_LIBRARY_PATH = "${
-              pkgs.lib.makeLibraryPath [
-                pkgs.sdl3
-              ]
-            }:$LD_LIBRARY_PATH";
+  outputs =
+    { nixpkgs, ... }:
+    let
+      forAllSystems =
+        function:
+        nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed (
+          system: function nixpkgs.legacyPackages.${system}
+        );
+    in
+    {
+      devShells = nixpkgs.lib.genAttrs [ "x86_64-linux" ] (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              dotnetCorePackages.sdk_10_0
+              sdl3
+              libdecor
+              icu
+              libxrandr
+              libxscrnsaver
+              wayland
+              libxkbcommon
+              vulkan-loader
+              gamemode
+            ];
+            env = {
+              LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (
+                with pkgs;
+                [
+                  sdl3
+                  libdecor
+                  icu
+                  libxrandr
+                  libxscrnsaver
+                  wayland
+                  libxkbcommon
+                  vulkan-loader
+                  gamemode
+                  libXcursor
+                  libXi
+                  libXfixes
+                ]
+              );
+            };
           };
-        };
-      }
-    );
+        }
+      );
+    };
 }
