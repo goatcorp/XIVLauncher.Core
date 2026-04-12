@@ -20,32 +20,22 @@
           default = pkgs.mkShell {
             packages = with pkgs; [
               dotnetCorePackages.sdk_10_0
-              sdl3
-              libdecor
-              icu
-              libxrandr
-              libxscrnsaver
-              wayland
-              libxkbcommon
-              vulkan-loader
-              gamemode
             ];
             env = {
               LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (
                 with pkgs;
                 [
-                  sdl3
-                  libdecor
+                  gamemode
                   icu
+                  libdecor
+                  libXcursor
+                  libXfixes
+                  libXi
+                  libxkbcommon
                   libxrandr
                   libxscrnsaver
-                  wayland
-                  libxkbcommon
                   vulkan-loader
-                  gamemode
-                  libXcursor
-                  libXi
-                  libXfixes
+                  wayland
                 ]
               );
             };
