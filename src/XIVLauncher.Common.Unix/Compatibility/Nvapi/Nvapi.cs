@@ -16,8 +16,11 @@ namespace XIVLauncher.Common.Unix.Compatibility.Nvapi;
 
 public enum NvapiVersion
 {
-    [SettingsDescription("Stable", "Dxvk-Nvapi v0.9.0. For DLSS with nVidia cards and Stable Dxvk release")]
+    [SettingsDescription("Stable", "Dxvk-Nvapi v0.9.1. For DLSS with nVidia cards and Stable Dxvk release")]
     Stable,
+
+    [SettingsDescription("Legacy", "Dxvk-Nvapi v0.6.4. May be useful for older nVidia drivers.")]
+    Legacy,
 
     [SettingsDescription("Disabled", "Do not use Dxvk-Nvapi. For GPUs without DLSS support")]
     Disabled,
@@ -34,6 +37,7 @@ public static class Nvapi
         INvapiRelease release = version switch
         {
             NvapiVersion.Stable => new NvapiStableRelease(),
+            NvapiVersion.Legacy => new NvapiLegacyRelease(),
             _ => throw new NotImplementedException(),
         };
 
