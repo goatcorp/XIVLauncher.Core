@@ -1,12 +1,12 @@
+using System.Diagnostics;
+using System.Numerics;
+using System.Runtime.InteropServices;
+
 using Hexa.NET.ImGui;
 using Hexa.NET.ImGui.Backends.SDL3;
 using Hexa.NET.SDL3;
 
 using HexaGen.Runtime;
-
-using System.Diagnostics;
-using System.Numerics;
-using System.Runtime.InteropServices;
 
 using ImSDLEvent = Hexa.NET.ImGui.Backends.SDL3.SDLEvent;
 using ImSDLGPUCommandBuffer = Hexa.NET.ImGui.Backends.SDL3.SDLGPUCommandBuffer;

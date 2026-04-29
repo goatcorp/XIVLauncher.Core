@@ -1,8 +1,8 @@
+using System.Numerics;
+
 using Hexa.NET.ImGui;
 
 using Serilog;
-
-using System.Numerics;
 
 using XIVLauncher.Common.Http;
 using XIVLauncher.Core.Resources.Localization;
@@ -14,9 +14,12 @@ public class OtpEntryPage : Page
     private string otp = string.Empty;
     private bool appearing = false;
     private OtpListener? otpListener;
+    private TaskCompletionSource<string?> resultTcs = new();
 
     public string? Result { get; private set; }
     public bool Cancelled { get; private set; }
+
+    public Task<string?> GetResultAsync() => this.resultTcs.Task;
 
     public OtpEntryPage(LauncherApp app) : base(app)
     {
@@ -25,10 +28,8 @@ public class OtpEntryPage : Page
 
     private void SteamOnOnGamepadTextInputDismissed(bool success)
     {
-        if (success)
-        {
-            if (Program.Steam is not null) this.Result = Program.Steam.GetEnteredGamepadText();
-        }
+        if (success && Program.Steam is not null)
+            TryAcceptOtp(Program.Steam.GetEnteredGamepadText());
     }
 
     public void Reset()
@@ -37,6 +38,7 @@ public class OtpEntryPage : Page
         this.appearing = true;
         this.Result = null;
         this.Cancelled = false;
+        this.resultTcs = new TaskCompletionSource<string?>();
 
         // TODO(goat): This doesn't work if you call it right after starting the app... Steam probably takes a little while to initialize. Might be annoying for autologin.
         // BUG: We have to turn this off when using OTP server, because there's no way to dismiss open keyboards
@@ -71,6 +73,7 @@ public class OtpEntryPage : Page
 
         Log.Verbose("Received OTP: {Otp}", otp);
         this.Result = otp;
+        this.resultTcs.TrySetResult(otp);
     }
 
     public void StartOtpListener()
@@ -135,6 +138,7 @@ public class OtpEntryPage : Page
             if (ImGui.Button(Strings.CancelLabel, buttonSize))
             {
                 this.Cancelled = true;
+                this.resultTcs.TrySetResult(null);
             }
         }
 

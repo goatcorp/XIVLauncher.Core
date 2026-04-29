@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+
 using XIVLauncher.Common.PlatformAbstractions;
 
 namespace XIVLauncher.Common.Unix;

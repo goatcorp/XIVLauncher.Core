@@ -1,8 +1,8 @@
+using System.Text;
+
 using Newtonsoft.Json;
 
 using Serilog;
-
-using System.Text;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
@@ -82,7 +82,7 @@ namespace XIVLauncher.Core.Support
                 }
                 else
                 {
-                    var result = IntegrityCheck.CompareIntegrityAsync(null, gamePath, true).Result;
+                    var result = IntegrityCheck.CompareIntegrityAsync(Program.HttpClient, null, gamePath, true).Result;
 
                     integrity = result.compareResult switch
                     {

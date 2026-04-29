@@ -23,7 +23,7 @@ public static class CompatUtil
         {
             return WineReleaseDistro.macOS;
         }
-        
+
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
             throw new InvalidOperationException("GetWineIdForDistro called on unsupported platform");

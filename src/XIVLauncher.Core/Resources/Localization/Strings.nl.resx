@@ -80,26 +80,8 @@ Dit moet een absoluut locatie zijn naar een map die de binaire bestanden wine64 
   <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
         <value>GameMode is niet gedetecteerd op uw systeem.</value>
     </data>
-  <data name="EnableESyncSetting" xml:space="preserve">
-        <value>ESync inschakelen</value>
-    </data>
-  <data name="EnableFSyncSetting" xml:space="preserve">
-        <value>FSync inschakelen</value>
-    </data>
-  <data name="EnableESyncSettingDescription" xml:space="preserve">
-        <value>Schakel eventfd-gebaseerde synchronisatie in.</value>
-    </data>
-  <data name="EnableFSyncSettingDescription" xml:space="preserve">
-        <value>Snelle gebruikersmutex (futex2) inschakelen.</value>
-    </data>
   <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
         <value>Voor FSync is Linux-kernel 5.16 of hoger vereist.</value>
-    </data>
-  <data name="SetWindows7Setting" xml:space="preserve">
-        <value>Stel Windows-versie in op 7</value>
-    </data>
-  <data name="SetWindows7SettingDescription" xml:space="preserve">
-        <value>De standaardinstelling voor WINE 8.1+ is Windows 10, maar dit veroorzaakt problemen met sommige Dalamud-plugins. Voorlopig wordt Windows 7 aanbevolen.</value>
     </data>
   <data name="EnableDXVKOverlaySetting" xml:space="preserve">
         <value>DXVK Overlay</value>
@@ -163,7 +145,7 @@ Dit moet een absoluut locatie zijn naar een map die de binaire bestanden wine64 
         <value>Your locale is "{0}". You probably don't need this hack.</value>
     </data>
   <data name="ForceDontUseSystemTZ" xml:space="preserve">
-        <value>Don't use system timezone</value>
+        <value>Hack: Don't use system timezone.</value>
     </data>
   <data name="ForceDontUseSystemDescription" xml:space="preserve">
         <value>Unsets the TZ environment variable from system provided</value>
@@ -351,6 +333,12 @@ Can't pass programs (like gamescope -- %command%). Does not accept flatpak args 
     </data>
   <data name="DalamudLocalInjectionPathSettingNoInjValidation" xml:space="preserve">
         <value>Dalamud.Injector.exe was not found inside of the provided directory.</value>
+    </data>
+  <data name="DalamudBranchSwitcher" xml:space="preserve">
+        <value>Dalamud Branch</value>
+    </data>
+  <data name="DalamudBranchSwitcherDescription" xml:space="preserve">
+        <value>Change to a different branch of Dalamud. It is recommended you use the stable branch.</value>
     </data>
   <data name="OpenRepositoryButton" xml:space="preserve">
         <value>Open Repository</value>
@@ -573,5 +561,14 @@ Please try again later.</value>
   <data name="RepairFailureError" xml:space="preserve">
         <value>An error occurred while repairing the game files.
 You may have to reinstall the game.</value>
+    </data>
+  <data name="WineSyncMethodSetting" xml:space="preserve">
+        <value>WINE Sync Method</value>
+    </data>
+  <data name="WineSyncMethodSettingDescription" xml:space="preserve">
+        <value>How Wine synchronizes multi-threaded operations.</value>
+    </data>
+  <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
+        <value>FSync is only available on Linux</value>
     </data>
 </root>

@@ -1,8 +1,8 @@
+using System.Numerics;
+
 using Hexa.NET.ImGui;
 
 using Newtonsoft.Json;
-
-using System.Numerics;
 
 namespace XIVLauncher.Core.Style;
 

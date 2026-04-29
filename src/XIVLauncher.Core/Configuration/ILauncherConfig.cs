@@ -56,9 +56,8 @@ public interface ILauncherConfig
     #region Linux
 
     public WineStartupType? WineStartupType { get; set; }
-
     public WineManagedVersion? WineManagedVersion { get; set; }
-
+    public WineSyncType? WineSyncType { get; set; }
     public string? WineBinaryPath { get; set; }
 
     public bool? GameModeEnabled { get; set; }
@@ -66,10 +65,6 @@ public interface ILauncherConfig
     public DxvkVersion? DxvkVersion { get; set; }
 
     public bool? DxvkAsyncEnabled { get; set; }
-
-    public bool? ESyncEnabled { get; set; }
-
-    public bool? FSyncEnabled { get; set; }
 
     public DxvkHudType DxvkHudType { get; set; }
 
@@ -84,8 +79,6 @@ public interface ILauncherConfig
     public bool? FixIM { get; set; }
 
     public bool? FixError127 { get; set; }
-
-    public bool? SetWin7 { get; set; }
 
     public bool? DontUseSystemTz { get; set; }
 

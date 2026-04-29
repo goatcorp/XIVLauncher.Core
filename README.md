@@ -8,7 +8,7 @@ If you want to use XIVLauncher on your Steam Deck, feel free to [follow our guid
 
 ## Building & Contributing
 1. Clone this repository with submodules
-2. Make sure you have a recent(.NET 6.0.400+) version of the .NET SDK installed
+2. Make sure you have a recent (.NET 10+) version of the .NET SDK installed
 2. Run `dotnet build` or `dotnet publish`
 
 Common components that are shared with the Windows version of XIVLauncher are linked as a submodule in the "lib" folder. XIVLauncher Core can run on Windows, but is by far not as polished as the [original Windows version](https://github.com/goatcorp/FFXIVQuickLauncher). Windows users should not use this application unless for troubleshooting purposes or development work.
@@ -26,5 +26,5 @@ XIVLauncher Core has community packages for various Linux distributions. Please 
 | [GURU (Gentoo)](https://gitweb.gentoo.org/repo/proj/guru.git/tree/games-util/xivlauncher) | ![GURU version](https://repology.org/badge/version-for-repo/gentoo_ovl_guru/xivlauncher.core.svg?header=guru) |
 | [nixpkgs stable](https://search.nixos.org/packages?channel=25.11&from=0&size=50&sort=relevance&type=packages&query=xivlauncher) | ![nixpkgs stable version](https://repology.org/badge/version-for-repo/nix_stable_25_11/xivlauncher.core.svg?header=nixpkgs%2025.11) |
 | [nixpkgs unstable](https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=xivlauncher) | ![nixpkgs unstable version](https://repology.org/badge/version-for-repo/nix_unstable/xivlauncher.core.svg?header=nixpkgs%20unstable) |
-| [PPA (Ubuntu)](https://launchpad.net/~linneris/+archive/ubuntu/xivlauncher-core-stable) | ![PPA version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Flaunchpad.net%2Fapi%2F1.0%2F~linneris%2F%2Barchive%2Fxivlauncher-core-stable%3Fws.op%3DgetPublishedBinaries%26status%3DPublished%26distro_arch_series%3Dhttps%3A%2F%2Flaunchpad.net%2Fapi%2F1.0%2Fubuntu%2Fnoble%2Famd64&query=%24.entries[0].binary_package_version&logo=ubuntu&label=PPA&color=dark-green) |
+| [PPA (Ubuntu)](https://launchpad.net/~linneris/+archive/ubuntu/xivlauncher-core-stable) | ![PPA version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Flaunchpad.net%2Fapi%2F1.0%2F~linneris%2F%2Barchive%2Fxivlauncher-core-stable%3Fws.op%3DgetPublishedBinaries%26binary_name%3Dxivlauncher-core%26status%3DPublished%26distro_arch_series%3Dhttps%3A%2F%2Flaunchpad.net%2Fapi%2F1.0%2Fubuntu%2Fnoble%2Famd64&query=%24.entries[0].binary_package_version&logo=ubuntu&label=PPA&color=dark-green) |
 | [AppImage](https://github.com/spiteful-fox/xivlauncher-appimage/releases/latest) | ![AppImage version](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fspiteful-fox%2Fxivlauncher-appimage%2Frefs%2Fheads%2Fmain%2Fbadge.json) |

@@ -1,9 +1,9 @@
+using System.Diagnostics;
+using System.Numerics;
+
 using Hexa.NET.ImGui;
 
 using Serilog;
-
-using System.Diagnostics;
-using System.Numerics;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Game;
@@ -223,14 +223,11 @@ public class LauncherApp : Component
         this.State = LauncherState.OtpEntry;
     }
 
-    public string? WaitForOtp()
+    public async Task<string?> WaitForOtpAsync()
     {
-        while (this.otpEntryPage.Result == null && !this.otpEntryPage.Cancelled)
-            Thread.Yield();
-
-        var res = this.otpEntryPage.Result;
+        var result = await this.otpEntryPage.GetResultAsync().ConfigureAwait(false);
         this.otpEntryPage.StopOtpListener();
-        return res;
+        return result;
     }
 
     public void StartLoading(string line1, string line2 = "", string line3 = "", bool isIndeterminate = true, bool canCancel = false, bool canDisableAutoLogin = false)

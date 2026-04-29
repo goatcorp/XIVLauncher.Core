@@ -1,6 +1,6 @@
-using Hexa.NET.ImGui;
-
 using System.Numerics;
+
+using Hexa.NET.ImGui;
 
 using XIVLauncher.Core.Accounts.Secrets.Providers;
 using XIVLauncher.Core.Components.Common;

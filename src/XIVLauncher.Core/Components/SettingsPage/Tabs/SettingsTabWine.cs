@@ -1,7 +1,7 @@
-using Hexa.NET.ImGui;
-
 using System.Numerics;
 using System.Runtime.InteropServices;
+
+using Hexa.NET.ImGui;
 
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
 using XIVLauncher.Common.Unix.Compatibility.Nvapi;
@@ -23,24 +23,41 @@ public class SettingsTabWine : SettingsTab
     {
         Entries = new SettingsEntry[]
         {
+            // WINE
             startupTypeSetting = new SettingsEntry<WineStartupType>(Strings.WineInstallSetting, Strings.WineInstallSettingDescription,
                 () => Program.Config.WineStartupType ?? WineStartupType.Managed, x => Program.Config.WineStartupType = x),
-
-            wineVersionSetting = new SettingsEntry<WineManagedVersion>(Strings.WineVersionSetting, Strings.WineVersionSettingDescription, () => Program.Config.WineManagedVersion ?? WineManagedVersion.Stable,
+            new SettingsEntry<WineManagedVersion>(Strings.WineVersionSetting, Strings.WineVersionSettingDescription, () => Program.Config.WineManagedVersion ?? WineManagedVersion.Stable,
                 x => Program.Config.WineManagedVersion = x )
             {
                 CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Managed
             },
-
             new SettingsEntry<string>(Strings.WineBinaryPathSetting,
                 Strings.WineBinarySettingDescription,
                 () => Program.Config.WineBinaryPath, s => Program.Config.WineBinaryPath = s)
             {
                 CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Custom
             },
+            new SettingsEntry<WineSyncType>(Strings.WineSyncMethodSetting, Strings.WineSyncMethodSettingDescription, () => Program.Config.WineSyncType ?? WineSyncType.FSync, x => Program.Config.WineSyncType = x)
+            {
+                CheckValidity = b =>
+                {
+                    switch (WineUtility.SystemFsyncSupport())
+                    {
+                        case FsyncSupport.UnsupportedPlatform:
+                            return Strings.EnableFsyncSettingUnsupportedPlatformValidation;
+                        case FsyncSupport.OutdatedKernel:
+                            return Strings.EnableFSyncSettingMinKernelValidation;
+                        case FsyncSupport.Supported:
+                        default:
+                            return null;
+                    }
+                }
+            },
+            new SettingsEntry<string>(Strings.WineDebugAdditionalVarSetting, Strings.WineDebugAdditionalVarSettingDescription, () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s),
 
+            // DXVK
             dxvkVersionSetting = new SettingsEntry<DxvkVersion>(Strings.DXVKVersionSetting, Strings.DXVKVersionSettingDescription, () => Program.Config.DxvkVersion ?? DxvkVersion.Stable, x => Program.Config.DxvkVersion = x),
-
+            new SettingsEntry<DxvkHudType>(Strings.EnableDXVKOverlaySetting, Strings.EnableDXVKOverlaySettingDescription, () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type),
             new SettingsEntry<bool>(Strings.DXVKEnableAsyncSetting, Strings.DXVKEnableAsyncSettingDescription, () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
             {
                 CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled
@@ -56,8 +73,6 @@ public class SettingsTabWine : SettingsTab
                         warning += Strings.NvapiLegacyDxvkWarning + "\n";
                     if (startupTypeSetting.Value == WineStartupType.Custom)
                         warning += Strings.NvapiCustomWineWarning;
-                    else if (wineVersionSetting.Value == WineManagedVersion.Legacy)
-                        warning += Strings.NvapiLegacyWineWarning;
 
                     warning = warning.Trim();
                     
@@ -65,6 +80,7 @@ public class SettingsTabWine : SettingsTab
                 }
             },
 
+            // GameMode
             new SettingsEntry<bool>(Strings.EnableFeralGameModeSetting, Strings.EnableFeralGameModeSettingDescription, () => Program.Config.GameModeEnabled ?? true, b => Program.Config.GameModeEnabled = b)
             {
                 CheckVisibility = () => RuntimeInformation.IsOSPlatform(OSPlatform.Linux),
@@ -75,36 +91,6 @@ public class SettingsTabWine : SettingsTab
                     return null;
                 }
             },
-
-            new SettingsEntry<bool>(Strings.EnableESyncSetting, Strings.EnableESyncSettingDescription, () => Program.Config.ESyncEnabled ?? true, b => Program.Config.ESyncEnabled = b),
-            new SettingsEntry<bool>(Strings.EnableFSyncSetting, Strings.EnableFSyncSettingDescription, () => Program.Config.FSyncEnabled ?? true, b => Program.Config.FSyncEnabled = b)
-            {
-                CheckVisibility = () => RuntimeInformation.IsOSPlatform(OSPlatform.Linux),
-                CheckValidity = b =>
-                {
-                    if (b == true && (Environment.OSVersion.Version.Major < 5 && (Environment.OSVersion.Version.Minor < 16 || Environment.OSVersion.Version.Major < 6)))
-                        return Strings.EnableFSyncSettingMinKernelValidation;
-
-                    return null;
-                }
-            },
-
-            new SettingsEntry<bool>(Strings.SetWindows7Setting, Strings.SetWindows7SettingDescription, () => Program.Config.SetWin7 ?? true, b => Program.Config.SetWin7 = b),
-
-            new SettingsEntry<DxvkHudType>(Strings.EnableDXVKOverlaySetting, Strings.EnableDXVKOverlaySettingDescription, () => Program.Config.DxvkHudType, type => Program.Config.DxvkHudType = type),
-            
-            new SettingsEntry<string>(Strings.ExtraWineDLLOverridesSetting, Strings.ExtraWineDLLOverridesSettingDescription , () => Program.Config.WineDLLOverrides ?? "", s => Program.Config.WineDLLOverrides = s)
-            {
-                CheckValidity = s =>
-                {
-                    if (!WineSettings.WineDLLOverrideIsValid(s))
-                        return Strings.ExtraWineDLLOverridesInvalidError;
-                    
-                    return null;
-                },
-            },
-
-            new SettingsEntry<string>(Strings.WineDebugAdditionalVarSetting, Strings.WineDebugAdditionalVarSettingDescription, () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s)
         };
     }
 

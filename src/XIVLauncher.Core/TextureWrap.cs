@@ -1,9 +1,9 @@
+using System.Numerics;
+using System.Runtime.InteropServices;
+
 using Hexa.NET.ImGui;
 using Hexa.NET.SDL3;
 using Hexa.NET.SDL3.Image;
-
-using System.Numerics;
-using System.Runtime.InteropServices;
 
 namespace XIVLauncher.Core;
 

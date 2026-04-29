@@ -1,7 +1,7 @@
-using Hexa.NET.ImGui;
-
 using System.Collections.Immutable;
 using System.Numerics;
+
+using Hexa.NET.ImGui;
 
 using XIVLauncher.Core.Components.SettingsPage.Tabs;
 using XIVLauncher.Core.Resources.Localization;

@@ -82,9 +82,6 @@ It should be an absolute path to a folder containing wine64 and wineserver binar
     <data name="NvapiLegacyDxvkWarning" xml:space="preserve">
         <value>DLSS will not work with Legacy DXVK. Use Stable instead.</value>
     </data>
-    <data name="NvapiLegacyWineWarning" xml:space="preserve">
-        <value>DLSS will not work with Legacy Wine. Use Stable instead, or Custom Wine 9.0 or later</value>
-    </data>
     <data name="NvapiCustomWineWarning" xml:space="preserve">
         <value>DLSS may not work with custom wine versions. Make sure wine is 9.0 or later</value>
     </data>
@@ -97,26 +94,8 @@ It should be an absolute path to a folder containing wine64 and wineserver binar
     <data name="EnableFeralGameModeNotFoundValidation" xml:space="preserve">
         <value>GameMode was not detected on your system.</value>
     </data>
-    <data name="EnableESyncSetting" xml:space="preserve">
-        <value>Enable ESync</value>
-    </data>
-    <data name="EnableFSyncSetting" xml:space="preserve">
-        <value>Enable FSync</value>
-    </data>
-    <data name="EnableESyncSettingDescription" xml:space="preserve">
-        <value>Enable eventfd-based synchronization.</value>
-    </data>
-    <data name="EnableFSyncSettingDescription" xml:space="preserve">
-        <value>Enable fast user mutex (futex2).</value>
-    </data>
     <data name="EnableFSyncSettingMinKernelValidation" xml:space="preserve">
         <value>Linux kernel 5.16 or higher is required for FSync.</value>
-    </data>
-    <data name="SetWindows7Setting" xml:space="preserve">
-        <value>Set Windows version to 7</value>
-    </data>
-    <data name="SetWindows7SettingDescription" xml:space="preserve">
-        <value>Default for WINE 8.1+ is Windows 10, but this causes issues with some Dalamud plugins. Windows 7 is recommended for now.</value>
     </data>
     <data name="EnableDXVKOverlaySetting" xml:space="preserve">
         <value>DXVK Overlay</value>
@@ -180,7 +159,7 @@ It should be an absolute path to a folder containing wine64 and wineserver binar
         <value>Your locale is "{0}". You probably don't need this hack.</value>
     </data>
     <data name="ForceDontUseSystemTZ" xml:space="preserve">
-        <value>Don't use system timezone</value>
+        <value>Hack: Don't use system timezone.</value>
     </data>
     <data name="ForceDontUseSystemDescription" xml:space="preserve">
         <value>Unsets the TZ environment variable from system provided</value>
@@ -389,7 +368,7 @@ Do not use msquic, mscoree, d3d9, d3d10core, d3d11, or dxgi. These are already s
         <value>Dalamud Branch</value>
     </data>
     <data name="DalamudBranchSwitcherDescription" xml:space="preserve">
-        <value>Change to a different branch of Dalamud. It is recommended to keep this on 'release'.</value>
+        <value>Change to a different branch of Dalamud. It is recommended you use the stable branch.</value>
     </data>
     <data name="OpenRepositoryButton" xml:space="preserve">
         <value>Open Repository</value>
@@ -612,5 +591,14 @@ Please try again later.</value>
     <data name="RepairFailureError" xml:space="preserve">
         <value>An error occurred while repairing the game files.
 You may have to reinstall the game.</value>
+    </data>
+    <data name="WineSyncMethodSetting" xml:space="preserve">
+        <value>WINE Sync Method</value>
+    </data>
+    <data name="WineSyncMethodSettingDescription" xml:space="preserve">
+        <value>How Wine synchronizes multi-threaded operations.</value>
+    </data>
+    <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
+        <value>FSync is only available on Linux</value>
     </data>
 </root>

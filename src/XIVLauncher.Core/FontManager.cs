@@ -1,6 +1,6 @@
-using Hexa.NET.ImGui;
-
 using System.Runtime.InteropServices;
+
+using Hexa.NET.ImGui;
 
 namespace XIVLauncher.Core;
 

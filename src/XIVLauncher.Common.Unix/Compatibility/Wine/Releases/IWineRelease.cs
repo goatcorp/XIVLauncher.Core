@@ -1,4 +1,4 @@
-namespace XIVLauncher.Common.Unix.Compatibility.Wine;
+namespace XIVLauncher.Common.Unix.Compatibility.Wine.Releases;
 
 public interface IWineRelease
 {

@@ -1,3 +1,4 @@
+using System.Net;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
@@ -10,6 +11,7 @@ using Serilog;
 using XIVLauncher.Common;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Game.Patch;
+using XIVLauncher.Common.Http.HappyEyeballs;
 using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Support;
 using XIVLauncher.Common.Unix;
@@ -51,7 +53,18 @@ sealed class Program
     public static DalamudOverlayInfoProxy DalamudLoadInfo { get; private set; } = null!;
     public static CompatibilityTools CompatibilityTools { get; private set; } = null!;
     public static ISecretProvider Secrets { get; private set; } = null!;
-    public static HttpClient HttpClient { get; private set; } = HappyEyeballsHttp.CreateHttpClient();
+    public static HttpClient HttpClient { get; private set; } = new HttpClient(new SocketsHttpHandler
+    {
+        ConnectCallback = new SocketsHttpHandler
+        {
+            UseCookies = false,
+            ConnectCallback = new HappyEyeballsCallback().ConnectCallback,
+        }.ConnectCallback,
+        AutomaticDecompression = DecompressionMethods.All,
+        AllowAutoRedirect = true,
+        MaxAutomaticRedirections = 4,
+    });
+
     public static PatchManager? Patcher { get; set; } = null;
     public static Storage storage = null!;
     public static DirectoryInfo DotnetRuntime => storage.GetFolder("runtime");
@@ -119,12 +132,10 @@ sealed class Program
         Config.DxvkVersion ??= DxvkVersion.Stable;
         Config.DxvkAsyncEnabled ??= true;
         Config.NvapiVersion ??= NvapiVersion.Stable;
-        Config.ESyncEnabled ??= true;
-        Config.FSyncEnabled ??= false;
-        Config.SetWin7 ??= true;
 
         Config.WineStartupType ??= WineStartupType.Managed;
         Config.WineManagedVersion ??= WineManagedVersion.Stable;
+        Config.WineSyncType ??= WineUtility.SystemFsyncSupport() == FsyncSupport.Supported ? WineSyncType.FSync : WineSyncType.ESync;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
         Config.WineDLLOverrides ??= "";
@@ -163,7 +174,7 @@ sealed class Program
         {
             runnerOverride = new FileInfo(Path.Combine(Config.DalamudManualInjectPath.FullName, DALAMUD_INJECTOR_NAME));
         }
-        return new DalamudUpdater(storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), null, null)
+        return new DalamudUpdater(HttpClient, storage.GetFolder("dalamud"), storage.GetFolder("runtime"), storage.GetFolder("dalamudAssets"), null, null)
         {
             Overlay = DalamudLoadInfo,
             RunnerOverride = runnerOverride
@@ -257,7 +268,8 @@ sealed class Program
 
         Log.Debug("Creating SDL3 devices...");
 
-        var version = AppUtil.GetGitHash();
+        var version = AppUtil.GetAssemblyVersion();
+        var hash = AppUtil.GetGitHash();
         unsafe
         {
             if (!SDL.Init(SDLInitFlags.Video | SDLInitFlags.Gamepad))
@@ -269,7 +281,7 @@ sealed class Program
             var mainScale = SDL.GetDisplayContentScale(SDL.GetPrimaryDisplay());
             var windowFlags = SDLWindowFlags.Resizable | SDLWindowFlags.Hidden | SDLWindowFlags.HighPixelDensity;
             window = SDL.CreateWindow(
-                $"XIVLauncher {version}",
+                $"XIVLauncher {version} ({hash})",
                 (int)(1280 * mainScale),
                 (int)(800 * mainScale),
                 windowFlags);
@@ -352,7 +364,7 @@ sealed class Program
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return;
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
-        var wineSettings = new WineSettings(Config.WineStartupType ?? WineStartupType.Custom, Config.WineManagedVersion ?? WineManagedVersion.Stable, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.ESyncEnabled ?? true, Config.FSyncEnabled ?? false);
+        var wineSettings = new WineSettings(Config.WineStartupType ?? WineStartupType.Custom, Config.WineManagedVersion ?? WineManagedVersion.Stable, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.WineSyncType ?? WineSyncType.FSync);
         var toolsFolder = storage.GetFolder("compatibilitytool");
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "dxvk"));
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "nvapi"));
