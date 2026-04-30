@@ -705,12 +705,6 @@ namespace XIVLauncher.Core.Resources.Localization {
             }
         }
         
-        internal static string DalamudBranchSwitcherBetaKeyTrack {
-            get {
-                return ResourceManager.GetString("DalamudBranchSwitcherBetaKeyTrack", resourceCulture);
-            }
-        }
-        
         internal static string DalamudBranchSwitcherBetaKeyKey {
             get {
                 return ResourceManager.GetString("DalamudBranchSwitcherBetaKeyKey", resourceCulture);

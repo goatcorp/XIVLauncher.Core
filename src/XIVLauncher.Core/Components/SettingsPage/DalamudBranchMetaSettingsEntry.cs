@@ -12,8 +12,6 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
     private Task<IEnumerable<DalamudBranchMeta.Branch>> BranchTask { get; init; }
 
     private List<DalamudBranchMeta.Branch> Branches { get; set; } = [];
-    
-    private string manualBranchTrack = "";
     private string manualBranchKey = "";
 
     public DalamudBranchMetaSettingsEntry(string name, string description, Func<string> load, Action<string?> save)
@@ -38,7 +36,7 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
         {
             foreach (var branch in this.Branches)
             {
-                if (branch.Hidden && !(branch.Track == this.manualBranchTrack && branch.Key == this.manualBranchKey)) continue;
+                if (branch.Hidden && branch.Key != this.manualBranchKey) continue;
                 if (ImGui.Selectable(branch.DisplayName, branch.Track == currentBranch?.Track))
                 {
                     this.SelectedBranch = branch;
@@ -55,12 +53,10 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
         if (ImGui.BeginPopupModal(Strings.DalamudBranchSwitcherBetaKeyTitle))
         {
             ImGui.PushItemWidth(200);
-            ImGui.InputText($"{Strings.DalamudBranchSwitcherBetaKeyTrack}###{this.Id}-manual-track", ref this.manualBranchTrack, 10000);
             ImGui.InputText($"{Strings.DalamudBranchSwitcherBetaKeyKey}###{this.Id}-manual-key", ref this.manualBranchKey, 10000);
             ImGui.PopItemWidth();
             if (ImGui.Button(Strings.ClearLabel))
             {
-                this.manualBranchTrack = "";
                 this.manualBranchKey = "";
             }
             ImGui.SameLine();
