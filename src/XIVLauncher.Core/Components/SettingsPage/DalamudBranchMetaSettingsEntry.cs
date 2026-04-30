@@ -1,6 +1,6 @@
 using Hexa.NET.ImGui;
 
-using Serilog;
+using Microsoft.VisualBasic;
 
 using XIVLauncher.Common.Dalamud;
 
@@ -57,8 +57,10 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
 
         if (this.manualKeyToggle)
         {
+            ImGui.PushItemWidth(200);
             ImGui.InputText($"Track###{this.Id}-manualtrack", ref this.manualBranchTrack, 10000);
             ImGui.InputText($"Key###{this.Id}-manualkey", ref this.manualBranchKey, 10000);
+            ImGui.PopItemWidth();
         }
         else
         {
