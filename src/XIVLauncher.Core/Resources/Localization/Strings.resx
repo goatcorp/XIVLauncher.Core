@@ -354,9 +354,6 @@ Can't pass programs (like gamescope -- %command%). Does not accept flatpak args 
     <data name="DalamudBranchSwitcherBetaKeyTitle" xml:space="preserve">
         <value>Enter Beta Key</value>
     </data>
-    <data name="DalamudBranchSwitcherBetaKeyTrack" xml:space="preserve">
-        <value>Track</value>
-    </data>
     <data name="DalamudBranchSwitcherBetaKeyKey" xml:space="preserve">
         <value>Key</value>
     </data>
