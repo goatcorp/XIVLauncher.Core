@@ -53,6 +53,18 @@ public class SettingsTabWine : SettingsTab
                     }
                 }
             },
+
+            new SettingsEntry<string>(Strings.ExtraWineDLLOverridesSetting, Strings.ExtraWineDLLOverridesSettingDescription , () => Program.Config.WineDLLOverrides ?? "", s => Program.Config.WineDLLOverrides = s)
+            {
+                CheckValidity = s =>
+                {
+                    if (!WineSettings.WineDLLOverrideIsValid(s))
+                        return Strings.ExtraWineDLLOverridesInvalidError;
+                    
+                    return null;
+                },
+            },
+            
             new SettingsEntry<string>(Strings.WineDebugAdditionalVarSetting, Strings.WineDebugAdditionalVarSettingDescription, () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s),
 
             // DXVK
