@@ -63,6 +63,18 @@ namespace XIVLauncher.Core.Resources.Localization {
             }
         }
         
+        internal static string ClearLabel {
+            get {
+                return ResourceManager.GetString("ClearLabel", resourceCulture);
+            }
+        }
+        
+        internal static string CloseLabel {
+            get {
+                return ResourceManager.GetString("CloseLabel", resourceCulture);
+            }
+        }
+        
         internal static string SearchResults {
             get {
                 return ResourceManager.GetString("SearchResults", resourceCulture);
@@ -678,6 +690,24 @@ namespace XIVLauncher.Core.Resources.Localization {
         internal static string DalamudBranchSwitcherDescription {
             get {
                 return ResourceManager.GetString("DalamudBranchSwitcherDescription", resourceCulture);
+            }
+        }
+        
+        internal static string DalamudBranchSwitcherBetaKeyButton {
+            get {
+                return ResourceManager.GetString("DalamudBranchSwitcherBetaKeyButton", resourceCulture);
+            }
+        }
+        
+        internal static string DalamudBranchSwitcherBetaKeyTitle {
+            get {
+                return ResourceManager.GetString("DalamudBranchSwitcherBetaKeyTitle", resourceCulture);
+            }
+        }
+        
+        internal static string DalamudBranchSwitcherBetaKeyKey {
+            get {
+                return ResourceManager.GetString("DalamudBranchSwitcherBetaKeyKey", resourceCulture);
             }
         }
         

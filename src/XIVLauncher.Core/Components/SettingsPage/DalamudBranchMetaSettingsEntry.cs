@@ -1,14 +1,18 @@
 using Hexa.NET.ImGui;
 
 using XIVLauncher.Common.Dalamud;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage;
 
 public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
 {
     private DalamudBranchMeta.Branch? SelectedBranch { get; set; }
+
     private Task<IEnumerable<DalamudBranchMeta.Branch>> BranchTask { get; init; }
+
     private List<DalamudBranchMeta.Branch> Branches { get; set; } = [];
+    private string manualBranchKey = "";
 
     public DalamudBranchMetaSettingsEntry(string name, string description, Func<string> load, Action<string?> save)
         : base(name, description, load, save)
@@ -32,7 +36,7 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
         {
             foreach (var branch in this.Branches)
             {
-                if (branch.Hidden) continue;
+                if (branch.Hidden && branch.Key != this.manualBranchKey) continue;
                 if (ImGui.Selectable(branch.DisplayName, branch.Track == currentBranch?.Track))
                 {
                     this.SelectedBranch = branch;
@@ -45,6 +49,20 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
         ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudGrey);
         ImGuiHelpers.TextWrapped(this.Description);
         ImGui.PopStyleColor();
+        if (ImGui.Button(Strings.DalamudBranchSwitcherBetaKeyButton)) ImGui.OpenPopup(Strings.DalamudBranchSwitcherBetaKeyTitle);
+        if (ImGui.BeginPopupModal(Strings.DalamudBranchSwitcherBetaKeyTitle))
+        {
+            ImGui.PushItemWidth(200);
+            ImGui.InputText($"{Strings.DalamudBranchSwitcherBetaKeyKey}###{this.Id}-manual-key", ref this.manualBranchKey, 10000);
+            ImGui.PopItemWidth();
+            if (ImGui.Button(Strings.ClearLabel))
+            {
+                this.manualBranchKey = "";
+            }
+            ImGui.SameLine();
+            if (ImGui.Button(Strings.CloseLabel)) ImGui.CloseCurrentPopup();
+            ImGui.EndPopup();
+        }
     }
 
     public override void Save()
