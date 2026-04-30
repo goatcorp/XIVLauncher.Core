@@ -32,6 +32,7 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
         {
             foreach (var branch in this.Branches)
             {
+                if (branch.Hidden) continue;
                 if (ImGui.Selectable(branch.DisplayName, branch.Track == currentBranch?.Track))
                 {
                     this.SelectedBranch = branch;
