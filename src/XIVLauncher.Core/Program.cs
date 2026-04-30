@@ -17,6 +17,7 @@ using XIVLauncher.Common.Support;
 using XIVLauncher.Common.Unix;
 using XIVLauncher.Common.Unix.Compatibility;
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
+using XIVLauncher.Common.Unix.Compatibility.Nvapi;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
 using XIVLauncher.Common.Util;
 using XIVLauncher.Common.Windows;
@@ -130,12 +131,14 @@ sealed class Program
         Config.GameModeEnabled ??= false;
         Config.DxvkVersion ??= DxvkVersion.Stable;
         Config.DxvkAsyncEnabled ??= true;
+        Config.NvapiVersion ??= NvapiVersion.Stable;
 
         Config.WineStartupType ??= WineStartupType.Managed;
         Config.WineManagedVersion ??= WineManagedVersion.Stable;
         Config.WineSyncType ??= WineUtility.SystemFsyncSupport() == FsyncSupport.Supported ? WineSyncType.FSync : WineSyncType.ESync;
         Config.WineBinaryPath ??= "/usr/bin";
         Config.WineDebugVars ??= "-all";
+        Config.WineDLLOverrides ??= "";
 
         Config.FixLDP ??= false;
         Config.FixIM ??= false;
@@ -183,6 +186,9 @@ sealed class Program
         mainArgs = args;
         storage = new Storage(APP_NAME);
 
+        SetupLogging(mainArgs);
+        LoadConfig(storage);
+
         if (CoreEnvironmentSettings.ClearAll)
         {
             ClearAll();
@@ -193,11 +199,9 @@ sealed class Program
             if (CoreEnvironmentSettings.ClearPrefix) ClearPrefix();
             if (CoreEnvironmentSettings.ClearPlugins) ClearPlugins();
             if (CoreEnvironmentSettings.ClearTools) ClearTools();
-            if (CoreEnvironmentSettings.ClearLogs) ClearLogs();
+            if (CoreEnvironmentSettings.ClearLogs) ClearLogs(true);
+            if (CoreEnvironmentSettings.ClearNvngx) ClearNvngx();
         }
-
-        SetupLogging(mainArgs);
-        LoadConfig(storage);
 
         Secrets = GetSecretProvider(storage);
 
@@ -363,8 +367,9 @@ sealed class Program
         var wineSettings = new WineSettings(Config.WineStartupType ?? WineStartupType.Custom, Config.WineManagedVersion ?? WineManagedVersion.Stable, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.WineSyncType ?? WineSyncType.FSync);
         var toolsFolder = storage.GetFolder("compatibilitytool");
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "dxvk"));
+        Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "nvapi"));
         Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "wine"));
-        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkVersion ?? DxvkVersion.Stable, Config.DxvkHudType, Config.GameModeEnabled ?? false, Config.DxvkAsyncEnabled ?? true, toolsFolder);
+        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkVersion ?? DxvkVersion.Stable, Config.DxvkHudType, Config.NvapiVersion ?? NvapiVersion.Stable, Config.GameModeEnabled ?? false, Config.WineDLLOverrides ?? "", Config.DxvkAsyncEnabled ?? true, toolsFolder, Config.GamePath);
     }
 
     public static void ShowWindow()
@@ -458,6 +463,7 @@ sealed class Program
         storage.GetFolder("compatibilitytool").Delete(true);
         storage.GetFolder("compatibilitytool/wine");
         storage.GetFolder("compatibilitytool/dxvk");
+        storage.GetFolder("compatibilitytool/nvapi");
         if (tsbutton) CreateCompatToolsInstance();
     }
 
@@ -472,6 +478,17 @@ sealed class Program
             SetupLogging(mainArgs);
 
     }
+
+    public static void ClearNvngx()
+    {
+        var nvngx = new FileInfo(Path.Combine(Config.GamePath.FullName, "game", "nvngx.dll"));
+        var _nvngx = new FileInfo(Path.Combine(Config.GamePath.FullName, "game", "_nvngx.dll"));
+        var nvngxdlssg = new FileInfo(Path.Combine(Config.GamePath.FullName, "game", "nvngx_dlssg.dll"));
+        if (nvngx.Exists) nvngx.Delete();
+        if (_nvngx.Exists) _nvngx.Delete();
+        if (nvngxdlssg.Exists) nvngxdlssg.Delete();
+    }
+
     public static void ClearAll(bool tsbutton = false)
     {
         ClearSettings(tsbutton);
@@ -479,6 +496,7 @@ sealed class Program
         ClearPlugins(tsbutton);
         ClearTools(tsbutton);
         ClearLogs(true);
+        ClearNvngx();
     }
 
     public static void ResetUIDCache(bool tsbutton = false) => launcherApp.UniqueIdCache.Reset();

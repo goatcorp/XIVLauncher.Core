@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Hexa.NET.ImGui;
 
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
+using XIVLauncher.Common.Unix.Compatibility.Nvapi;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
 using XIVLauncher.Common.Util;
 using XIVLauncher.Core.Resources.Localization;
@@ -13,6 +14,8 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 public class SettingsTabWine : SettingsTab
 {
     private SettingsEntry<WineStartupType> startupTypeSetting;
+
+    private SettingsEntry<WineManagedVersion> wineVersionSetting;
 
     private SettingsEntry<DxvkVersion> dxvkVersionSetting;
 
@@ -50,6 +53,18 @@ public class SettingsTabWine : SettingsTab
                     }
                 }
             },
+
+            new SettingsEntry<string>(Strings.ExtraWineDLLOverridesSetting, Strings.ExtraWineDLLOverridesSettingDescription , () => Program.Config.WineDLLOverrides ?? "", s => Program.Config.WineDLLOverrides = s)
+            {
+                CheckValidity = s =>
+                {
+                    if (!WineSettings.WineDLLOverrideIsValid(s))
+                        return Strings.ExtraWineDLLOverridesInvalidError;
+                    
+                    return null;
+                },
+            },
+            
             new SettingsEntry<string>(Strings.WineDebugAdditionalVarSetting, Strings.WineDebugAdditionalVarSettingDescription, () => Program.Config.WineDebugVars ?? string.Empty, s => Program.Config.WineDebugVars = s),
 
             // DXVK
@@ -58,6 +73,23 @@ public class SettingsTabWine : SettingsTab
             new SettingsEntry<bool>(Strings.DXVKEnableAsyncSetting, Strings.DXVKEnableAsyncSettingDescription, () => Program.Config.DxvkAsyncEnabled ?? true, b => Program.Config.DxvkAsyncEnabled = b)
             {
                 CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled
+            },
+
+            new SettingsEntry<NvapiVersion>(Strings.NvapiVersionSetting, Strings.NvapiVersionSettingDescription, () => Program.Config.NvapiVersion ?? NvapiVersion.Stable, x => Program.Config.NvapiVersion = x)
+            {
+                CheckVisibility = () => dxvkVersionSetting.Value != DxvkVersion.Disabled,
+                CheckWarning = x =>
+                {
+                    string warning = "";
+                    if (dxvkVersionSetting.Value == DxvkVersion.Legacy)
+                        warning += Strings.NvapiLegacyDxvkWarning + "\n";
+                    if (startupTypeSetting.Value == WineStartupType.Custom)
+                        warning += Strings.NvapiCustomWineWarning;
+
+                    warning = warning.Trim();
+                    
+                    return string.IsNullOrEmpty(warning) ? null : warning;
+                }
             },
 
             // GameMode

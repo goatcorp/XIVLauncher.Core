@@ -2,6 +2,7 @@ using XIVLauncher.Common;
 using XIVLauncher.Common.Addon;
 using XIVLauncher.Common.Dalamud;
 using XIVLauncher.Common.Unix.Compatibility.Dxvk;
+using XIVLauncher.Common.Unix.Compatibility.Nvapi;
 using XIVLauncher.Common.Unix.Compatibility.Wine;
 
 namespace XIVLauncher.Core.Configuration;
@@ -67,6 +68,8 @@ public interface ILauncherConfig
 
     public DxvkHudType DxvkHudType { get; set; }
 
+    public NvapiVersion? NvapiVersion { get; set; }
+
     public string? WineDebugVars { get; set; }
 
     public bool? FixLocale { get; set; }
@@ -78,6 +81,8 @@ public interface ILauncherConfig
     public bool? FixError127 { get; set; }
 
     public bool? DontUseSystemTz { get; set; }
+
+    public string? WineDLLOverrides { get; set; }
 
     #endregion
 

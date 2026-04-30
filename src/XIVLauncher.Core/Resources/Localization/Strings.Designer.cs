@@ -146,6 +146,30 @@ namespace XIVLauncher.Core.Resources.Localization {
                 return ResourceManager.GetString("DXVKEnableAsyncSettingDescription", resourceCulture);
             }
         }
+
+        internal static string NvapiVersionSetting {
+            get {
+                return ResourceManager.GetString("NvapiVersionSetting", resourceCulture);
+            }
+        }
+
+        internal static string NvapiVersionSettingDescription {
+            get {
+                return ResourceManager.GetString("NvapiVersionSettingDescription", resourceCulture);
+            }
+        }
+
+        internal static string NvapiLegacyDxvkWarning {
+            get {
+                return ResourceManager.GetString("NvapiLegacyDxvkWarning", resourceCulture);
+            }
+        }
+
+        internal static string NvapiCustomWineWarning {
+            get {
+                return ResourceManager.GetString("NvapiCustomWineWarning", resourceCulture);
+            }
+        }
         
         internal static string EnableFeralGameModeSetting {
             get {
@@ -326,6 +350,18 @@ namespace XIVLauncher.Core.Resources.Localization {
                 return ResourceManager.GetString("ClearManagedCompatToolsTroubleshooting", resourceCulture);
             }
         }
+
+        internal static string ClearNvngxTroubleshootingButton {
+            get {
+                return ResourceManager.GetString("ClearNvngxTroubleshootingButton", resourceCulture);
+            }
+        }
+
+        internal static string ClearNvngxTroubleshooting {
+            get {
+                return ResourceManager.GetString("ClearNvngxTroubleshooting", resourceCulture);
+            }
+        }
         
         internal static string ClearManagedCompatToolsTroubleshootingButton {
             get {
@@ -488,7 +524,7 @@ namespace XIVLauncher.Core.Resources.Localization {
                 return ResourceManager.GetString("GameConfigurationPathSettingDescription", resourceCulture);
             }
         }
-        
+
         internal static string GameConfigurationPathNotSetValidation {
             get {
                 return ResourceManager.GetString("GameConfigurationPathNotSetValidation", resourceCulture);
@@ -506,7 +542,25 @@ namespace XIVLauncher.Core.Resources.Localization {
                 return ResourceManager.GetString("AdditionalGameArgsSettingDescription", resourceCulture);
             }
         }
-        
+
+        internal static string ExtraWineDLLOverridesSetting {
+            get {
+                return ResourceManager.GetString("ExtraWineDLLOverridesSetting", resourceCulture);
+            }
+        }
+
+        internal static string ExtraWineDLLOverridesSettingDescription {
+            get {
+                return ResourceManager.GetString("ExtraWineDLLOverridesSettingDescription", resourceCulture);
+            }
+        }
+
+        internal static string ExtraWineDLLOverridesInvalidError {
+            get {
+                return ResourceManager.GetString("ExtraWineDLLOverridesInvalidError", resourceCulture);
+            }
+        }
+
         internal static string GameLanguageSetting {
             get {
                 return ResourceManager.GetString("GameLanguageSetting", resourceCulture);
