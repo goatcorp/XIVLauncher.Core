@@ -15,8 +15,8 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
     private List<DalamudBranchMeta.Branch> Branches { get; set; } = [];
 
     private bool manualKeyToggle;
-    private string ManualBranchTrack = "";
-    private string ManualBranchKey = "";
+    private string manualBranchTrack = "";
+    private string manualBranchKey = "";
 
     public DalamudBranchMetaSettingsEntry(string name, string description, Func<string> load, Action<string?> save)
         : base(name, description, load, save)
@@ -40,7 +40,7 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
         {
             foreach (var branch in this.Branches)
             {
-                if (branch.Hidden) continue;
+                if (branch.Hidden && !(branch.Track == this.manualBranchTrack && branch.Key == this.manualBranchKey)) continue;
                 if (ImGui.Selectable(branch.DisplayName, branch.Track == currentBranch?.Track))
                 {
                     this.SelectedBranch = branch;
@@ -53,27 +53,25 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
         ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudGrey);
         ImGuiHelpers.TextWrapped(this.Description);
         ImGui.PopStyleColor();
-        ImGui.Checkbox($"Have a beta key?###{this.Id}manual", ref this.manualKeyToggle);
+        ImGui.Checkbox($"Have a beta key?###{this.Id}-manual", ref this.manualKeyToggle);
 
         if (this.manualKeyToggle)
         {
-            ImGui.InputText($"Track###{this.Id}manualtrack", ref this.ManualBranchTrack, 10000);
-            ImGui.InputText($"Key###{this.Id}manualkey", ref this.ManualBranchKey, 10000);
+            ImGui.InputText($"Track###{this.Id}-manualtrack", ref this.manualBranchTrack, 10000);
+            ImGui.InputText($"Key###{this.Id}-manualkey", ref this.manualBranchKey, 10000);
+        }
+        else
+        {
+            this.manualBranchTrack = "";
+            this.manualBranchKey = "";
         }
     }
 
     public override void Save()
     {
-        if (this.SelectedBranch is not null)
-        {
-            Program.Config.DalamudBetaKind = SelectedBranch.Track;
-            Program.Config.DalamudBetaKey = SelectedBranch.Key;
-        }
-        if (this.ManualBranchTrack != "" && this.ManualBranchKey != "")
-        {
-            Program.Config.DalamudBetaKind = this.ManualBranchTrack;
-            Program.Config.DalamudBetaKey = this.ManualBranchKey;
-        }
+        if (this.SelectedBranch is null) return;
+        Program.Config.DalamudBetaKind = SelectedBranch.Track;
+        Program.Config.DalamudBetaKey = SelectedBranch.Key;
         Program.DalamudUpdater.Run(Program.Config.DalamudBetaKind, Program.Config.DalamudBetaKey);
     }
 }
