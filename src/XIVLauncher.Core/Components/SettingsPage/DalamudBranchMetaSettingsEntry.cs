@@ -1,8 +1,7 @@
 using Hexa.NET.ImGui;
 
-using Microsoft.VisualBasic;
-
 using XIVLauncher.Common.Dalamud;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage;
 
@@ -13,8 +12,7 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
     private Task<IEnumerable<DalamudBranchMeta.Branch>> BranchTask { get; init; }
 
     private List<DalamudBranchMeta.Branch> Branches { get; set; } = [];
-
-    private bool manualKeyToggle;
+    
     private string manualBranchTrack = "";
     private string manualBranchKey = "";
 
@@ -53,19 +51,21 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
         ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudGrey);
         ImGuiHelpers.TextWrapped(this.Description);
         ImGui.PopStyleColor();
-        ImGui.Checkbox($"Have a beta key?###{this.Id}-manual", ref this.manualKeyToggle);
-
-        if (this.manualKeyToggle)
+        if (ImGui.Button(Strings.DalamudBranchSwitcherBetaKeyButton)) ImGui.OpenPopup(Strings.DalamudBranchSwitcherBetaKeyTitle);
+        if (ImGui.BeginPopupModal(Strings.DalamudBranchSwitcherBetaKeyTitle))
         {
             ImGui.PushItemWidth(200);
-            ImGui.InputText($"Track###{this.Id}-manualtrack", ref this.manualBranchTrack, 10000);
-            ImGui.InputText($"Key###{this.Id}-manualkey", ref this.manualBranchKey, 10000);
+            ImGui.InputText($"{Strings.DalamudBranchSwitcherBetaKeyTrack}###{this.Id}-manual-track", ref this.manualBranchTrack, 10000);
+            ImGui.InputText($"{Strings.DalamudBranchSwitcherBetaKeyKey}###{this.Id}-manual-key", ref this.manualBranchKey, 10000);
             ImGui.PopItemWidth();
-        }
-        else
-        {
-            this.manualBranchTrack = "";
-            this.manualBranchKey = "";
+            if (ImGui.Button(Strings.ClearLabel))
+            {
+                this.manualBranchTrack = "";
+                this.manualBranchKey = "";
+            }
+            ImGui.SameLine();
+            if (ImGui.Button(Strings.CloseLabel)) ImGui.CloseCurrentPopup();
+            ImGui.EndPopup();
         }
     }
 
