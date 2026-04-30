@@ -1,5 +1,7 @@
 using Hexa.NET.ImGui;
 
+using Serilog;
+
 using XIVLauncher.Common.Dalamud;
 
 namespace XIVLauncher.Core.Components.SettingsPage;
@@ -7,8 +9,14 @@ namespace XIVLauncher.Core.Components.SettingsPage;
 public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
 {
     private DalamudBranchMeta.Branch? SelectedBranch { get; set; }
+
     private Task<IEnumerable<DalamudBranchMeta.Branch>> BranchTask { get; init; }
+
     private List<DalamudBranchMeta.Branch> Branches { get; set; } = [];
+
+    private bool manualKeyToggle;
+    private string ManualBranchTrack = "";
+    private string ManualBranchKey = "";
 
     public DalamudBranchMetaSettingsEntry(string name, string description, Func<string> load, Action<string?> save)
         : base(name, description, load, save)
@@ -45,13 +53,27 @@ public class DalamudBranchMetaSettingsEntry : SettingsEntry<string>
         ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudGrey);
         ImGuiHelpers.TextWrapped(this.Description);
         ImGui.PopStyleColor();
+        ImGui.Checkbox($"Have a beta key?###{this.Id}manual", ref this.manualKeyToggle);
+
+        if (this.manualKeyToggle)
+        {
+            ImGui.InputText($"Track###{this.Id}manualtrack", ref this.ManualBranchTrack, 10000);
+            ImGui.InputText($"Key###{this.Id}manualkey", ref this.ManualBranchKey, 10000);
+        }
     }
 
     public override void Save()
     {
-        if (this.SelectedBranch is null) return;
-        Program.Config.DalamudBetaKind = SelectedBranch.Track;
-        Program.Config.DalamudBetaKey = SelectedBranch.Key;
+        if (this.SelectedBranch is not null)
+        {
+            Program.Config.DalamudBetaKind = SelectedBranch.Track;
+            Program.Config.DalamudBetaKey = SelectedBranch.Key;
+        }
+        if (this.ManualBranchTrack != "" && this.ManualBranchKey != "")
+        {
+            Program.Config.DalamudBetaKind = this.ManualBranchTrack;
+            Program.Config.DalamudBetaKey = this.ManualBranchKey;
+        }
         Program.DalamudUpdater.Run(Program.Config.DalamudBetaKind, Program.Config.DalamudBetaKey);
     }
 }
