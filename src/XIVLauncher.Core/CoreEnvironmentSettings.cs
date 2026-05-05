@@ -17,6 +17,27 @@ public static class CoreEnvironmentSettings
     public static bool IsSteamCompatTool => CheckEnvBool("XL_SCT");
     public static uint SteamAppId => GetAppId(Environment.GetEnvironmentVariable("SteamAppId"));
     public static uint AltAppID => GetAppId(Environment.GetEnvironmentVariable("XL_APPID"));
+    
+    private static string? userDir = null;
+    public static string UserDir
+    {
+        get
+        {
+            if (userDir != null)
+                return userDir;
+
+            var uDir = Environment.GetEnvironmentVariable("XL_USERDIR") ?? "";
+            var uDir2 = Environment.GetEnvironmentVariable("XL_USER_DIR") ?? "";
+            var xlPath = Environment.GetEnvironmentVariable("XL_PATH") ?? "";
+            if (!string.IsNullOrEmpty(uDir))
+                userDir = uDir;
+            else if (!string.IsNullOrEmpty(uDir2))
+                userDir = uDir2;
+            else
+                userDir = xlPath;
+            return userDir;
+        }
+    }
 
     private static bool CheckEnvBool(string key)
     {
