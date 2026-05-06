@@ -23,6 +23,7 @@ public class CompatibilityTools
     private const uint NVAPI_CLEANUP_THRESHHOLD = 5;
     private const uint WINE_CLEANUP_THRESHHOLD = 5;
 
+    private readonly DirectoryInfo storageDirectory;
     private readonly DirectoryInfo wineDirectory;
     private readonly DirectoryInfo dxvkDirectory;
     private readonly DirectoryInfo nvapiDirectory;
@@ -46,7 +47,7 @@ public class CompatibilityTools
     public WineSettings Settings { get; private set; }
     public bool IsToolDownloaded => File.Exists(Wine64Path) && Settings.Prefix.Exists;
 
-    public CompatibilityTools(WineSettings wineSettings, DxvkVersion dxvkVersion, DxvkHudType hudType, NvapiVersion nvapiVersion, bool gamemodeOn, string winedlloverrides, bool dxvkAsyncOn, DirectoryInfo toolsFolder, DirectoryInfo gameDirectory)
+    public CompatibilityTools(WineSettings wineSettings, DxvkVersion dxvkVersion, DxvkHudType hudType, NvapiVersion nvapiVersion, bool gamemodeOn, string winedlloverrides, bool dxvkAsyncOn, DirectoryInfo storageFolder, DirectoryInfo gameDirectory)
     {
         this.Settings = wineSettings;
         this.dxvkVersion = dxvkVersion;
@@ -56,10 +57,20 @@ public class CompatibilityTools
         this.ExtraWineDLLOverrides = WineSettings.WineDLLOverrideIsValid(winedlloverrides) ? winedlloverrides : "";
         this.dxvkAsyncOn = dxvkAsyncOn ? "1" : "0";
 
-        this.wineDirectory = new DirectoryInfo(Path.Combine(toolsFolder.FullName, "wine"));
-        this.dxvkDirectory = new DirectoryInfo(Path.Combine(toolsFolder.FullName, "dxvk"));
-        this.nvapiDirectory = new DirectoryInfo(Path.Combine(toolsFolder.FullName, "nvapi"));
+        this.storageDirectory = storageFolder;
+        this.wineDirectory = new DirectoryInfo(Path.Combine(storageFolder.FullName, "compatibilitytool", "wine"));
+        this.dxvkDirectory = new DirectoryInfo(Path.Combine(storageFolder.FullName, "compatibilitytool", "dxvk"));
+        this.nvapiDirectory = new DirectoryInfo(Path.Combine(storageFolder.FullName, "compatibilitytool", "nvapi"));
         this.gameDirectory = gameDirectory;
+
+        if (!this.wineDirectory.Exists)
+            this.wineDirectory.Create();
+        if (!this.dxvkDirectory.Exists)
+            this.dxvkDirectory.Create();
+        if (!this.nvapiDirectory.Exists)
+            this.nvapiDirectory.Create();
+        if (!wineSettings.Prefix.Exists)
+            wineSettings.Prefix.Create();
 
         // TODO: Replace these with a nicer way of preventing a pileup of compat tools,
         // This implementation is just a hack.
@@ -80,15 +91,6 @@ public class CompatibilityTools
         }
 
         this.logWriter = new StreamWriter(wineSettings.LogFile.FullName);
-
-        if (!this.wineDirectory.Exists)
-            this.wineDirectory.Create();
-        if (!this.dxvkDirectory.Exists)
-            this.dxvkDirectory.Create();
-        if (!this.nvapiDirectory.Exists)
-            this.nvapiDirectory.Create();
-        if (!wineSettings.Prefix.Exists)
-            wineSettings.Prefix.Create();
     }
 
     public async Task EnsureTool(HttpClient httpClient, DirectoryInfo tempPath)
@@ -103,7 +105,7 @@ public class CompatibilityTools
         await Dxvk.Dxvk.InstallDxvk(httpClient, Settings.Prefix, dxvkDirectory, dxvkVersion).ConfigureAwait(false);
         await Nvapi.Nvapi.InstallNvapi(httpClient, Settings.Prefix, nvapiDirectory, nvapiVersion).ConfigureAwait(false);
         if (nvapiVersion != NvapiVersion.Disabled)
-            Nvapi.Nvapi.CopyNvngx(gameDirectory, Settings.Prefix);
+            Nvapi.Nvapi.CopyNvngx(gameDirectory, Settings.Prefix, storageDirectory);
 
         IsToolReady = true;
     }

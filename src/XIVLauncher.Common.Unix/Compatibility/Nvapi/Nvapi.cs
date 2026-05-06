@@ -62,7 +62,7 @@ public static class Nvapi
 
     // In order for the nvngx dlls to work properly with wine-staging, they need to be in the game directory.
     // The prefix system32 folder will not work. If the dlls are only in system32, the game will hang on startup.
-    public static void CopyNvngx(DirectoryInfo gameDirectory, DirectoryInfo prefix, bool installIntoPrefix = true)
+    public static void CopyNvngx(DirectoryInfo gameDirectory, DirectoryInfo prefix, DirectoryInfo storage, bool installIntoPrefix = true)
     {
         var game = Path.Combine(gameDirectory.FullName, "game");
         var system32 = Path.Combine(prefix.FullName, "drive_c", "windows", "system32");
@@ -87,7 +87,7 @@ public static class Nvapi
 
         if (installedGame && installedPrefix) return;
 
-        var nvngxPath = NvidiaWineDLLPath();
+        var nvngxPath = NvidiaWineDLLPath(storage);
         if (string.IsNullOrEmpty(nvngxPath))
         {
             Log.Information("No nvngx.dll or _nvngx.dll found. Try copying them to ~/.xlcore/compatibilitytool");
@@ -108,7 +108,7 @@ public static class Nvapi
         }
     }
 
-    private static string NvidiaWineDLLPath()
+    private static string NvidiaWineDLLPath(DirectoryInfo storage)
     {
         string nvngxPath = "";
         string HOME = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
@@ -116,7 +116,8 @@ public static class Nvapi
 
         var targets = new List<string>
         { 
-            Path.Combine(HOME, ".xlcore", "compatibilitytool"),
+            Path.Combine(storage.FullName, "compatibilitytool"),        // Check the storage directory first, in case the user copied the nvidia dlls there.
+            Path.Combine(storage.FullName, "nvidia"),
             Path.Combine("/", "app", "lib"),                            // flatpak
             Path.Combine("/", "usr", "lib", "extensions"),              // flatpak
             Path.Combine("/", "usr", "lib", "x86_64-linux-gnu"),        // flatpak, debuntu

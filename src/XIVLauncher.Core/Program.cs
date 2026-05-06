@@ -365,11 +365,8 @@ sealed class Program
         var wineLogFile = new FileInfo(Path.Combine(storage.GetFolder("logs").FullName, "wine.log"));
         var winePrefix = storage.GetFolder("wineprefix");
         var wineSettings = new WineSettings(Config.WineStartupType ?? WineStartupType.Custom, Config.WineManagedVersion ?? WineManagedVersion.Stable, Config.WineBinaryPath, Config.WineDebugVars, wineLogFile, winePrefix, Config.WineSyncType ?? WineSyncType.FSync);
-        var toolsFolder = storage.GetFolder("compatibilitytool");
-        Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "dxvk"));
-        Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "nvapi"));
-        Directory.CreateDirectory(Path.Combine(toolsFolder.FullName, "wine"));
-        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkVersion ?? DxvkVersion.Stable, Config.DxvkHudType, Config.NvapiVersion ?? NvapiVersion.Stable, Config.GameModeEnabled ?? false, Config.WineDLLOverrides ?? "", Config.DxvkAsyncEnabled ?? true, toolsFolder, Config.GamePath);
+        storage.GetFolder("compatibilitytool");
+        CompatibilityTools = new CompatibilityTools(wineSettings, Config.DxvkVersion ?? DxvkVersion.Stable, Config.DxvkHudType, Config.NvapiVersion ?? NvapiVersion.Stable, Config.GameModeEnabled ?? false, Config.WineDLLOverrides ?? "", Config.DxvkAsyncEnabled ?? true, storage.Root, Config.GamePath);
     }
 
     public static void ShowWindow()
