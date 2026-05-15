@@ -8,6 +8,8 @@ using Hexa.NET.SDL3;
 
 using HexaGen.Runtime;
 
+using Serilog;
+
 using ImSDLEvent = Hexa.NET.ImGui.Backends.SDL3.SDLEvent;
 using ImSDLGPUCommandBuffer = Hexa.NET.ImGui.Backends.SDL3.SDLGPUCommandBuffer;
 using ImSDLGPUDevice = Hexa.NET.ImGui.Backends.SDL3.SDLGPUDevice;
@@ -218,7 +220,10 @@ public class ImGuiBindings : IDisposable
         }
 
         SDLGPUTexture* swapTexture;
-        SDL.AcquireGPUSwapchainTexture(commandBuffer, this.window, &swapTexture, null, null);
+        if (!SDL.WaitAndAcquireGPUSwapchainTexture(commandBuffer, this.window, &swapTexture, null, null))
+        {
+            Log.Error($"Error: SDL.WaitAndAcquireGPUSwapchainTexture(): {SDL.GetErrorS()}");
+        }
 
         if (swapTexture != null && !isMinimized)
         {
