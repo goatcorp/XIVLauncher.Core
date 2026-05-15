@@ -126,6 +126,11 @@ public class SettingsTabWine : SettingsTab
             Program.CompatibilityTools.RunInPrefix("explorer");
         }
 
+        if (ImGui.IsItemHovered())
+        {
+            ImGui.SetTooltip(Strings.OpenWINEExplorerTooltip);
+        }
+
         if (ImGui.Button(Strings.KillAllWINEProcesses))
         {
             Program.CompatibilityTools.Kill();

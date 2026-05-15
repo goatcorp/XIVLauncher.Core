@@ -129,6 +129,23 @@ public class CompatibilityTools
         return RunInPrefix(psi, workingDirectory, environment, redirectOutput, writeLog, wineD3D);
     }
 
+    public void RunInPrefixAndExit(string[] args, string workingDirectory = "", IDictionary<string, string> environment = null, bool wineD3D = false)
+    {
+        var psi = new ProcessStartInfo(Wine64Path);
+        foreach (var arg in args)
+            psi.ArgumentList.Add(arg);
+
+        psi.RedirectStandardInput = false;
+        psi.RedirectStandardOutput = false;
+        psi.RedirectStandardError = false;
+
+        var p = PrepareRunInPrefix(psi, workingDirectory, environment, false, wineD3D);
+        p.Start();
+
+        p.WaitForExit();
+        Environment.Exit(p.ExitCode);
+    }
+
     private void MergeDictionaries(StringDictionary a, IDictionary<string, string> b)
     {
         if (b is null)
@@ -143,10 +160,8 @@ public class CompatibilityTools
         }
     }
 
-    private Process RunInPrefix(ProcessStartInfo psi, string workingDirectory, IDictionary<string, string> environment, bool redirectOutput, bool writeLog, bool wineD3D)
+    private Process PrepareRunInPrefix(ProcessStartInfo psi, string workingDirectory, IDictionary<string, string> environment, bool canGamemode, bool wineD3D)
     {
-        psi.RedirectStandardOutput = redirectOutput;
-        psi.RedirectStandardError = writeLog;
         psi.UseShellExecute = false;
         psi.WorkingDirectory = workingDirectory;
 
@@ -174,7 +189,7 @@ public class CompatibilityTools
             _ => throw new ArgumentOutOfRangeException()
         };
 
-        if (this.gamemodeOn == true && !ldPreload.Contains("libgamemodeauto.so.0"))
+        if (canGamemode && this.gamemodeOn == true && !ldPreload.Contains("libgamemodeauto.so.0"))
         {
             ldPreload = ldPreload.Equals("", StringComparison.OrdinalIgnoreCase) ? "libgamemodeauto.so.0" : ldPreload + ":libgamemodeauto.so.0";
         }
@@ -197,6 +212,17 @@ public class CompatibilityTools
 
         Process helperProcess = new();
         helperProcess.StartInfo = psi;
+
+        return helperProcess;
+    }
+
+    private Process RunInPrefix(ProcessStartInfo psi, string workingDirectory, IDictionary<string, string> environment, bool redirectOutput, bool writeLog, bool wineD3D)
+    {
+        psi.RedirectStandardOutput = redirectOutput;
+        psi.RedirectStandardError = writeLog;
+
+        var helperProcess = PrepareRunInPrefix(psi, workingDirectory, environment, true, wineD3D);
+
         helperProcess.ErrorDataReceived += new DataReceivedEventHandler((_, errLine) =>
         {
             if (string.IsNullOrEmpty(errLine.Data))
