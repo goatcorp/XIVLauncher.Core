@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 using XIVLauncher.Common.Unix.Compatibility.Wine.Releases;
 
@@ -63,5 +65,17 @@ public readonly struct WineSettings
                 _ => throw new ArgumentOutOfRangeException(managedWine.ToString())
             };
         }
+    }
+
+    public static bool WineDLLOverrideIsValid(string dlls)
+    {
+        string[] invalid = { "msquic", "mscoree", "d3d9", "d3d11", "d3d10core", "dxgi" };
+        var format = @"^(?:(?:[a-zA-Z0-9_\-\.]+,?)+=(?:n,b|b,n|n|b|d|,|);?)+$";
+
+        if (string.IsNullOrEmpty(dlls)) return true;
+        if (invalid.Any(s => dlls.Contains(s))) return false;
+        if (Regex.IsMatch(dlls, format)) return true;
+
+        return false;
     }
 }
