@@ -18,6 +18,39 @@ public static class CoreEnvironmentSettings
     public static uint SteamAppId => GetAppId(Environment.GetEnvironmentVariable("SteamAppId"));
     public static uint AltAppID => GetAppId(Environment.GetEnvironmentVariable("XL_APPID"));
 
+    public static string? StoragePath => CheckEnvPath("XL_STORAGE_PATH");
+
+    private static string? CheckEnvPath(string key)
+    {
+        string rawPath = Environment.GetEnvironmentVariable(key) ?? string.Empty;
+
+        if (string.IsNullOrWhiteSpace(rawPath))
+        {
+            return null;
+        }
+
+        // Validate for invalid path characters
+        if (rawPath.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
+        {
+            // Invalid path: contains illegal characters.
+            return null;
+        }
+
+        // Normalize and validate the path format
+        string fullPath;
+        try
+        {
+            fullPath = Path.GetFullPath(rawPath);
+        }
+        catch (Exception ex) when (ex is ArgumentException || ex is NotSupportedException || ex is PathTooLongException)
+        {
+            // Invalid path format
+            return null;
+        }
+
+        return fullPath;
+    }
+
     private static bool CheckEnvBool(string key)
     {
         string val = (Environment.GetEnvironmentVariable(key) ?? string.Empty).ToLower();
