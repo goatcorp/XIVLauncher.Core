@@ -14,6 +14,8 @@ public class Button : Component
     public Vector4 TextColor { get; set; }
 
     public event Action? Click;
+    
+    public bool TakeKeyboardFocus { get; set; }
 
     public int? Width { get; set; }
 
@@ -33,6 +35,9 @@ public class Button : Component
         ImGui.PushStyleColor(ImGuiCol.Button, Color);
         ImGui.PushStyleColor(ImGuiCol.ButtonHovered, HoverColor);
         ImGui.PushStyleColor(ImGuiCol.Text, TextColor);
+        
+        if (TakeKeyboardFocus && ImGui.IsWindowAppearing())
+            ImGui.SetKeyboardFocusHere();
 
         if (ImGui.Button(Label, new Vector2(Width ?? -1, 0)) || (ImGui.IsItemFocused() && ImGui.IsKeyPressed(ImGuiKey.Enter)))
         {
