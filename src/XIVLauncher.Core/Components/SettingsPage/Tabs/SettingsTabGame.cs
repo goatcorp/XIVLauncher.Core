@@ -16,8 +16,14 @@ public class SettingsTabGame : SettingsTab
                 if (string.IsNullOrWhiteSpace(x?.FullName))
                     return Strings.GamePathSettingNotSetValidation;
 
-                if (x.Name is "game" or "boot")
-                    return Strings.GamePathSettingInvalidValidationj;
+                try
+                {
+                    if ((x.Name is "game" or "boot") && x.Exists && x.GetFileSystemInfos().Length > 0)
+                        return Strings.GamePathSettingInvalidValidationj;
+                }
+                catch (Exception)
+                {
+                }
 
                 return null;
             }
