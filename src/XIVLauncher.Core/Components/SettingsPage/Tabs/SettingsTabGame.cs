@@ -18,7 +18,7 @@ public class SettingsTabGame : SettingsTab
 
                 try
                 {
-                    if ((x.Name is "game" or "boot") && x.Exists && x.GetFileSystemInfos().Length > 0)
+                    if ((x.Name is "game" or "boot") && x.Exists && x.EnumerateFileSystemInfos().Any())
                         return Strings.GamePathSettingInvalidValidationj;
                 }
                 catch (Exception)
