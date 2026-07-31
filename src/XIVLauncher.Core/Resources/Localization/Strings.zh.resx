@@ -359,7 +359,7 @@
         <value>主题</value>
     </data>
   <data name="NewsLoading" xml:space="preserve">
-        <value>正在加载新闻...</value>
+        <value>正在加载新闻……</value>
     </data>
   <data name="XLElevatedWarning" xml:space="preserve">
         <value>XIVLauncher 正以管理员 / root 身份运行。

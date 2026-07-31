@@ -23,10 +23,10 @@
         <value>Please enter your OTP</value>
     </data>
   <data name="OKLabel" xml:space="preserve">
-        <value>OK</value>
+        <value>確定</value>
     </data>
   <data name="CancelLabel" xml:space="preserve">
-        <value>Cancel</value>
+        <value>取消</value>
     </data>
   <data name="SearchResults" xml:space="preserve">
         <value>Search Results</value>
@@ -38,16 +38,16 @@
         <value>Search for settings...</value>
     </data>
   <data name="AboutTitle" xml:space="preserve">
-        <value>About</value>
+        <value>關於</value>
     </data>
   <data name="WineInstallSetting" xml:space="preserve">
-        <value>WINE Install</value>
+        <value>WINE 安裝</value>
     </data>
   <data name="WineInstallSettingDescription" xml:space="preserve">
         <value>Choose how XIVLauncher will start and manage your WINE installation.</value>
     </data>
   <data name="WineVersionSetting" xml:space="preserve">
-        <value>WINE Version</value>
+        <value>WINE 版本</value>
     </data>
   <data name="WineVersionSettingDescription" xml:space="preserve">
         <value>If you change WINE releases, you might have to clear your prefix (Troubleshooting tab)</value>
@@ -60,7 +60,7 @@
 It should be an absolute path to a folder containing wine64 and wineserver binaries.</value>
     </data>
   <data name="DXVKVersionSetting" xml:space="preserve">
-        <value>DXVK Version</value>
+        <value>DXVK 版本</value>
     </data>
   <data name="DXVKVersionSettingDescription" xml:space="preserve">
         <value>Choose which DXVK version to use.</value>
@@ -151,7 +151,7 @@ It should be an absolute path to a folder containing wine64 and wineserver binar
         <value>Unsets the TZ environment variable from system provided</value>
     </data>
   <data name="TroubleshootingTitle" xml:space="preserve">
-        <value>Troubleshooting</value>
+        <value>疑難排解</value>
     </data>
   <data name="ClearWINEPrefixTroubleshooting" xml:space="preserve">
         <value>Clear the WINE Prefix.</value>
@@ -169,7 +169,7 @@ It should be an absolute path to a folder containing wine64 and wineserver binar
         <value>Clear all the files and folders related to Dalamud. Your settings will not be touched, but all your plugins will be uninstalled, including custom repos.</value>
     </data>
   <data name="ClearDalamudTroubleshootingButton" xml:space="preserve">
-        <value>Clear Dalamud</value>
+        <value>清除 Dalamud</value>
     </data>
   <data name="ClearAllLogsTroubleshooting" xml:space="preserve">
         <value>Clear all the log files.</value>
@@ -353,13 +353,13 @@ Can't pass programs (like gamescope -- %command%). Does not accept flatpak args 
         <value>By {0} and other contributors.</value>
     </data>
   <data name="NewsCaption" xml:space="preserve">
-        <value>News</value>
+        <value>最新消息</value>
     </data>
   <data name="TopicsCaption" xml:space="preserve">
-        <value>Topics</value>
+        <value>主題</value>
     </data>
   <data name="NewsLoading" xml:space="preserve">
-        <value>News is loading...</value>
+        <value>正在載入最新消息……</value>
     </data>
   <data name="XLElevatedWarning" xml:space="preserve">
         <value>XIVLauncher is running as administrator/root user.
@@ -368,14 +368,14 @@ This can cause various issues, including but not limited to addons failing to la
 Please take care to avoid running XIVLauncher with elevated privileges</value>
     </data>
   <data name="LoggingIn" xml:space="preserve">
-        <value>Logging in...</value>
+        <value>正在登入……</value>
     </data>
   <data name="RepairOfficialLauncherOpenError" xml:space="preserve">
         <value>The game and/or the official launcher are open. XIVLauncher cannot repair the game if this is the case.
 Please close them and try again.</value>
     </data>
   <data name="XIVLauncherError" xml:space="preserve">
-        <value>XIVLauncher Error</value>
+        <value>XIVLauncher 錯誤</value>
     </data>
   <data name="ReinstallUIDCacheError" xml:space="preserve">
         <value>You enabled the UID cache in the patcher settings.
@@ -399,7 +399,7 @@ If you want to reinstall FFXIV, please take care to disable it first.</value>
         <value>This may take a little while, please be patient.</value>
     </data>
   <data name="DisableAutoLoginButton" xml:space="preserve">
-        <value>Disable auto login</value>
+        <value>停用自動登入</value>
     </data>
   <data name="AutoLoginDisabledNextStart" xml:space="preserve">
         <value>Auto login disabled on next start!</value>
