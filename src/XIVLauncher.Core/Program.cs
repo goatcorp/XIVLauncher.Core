@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using Config.Net;
 
 using Hexa.NET.SDL3;
+using Hexa.NET.SDL3.Image;
 
 using Serilog;
 
@@ -41,6 +42,7 @@ sealed class Program
     private static string[] mainArgs = [];
     private static LauncherApp launcherApp = null!;
     private static unsafe SDLWindow* window = null!;
+    private static unsafe SDLSurface* icon = null!;
     private static unsafe SDLGPUDevice* gpuDevice = null!;
     public static unsafe SDLGPUDevice* GPUDevice => gpuDevice;
     private static ImGuiBindings guiBindings = null!;
@@ -287,6 +289,13 @@ sealed class Program
                 Environment.Exit(1);
             }
 
+            if (TryGetApplicationIcon(out icon))
+            {
+                if (!SDL.SetWindowIcon(window, icon))
+                {
+                    Log.Error($"Error: SDL_SetWindowIcon(): {SDL.GetErrorS()}");
+                }
+            }
             SDL.SetWindowPosition(window, (int)SDL.SDL_WINDOWPOS_CENTERED_MASK, (int)SDL.SDL_WINDOWPOS_CENTERED_MASK);
             Log.Debug("SDL OK!");
 
@@ -336,6 +345,7 @@ sealed class Program
             guiBindings.Dispose();
             SDL.ReleaseWindowFromGPUDevice(gpuDevice, window);
             SDL.DestroyGPUDevice(gpuDevice);
+            SDL.DestroySurface(icon);
             SDL.DestroyWindow(window);
             SDL.Quit();
 
@@ -482,4 +492,61 @@ sealed class Program
     }
 
     public static void ResetUIDCache(bool tsbutton = false) => launcherApp.UniqueIdCache.Reset();
+
+    private static unsafe bool TryGetApplicationIcon(out SDLSurface* icon)
+    {
+        var logoImage = AppUtil.GetEmbeddedResourceBytes("logo.png").AsMemory();
+        using var handle = logoImage.Pin();
+        var sdlIoStream = SDL.IOFromMem(handle.Pointer, (nuint) logoImage.Length);
+        if (sdlIoStream is null)
+        {
+            Log.Error($"Error: SDL_IOFromMem(): {SDL.GetErrorS()}");
+            icon = null;
+            return false;
+        }
+        var tempicon = SDLImage.LoadPNGIO(sdlIoStream);
+        if (tempicon is null)
+        {
+            Log.Error($"Error: SDL_LoadPNG_IO(): {SDL.GetErrorS()}");
+            icon = null;
+            return false;
+        }
+
+        var applicationIcon = SDL.ScaleSurface(tempicon, 512, 512, SDLScaleMode.Linear);
+        if (applicationIcon is null)
+        {
+            Log.Error($"Error: SDL_ScaleSurface() (512x512): {SDL.GetErrorS()}");
+            icon = null;
+            return false;
+        }
+
+        // Sizes smaller than 64x64 don't look good on my machine
+        int[] alternateSizes = [64, 96, 128, 256];
+        foreach(var size in alternateSizes)
+        {
+            var alternateIcon = SDL.ScaleSurface(tempicon, size, size, SDLScaleMode.Linear);
+            if (alternateIcon is null)
+            {
+                Log.Error($"Error: SDL_ScaleSurface() ({size}x{size}): {SDL.GetErrorS()}");
+                SDL.DestroySurface(applicationIcon);
+                SDL.DestroySurface(alternateIcon);
+                icon = null;
+                return false;
+            }
+            if (!SDL.AddSurfaceAlternateImage(applicationIcon, alternateIcon))
+            {
+                Log.Error($"Error: SDL_AddSurfaceAlternateImage() ({size}x{size}): {SDL.GetErrorS()}");
+                SDL.DestroySurface(applicationIcon);
+                SDL.DestroySurface(alternateIcon);
+                icon = null;
+                return false;
+            }
+            
+            SDL.DestroySurface(alternateIcon);
+        }
+
+        SDL.DestroySurface(tempicon);
+        icon = applicationIcon;
+        return true;
+    }
 }
