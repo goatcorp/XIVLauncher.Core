@@ -80,7 +80,10 @@ public class LoginFrame : Component
         this.freeTrialCheckbox = new Checkbox(Strings.FreeTrialAccountCheckbox);
         this.autoLoginCheckbox = new Checkbox(Strings.LogInAutomaticCheckbox);
 
-        this.loginButton = new Button(Strings.LoginButton);
+        this.loginButton = new Button(Strings.LoginButton)
+        {
+            TakeKeyboardFocus = true
+        };
         this.loginButton.Click += TriggerLogin;
     }
 
