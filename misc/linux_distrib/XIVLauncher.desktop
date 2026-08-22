@@ -6,4 +6,4 @@ Icon=xivlauncher
 Terminal=false
 Type=Application
 Categories=Game;PackageManager;
-StartupWMClass=XIVLauncher.Core
+StartupWMClass=ffxiv_dx11.exe
