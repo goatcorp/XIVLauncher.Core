@@ -36,7 +36,7 @@ namespace XIVLauncher.Core;
 
 sealed class Program
 {
-    private const string APP_NAME = "xlcore";
+    internal const string APP_NAME = "dev.goats.xivlauncher";
     private static readonly Vector3 ClearColor = new(0.1f, 0.1f, 0.1f);
     private static string[] mainArgs = [];
     private static LauncherApp launcherApp = null!;
@@ -181,7 +181,11 @@ sealed class Program
     private static void Main(string[] args)
     {
         mainArgs = args;
-        storage = new Storage(APP_NAME);
+        // StorageHelper will handle moving old storage to the new XDG path if possible, and will return the correct path to use for storage.
+        var userDir = StorageHelper.GetStoragePath();
+        storage = new Storage(APP_NAME, userDir);
+        if (CoreEnvironmentSettings.MakeSymlink)
+            StorageHelper.MakeSymlink(storage.Root.FullName);
 
         if (CoreEnvironmentSettings.ClearAll)
         {
@@ -198,6 +202,7 @@ sealed class Program
 
         SetupLogging(mainArgs);
         LoadConfig(storage);
+        FixConfigPaths();
 
         Secrets = GetSecretProvider(storage);
 
@@ -479,6 +484,15 @@ sealed class Program
         ClearPlugins(tsbutton);
         ClearTools(tsbutton);
         ClearLogs(true);
+    }
+
+    public static void FixConfigPaths()
+    {
+        Config.GamePath = StorageHelper.FixConfigPath(Config.GamePath);
+        Config.GameConfigPath = StorageHelper.FixConfigPath(Config.GameConfigPath);
+        Config.PatchPath = StorageHelper.FixConfigPath(Config.PatchPath);
+        Config.WineBinaryPath = StorageHelper.FixConfigPath(Config.WineBinaryPath);
+        Config.DalamudManualInjectPath = StorageHelper.FixConfigPath(Config.DalamudManualInjectPath);
     }
 
     public static void ResetUIDCache(bool tsbutton = false) => launcherApp.UniqueIdCache.Reset();
