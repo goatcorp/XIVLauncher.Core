@@ -699,6 +699,7 @@ public class MainPage : Page
                 Log.Information("Using Managed Wine: " + App.Settings.WineManagedVersion.ToString());
             }
             Log.Information("Using Dxvk Version: " + App.Settings.DxvkVersion.ToString());
+            Log.Information("Using Dxvk-Nvapi Version: " + App.Settings.NvapiVersion.ToString());
 
             var signal = new ManualResetEvent(false);
             var isFailed = false;

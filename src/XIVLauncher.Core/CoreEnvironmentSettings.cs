@@ -12,6 +12,7 @@ public static class CoreEnvironmentSettings
     public static bool ClearPlugins => CheckEnvBool("XL_CLEAR_PLUGINS");
     public static bool ClearTools => CheckEnvBool("XL_CLEAR_TOOLS");
     public static bool ClearLogs => CheckEnvBool("XL_CLEAR_LOGS");
+    public static bool ClearNvngx => CheckEnvBool("XL_CLEAR_NVNGX");
     public static bool ClearAll => CheckEnvBool("XL_CLEAR_ALL");
     public static bool? UseSteam => CheckEnvBoolOrNull("XL_USE_STEAM"); // Fix for Steam Deck users who lock themselves out
     public static bool IsSteamCompatTool => CheckEnvBool("XL_SCT");
