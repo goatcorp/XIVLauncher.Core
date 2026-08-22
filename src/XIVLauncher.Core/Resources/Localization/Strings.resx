@@ -112,6 +112,9 @@ It should be an absolute path to a folder containing wine64 and wineserver binar
     <data name="OpenWINEExplorer" xml:space="preserve">
         <value>Open WINE explorer (run apps in prefix)</value>
     </data>
+    <data name="OpenWINEExplorerTooltip" xml:space="preserve">
+        <value>Tip: You can do the same via CLI: &lt;xlcore&gt; wine explorer</value>
+    </data>
     <data name="KillAllWINEProcesses" xml:space="preserve">
         <value>Kill all WINE processes</value>
     </data>

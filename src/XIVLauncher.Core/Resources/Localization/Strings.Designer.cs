@@ -225,6 +225,12 @@ namespace XIVLauncher.Core.Resources.Localization {
             }
         }
         
+        internal static string OpenWINEExplorerTooltip {
+            get {
+                return ResourceManager.GetString("OpenWINEExplorerTooltip", resourceCulture);
+            }
+        }
+        
         internal static string KillAllWINEProcesses {
             get {
                 return ResourceManager.GetString("KillAllWINEProcesses", resourceCulture);

@@ -199,6 +199,20 @@ sealed class Program
         SetupLogging(mainArgs);
         LoadConfig(storage);
 
+        if (args.Length >= 1 && args[0] == "wine")
+        {
+            if (args.Length == 1)
+            {
+                Console.WriteLine("Usage: xlcore wine taskmgr");
+                Environment.Exit(1);
+                return;
+            }
+
+            CreateCompatToolsInstance();
+            CompatibilityTools.RunInPrefixAndExit([.. args.Skip(1)]);
+            return;
+        }
+
         Secrets = GetSecretProvider(storage);
 
         Dictionary<uint, string> apps = [];
