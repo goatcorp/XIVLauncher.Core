@@ -912,6 +912,10 @@ public class MainPage : Page
             return false;
         }
 
+        // The free space check in PatchManager throws DriveNotFoundException if the game folder was deleted by the user
+        if (!App.Settings.GamePath.Exists)
+            App.Settings.GamePath.Create();
+
         using var installer = new PatchInstaller(App.Settings.GamePath, App.Settings.KeepPatches ?? false);
         using var acquisition = new AriaPatchAcquisition(new FileInfo(Path.Combine(App.Storage.GetFolder("logs").FullName, "aria2.log")));
         Program.Patcher = new PatchManager(acquisition, App.Settings.PatchSpeedLimit, repository, pendingPatches, App.Settings.GamePath,
