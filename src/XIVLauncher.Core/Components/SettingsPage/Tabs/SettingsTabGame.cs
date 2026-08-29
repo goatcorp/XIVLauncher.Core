@@ -7,40 +7,57 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabGame : SettingsTab
 {
-    public override SettingsEntry[] Entries { get; } =
+    public override SettingsEntry[] Entries { get;  }
+    private readonly SettingsEntry<bool> enableDiscordRpc;
+    private readonly SettingsEntry<bool> enableDiscordRpcCustomPort;
+
+    public SettingsTabGame()
     {
-        new SettingsEntry<DirectoryInfo>(Strings.GamePathSetting, Strings.GamePathSettingDescription, () => Program.Config.GamePath, x => Program.Config.GamePath = x)
+        this.Entries = new SettingsEntry[]
         {
-            CheckValidity = x =>
+            new SettingsEntry<DirectoryInfo>(Strings.GamePathSetting, Strings.GamePathSettingDescription, () => Program.Config.GamePath, x => Program.Config.GamePath = x)
             {
-                if (string.IsNullOrWhiteSpace(x?.FullName))
-                    return Strings.GamePathSettingNotSetValidation;
+                CheckValidity = x =>
+                {
+                    if (string.IsNullOrWhiteSpace(x?.FullName))
+                        return Strings.GamePathSettingNotSetValidation;
 
-                if (x.Name is "game" or "boot")
-                    return Strings.GamePathSettingInvalidValidationj;
+                    if (x.Name is "game" or "boot")
+                        return Strings.GamePathSettingInvalidValidationj;
 
-                return null;
-            }
-        },
+                    return null;
+                }
+            },
 
-        new SettingsEntry<DirectoryInfo>(Strings.GameConfigurationPathSetting, Strings.GameConfigurationPathSettingDescription, () => Program.Config.GameConfigPath, x => Program.Config.GameConfigPath = x)
-        {
-            CheckValidity = x => string.IsNullOrWhiteSpace(x?.FullName) ? Strings.GameConfigurationPathNotSetValidation : null,
+            new SettingsEntry<DirectoryInfo>(Strings.GameConfigurationPathSetting, Strings.GameConfigurationPathSettingDescription, () => Program.Config.GameConfigPath, x => Program.Config.GameConfigPath = x)
+            {
+                CheckValidity = x => string.IsNullOrWhiteSpace(x?.FullName) ? Strings.GameConfigurationPathNotSetValidation : null,
 
-            // TODO: We should also support this on Windows
-            CheckVisibility = () => Environment.OSVersion.Platform == PlatformID.Unix,
-        },
+                // TODO: We should also support this on Windows
+                CheckVisibility = () => Environment.OSVersion.Platform == PlatformID.Unix,
+            },
 
-        new SettingsEntry<string>(Strings.AdditionalGameArgsSetting, Strings.AdditionalGameArgsSettingDescription, () => Program.Config.AdditionalArgs, x => Program.Config.AdditionalArgs = x),
-        new SettingsEntry<ClientLanguage>(Strings.GameLanguageSetting, Strings.GameLanguageSettingDescription, () => Program.Config.ClientLanguage ?? ClientLanguage.English, x => Program.Config.ClientLanguage = x),
-        new SettingsEntry<DpiAwareness>(Strings.GameDPIAwarenessSetting, Strings.GameDPIAwarenessSettingDescription, () => Program.Config.DpiAwareness ?? DpiAwareness.Unaware, x => Program.Config.DpiAwareness = x),
-        new SettingsEntry<bool>(Strings.UseXLAuthMacrosSetting, Strings.UseXLAuthMacrosSettingDescription, () => Program.Config.IsOtpServer ?? false, x => Program.Config.IsOtpServer = x),
-        new SettingsEntry<bool>(Strings.IgnoreSteamSetting, Strings.IgnoreSteamSettingDescription, () => Program.Config.IsIgnoringSteam ?? false, x => Program.Config.IsIgnoringSteam = x)
-        {
-            CheckVisibility = () => !CoreEnvironmentSettings.IsSteamCompatTool,
-        },
-        new SettingsEntry<bool>(Strings.UseUIDCacheSetting, Strings.UseUIDCacheSettingDescription, () => Program.Config.IsUidCacheEnabled ?? false, x => Program.Config.IsUidCacheEnabled = x),
-    };
+            new SettingsEntry<string>(Strings.AdditionalGameArgsSetting, Strings.AdditionalGameArgsSettingDescription, () => Program.Config.AdditionalArgs, x => Program.Config.AdditionalArgs = x),
+            new SettingsEntry<ClientLanguage>(Strings.GameLanguageSetting, Strings.GameLanguageSettingDescription, () => Program.Config.ClientLanguage ?? ClientLanguage.English, x => Program.Config.ClientLanguage = x),
+            new SettingsEntry<DpiAwareness>(Strings.GameDPIAwarenessSetting, Strings.GameDPIAwarenessSettingDescription, () => Program.Config.DpiAwareness ?? DpiAwareness.Unaware, x => Program.Config.DpiAwareness = x),
+
+            enableDiscordRpc = new SettingsEntry<bool>(Strings.UseDiscordRPCBridgeSetting, Strings.UseDiscordRPCBridgeDescription, () => Program.Config.UseDiscordRpcBridge ?? false, x => Program.Config.UseDiscordRpcBridge = x),
+            this.enableDiscordRpcCustomPort = new SettingsEntry<bool>(Strings.DiscordRPCUseCustomPortSetting, Strings.DiscordRPCUseCustomPortDescription, () => Program.Config.DiscordRpcUseCustomPort ?? false, x => Program.Config.DiscordRpcUseCustomPort = x)
+            {
+                CheckVisibility = () => enableDiscordRpc.Value,
+            },
+            new NumericSettingsEntry(Strings.DiscordRPCCustomPortSetting, Strings.DiscordRPCCustomPortDescription, () => Program.Config.DiscordRpcCustomPort ?? 2026, x => Program.Config.DiscordRpcCustomPort = x, 1024, 49151, 0)
+            {
+                CheckVisibility = () => this.enableDiscordRpcCustomPort.Value,
+            },
+            new SettingsEntry<bool>(Strings.UseXLAuthMacrosSetting, Strings.UseXLAuthMacrosSettingDescription, () => Program.Config.IsOtpServer ?? false, x => Program.Config.IsOtpServer = x),
+            new SettingsEntry<bool>(Strings.IgnoreSteamSetting, Strings.IgnoreSteamSettingDescription, () => Program.Config.IsIgnoringSteam ?? false, x => Program.Config.IsIgnoringSteam = x)
+            {
+                CheckVisibility = () => !CoreEnvironmentSettings.IsSteamCompatTool,
+            },
+            new SettingsEntry<bool>(Strings.UseUIDCacheSetting, Strings.UseUIDCacheSettingDescription, () => Program.Config.IsUidCacheEnabled ?? false, x => Program.Config.IsUidCacheEnabled = x),
+        };
+    }
 
     public override string Title => Strings.GameTitle;
 

@@ -571,4 +571,28 @@ ReShade를 사용 중이었다면, 다시 설치해야 합니다.</value>
   <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
         <value>FSync는 Linux에서만 사용할 수 있습니다</value>
     </data>
+    <data name="StartingRPC" xml:space="preserve">
+        <value>Starting the Discord RPC bridge</value>
+    </data>
+    <data name="UseDiscordRPCBridgeDescription" xml:space="preserve">
+        <value>Check this to enable the Discord Rich Presence Bridge when launching the game (only needed for some Wine/Proton builds).</value>
+    </data>
+    <data name="UseDiscordRPCBridgeSetting" xml:space="preserve">
+        <value>Use Discord Rich Presence Bridge</value>
+    </data>
+    <data name="DiscordRPCUseCustomPortDescription" xml:space="preserve">
+        <value>Set to customize the port Discord RPC communicates on (Port must also be set in the Discord RPC plugin).</value>
+    </data>
+    <data name="DiscordRPCUseCustomPortSetting" xml:space="preserve">
+        <value>Use Custom RPC Port</value>
+    </data>
+    <data name="DiscordRPCCustomPortDescription" xml:space="preserve">
+        <value>Set what port Discord RPC should communicate on.</value>
+    </data>
+    <data name="DiscordRPCCustomPortSetting" xml:space="preserve">
+        <value>Custom RPC Port</value>
+    </data>
+    <data name="PortNumberMustBeBetween" xml:space="preserve">
+        <value>Port number must be between 1024-49151</value>
+    </data>
 </root>

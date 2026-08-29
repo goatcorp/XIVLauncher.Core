@@ -531,6 +531,18 @@ namespace XIVLauncher.Core.Resources.Localization {
             }
         }
         
+        internal static string UseDiscordRPCBridgeSetting {
+            get {
+                return ResourceManager.GetString("UseDiscordRPCBridgeSetting", resourceCulture);
+            }
+        }
+        
+        internal static string UseDiscordRPCBridgeDescription {
+            get {
+                return ResourceManager.GetString("UseDiscordRPCBridgeDescription", resourceCulture);
+            }
+        }
+        
         internal static string UseXLAuthMacrosSetting {
             get {
                 return ResourceManager.GetString("UseXLAuthMacrosSetting", resourceCulture);
@@ -921,6 +933,12 @@ namespace XIVLauncher.Core.Resources.Localization {
             }
         }
         
+        internal static string StartingRPC {
+            get {
+                return ResourceManager.GetString("StartingRPC", resourceCulture);
+            }
+        }
+        
         internal static string StartingGame {
             get {
                 return ResourceManager.GetString("StartingGame", resourceCulture);
@@ -1062,6 +1080,36 @@ namespace XIVLauncher.Core.Resources.Localization {
         internal static string EnableFsyncSettingUnsupportedPlatformValidation {
             get {
                 return ResourceManager.GetString("EnableFsyncSettingUnsupportedPlatformValidation", resourceCulture);
+            }
+        }
+        
+        internal static string DiscordRPCUseCustomPortSetting {
+            get {
+                return ResourceManager.GetString("DiscordRPCUseCustomPortSetting", resourceCulture);
+            }
+        }
+        
+        internal static string DiscordRPCUseCustomPortDescription {
+            get {
+                return ResourceManager.GetString("DiscordRPCUseCustomPortDescription", resourceCulture);
+            }
+        }
+        
+        internal static string DiscordRPCCustomPortSetting {
+            get {
+                return ResourceManager.GetString("DiscordRPCCustomPortSetting", resourceCulture);
+            }
+        }
+        
+        internal static string DiscordRPCCustomPortDescription {
+            get {
+                return ResourceManager.GetString("DiscordRPCCustomPortDescription", resourceCulture);
+            }
+        }
+        
+        internal static string PortNumberMustBeBetween {
+            get {
+                return ResourceManager.GetString("PortNumberMustBeBetween", resourceCulture);
             }
         }
     }

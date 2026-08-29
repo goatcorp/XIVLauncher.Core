@@ -42,6 +42,12 @@ public interface ILauncherConfig
 
     public bool? IsIgnoringSteam { get; set; }
 
+    public bool? UseDiscordRpcBridge { get; set; }
+    
+    public bool? DiscordRpcUseCustomPort { get; set; }
+
+    public int? DiscordRpcCustomPort { get; set; }
+
     #region Patching
 
     public DirectoryInfo? PatchPath { get; set; }

@@ -27,6 +27,8 @@ namespace XIVLauncher.Core.Components.MainPage;
 
 public class MainPage : Page
 {
+    private UnixDiscordRpcRunner? rpcRunner;
+    
     private readonly LoginFrame loginFrame;
     private readonly NewsFrame newsFrame;
     private readonly ActionButtons actionButtons;
@@ -686,11 +688,13 @@ public class MainPage : Page
                 if (App.Settings.WineBinaryPath == null)
                     throw new InvalidOperationException("Custom wine binary path wasn't set.");
                 else if (!Directory.Exists(App.Settings.WineBinaryPath))
-                    throw new InvalidOperationException("Custom wine binary path is invalid: no such directory.\n" +
-                                                        "Check path carefully for typos: " + App.Settings.WineBinaryPath);
+                    throw new InvalidOperationException(
+                        "Custom wine binary path is invalid: no such directory.\n" +
+                        "Check path carefully for typos: " + App.Settings.WineBinaryPath);
                 else if (!File.Exists(Path.Combine(App.Settings.WineBinaryPath, "wine64")))
-                    throw new InvalidOperationException("Custom wine binary path is invalid: no wine64 found at that location.\n" +
-                                                        "Check path carefully for typos: " + App.Settings.WineBinaryPath);
+                    throw new InvalidOperationException(
+                        "Custom wine binary path is invalid: no wine64 found at that location.\n" +
+                        "Check path carefully for typos: " + App.Settings.WineBinaryPath);
 
                 Log.Information("Using Custom Wine: " + App.Settings.WineBinaryPath);
             }
@@ -703,19 +707,21 @@ public class MainPage : Page
             var signal = new ManualResetEvent(false);
             var isFailed = false;
 
-            var _ = Task.Run(async () =>
-            {
-                var tempPath = App.Storage.GetFolder("temp");
-                await Program.CompatibilityTools.EnsureTool(Program.HttpClient, tempPath).ConfigureAwait(false);
-            }).ContinueWith(t =>
-            {
-                isFailed = t.IsFaulted || t.IsCanceled;
+            var _ = Task.Run(
+                async () =>
+                {
+                    var tempPath = App.Storage.GetFolder("temp");
+                    await Program.CompatibilityTools.EnsureTool(Program.HttpClient, tempPath).ConfigureAwait(false);
+                }).ContinueWith(
+                t =>
+                {
+                    isFailed = t.IsFaulted || t.IsCanceled;
 
-                if (isFailed)
-                    Log.Error(t.Exception, "Couldn't ensure compatibility tool");
+                    if (isFailed)
+                        Log.Error(t.Exception, "Couldn't ensure compatibility tool");
 
-                signal.Set();
-            });
+                    signal.Set();
+                });
 
             App.StartLoading(Strings.PreparingForCompatTool, Strings.PleaseBePatient);
             signal.WaitOne();
@@ -723,6 +729,38 @@ public class MainPage : Page
 
             if (isFailed)
                 return null!;
+
+            // Start RPC bridge
+            if (App.Settings.UseDiscordRpcBridge ?? false)
+            {
+                var rpcSignal = new ManualResetEvent(false);
+                isFailed = false;
+                
+                var rpcTask = Task.Run(
+                    () =>
+                    {
+                        this.rpcRunner = App.Settings.DiscordRpcUseCustomPort ?? false
+                                             ? new UnixDiscordRpcRunner(App.Settings.DiscordRpcCustomPort)
+                                             : new UnixDiscordRpcRunner();
+                        this.rpcRunner.StartRpcBridge();
+                    }).ContinueWith(
+                    t =>
+                    {
+                        isFailed = t.IsFaulted || t.IsCanceled;
+
+                        if (isFailed)
+                            Log.Error(t.Exception, "Couldn't start Discord RPC Bridge");
+
+                        rpcSignal.Set();
+                    });
+                
+                App.StartLoading(Strings.StartingRPC, Strings.PleaseBePatient);
+                rpcSignal.WaitOne();
+                rpcSignal.Dispose();
+
+                if (isFailed)
+                    return null!;
+            }
 
             App.StartLoading(Strings.StartingGame, Strings.HaveFun);
 
@@ -795,7 +833,10 @@ public class MainPage : Page
         await Task.Run(() => launchedProcess!.WaitForExit()).ConfigureAwait(false);
 
         Log.Verbose("Game has exited");
-
+        
+        if (this.rpcRunner != null)
+            await this.rpcRunner.StopRpcBridge().ConfigureAwait(false);
+        
         if (addonMgr.IsRunning)
             addonMgr.StopAddons();
 

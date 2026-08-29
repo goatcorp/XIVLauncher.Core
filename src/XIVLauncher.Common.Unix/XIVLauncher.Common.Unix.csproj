@@ -22,8 +22,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference
-            Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
+        <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
     </ItemGroup>
 
     <PropertyGroup Label="Configuration" Condition="'$(Configuration)'=='Release'">
@@ -33,6 +32,7 @@
 
     <ItemGroup>
         <!-- Custom steamworks, based on the chippy branch of Facepunch.Steamworks -->
+        <PackageReference Include="DiscordRPCBridge-Wine" Version="1.0.0" />
         <PackageReference Include="goaaats.Steamworks" Version="2.3.4" />
     </ItemGroup>
 </Project>
