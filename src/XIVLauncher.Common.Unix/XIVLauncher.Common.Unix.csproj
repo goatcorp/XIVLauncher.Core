@@ -13,12 +13,16 @@
         <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
 
         <IsOSX Condition="'$(RuntimeIdentifier)' == 'osx-x64'">true</IsOSX>
-        <IsLinux Condition="'$(RuntimeIdentifier)' == 'linux-x64'">true</IsLinux>
+        <IsLinux Condition="'$(RuntimeIdentifier)' == 'linux-x64' Or '$(RuntimeIdentifier)' == 'linux-arm64'">true</IsLinux>
     </PropertyGroup>
 
     <PropertyGroup>
         <DefineConstants Condition=" '$(ExtraDefineConstants)' != '' ">
             $(DefineConstants);$(ExtraDefineConstants)</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">
+        <DefineConstants>$(DefineConstants);STEAMWORKS_MODERN</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
@@ -32,7 +36,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <!-- Custom steamworks, based on the chippy branch of Facepunch.Steamworks -->
-        <PackageReference Include="goaaats.Steamworks" Version="2.3.4" />
+        <!-- Existing Steamworks implementation for current platforms. -->
+        <PackageReference Include="goaaats.Steamworks"
+                          Version="2.3.4"
+                          Condition="'$(RuntimeIdentifier)' != 'linux-arm64'" />
+
+        <!-- Linux ARM64 requires the newer POSIX bindings for Steamworks SDK 1.64. -->
+        <ProjectReference Include="../../lib/Facepunch.Steamworks/Facepunch.Steamworks/Facepunch.Steamworks.Posix.csproj"
+                          Condition="'$(RuntimeIdentifier)' == 'linux-arm64'" />
     </ItemGroup>
 </Project>

@@ -2,6 +2,9 @@ using System;
 using System.Threading.Tasks;
 
 using Steamworks;
+#if STEAMWORKS_MODERN
+using Steamworks.Data;
+#endif
 
 using XIVLauncher.Common.PlatformAbstractions;
 
@@ -39,7 +42,11 @@ namespace XIVLauncher.Common.Unix
 
         public async Task<byte[]?> GetAuthSessionTicketAsync()
         {
+#if STEAMWORKS_MODERN
+            var ticket = await SteamUser.GetAuthSessionTicketAsync(NetIdentity.LocalHost).ConfigureAwait(true);
+#else
             var ticket = await SteamUser.GetAuthSessionTicketAsync().ConfigureAwait(true);
+#endif
             return ticket?.Data;
         }
 

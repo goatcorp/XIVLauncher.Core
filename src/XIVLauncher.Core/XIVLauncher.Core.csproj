@@ -13,13 +13,13 @@
         <FileVersion>$(Version)</FileVersion>
         <AssemblyVersion>$(Version)</AssemblyVersion>
 
-        <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+        <RuntimeIdentifiers>win-x64;linux-x64;linux-arm64;osx-x64</RuntimeIdentifiers>
         <PublishSingleFile>true</PublishSingleFile>
         <SelfContained>true</SelfContained>
 
         <IsWindows Condition="'$(RuntimeIdentifier)' == 'win-x64'">true</IsWindows>
         <IsOSX Condition="'$(RuntimeIdentifier)' == 'osx-x64'">true</IsOSX>
-        <IsLinux Condition="'$(RuntimeIdentifier)' == 'linux-x64'">true</IsLinux>
+        <IsLinux Condition="'$(RuntimeIdentifier)' == 'linux-x64' Or '$(RuntimeIdentifier)' == 'linux-arm64'">true</IsLinux>
         <Configurations>Debug;Release</Configurations>
     </PropertyGroup>
 
@@ -43,16 +43,26 @@
         <PathMap>$(AppOutputBase)=C:\goatsoft\xl\XIVLauncher.Core\</PathMap>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(IsLinux)'=='true'">
-        <None Remove="libsteam_api64.so" />
-        <Content Include="libsteam_api64.so">
+    <ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
+        <None Remove="steamworks/linux-x64/libsteam_api64.so" />
+        <Content Include="steamworks/linux-x64/libsteam_api64.so">
+            <TargetPath>libsteam_api64.so</TargetPath>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">
+        <None Remove="steamworks/linux-arm64/libsteam_api.so" />
+        <Content Include="steamworks/linux-arm64/libsteam_api.so">
+            <TargetPath>libsteam_api.so</TargetPath>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 
     <ItemGroup Condition="'$(IsOSX)'=='true'">
-        <None Remove="libsteam_api64.dylib" />
-        <Content Include="libsteam_api64.dylib">
+        <None Remove="steamworks/osx-universal/libsteam_api64.dylib" />
+        <Content Include="steamworks/osx-universal/libsteam_api64.dylib">
+            <TargetPath>libsteam_api64.dylib</TargetPath>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
