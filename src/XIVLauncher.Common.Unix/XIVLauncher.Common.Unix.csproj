@@ -21,7 +21,7 @@
             $(DefineConstants);$(ExtraDefineConstants)</DefineConstants>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">
+    <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm64' Or '$(XIVLauncherTargetRuntimeIdentifier)' == 'linux-arm64'">
         <DefineConstants>$(DefineConstants);STEAMWORKS_MODERN</DefineConstants>
     </PropertyGroup>
 
@@ -39,10 +39,10 @@
         <!-- Existing Steamworks implementation for current platforms. -->
         <PackageReference Include="goaaats.Steamworks"
                           Version="2.3.4"
-                          Condition="'$(RuntimeIdentifier)' != 'linux-arm64'" />
+                          Condition="'$(RuntimeIdentifier)' != 'linux-arm64' And '$(XIVLauncherTargetRuntimeIdentifier)' != 'linux-arm64'" />
 
         <!-- Linux ARM64 requires the newer POSIX bindings for Steamworks SDK 1.64. -->
         <ProjectReference Include="../../lib/Facepunch.Steamworks/Facepunch.Steamworks/Facepunch.Steamworks.Posix.csproj"
-                          Condition="'$(RuntimeIdentifier)' == 'linux-arm64'" />
+                          Condition="'$(RuntimeIdentifier)' == 'linux-arm64' Or '$(XIVLauncherTargetRuntimeIdentifier)' == 'linux-arm64'" />
     </ItemGroup>
 </Project>

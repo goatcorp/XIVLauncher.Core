@@ -69,7 +69,9 @@
 
     <ItemGroup>
         <ProjectReference Include="../XIVLauncher.VersionGenerator/XIVLauncher.VersionGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-        <ProjectReference Include="..\XIVLauncher.Common.Unix\XIVLauncher.Common.Unix.csproj" />
+        <ProjectReference Include="..\XIVLauncher.Common.Unix\XIVLauncher.Common.Unix.csproj">
+            <AdditionalProperties Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">XIVLauncherTargetRuntimeIdentifier=linux-arm64</AdditionalProperties>
+        </ProjectReference>
         <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common.Windows\XIVLauncher.Common.Windows.csproj" />
         <ProjectReference Include="..\..\lib\FFXIVQuickLauncher\src\XIVLauncher.Common\XIVLauncher.Common.csproj" />
     </ItemGroup>

@@ -72,6 +72,14 @@ public class UnixDalamudRunner : IDalamudRunner
         if (noThirdPlugins)
             launchArguments.Add(DalamudInjectorArgs.NO_THIRD_PARTY);
 
+        // Wine's ARM64EC path can fail in the Injector's Windows ACL setup
+        // before the game is created. Skip that ACL manipulation on ARM64.
+        if (System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture ==
+            System.Runtime.InteropServices.Architecture.Arm64)
+        {
+            launchArguments.Add("--no-fix-acl");
+        }
+
         launchArguments.Add("--");
         launchArguments.Add(gameArgs);
 
@@ -97,7 +105,7 @@ public class UnixDalamudRunner : IDalamudRunner
         try
         {
             var dalamudConsoleOutput = JsonConvert.DeserializeObject<DalamudConsoleOutput>(output);
-            var unixPid = compatibility.GetUnixProcessId(dalamudConsoleOutput.Pid);
+            var unixPid = compatibility.GetUnixProcessId(dalamudConsoleOutput.Pid, gameExe.Name);
 
             if (unixPid == 0)
             {
