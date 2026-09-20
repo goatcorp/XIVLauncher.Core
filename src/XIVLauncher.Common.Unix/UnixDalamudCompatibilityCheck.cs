@@ -28,7 +28,9 @@ public class UnixDalamudCompatibilityCheck : IDalamudCompatibilityCheck
                 throw new IDalamudCompatibilityCheck.ArchitectureNotSupportedException("Dalamud is not supported on ARM32.");
 
             case Architecture.Arm64:
-                throw new IDalamudCompatibilityCheck.ArchitectureNotSupportedException("x64 emulation was not detected. Please make sure to run XIVLauncher with x64 emulation.");
+                // XIVLauncher runs natively on ARM64. The managed Wine runtime
+                // provides x64 Windows execution through ARM64X/FEX.
+                break;
         }
     }
 }

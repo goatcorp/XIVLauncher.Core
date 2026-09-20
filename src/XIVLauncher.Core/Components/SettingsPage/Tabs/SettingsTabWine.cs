@@ -26,7 +26,9 @@ public class SettingsTabWine : SettingsTab
             new SettingsEntry<WineManagedVersion>(Strings.WineVersionSetting, Strings.WineVersionSettingDescription, () => Program.Config.WineManagedVersion ?? WineManagedVersion.Stable,
                 x => Program.Config.WineManagedVersion = x )
             {
-                CheckVisibility = () => startupTypeSetting.Value == WineStartupType.Managed
+                CheckVisibility = () =>
+                    startupTypeSetting.Value == WineStartupType.Managed &&
+                    RuntimeInformation.ProcessArchitecture != Architecture.Arm64
             },
             new SettingsEntry<string>(Strings.WineBinaryPathSetting,
                 Strings.WineBinarySettingDescription,

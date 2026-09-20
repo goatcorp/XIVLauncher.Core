@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -87,6 +88,7 @@ public class CompatibilityTools
         }
 
         EnsurePrefix();
+        EnsureArm64FexBackend();
         await Dxvk.Dxvk.InstallDxvk(httpClient, Settings.Prefix, dxvkDirectory, dxvkVersion).ConfigureAwait(false);
 
         IsToolReady = true;
@@ -108,6 +110,111 @@ public class CompatibilityTools
     public void EnsurePrefix()
     {
         RunInPrefix("cmd /c dir %userprofile%/Documents > nul").WaitForExit();
+    }
+
+    private void EnsureArm64FexBackend()
+    {
+        if (Settings.StartupType != WineStartupType.Managed ||
+            System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture !=
+            System.Runtime.InteropServices.Architecture.Arm64)
+        {
+            return;
+        }
+
+        var source = Path.Combine(
+            wineDirectory.FullName,
+            Settings.Release.Name,
+            "share",
+            "xivlauncher-arm64",
+            "libarm64ecfex.dll");
+
+        if (!File.Exists(source))
+        {
+            throw new FileNotFoundException(
+                "The ARM64 managed Wine runtime does not contain the FEX ARM64EC backend.",
+                source);
+        }
+
+        var system32 = Path.Combine(
+            Settings.Prefix.FullName,
+            "drive_c",
+            "windows",
+            "system32");
+
+        Directory.CreateDirectory(system32);
+
+        var destination = Path.Combine(
+            system32,
+            "libarm64ecfex.dll");
+
+        var marker = Path.Combine(
+            Settings.Prefix.FullName,
+            ".xivlauncher-arm64-fex.sha256");
+
+        string sourceHash;
+        using (var sourceStream = File.OpenRead(source))
+        {
+            sourceHash = Convert.ToHexString(
+                SHA256.HashData(sourceStream));
+        }
+
+        if (File.Exists(destination) && File.Exists(marker))
+        {
+            string destinationHash;
+            using (var destinationStream = File.OpenRead(destination))
+            {
+                destinationHash = Convert.ToHexString(
+                    SHA256.HashData(destinationStream));
+            }
+
+            var markerHash = File.ReadAllText(marker).Trim();
+
+            if (string.Equals(
+                    sourceHash,
+                    destinationHash,
+                    StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(
+                    sourceHash,
+                    markerHash,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                Log.Debug(
+                    "ARM64 FEX backend is already installed in Wine prefix.");
+                return;
+            }
+        }
+
+        File.Copy(source, destination, true);
+
+        var registryProcess = RunInPrefix(
+            new[]
+            {
+                "reg",
+                "add",
+                @"HKLM\Software\Microsoft\Wow64\amd64",
+                "/ve",
+                "/d",
+                "libarm64ecfex.dll",
+                "/f"
+            },
+            redirectOutput: true,
+            writeLog: true);
+
+        registryProcess.WaitForExit();
+
+        if (registryProcess.ExitCode != 0)
+        {
+            throw new InvalidOperationException(
+                $"Could not register FEX ARM64EC backend (exit code {registryProcess.ExitCode}).");
+        }
+
+        File.WriteAllText(
+            marker,
+            sourceHash + Environment.NewLine);
+
+        Log.Information(
+            "ARM64 FEX backend installed into Wine prefix: {Path}",
+            destination);
     }
 
     public Process RunInPrefix(string command, string workingDirectory = "", IDictionary<string, string> environment = null, bool redirectOutput = false, bool writeLog = false, bool wineD3D = false)
@@ -237,16 +344,89 @@ public class CompatibilityTools
         return GetProcessIds(executableName).FirstOrDefault();
     }
 
+    public int GetUnixProcessId(int winePid, string executableName)
+    {
+        if (System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture ==
+            System.Runtime.InteropServices.Architecture.Arm64)
+        {
+            return GetUnixProcessIdByName(executableName);
+        }
+
+        return GetUnixProcessId(winePid);
+    }
+
     public int GetUnixProcessId(int winePid)
     {
         var wineDbg = RunInPrefix("winedbg --command \"info procmap\"", redirectOutput: true);
         var output = wineDbg.StandardOutput.ReadToEnd();
-        if (output.Contains("syntax error\n"))
-            return 0;
+
+        if (output.Contains("syntax error\n") || output.Contains("Exception c0000005"))
+        {
+            var processName = GetProcessName(winePid);
+            return GetUnixProcessIdByName(processName);
+        }
+
         var matchingLines = output.Split('\n', StringSplitOptions.RemoveEmptyEntries).Skip(1).Where(
             l => int.Parse(l.Substring(1, 8), System.Globalization.NumberStyles.HexNumber) == winePid);
-        var unixPids = matchingLines.Select(l => int.Parse(l.Substring(10, 8), System.Globalization.NumberStyles.HexNumber)).ToArray();
+        var unixPids = matchingLines.Select(
+            l => int.Parse(l.Substring(10, 8), System.Globalization.NumberStyles.HexNumber)).ToArray();
+
         return unixPids.FirstOrDefault();
+    }
+
+    private string GetProcessName(int winePid)
+    {
+        var wineDbg = RunInPrefix("winedbg --command \"info proc\"", redirectOutput: true);
+        var output = wineDbg.StandardOutput.ReadToEnd();
+
+        var matchingLines = output.Split('\n', StringSplitOptions.RemoveEmptyEntries).Skip(1).Where(
+            l => int.Parse(l.Substring(1, 8), System.Globalization.NumberStyles.HexNumber) == winePid);
+        var processNames = matchingLines.Select(l => l.Substring(20).Trim('\'')).ToArray();
+
+        return processNames.FirstOrDefault();
+    }
+
+    private int GetUnixProcessIdByName(string executableName)
+    {
+        var closest = 0;
+        var early = 0;
+        var currentProcess = Process.GetCurrentProcess();
+        var nonunique = false;
+
+        foreach (var process in Process.GetProcessesByName(executableName))
+        {
+            if (process.Id < currentProcess.Id)
+            {
+                early = process.Id;
+                continue;
+            }
+
+            if (closest == 0 ||
+                (closest - currentProcess.Id) > (process.Id - currentProcess.Id))
+            {
+                if (closest != 0)
+                    nonunique = true;
+
+                closest = process.Id;
+            }
+
+            if (nonunique)
+            {
+                Log.Error(
+                    $"More than one {executableName} found! Selecting the most likely match with process id {closest}.");
+            }
+        }
+
+        if (closest == 0 && early != 0)
+            closest = early;
+
+        if (closest != 0)
+        {
+            Log.Verbose(
+                $"Process for {executableName} found using fallback method: {closest}. XLCore pid: {currentProcess.Id}");
+        }
+
+        return closest;
     }
 
     public string UnixToWinePath(string unixPath)

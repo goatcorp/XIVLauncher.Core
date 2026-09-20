@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<AssemblyName>Facepunch.Steamworks.Posix</AssemblyName>
+		<DefineConstants>$(DefineConstants);PLATFORM_POSIX</DefineConstants>
+		<TargetFrameworks Condition="'$(RuntimeIdentifier)' != 'linux-arm64' And '$(XIVLauncherTargetRuntimeIdentifier)' != 'linux-arm64'">netstandard2.1;net6.0;net46</TargetFrameworks>
+		<TargetFramework Condition="'$(RuntimeIdentifier)' == 'linux-arm64' Or '$(XIVLauncherTargetRuntimeIdentifier)' == 'linux-arm64'">net6.0</TargetFramework>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<LangVersion>10</LangVersion>	
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<RootNamespace>Steamworks</RootNamespace>
+	</PropertyGroup>
+
+	<Import Project="Facepunch.Steamworks.targets" />
+
+</Project>

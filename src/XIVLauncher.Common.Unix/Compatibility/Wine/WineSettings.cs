@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 using XIVLauncher.Common.Unix.Compatibility.Wine.Releases;
 
@@ -54,14 +55,24 @@ public readonly struct WineSettings
         this.Prefix = prefix;
         if (startupType == WineStartupType.Managed)
         {
-            var wineDistroId = CompatUtil.GetWineIdForDistro();
-            this.Release = managedWine switch
+            if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
             {
-                WineManagedVersion.Stable => new WineStableRelease(wineDistroId),
-                WineManagedVersion.Beta => new WineBetaRelease(wineDistroId),
-                WineManagedVersion.Legacy => new WineLegacyRelease(wineDistroId),
-                _ => throw new ArgumentOutOfRangeException(managedWine.ToString())
-            };
+                // ARM64 currently has a single supported managed runtime.
+                // Ignore a stale Beta/Legacy preference that may have come
+                // from an existing configuration.
+                this.Release = new WineArm64StableRelease();
+            }
+            else
+            {
+                var wineDistroId = CompatUtil.GetWineIdForDistro();
+                this.Release = managedWine switch
+                {
+                    WineManagedVersion.Stable => new WineStableRelease(wineDistroId),
+                    WineManagedVersion.Beta => new WineBetaRelease(wineDistroId),
+                    WineManagedVersion.Legacy => new WineLegacyRelease(wineDistroId),
+                    _ => throw new ArgumentOutOfRangeException(managedWine.ToString())
+                };
+            }
         }
     }
 }
