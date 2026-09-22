@@ -11,6 +11,8 @@ public class ActionButtons : Component
     public event Action? OnAccountButtonClicked;
     public event Action? OnStatusButtonClicked;
     public event Action? OnSettingsButtonClicked;
+    public event Action? OnGameFolderButtonClicked;
+    public event Action? OnPluginsFolderButtonClicked;
 
     public override void Draw()
     {
@@ -48,6 +50,30 @@ public class ActionButtons : Component
         }
         ImGui.PushFont(FontManager.TextFont, 0.0f);
         ImGuiHelpers.AddTooltip(Strings.LauncherSettings);
+        ImGui.PopFont();
+        ImGui.EndDisabled();
+
+        ImGui.SameLine();
+
+        ImGui.BeginDisabled(this.OnGameFolderButtonClicked == null);
+        if (ImGui.Button(FontAwesomeIcon.Folder.ToIconString(), btnSize))
+        {
+            this.OnGameFolderButtonClicked?.Invoke();
+        }
+        ImGui.PushFont(FontManager.TextFont, 0.0f);
+        ImGuiHelpers.AddTooltip(Strings.OpenGameFolder);
+        ImGui.PopFont();
+        ImGui.EndDisabled();
+
+        ImGui.SameLine();
+
+        ImGui.BeginDisabled(this.OnPluginsFolderButtonClicked == null);
+        if (ImGui.Button(FontAwesomeIcon.PuzzlePiece.ToIconString(), btnSize))
+        {
+            this.OnPluginsFolderButtonClicked?.Invoke();
+        }
+        ImGui.PushFont(FontManager.TextFont, 0.0f);
+        ImGuiHelpers.AddTooltip(Strings.OpenPluginsFolder);
         ImGui.PopFont();
         ImGui.EndDisabled();
 

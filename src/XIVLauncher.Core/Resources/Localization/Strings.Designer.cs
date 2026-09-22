@@ -44,6 +44,19 @@ namespace XIVLauncher.Core.Resources.Localization {
                 resourceCulture = value;
             }
         }
+
+        //Added temporarily (I expect it to be overwritten when the resx is regenerated)
+        internal static string OpenGameFolder {
+            get {
+                return ResourceManager.GetString("OpenGameFolder", resourceCulture);
+            }
+        }
+        //Added temporarily (I expect it to be overwritten when the resx is regenerated)
+        internal static string OpenPluginsFolder {
+            get {
+                return ResourceManager.GetString("OpenPluginsFolder", resourceCulture);
+            }
+        }
         
         internal static string EnterYourOTP {
             get {

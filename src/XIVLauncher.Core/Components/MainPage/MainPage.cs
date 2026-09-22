@@ -48,6 +48,19 @@ public class MainPage : Page
         this.actionButtons.OnSettingsButtonClicked += () => this.App.State = LauncherApp.LauncherState.Settings;
         this.actionButtons.OnStatusButtonClicked += () => AppUtil.OpenBrowser("https://is.xivup.com/");
         this.actionButtons.OnAccountButtonClicked += () => AppUtil.OpenBrowser("https://sqex.to/Msp");
+        this.actionButtons.OnGameFolderButtonClicked += () =>
+        {
+            if (App.Settings.GamePath?.Exists == true)
+                PlatformHelpers.OpenBrowser(App.Settings.GamePath.FullName);
+        };
+        this.actionButtons.OnPluginsFolderButtonClicked += () =>
+        {
+            if (App.Settings.GamePath?.Exists == true)
+            {
+                var pluginsPath = Path.GetFullPath(Path.Combine(App.Settings.GamePath.FullName, "..", "installedPlugins"));
+                PlatformHelpers.OpenBrowser(pluginsPath);
+            }
+        };
 
         this.Padding = new Vector2(32f, 32f);
 
