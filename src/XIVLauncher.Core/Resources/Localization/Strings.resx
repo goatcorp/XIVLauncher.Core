@@ -415,6 +415,12 @@ If you want to reinstall FFXIV, please take care to disable it first.</value>
     <data name="ServiceStatus" xml:space="preserve">
         <value>Service Status</value>
     </data>
+    <data name="OpenGameFolder" xml:space="preserve">
+        <value>Open game folder</value>
+    </data>
+    <data name="OpenPluginsFolder" xml:space="preserve">
+        <value>Open plugins folder</value>
+    </data>
     <data name="LauncherSettings" xml:space="preserve">
         <value>Launcher Settings</value>
     </data>
