@@ -220,7 +220,7 @@ public partial class FileDialog
 
         if (ImGui.IsItemHovered())
         {
-            ImGui.SetTooltip("Reset to current directory"u8);
+            ImGui.SetTooltip(Strings.FileDialogResetTooltip);
         }
 
         ImGui.SameLine();
@@ -230,7 +230,7 @@ public partial class FileDialog
         if (!this.createDirectoryMode)
         {
             ImGui.SameLine();
-            ImGui.Text("Search :"u8);
+            ImGui.Text(Strings.FileDialogSearchLabel);
             ImGui.SameLine();
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
             if (ImGui.InputText("##InputImGuiFileDialogSearchField"u8, ref this.searchBuffer, 255))
@@ -255,7 +255,7 @@ public partial class FileDialog
 
         if (ImGui.IsItemHovered())
         {
-            ImGui.SetTooltip("Create Directory"u8);
+            ImGui.SetTooltip(Strings.FileDialogCreateDirTooltip);
         }
 
         if (this.createDirectoryMode)
@@ -269,7 +269,7 @@ public partial class FileDialog
 
             ImGui.SameLine();
 
-            if (ImGui.Button("Ok"u8))
+            if (ImGui.Button(Strings.FileDialogOkButton))
             {
                 if (this.CreateDir(this.createDirectoryBuffer))
                 {
@@ -281,7 +281,7 @@ public partial class FileDialog
 
             ImGui.SameLine();
 
-            if (ImGui.Button("Cancel"u8))
+            if (ImGui.Button(Strings.FileDialogCancelButton))
             {
                 this.createDirectoryMode = false;
             }
@@ -369,10 +369,10 @@ public partial class FileDialog
             var hideSize = this.flags.HasFlag(ImGuiFileDialogFlags.HideColumnSize);
             var hideDate = this.flags.HasFlag(ImGuiFileDialogFlags.HideColumnDate);
 
-            ImGui.TableSetupColumn(" File Name"u8, ImGuiTableColumnFlags.WidthStretch, -1, 0);
-            ImGui.TableSetupColumn("Type"u8, ImGuiTableColumnFlags.WidthFixed | (hideType ? ImGuiTableColumnFlags.DefaultHide : ImGuiTableColumnFlags.None), -1, 1);
-            ImGui.TableSetupColumn("Size"u8, ImGuiTableColumnFlags.WidthFixed | (hideSize ? ImGuiTableColumnFlags.DefaultHide : ImGuiTableColumnFlags.None), -1, 2);
-            ImGui.TableSetupColumn("Date"u8, ImGuiTableColumnFlags.WidthFixed | (hideDate ? ImGuiTableColumnFlags.DefaultHide : ImGuiTableColumnFlags.None), -1, 3);
+            ImGui.TableSetupColumn(Strings.FileDialogFileNameLabel + " ", ImGuiTableColumnFlags.WidthStretch, -1, 0);
+            ImGui.TableSetupColumn(Strings.FileDialogTypeLabel, ImGuiTableColumnFlags.WidthFixed | (hideType ? ImGuiTableColumnFlags.DefaultHide : ImGuiTableColumnFlags.None), -1, 1);
+            ImGui.TableSetupColumn(Strings.FileDialogSizeLabel, ImGuiTableColumnFlags.WidthFixed | (hideSize ? ImGuiTableColumnFlags.DefaultHide : ImGuiTableColumnFlags.None), -1, 2);
+            ImGui.TableSetupColumn(Strings.FileDialogDateLabel, ImGuiTableColumnFlags.WidthFixed | (hideDate ? ImGuiTableColumnFlags.DefaultHide : ImGuiTableColumnFlags.None), -1, 3);
 
             ImGui.TableNextRow(ImGuiTableRowFlags.Headers);
             for (var column = 0; column < 4; column++)
@@ -458,7 +458,7 @@ public partial class FileDialog
 
                     if (ImGui.TableNextColumn())
                     {
-                        ImGui.TextUnformatted(Strings.NoPermissionFolder);
+                        ImGui.TextUnformatted(Strings.FileDialogNoPermissionError);
                     }
 
                     ImGui.TableNextColumn();
@@ -709,11 +709,11 @@ public partial class FileDialog
 
         if (this.IsDirectoryMode())
         {
-            ImGui.Text("Directory Path :"u8);
+            ImGui.Text(Strings.FileDialogDirectoryPathLabel + " :");
         }
         else
         {
-            ImGui.Text("File Name :"u8);
+            ImGui.Text(Strings.FileDialogFileNameLabel + " :");
         }
 
         ImGui.SameLine();
@@ -769,7 +769,7 @@ public partial class FileDialog
         var disableOk = string.IsNullOrEmpty(this.fileNameBuffer) || (selectOnly && !this.IsItemSelected());
         if (disableOk) ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 0.5f);
 
-        if (ImGui.Button("Ok"u8) && !disableOk)
+        if (ImGui.Button(Strings.FileDialogOkButton) && !disableOk)
         {
             this.isOk = true;
             res = true;
@@ -779,7 +779,7 @@ public partial class FileDialog
 
         ImGui.SameLine();
 
-        if (ImGui.Button("Cancel"u8))
+        if (ImGui.Button(Strings.FileDialogCancelButton))
         {
             this.isOk = false;
             res = true;
@@ -842,7 +842,7 @@ public partial class FileDialog
                 }
 
                 ImGui.SameLine();
-                if (ImGui.Button("Cancel"u8))
+                if (ImGui.Button(Strings.FileDialogCancelButton))
                 {
                     this.okResultToConfirm = false;
                     this.isOk = false;

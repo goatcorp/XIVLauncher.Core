@@ -48,7 +48,7 @@ public class SettingsEntry<T> : SettingsEntry
                 : (this.Value as FileInfo)?.FullName ?? string.Empty;
 
             var style = ImGui.GetStyle();
-            var browseButtonWidth = ImGui.CalcTextSize(Strings.Browse).X + style.FramePadding.X * 2f;
+            var browseButtonWidth = ImGui.CalcTextSize(Strings.FileDialogBrowse).X + style.FramePadding.X * 2f;
 
             ImGui.PushItemWidth(ImGui.CalcItemWidth() - browseButtonWidth - style.ItemSpacing.X);
 
@@ -69,18 +69,18 @@ public class SettingsEntry<T> : SettingsEntry
             ImGui.PopItemWidth();
             ImGui.SameLine();
 
-            if (ImGui.Button($"{Strings.Browse}###{Id.ToString()}Browse"))
+            if (ImGui.Button($"{Strings.FileDialogBrowse}###{Id.ToString()}Browse"))
             {
                 if (isDir)
                 {
-                    FileDialogHost.OpenFolder(Strings.Browse, (this.Value as DirectoryInfo)?.FullName, path =>
+                    FileDialogHost.OpenFolder(Strings.FileDialogBrowse, (this.Value as DirectoryInfo)?.FullName, path =>
                     {
                         this.InternalValue = new DirectoryInfo(path);
                     });
                 }
                 else
                 {
-                    FileDialogHost.OpenFile(Strings.Browse, ".*", (this.Value as FileInfo)?.Directory?.FullName, path =>
+                    FileDialogHost.OpenFile(Strings.FileDialogBrowse, ".*", (this.Value as FileInfo)?.Directory?.FullName, path =>
                     {
                         this.InternalValue = new FileInfo(path);
                     });

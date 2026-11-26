@@ -1065,15 +1065,75 @@ namespace XIVLauncher.Core.Resources.Localization {
             }
         }
 
-        internal static string Browse {
+        internal static string FileDialogBrowse {
             get {
-                return ResourceManager.GetString("Browse", resourceCulture);
+                return ResourceManager.GetString("FileDialogBrowse", resourceCulture);
             }
         }
     
-        internal static string NoPermissionFolder {
+        internal static string FileDialogNoPermissionError {
             get {
-                return ResourceManager.GetString("NoPermissionFolder", resourceCulture);
+                return ResourceManager.GetString("FileDialogNoPermissionError", resourceCulture);
+            }
+        }
+    
+        internal static string FileDialogSearchLabel {
+            get {
+                return ResourceManager.GetString("FileDialogSearchLabel", resourceCulture);
+            }
+        }
+    
+        internal static string FileDialogFileNameLabel {
+            get {
+                return ResourceManager.GetString("FileDialogFileNameLabel", resourceCulture);
+            }
+        }
+    
+        internal static string FileDialogTypeLabel {
+            get {
+                return ResourceManager.GetString("FileDialogTypeLabel", resourceCulture);
+            }
+        }
+    
+        internal static string FileDialogSizeLabel {
+            get {
+                return ResourceManager.GetString("FileDialogSizeLabel", resourceCulture);
+            }
+        }
+    
+        internal static string FileDialogDateLabel {
+            get {
+                return ResourceManager.GetString("FileDialogDateLabel", resourceCulture);
+            }
+        }
+    
+        internal static string FileDialogDirectoryPathLabel {
+            get {
+                return ResourceManager.GetString("FileDialogDirectoryPathLabel", resourceCulture);
+            }
+        }
+    
+        internal static string FileDialogOkButton {
+            get {
+                return ResourceManager.GetString("FileDialogOkButton", resourceCulture);
+            }
+        }
+    
+        internal static string FileDialogCancelButton {
+            get {
+                return ResourceManager.GetString("FileDialogCancelButton", resourceCulture);
+            }
+        }
+    
+        internal static string FileDialogResetTooltip {
+            get {
+                return ResourceManager.GetString("FileDialogResetTooltip", resourceCulture);
+            }
+        }
+    
+        internal static string FileDialogCreateDirTooltip {
+            get {
+                return ResourceManager.GetString("FileDialogCreateDirTooltip", resourceCulture);
             }
         }
     }
