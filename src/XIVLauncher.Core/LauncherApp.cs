@@ -11,6 +11,7 @@ using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Util;
 using XIVLauncher.Core.Accounts;
 using XIVLauncher.Core.Components;
+using XIVLauncher.Core.Components.Common;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Components.MainPage;
 using XIVLauncher.Core.Components.SettingsPage;
@@ -296,6 +297,7 @@ public class LauncherApp : Component
         ImGui.PopStyleColor();
 
         this.DrawModal();
+        FileDialogHost.Draw();
     }
 
     private void DrawModal()

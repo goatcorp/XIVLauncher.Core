@@ -1,0 +1,110 @@
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using Hexa.NET.ImGui;
+
+namespace XIVLauncher.Core.ImGuiFileDialog;
+
+/// <summary>
+/// A file or folder picker.
+/// </summary>
+public partial class FileDialog
+{
+    private List<FilterStruct> filters = [];
+    private FilterStruct selectedFilter;
+
+    [GeneratedRegex(@"[^,{}]+(\{([^{}]*?)\})?", RegexOptions.Compiled)]
+    private static partial Regex FilterRegex();
+
+    private void ParseFilters(string filters)
+    {
+        // ".*,.cpp,.h,.hpp"
+        // "Source files{.cpp,.h,.hpp},Image files{.png,.gif,.jpg,.jpeg},.md"
+
+        this.filters.Clear();
+        if (filters.Length == 0) return;
+
+        var currentFilterFound = false;
+        var matches = FilterRegex().Matches(filters);
+        foreach (Match m in matches)
+        {
+            var match = m.Value;
+            var filter = default(FilterStruct);
+
+            if (match.Contains('{'))
+            {
+                var exts = m.Groups[2].Value;
+                filter = new FilterStruct
+                {
+                    Filter = match.Split('{')[0],
+                    CollectionFilters = new HashSet<string>(exts.Split(',')),
+                };
+            }
+            else
+            {
+                filter = new FilterStruct
+                {
+                    Filter = match,
+                    CollectionFilters = [],
+                };
+            }
+
+            this.filters.Add(filter);
+
+            if (!currentFilterFound && filter.Filter == this.selectedFilter.Filter)
+            {
+                currentFilterFound = true;
+                this.selectedFilter = filter;
+            }
+        }
+
+        if (!currentFilterFound && !(this.filters.Count == 0))
+        {
+            this.selectedFilter = this.filters[0];
+        }
+    }
+
+    private void SetSelectedFilterWithExt(string ext)
+    {
+        if (this.filters.Count == 0) return;
+        if (string.IsNullOrEmpty(ext)) return;
+
+        foreach (var filter in this.filters)
+        {
+            if (filter.FilterExists(ext))
+            {
+                this.selectedFilter = filter;
+            }
+        }
+
+        if (this.selectedFilter.Empty())
+        {
+            this.selectedFilter = this.filters[0];
+        }
+    }
+
+    private void ApplyFilteringOnFileList()
+    {
+        using var scope = this.filesLock.EnterScope();
+
+        this.filteredFiles.Clear();
+
+        foreach (var file in this.files)
+        {
+            var show = true;
+            if (!string.IsNullOrEmpty(this.searchBuffer) && !file.FileName.Contains(this.searchBuffer, StringComparison.InvariantCultureIgnoreCase))
+            {
+                show = false;
+            }
+
+            if (this.IsDirectoryMode() && file.Type != FileStructType.Directory)
+            {
+                show = false;
+            }
+
+            if (show)
+            {
+                this.filteredFiles.Add(file);
+            }
+        }
+    }
+}

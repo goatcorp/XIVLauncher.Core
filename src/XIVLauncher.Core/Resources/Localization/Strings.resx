@@ -573,4 +573,40 @@ You may have to reinstall the game.</value>
     <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
         <value>FSync is only available on Linux</value>
     </data>
+    <data name="FileDialogBrowse" xml:space="preserve">
+      <value>Browse</value>
+    </data>
+    <data name="FileDialogNoPermissionError" xml:space="preserve">
+      <value>You do not have permission to view this folder</value>
+    </data>
+    <data name="FileDialogSearchLabel" xml:space="preserve">
+      <value>Search:</value>
+    </data>
+    <data name="FileDialogFileNameLabel" xml:space="preserve">
+      <value>File Name</value>
+    </data>
+    <data name="FileDialogTypeLabel" xml:space="preserve">
+      <value>Type</value>
+    </data>
+    <data name="FileDialogSizeLabel" xml:space="preserve">
+      <value>Size</value>
+    </data>
+    <data name="FileDialogDateLabel" xml:space="preserve">
+      <value>Date</value>
+    </data>
+    <data name="FileDialogDirectoryPathLabel" xml:space="preserve">
+      <value>Directory Path</value>
+    </data>
+    <data name="FileDialogOkButton" xml:space="preserve">
+      <value>Ok</value>
+    </data>
+    <data name="FileDialogCancelButton" xml:space="preserve">
+      <value>Cancel</value>
+    </data>
+    <data name="FileDialogResetTooltip" xml:space="preserve">
+      <value>Reset to current directory</value>
+    </data>
+    <data name="FileDialogCreateDirTooltip" xml:space="preserve">
+      <value>Create Directory</value>
+    </data>
 </root>

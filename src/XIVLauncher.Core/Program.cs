@@ -89,6 +89,7 @@ sealed class Program
                  .UseCommandLineArgs()
                  .UseIniFile(storage.GetFile("launcher.ini").FullName)
                  .UseTypeParser(new DirectoryInfoParser())
+                 .UseTypeParser(new FileInfoParser())
                  .UseTypeParser(new AddonListParser())
                  .Build();
 

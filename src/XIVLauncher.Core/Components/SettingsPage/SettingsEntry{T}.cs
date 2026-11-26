@@ -2,6 +2,8 @@ using Hexa.NET.ImGui;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Util;
+using XIVLauncher.Core.Components.Common;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage;
 
@@ -36,16 +38,53 @@ public class SettingsEntry<T> : SettingsEntry
     {
         var type = typeof(T);
 
-        if (type == typeof(DirectoryInfo))
+        if (type == typeof(DirectoryInfo) || type == typeof(FileInfo))
         {
             ImGuiHelpers.TextWrapped(this.Name);
 
-            var value = this.Value as DirectoryInfo;
-            var nativeBuffer = value?.FullName ?? string.Empty;
+            var isDir = type == typeof(DirectoryInfo);
+            var nativeBuffer = isDir
+                ? (this.Value as DirectoryInfo)?.FullName ?? string.Empty
+                : (this.Value as FileInfo)?.FullName ?? string.Empty;
+
+            var style = ImGui.GetStyle();
+            var browseButtonWidth = ImGui.CalcTextSize(Strings.FileDialogBrowse).X + style.FramePadding.X * 2f;
+
+            ImGui.PushItemWidth(ImGui.CalcItemWidth() - browseButtonWidth - style.ItemSpacing.X);
 
             if (ImGui.InputText($"###{Id.ToString()}", ref nativeBuffer, 10000))
             {
-                this.InternalValue = !string.IsNullOrEmpty(nativeBuffer) ? new DirectoryInfo(nativeBuffer) : null;
+                object? parsed = null;
+                if (!string.IsNullOrEmpty(nativeBuffer))
+                {
+                    if (isDir)
+                        parsed = new DirectoryInfo(nativeBuffer);
+                    else
+                        parsed = new FileInfo(nativeBuffer);
+                }
+
+                this.InternalValue = parsed;
+            }
+
+            ImGui.PopItemWidth();
+            ImGui.SameLine();
+
+            if (ImGui.Button($"{Strings.FileDialogBrowse}###{Id.ToString()}Browse"))
+            {
+                if (isDir)
+                {
+                    FileDialogHost.OpenFolder(Strings.FileDialogBrowse, (this.Value as DirectoryInfo)?.FullName, path =>
+                    {
+                        this.InternalValue = new DirectoryInfo(path);
+                    });
+                }
+                else
+                {
+                    FileDialogHost.OpenFile(Strings.FileDialogBrowse, ".*", (this.Value as FileInfo)?.Directory?.FullName, path =>
+                    {
+                        this.InternalValue = new FileInfo(path);
+                    });
+                }
             }
         }
         else if (type == typeof(string))
