@@ -317,7 +317,13 @@ public partial class FileDialog
             foreach (var qa in this.GetDrives().Concat(this.quickAccess).Where(qa => !string.IsNullOrEmpty(qa.Location)))
             {
                 ImGui.PushID(idx++);
-                ImGui.SetCursorPosX(Scaled(25));
+
+                var iconText = qa.Icon.ToIconString();
+                ImGui.PushFont(FontManager.IconFont, 0f);
+                var iconWidth = ImGui.CalcTextSize(iconText).X;
+                ImGui.PopFont();
+
+                ImGui.SetCursorPosX(iconWidth + Scaled(6));
                 if (ImGui.Selectable(qa.Text, qa.Text == this.selectedSideBar) && qa.CheckExistence())
                 {
                     this.SetPath(qa.Location);
@@ -327,7 +333,7 @@ public partial class FileDialog
                 ImGui.PushFont(FontManager.IconFont, 0f);
                 ImGui.SameLine();
                 ImGui.SetCursorPosX(0);
-                ImGui.Text(qa.Icon.ToIconString());
+                ImGui.Text(iconText);
 
                 ImGui.PopFont();
                 ImGui.PopID();
