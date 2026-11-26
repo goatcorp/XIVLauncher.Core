@@ -2,6 +2,7 @@ using Hexa.NET.ImGui;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Util;
+using XIVLauncher.Core.Components.Common;
 using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage;
@@ -59,7 +60,10 @@ public class SettingsEntry<T> : SettingsEntry
 
             if (ImGui.Button($"{Strings.Browse}###{Id.ToString()}Browse"))
             {
-                // TODO: open folder file dialog (next item)
+                FileDialogHost.OpenFolder(Strings.Browse, value?.FullName, path =>
+                {
+                    this.InternalValue = new DirectoryInfo(path);
+                });
             }
         }
         else if (type == typeof(string))
