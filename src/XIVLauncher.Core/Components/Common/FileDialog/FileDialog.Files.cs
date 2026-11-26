@@ -16,6 +16,14 @@ public partial class FileDialog
 
     private bool permissionDenied;
 
+    /// <summary>Filesystem formats that should not appear as sidebar drives on Linux.</summary>
+    private static readonly HashSet<string> HiddenDriveFormats = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "autofs",
+        "efivarfs",
+        "tracefs",
+    };
+
     private readonly DriveListLoader driveListLoader = new();
 
     private readonly List<FileStruct> files = [];
@@ -483,6 +491,25 @@ public partial class FileDialog
             catch (Exception)
             {
                 // stale/unmounted drive: skip it
+                continue;
+            }
+
+            if (drive.DriveType == DriveType.Ram)
+            {
+                // kernel virtual filesystems (devtmpfs, sysfs, procfs, tmpfs, ...) do not belong in the sidebar
+                continue;
+            }
+
+            try
+            {
+                if (HiddenDriveFormats.Contains(drive.DriveFormat))
+                {
+                    continue;
+                }
+            }
+            catch (Exception)
+            {
+                // drive not ready / format unreadable: skip it
                 continue;
             }
 
