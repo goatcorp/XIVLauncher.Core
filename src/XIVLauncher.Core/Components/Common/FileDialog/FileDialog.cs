@@ -271,8 +271,8 @@ public partial class FileDialog
     {
         var dir = new DirectoryInfo(path);
         this.currentPath = dir.FullName;
-        if (this.currentPath[^1] == Path.DirectorySeparatorChar)
-        { // handle selecting a drive, like C: -> C:\
+        if (this.currentPath.Length > 1 && this.currentPath[^1] == Path.DirectorySeparatorChar)
+        { // handle selecting a drive, like C: -> C:\ (never strip the Unix root itself)
             this.currentPath = this.currentPath[..^1];
         }
 
