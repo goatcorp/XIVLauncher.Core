@@ -177,7 +177,8 @@ public partial class FileDialog
 
                     ImGui.PushID(idx);
                     ImGui.PushStyleColor(ImGuiCol.Button, pathDecompColor);
-                    var click = ImGui.Button(this.pathDecomposition[idx]);
+                    var segment = this.pathDecomposition[idx];
+                    var click = ImGui.Button(string.IsNullOrEmpty(segment) ? "/" : segment);
                     ImGui.PopStyleColor();
                     ImGui.PopID();
 
