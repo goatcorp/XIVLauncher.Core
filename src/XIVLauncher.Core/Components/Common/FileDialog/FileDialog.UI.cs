@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using Hexa.NET.ImGui;
 using XIVLauncher.Core.Resources.Localization;
 
@@ -205,7 +206,14 @@ public partial class FileDialog
         ImGui.PushFont(FontManager.IconFont, 0f);
         if (ImGui.Button(FontAwesomeIcon.Home.ToIconString()))
         {
-            this.SetPath(".");
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                this.SetPath(Program.storage.Root.FullName);
+            }
+            else
+            {
+                this.SetPath(".");
+            }
         }
 
         ImGui.PopFont();
