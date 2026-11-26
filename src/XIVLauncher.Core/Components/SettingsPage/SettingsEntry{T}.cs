@@ -2,6 +2,7 @@ using Hexa.NET.ImGui;
 
 using XIVLauncher.Common;
 using XIVLauncher.Common.Util;
+using XIVLauncher.Core.Resources.Localization;
 
 namespace XIVLauncher.Core.Components.SettingsPage;
 
@@ -43,9 +44,22 @@ public class SettingsEntry<T> : SettingsEntry
             var value = this.Value as DirectoryInfo;
             var nativeBuffer = value?.FullName ?? string.Empty;
 
+            var style = ImGui.GetStyle();
+            var browseButtonWidth = ImGui.CalcTextSize(Strings.Browse).X + style.FramePadding.X * 2f;
+
+            ImGui.PushItemWidth(ImGui.CalcItemWidth() - browseButtonWidth - style.ItemSpacing.X);
+
             if (ImGui.InputText($"###{Id.ToString()}", ref nativeBuffer, 10000))
             {
                 this.InternalValue = !string.IsNullOrEmpty(nativeBuffer) ? new DirectoryInfo(nativeBuffer) : null;
+            }
+
+            ImGui.PopItemWidth();
+            ImGui.SameLine();
+
+            if (ImGui.Button($"{Strings.Browse}###{Id.ToString()}Browse"))
+            {
+                // TODO: open folder file dialog (next item)
             }
         }
         else if (type == typeof(string))
