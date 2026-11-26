@@ -486,10 +486,12 @@ public partial class FileDialog
 
         ImGui.PushFont(FontManager.IconFont, 0f);
 
-        ImGui.Text(icon.ToIconString());
+        var iconText = icon.ToIconString();
+        ImGui.Text(iconText);
+        var iconWidth = ImGui.CalcTextSize(iconText).X;
         ImGui.PopFont();
 
-        ImGui.SameLine(Scaled(25f));
+        ImGui.SameLine(iconWidth + Scaled(6f));
 
         if (ImGui.Selectable(file.FileName, selected, flags))
         {
