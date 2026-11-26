@@ -650,7 +650,7 @@ public partial class FileDialog
             this.fileNameBuffer = $"{this.selectedFileNames.Count} files Selected";
         }
 
-        this.SelectionChanged(this, this.GetFilePathName());
+        this.SelectionChanged?.Invoke(this, this.GetFilePathName());
         if (setLastSelection)
         {
             this.lastSelectedFileName = name;
