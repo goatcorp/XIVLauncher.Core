@@ -14,6 +14,8 @@ public partial class FileDialog
 {
     private readonly Lock filesLock = new();
 
+    private bool permissionDenied;
+
     private readonly DriveListLoader driveListLoader = new();
 
     private readonly List<FileStruct> files = [];
@@ -107,13 +109,25 @@ public partial class FileDialog
                 return $@"\\{string.Join('\\', pathParts)}";
             case 1:
                 var drivePath = decomposition[0];
+                if (drivePath.Length == 0)
+                { // Unix root: decomposition is ["", ...]
+                    return Path.DirectorySeparatorChar.ToString();
+                }
+
                 if (drivePath[^1] != Path.DirectorySeparatorChar)
                 { // turn C: into C:\
                     drivePath += Path.DirectorySeparatorChar;
                 }
 
                 return drivePath;
-            default: return Path.Combine(decomposition.ToArray());
+            default:
+                var joined = Path.Combine(decomposition.ToArray());
+                if (decomposition[0].Length == 0)
+                { // leading empty segment is the Unix root: restore it
+                    joined = Path.DirectorySeparatorChar + joined;
+                }
+
+                return joined;
         }
     }
 
@@ -353,11 +367,11 @@ public partial class FileDialog
 
         if (this.pathDecomposition.Count > 0)
         {
-            this.files.Clear();
+            var scanned = new List<FileStruct>();
 
             if (this.pathDecomposition.Count > 1)
             {
-                this.files.Add(new FileStruct
+                scanned.Add(new FileStruct
                 {
                     Type = FileStructType.Directory,
                     FilePath = path,
@@ -370,55 +384,110 @@ public partial class FileDialog
             }
 
             var dirInfo = new DirectoryInfo(path);
+            this.permissionDenied = false;
 
             var dontShowHidden = this.flags.HasFlag(ImGuiFileDialogFlags.DontShowHiddenFiles);
 
-            foreach (var dir in dirInfo.EnumerateDirectories().OrderBy(d => d.Name))
+            try
             {
-                if (string.IsNullOrEmpty(dir.Name))
+                foreach (var dir in dirInfo.EnumerateDirectories().OrderBy(d => d.Name))
                 {
-                    continue;
-                }
-
-                if (dontShowHidden && dir.Name[0] == '.')
-                {
-                    continue;
-                }
-
-                this.files.Add(GetDir(dir, path));
-            }
-
-            foreach (var file in dirInfo.EnumerateFiles().OrderBy(f => f.Name))
-            {
-                if (string.IsNullOrEmpty(file.Name))
-                {
-                    continue;
-                }
-
-                if (dontShowHidden && file.Name[0] == '.')
-                {
-                    continue;
-                }
-
-                if (!string.IsNullOrEmpty(file.Extension))
-                {
-                    var ext = file.Extension;
-                    if (this.filters.Count > 0 && !this.selectedFilter.Empty() && !this.selectedFilter.FilterExists(ext) && this.selectedFilter.Filter != ".*")
+                    if (string.IsNullOrEmpty(dir.Name))
                     {
                         continue;
                     }
+
+                    if (dontShowHidden && dir.Name[0] == '.')
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        scanned.Add(GetDir(dir, path));
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        // entry stat denied: skip it
+                    }
+                    catch (IOException)
+                    {
+                        // entry vanished mid-scan: skip it
+                    }
                 }
 
-                this.files.Add(GetFile(file, path));
+                foreach (var file in dirInfo.EnumerateFiles().OrderBy(f => f.Name))
+                {
+                    if (string.IsNullOrEmpty(file.Name))
+                    {
+                        continue;
+                    }
+
+                    if (dontShowHidden && file.Name[0] == '.')
+                    {
+                        continue;
+                    }
+
+                    if (!string.IsNullOrEmpty(file.Extension))
+                    {
+                        var ext = file.Extension;
+                        if (this.filters.Count > 0 && !this.selectedFilter.Empty() && !this.selectedFilter.FilterExists(ext) && this.selectedFilter.Filter != ".*")
+                        {
+                            continue;
+                        }
+                    }
+
+                    try
+                    {
+                        scanned.Add(GetFile(file, path));
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        // entry stat denied: skip it
+                    }
+                    catch (IOException)
+                    {
+                        // entry vanished mid-scan: skip it
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                this.permissionDenied = true;
+            }
+            catch (IOException)
+            {
+                this.permissionDenied = true;
+            }
+            catch (NotSupportedException)
+            {
+                this.permissionDenied = true;
             }
 
+            // publish the scan so filteredFiles always matches currentPath
+            this.files.Clear();
+            this.files.AddRange(scanned);
             this.SortFields(this.currentSortingField);
         }
     }
 
     private IEnumerable<SideBarItem> GetDrives()
     {
-        return this.driveListLoader.Drives.Select(drive => new SideBarItem(drive.Name, drive.Name, FontAwesomeIcon.Server));
+        foreach (var drive in this.driveListLoader.Drives)
+        {
+            string name;
+            try
+            {
+                name = drive.Name;
+            }
+            catch (Exception)
+            {
+                // stale/unmounted drive: skip it
+                continue;
+            }
+
+            yield return new SideBarItem(name, name, FontAwesomeIcon.Server);
+        }
     }
 
     private void SetupSideBar()

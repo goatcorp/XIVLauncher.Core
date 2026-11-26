@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using Hexa.NET.ImGui;
+using XIVLauncher.Core.Resources.Localization;
 
 
 namespace XIVLauncher.Core.ImGuiFileDialog;
@@ -436,6 +437,20 @@ public partial class FileDialog
                     }
                 }
 
+                if (this.permissionDenied)
+                {
+                    ImGui.TableNextRow();
+
+                    if (ImGui.TableNextColumn())
+                    {
+                        ImGui.TextUnformatted(Strings.NoPermissionFolder);
+                    }
+
+                    ImGui.TableNextColumn();
+                    ImGui.TableNextColumn();
+                    ImGui.TableNextColumn();
+                }
+
                 clipper.End();
                 clipper.Destroy();
             }
@@ -511,9 +526,10 @@ public partial class FileDialog
 
         if (file.FileName == "..")
         {
-            if (this.pathDecomposition.Count > 1)
+            var parent = Path.GetDirectoryName(this.currentPath);
+            if (!string.IsNullOrEmpty(parent))
             {
-                this.currentPath = ComposeNewPath(this.pathDecomposition.GetRange(0, this.pathDecomposition.Count - 1));
+                this.currentPath = parent;
                 pathClick = true;
             }
         }

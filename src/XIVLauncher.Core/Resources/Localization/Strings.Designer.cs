@@ -1070,5 +1070,11 @@ namespace XIVLauncher.Core.Resources.Localization {
                 return ResourceManager.GetString("Browse", resourceCulture);
             }
         }
+    
+        internal static string NoPermissionFolder {
+            get {
+                return ResourceManager.GetString("NoPermissionFolder", resourceCulture);
+            }
+        }
     }
 }

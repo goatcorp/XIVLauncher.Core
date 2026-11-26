@@ -574,6 +574,9 @@ You may have to reinstall the game.</value>
         <value>FSync is only available on Linux</value>
     </data>
     <data name="Browse" xml:space="preserve">
-        <value>Browse</value>
+      <value>Browse</value>
+    </data>
+    <data name="NoPermissionFolder" xml:space="preserve">
+      <value>You do not have permission to view this folder</value>
     </data>
 </root>
