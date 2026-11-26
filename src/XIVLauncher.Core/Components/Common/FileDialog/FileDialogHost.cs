@@ -34,6 +34,31 @@ public static class FileDialogHost
         onSelected = onSelect;
     }
 
+    /// <summary>
+    /// Opens a file-mode picker with the given filter string.
+    /// </summary>
+    /// <param name="title">Window title.</param>
+    /// <param name="filters">Filter string; ".*" shows all files.</param>
+    /// <param name="startPath">Starting directory; defaults to the launcher storage folder.</param>
+    /// <param name="onSelect">Invoked with the chosen file path when the user presses Ok.</param>
+    public static void OpenFile(string title, string filters, string? startPath, Action<string> onSelect)
+    {
+        var start = string.IsNullOrEmpty(startPath) ? Program.storage.Root.FullName : startPath;
+
+        dialog = new FileDialog(
+            "XIVLauncher_FilePicker",
+            title,
+            filters,
+            start,
+            string.Empty,
+            string.Empty,
+            1,
+            false,
+            ImGuiFileDialogFlags.SelectOnly);
+        dialog.Show();
+        onSelected = onSelect;
+    }
+
     /// <summary>Draws the dialog once per frame; call from the launcher draw loop.</summary>
     public static void Draw()
     {
