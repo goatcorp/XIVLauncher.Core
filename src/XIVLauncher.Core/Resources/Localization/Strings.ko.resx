@@ -166,7 +166,7 @@ wine64와 wineserver 바이너리를 포함하는 폴더의 절대경로여야 �
         <value>WINE &amp; DXVK 설치 제거</value>
     </data>
   <data name="ClearDalamudTroubleshooting" xml:space="preserve">
-        <value>Dalamud와 관련된 모든 파일 및 폴더를 제거합니다. 설정은 그대로 유지되지만, 커스텀 저장소를 포함한 모든 플러그인이 제거됩니다.</value>
+        <value>Dalamud와 관련된 모든 파일 및 폴더를 제거합니다. 플러그인은 건드리지 않습니다.</value>
     </data>
   <data name="ClearDalamudTroubleshootingButton" xml:space="preserve">
         <value>Dalamud 제거</value>
@@ -570,5 +570,29 @@ ReShade를 사용 중이었다면, 다시 설치해야 합니다.</value>
     </data>
   <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
         <value>FSync는 Linux에서만 사용할 수 있습니다</value>
+    </data>
+    <data name="ClearInstalledPluginsTroubleshootingButton" xml:space="preserve">
+        <value>설치된 플러그인 제거</value>
+    </data>
+    <data name="ConfirmClearCompatTools" xml:space="preserve">
+        <value>Are you sure you want to delete the managed Wine and Dxvk downloads?</value>
+    </data>
+    <data name="ConfirmClearDalamud" xml:space="preserve">
+        <value>Are you sure you want to clear Dalamud? This does not touch your plugins.</value>
+    </data>
+    <data name="ConfirmClearEverything" xml:space="preserve">
+        <value>Are you sure you want to clear everything?</value>
+    </data>
+    <data name="ConfirmClearInstalledPlugins" xml:space="preserve">
+        <value>Are you sure you want to clear the installed plugins?</value>
+    </data>
+    <data name="ConfirmClearLogs" xml:space="preserve">
+        <value>Are you sure you want to clear the log files?</value>
+    </data>
+    <data name="ConfirmClearSettings" xml:space="preserve">
+        <value>Are you sure you want to reset settings to default?</value>
+    </data>
+    <data name="ConfirmClearWinePrefix" xml:space="preserve">
+        <value>Are you sure you want to clear the Wine prefix?</value>
     </data>
 </root>

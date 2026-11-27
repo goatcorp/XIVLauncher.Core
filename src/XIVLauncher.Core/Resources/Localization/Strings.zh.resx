@@ -166,7 +166,7 @@
         <value>清除 WINE 与 DXVK 安装</value>
     </data>
   <data name="ClearDalamudTroubleshooting" xml:space="preserve">
-        <value>清除所有与 Dalamud 相关的文件和文件夹。你的设置将保持不变，但所有插件 (包括自定义仓库的插件) 都将被卸载。</value>
+        <value>清除所有与 Dalamud 相关的文件和文件夹。你的插件不会受到影响。</value>
     </data>
   <data name="ClearDalamudTroubleshootingButton" xml:space="preserve">
         <value>清除 Dalamud</value>
@@ -571,5 +571,29 @@
     </data>
   <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
         <value>FSync 仅在 Linux 系统可用</value>
+    </data>
+    <data name="ClearInstalledPluginsTroubleshootingButton" xml:space="preserve">
+        <value>清除已安装的插件</value>
+    </data>
+    <data name="ConfirmClearCompatTools" xml:space="preserve">
+        <value>Are you sure you want to delete the managed Wine and Dxvk downloads?</value>
+    </data>
+    <data name="ConfirmClearDalamud" xml:space="preserve">
+        <value>Are you sure you want to clear Dalamud? This does not touch your plugins.</value>
+    </data>
+    <data name="ConfirmClearEverything" xml:space="preserve">
+        <value>Are you sure you want to clear everything?</value>
+    </data>
+    <data name="ConfirmClearInstalledPlugins" xml:space="preserve">
+        <value>Are you sure you want to clear the installed plugins?</value>
+    </data>
+    <data name="ConfirmClearLogs" xml:space="preserve">
+        <value>Are you sure you want to clear the log files?</value>
+    </data>
+    <data name="ConfirmClearSettings" xml:space="preserve">
+        <value>Are you sure you want to reset settings to default?</value>
+    </data>
+    <data name="ConfirmClearWinePrefix" xml:space="preserve">
+        <value>Are you sure you want to clear the Wine prefix?</value>
     </data>
 </root>

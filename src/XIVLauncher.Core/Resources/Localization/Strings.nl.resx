@@ -166,7 +166,7 @@ Dit moet een absoluut locatie zijn naar een map die de binaire bestanden wine64 
         <value>Clear WINE &amp; DXVK Installs</value>
     </data>
   <data name="ClearDalamudTroubleshooting" xml:space="preserve">
-        <value>Clear all the files and folders related to Dalamud. Your settings will not be touched, but all your plugins will be uninstalled, including custom repos.</value>
+        <value>Clear all the files and folders related to Dalamud. Your plugins will not be touched.</value>
     </data>
   <data name="ClearDalamudTroubleshootingButton" xml:space="preserve">
         <value>Clear Dalamud</value>
@@ -570,5 +570,29 @@ You may have to reinstall the game.</value>
     </data>
   <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
         <value>FSync is only available on Linux</value>
+    </data>
+    <data name="ClearInstalledPluginsTroubleshootingButton" xml:space="preserve">
+        <value>Clear Installed Plugins</value>
+    </data>
+    <data name="ConfirmClearCompatTools" xml:space="preserve">
+        <value>Are you sure you want to delete the managed Wine and Dxvk downloads?</value>
+    </data>
+    <data name="ConfirmClearDalamud" xml:space="preserve">
+        <value>Are you sure you want to clear Dalamud? This does not touch your plugins.</value>
+    </data>
+    <data name="ConfirmClearEverything" xml:space="preserve">
+        <value>Are you sure you want to clear everything?</value>
+    </data>
+    <data name="ConfirmClearInstalledPlugins" xml:space="preserve">
+        <value>Are you sure you want to clear the installed plugins?</value>
+    </data>
+    <data name="ConfirmClearLogs" xml:space="preserve">
+        <value>Are you sure you want to clear the log files?</value>
+    </data>
+    <data name="ConfirmClearSettings" xml:space="preserve">
+        <value>Are you sure you want to reset settings to default?</value>
+    </data>
+    <data name="ConfirmClearWinePrefix" xml:space="preserve">
+        <value>Are you sure you want to clear the Wine prefix?</value>
     </data>
 </root>

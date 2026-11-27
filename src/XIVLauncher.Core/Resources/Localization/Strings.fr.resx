@@ -166,7 +166,7 @@ Le chemin doit être un chemin absolu vers un dossier contenant wine64 et les bi
         <value>Vider les installations WINE &amp; DXVK</value>
     </data>
   <data name="ClearDalamudTroubleshooting" xml:space="preserve">
-        <value>Effacer tous les fichiers et dossiers liés à Dalamud. Vos paramètres ne seront pas touchés, mais tous vos plugins seront désinstallés, y compris les dépôts personnalisés.</value>
+        <value>Effacer tous les fichiers et dossiers liés à Dalamud. Vos plugins ne seront pas touchés.</value>
     </data>
   <data name="ClearDalamudTroubleshootingButton" xml:space="preserve">
         <value>Vider Dalamud</value>
@@ -570,5 +570,29 @@ Vous allez peut-être devoir réinstaller le jeu.</value>
     </data>
   <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
         <value>FSync n'est disponible que sur Linux</value>
+    </data>
+    <data name="ClearInstalledPluginsTroubleshootingButton" xml:space="preserve">
+        <value>Effacer les plugins installés</value>
+    </data>
+    <data name="ConfirmClearCompatTools" xml:space="preserve">
+        <value>Are you sure you want to delete the managed Wine and Dxvk downloads?</value>
+    </data>
+    <data name="ConfirmClearDalamud" xml:space="preserve">
+        <value>Are you sure you want to clear Dalamud? This does not touch your plugins.</value>
+    </data>
+    <data name="ConfirmClearEverything" xml:space="preserve">
+        <value>Are you sure you want to clear everything?</value>
+    </data>
+    <data name="ConfirmClearInstalledPlugins" xml:space="preserve">
+        <value>Are you sure you want to clear the installed plugins?</value>
+    </data>
+    <data name="ConfirmClearLogs" xml:space="preserve">
+        <value>Are you sure you want to clear the log files?</value>
+    </data>
+    <data name="ConfirmClearSettings" xml:space="preserve">
+        <value>Are you sure you want to reset settings to default?</value>
+    </data>
+    <data name="ConfirmClearWinePrefix" xml:space="preserve">
+        <value>Are you sure you want to clear the Wine prefix?</value>
     </data>
 </root>
