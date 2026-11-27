@@ -1064,5 +1064,11 @@ namespace XIVLauncher.Core.Resources.Localization {
                 return ResourceManager.GetString("EnableFsyncSettingUnsupportedPlatformValidation", resourceCulture);
             }
         }
+        
+        internal static string ConfirmClearWinePrefix {
+            get {
+                return ResourceManager.GetString("ConfirmClearWinePrefix", resourceCulture);
+            }
+        }
     }
 }

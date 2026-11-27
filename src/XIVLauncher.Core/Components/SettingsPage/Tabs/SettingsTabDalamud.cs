@@ -9,7 +9,8 @@ public class SettingsTabDalamud : SettingsTab
     public override SettingsEntry[] Entries { get; }
     private SettingsEntry<bool> enableManualInjection;
 
-    public SettingsTabDalamud()
+    public SettingsTabDalamud(LauncherApp app)
+        : base(app)
     {
         this.Entries = new SettingsEntry[]
         {

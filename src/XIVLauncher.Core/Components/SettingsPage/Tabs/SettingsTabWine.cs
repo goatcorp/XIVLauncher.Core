@@ -16,7 +16,8 @@ public class SettingsTabWine : SettingsTab
 
     private SettingsEntry<DxvkVersion> dxvkVersionSetting;
 
-    public SettingsTabWine()
+    public SettingsTabWine(LauncherApp app)
+        : base(app)
     {
         Entries = new SettingsEntry[]
         {

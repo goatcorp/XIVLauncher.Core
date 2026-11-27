@@ -8,6 +8,10 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabTroubleshooting : SettingsTab
 {
+    public SettingsTabTroubleshooting(LauncherApp app)
+        : base(app)
+    {
+    }
     public override SettingsEntry[] Entries { get; } =
     {
         new SettingsEntry<bool>(Strings.DisableGameoverlayRendererHack, Strings.DisableGameoverlayRendererHackDescription, () => Program.Config.FixLDP ?? false, x => Program.Config.FixLDP = x)
@@ -65,7 +69,7 @@ public class SettingsTabTroubleshooting : SettingsTab
 
         if (ImGui.Button(Strings.ClearWINEPrefixTroubleshootingButton))
         {
-            Program.ClearPrefix();
+            this.App.ShowConfirm(Strings.ConfirmClearWinePrefix, () => Program.ClearPrefix());
         }
         ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearWINEPrefixTroubleshooting);
 

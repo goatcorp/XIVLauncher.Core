@@ -4,6 +4,10 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabPatching : SettingsTab
 {
+    public SettingsTabPatching(LauncherApp app)
+        : base(app)
+    {
+    }
     public override SettingsEntry[] Entries { get; } =
     {
         new SettingsEntry<DirectoryInfo>(Strings.PatchPathSetting, Strings.PatchPathSettingDescription, () => Program.Config.PatchPath, x => Program.Config.PatchPath = x)

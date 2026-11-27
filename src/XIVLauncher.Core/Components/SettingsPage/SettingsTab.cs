@@ -6,6 +6,13 @@ namespace XIVLauncher.Core.Components.SettingsPage;
 
 public abstract class SettingsTab : Component
 {
+    protected LauncherApp App { get; }
+
+    protected SettingsTab(LauncherApp app)
+    {
+        this.App = app;
+    }
+
     public abstract SettingsEntry[] Entries { get; }
 
     public virtual bool IsUnixExclusive => false;

@@ -11,6 +11,7 @@ using XIVLauncher.Common.PlatformAbstractions;
 using XIVLauncher.Common.Util;
 using XIVLauncher.Core.Accounts;
 using XIVLauncher.Core.Components;
+using XIVLauncher.Core.Components.Common;
 using XIVLauncher.Core.Components.LoadingPage;
 using XIVLauncher.Core.Components.MainPage;
 using XIVLauncher.Core.Components.SettingsPage;
@@ -33,6 +34,9 @@ public class LauncherApp : Component
     private string modalButtonText = string.Empty;
     private Action modalButtonPressAction = null!;
     private readonly ManualResetEvent modalWaitHandle = new(false);
+    private bool modalHasCancel;
+    private string modalCancelText = string.Empty;
+    private Action? modalCancelAction;
 
     #endregion
 
@@ -168,6 +172,7 @@ public class LauncherApp : Component
         this.modalText = text;
         this.modalTitle = title;
         this.modalButtonText = modalButtonText;
+        this.modalHasCancel = false;
         if (modalPressedAction is null)
         {
             this.modalButtonPressAction = () =>
@@ -181,6 +186,28 @@ public class LauncherApp : Component
         {
             this.modalButtonPressAction = modalPressedAction;
         }
+        this.isModalDrawing = true;
+        this.modalOnNextFrame = true;
+    }
+
+    public void ShowConfirm(string text, Action onOk, Action? onCancel = null, string title = "XIVLauncher")
+    {
+        if (this.isModalDrawing)
+            throw new InvalidOperationException("Cannot open modal while another modal is open");
+
+        this.modalText = text;
+        this.modalTitle = title;
+        this.modalButtonText = Strings.OKLabel;
+        this.modalButtonPressAction = () =>
+        {
+            ImGui.CloseCurrentPopup();
+            this.isModalDrawing = false;
+            this.modalWaitHandle.Set();
+            onOk();
+        };
+        this.modalHasCancel = true;
+        this.modalCancelText = Strings.CancelLabel;
+        this.modalCancelAction = onCancel;
         this.isModalDrawing = true;
         this.modalOnNextFrame = true;
     }
@@ -312,11 +339,34 @@ public class LauncherApp : Component
             ImGui.EndChild();
 
             const float BUTTON_WIDTH = 120f;
-            ImGui.SetCursorPosX((ImGui.GetWindowWidth() - BUTTON_WIDTH) / 2);
 
-            if (ImGui.Button(modalButtonText, new Vector2(BUTTON_WIDTH, 40)))
+            if (this.modalHasCancel)
             {
-                modalButtonPressAction();
+                ImGui.SetCursorPosX((ImGui.GetWindowWidth() - BUTTON_WIDTH * 2 - ImGui.GetStyle().ItemSpacing.X) / 2);
+
+                if (ImGui.Button(this.modalButtonText, new Vector2(BUTTON_WIDTH, 40)))
+                {
+                    modalButtonPressAction();
+                }
+
+                ImGui.SameLine();
+
+                if (ImGui.Button(this.modalCancelText, new Vector2(BUTTON_WIDTH, 40)))
+                {
+                    ImGui.CloseCurrentPopup();
+                    this.isModalDrawing = false;
+                    this.modalWaitHandle.Set();
+                    this.modalCancelAction?.Invoke();
+                }
+            }
+            else
+            {
+                ImGui.SetCursorPosX((ImGui.GetWindowWidth() - BUTTON_WIDTH) / 2);
+
+                if (ImGui.Button(modalButtonText, new Vector2(BUTTON_WIDTH, 40)))
+                {
+                    modalButtonPressAction();
+                }
             }
 
             ImGui.EndPopup();

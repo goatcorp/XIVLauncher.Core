@@ -573,4 +573,7 @@ You may have to reinstall the game.</value>
     <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
         <value>FSync is only available on Linux</value>
     </data>
+    <data name="ConfirmClearWinePrefix" xml:space="preserve">
+        <value>Are you sure you want to clear the Wine prefix?</value>
+    </data>
 </root>

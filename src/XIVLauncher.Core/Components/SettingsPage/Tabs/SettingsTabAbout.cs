@@ -15,7 +15,8 @@ public class SettingsTabAbout : SettingsTab
 
     public override string Title => Strings.AboutTitle;
 
-    public SettingsTabAbout()
+    public SettingsTabAbout(LauncherApp app)
+        : base(app)
     {
         this.logoTexture = TextureWrap.Load(AppUtil.GetEmbeddedResourceBytes("logo.png"));
     }
