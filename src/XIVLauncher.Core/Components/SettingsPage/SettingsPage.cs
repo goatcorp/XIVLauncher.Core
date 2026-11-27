@@ -10,22 +10,23 @@ namespace XIVLauncher.Core.Components.SettingsPage;
 
 public class SettingsPage : Page
 {
-    private readonly SettingsTab[] tabs =
-    {
-        new SettingsTabGame(),
-        new SettingsTabPatching(),
-        new SettingsTabWine(),
-        new SettingsTabDalamud(),
-        new SettingsTabAbout(),
-        new SettingsTabDebug(),
-        new SettingsTabTroubleshooting(),
-    };
+    private readonly SettingsTab[] tabs;
 
     private string searchInput = string.Empty;
 
     public SettingsPage(LauncherApp app)
         : base(app)
     {
+        this.tabs = new SettingsTab[]
+        {
+            new SettingsTabGame(app),
+            new SettingsTabPatching(app),
+            new SettingsTabWine(app),
+            new SettingsTabDalamud(app),
+            new SettingsTabAbout(app),
+            new SettingsTabDebug(app),
+            new SettingsTabTroubleshooting(app),
+        };
     }
 
     public override void OnShow()

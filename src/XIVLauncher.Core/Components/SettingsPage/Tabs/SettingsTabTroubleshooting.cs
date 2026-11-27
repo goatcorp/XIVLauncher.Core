@@ -8,6 +8,10 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabTroubleshooting : SettingsTab
 {
+    public SettingsTabTroubleshooting(LauncherApp app)
+        : base(app)
+    {
+    }
     public override SettingsEntry[] Entries { get; } =
     {
         new SettingsEntry<bool>(Strings.DisableGameoverlayRendererHack, Strings.DisableGameoverlayRendererHackDescription, () => Program.Config.FixLDP ?? false, x => Program.Config.FixLDP = x)
@@ -65,37 +69,43 @@ public class SettingsTabTroubleshooting : SettingsTab
 
         if (ImGui.Button(Strings.ClearWINEPrefixTroubleshootingButton))
         {
-            Program.ClearPrefix();
+            this.App.ShowConfirm(Strings.ConfirmClearWinePrefix, () => Program.ClearPrefix());
         }
         ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearWINEPrefixTroubleshooting);
 
         if (ImGui.Button(Strings.ClearManagedCompatToolsTroubleshootingButton))
         {
-            Program.ClearTools(true);
+            this.App.ShowConfirm(Strings.ConfirmClearCompatTools, () => Program.ClearTools(true));
         }
         ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearManagedCompatToolsTroubleshooting);
 
         if (ImGui.Button(Strings.ClearDalamudTroubleshootingButton))
         {
-            Program.ClearPlugins(true);
+            this.App.ShowConfirm(Strings.ConfirmClearDalamud, () => Program.ClearDalamud(true));
         }
         ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearDalamudTroubleshooting);
 
+        if (ImGui.Button(Strings.ClearInstalledPluginsTroubleshootingButton))
+        {
+            this.App.ShowConfirm(Strings.ConfirmClearInstalledPlugins, () => Program.ClearInstalledPlugins());
+        }
+        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearInstalledPluginsTroubleshooting);
+
         if (ImGui.Button(Strings.ClearAllLogsTroubleshootingButton))
         {
-            Program.ClearLogs(true);
+            this.App.ShowConfirm(Strings.ConfirmClearLogs, () => Program.ClearLogs(true));
         }
         ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearAllLogsTroubleshooting);
 
         if (ImGui.Button(Strings.ResetSettingsTroubleshootingButton))
         {
-            Program.ClearSettings(true);
+            this.App.ShowConfirm(Strings.ConfirmClearSettings, () => Program.ClearSettings(true));
         }
         ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ResetSettingsTroubleshooting);
 
         if (ImGui.Button(Strings.ResetAllTroubleshootingButton))
         {
-            Program.ClearAll(true);
+            this.App.ShowConfirm(Strings.ConfirmClearEverything, () => Program.ClearAll(true));
         }
         ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ResetAllTroubleshooting);
     }

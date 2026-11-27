@@ -191,7 +191,7 @@ sealed class Program
         {
             if (CoreEnvironmentSettings.ClearSettings) ClearSettings();
             if (CoreEnvironmentSettings.ClearPrefix) ClearPrefix();
-            if (CoreEnvironmentSettings.ClearPlugins) ClearPlugins();
+            if (CoreEnvironmentSettings.ClearPlugins) ClearDalamud();
             if (CoreEnvironmentSettings.ClearTools) ClearTools();
             if (CoreEnvironmentSettings.ClearLogs) ClearLogs();
         }
@@ -433,17 +433,15 @@ sealed class Program
         storage.GetFolder("wineprefix");
     }
 
-    public static void ClearPlugins(bool tsbutton = false)
+    public static void ClearDalamud(bool tsbutton = false)
     {
         storage.GetFolder("dalamud").Delete(true);
         storage.GetFolder("dalamudAssets").Delete(true);
-        storage.GetFolder("installedPlugins").Delete(true);
         storage.GetFolder("runtime").Delete(true);
         if (storage.GetFile("dalamudUI.ini").Exists) storage.GetFile("dalamudUI.ini").Delete();
         if (storage.GetFile("dalamudConfig.json").Exists) storage.GetFile("dalamudConfig.json").Delete();
         storage.GetFolder("dalamud");
         storage.GetFolder("dalamudAssets");
-        storage.GetFolder("installedPlugins");
         storage.GetFolder("runtime");
         if (tsbutton)
         {
@@ -451,6 +449,12 @@ sealed class Program
             DalamudUpdater = CreateDalamudUpdater();
             DalamudUpdater.Run(Config.DalamudBetaKind, Config.DalamudBetaKey);
         }
+    }
+
+    public static void ClearInstalledPlugins()
+    {
+        storage.GetFolder("installedPlugins").Delete(true);
+        storage.GetFolder("installedPlugins");
     }
 
     public static void ClearTools(bool tsbutton = false)
@@ -476,7 +480,7 @@ sealed class Program
     {
         ClearSettings(tsbutton);
         ClearPrefix();
-        ClearPlugins(tsbutton);
+        ClearDalamud(tsbutton);
         ClearTools(tsbutton);
         ClearLogs(true);
     }

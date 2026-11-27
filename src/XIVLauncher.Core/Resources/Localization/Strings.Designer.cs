@@ -1064,5 +1064,59 @@ namespace XIVLauncher.Core.Resources.Localization {
                 return ResourceManager.GetString("EnableFsyncSettingUnsupportedPlatformValidation", resourceCulture);
             }
         }
+        
+        internal static string ConfirmClearWinePrefix {
+            get {
+                return ResourceManager.GetString("ConfirmClearWinePrefix", resourceCulture);
+            }
+        }
+        
+        internal static string ConfirmClearCompatTools {
+            get {
+                return ResourceManager.GetString("ConfirmClearCompatTools", resourceCulture);
+            }
+        }
+        
+        internal static string ConfirmClearDalamud {
+            get {
+                return ResourceManager.GetString("ConfirmClearDalamud", resourceCulture);
+            }
+        }
+        
+        internal static string ConfirmClearLogs {
+            get {
+                return ResourceManager.GetString("ConfirmClearLogs", resourceCulture);
+            }
+        }
+        
+        internal static string ConfirmClearSettings {
+            get {
+                return ResourceManager.GetString("ConfirmClearSettings", resourceCulture);
+            }
+        }
+        
+        internal static string ConfirmClearEverything {
+            get {
+                return ResourceManager.GetString("ConfirmClearEverything", resourceCulture);
+            }
+        }
+        
+        internal static string ClearInstalledPluginsTroubleshootingButton {
+            get {
+                return ResourceManager.GetString("ClearInstalledPluginsTroubleshootingButton", resourceCulture);
+            }
+        }
+        
+        internal static string ClearInstalledPluginsTroubleshooting {
+            get {
+                return ResourceManager.GetString("ClearInstalledPluginsTroubleshooting", resourceCulture);
+            }
+        }
+        
+        internal static string ConfirmClearInstalledPlugins {
+            get {
+                return ResourceManager.GetString("ConfirmClearInstalledPlugins", resourceCulture);
+            }
+        }
     }
 }

@@ -7,6 +7,10 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabGame : SettingsTab
 {
+    public SettingsTabGame(LauncherApp app)
+        : base(app)
+    {
+    }
     public override SettingsEntry[] Entries { get; } =
     {
         new SettingsEntry<DirectoryInfo>(Strings.GamePathSetting, Strings.GamePathSettingDescription, () => Program.Config.GamePath, x => Program.Config.GamePath = x)

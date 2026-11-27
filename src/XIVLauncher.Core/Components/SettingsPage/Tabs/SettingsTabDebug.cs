@@ -8,6 +8,10 @@ namespace XIVLauncher.Core.Components.SettingsPage.Tabs;
 
 public class SettingsTabDebug : SettingsTab
 {
+    public SettingsTabDebug(LauncherApp app)
+        : base(app)
+    {
+    }
     public override SettingsEntry[] Entries => Array.Empty<SettingsEntry>();
     public override string Title => Strings.DebugTitle;
 
