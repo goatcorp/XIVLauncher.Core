@@ -576,4 +576,19 @@ You may have to reinstall the game.</value>
     <data name="ConfirmClearWinePrefix" xml:space="preserve">
         <value>Are you sure you want to clear the Wine prefix?</value>
     </data>
+    <data name="ConfirmClearCompatTools" xml:space="preserve">
+        <value>Are you sure you want to delete the managed Wine and Dxvk downloads?</value>
+    </data>
+    <data name="ConfirmClearDalamud" xml:space="preserve">
+        <value>Are you sure you want to clear dalamud, including installed plugins?</value>
+    </data>
+    <data name="ConfirmClearLogs" xml:space="preserve">
+        <value>Are you sure you want to clear the log files?</value>
+    </data>
+    <data name="ConfirmClearSettings" xml:space="preserve">
+        <value>Are you sure you want to reset settings to default?</value>
+    </data>
+    <data name="ConfirmClearEverything" xml:space="preserve">
+        <value>Are you sure you want to clear everything?</value>
+    </data>
 </root>
