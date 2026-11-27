@@ -576,6 +576,9 @@ You may have to reinstall the game.</value>
     <data name="EnableFsyncSettingUnsupportedPlatformValidation" xml:space="preserve">
         <value>FSync is only available on Linux</value>
     </data>
+    <data name="ClearInstalledPluginsTroubleshootingButton" xml:space="preserve">
+        <value>Clear Installed Plugins</value>
+    </data>
     <data name="ConfirmClearWinePrefix" xml:space="preserve">
         <value>Are you sure you want to clear the Wine prefix?</value>
     </data>
@@ -593,9 +596,6 @@ You may have to reinstall the game.</value>
     </data>
     <data name="ConfirmClearEverything" xml:space="preserve">
         <value>Are you sure you want to clear everything?</value>
-    </data>
-    <data name="ClearInstalledPluginsTroubleshootingButton" xml:space="preserve">
-        <value>Clear Installed Plugins</value>
     </data>
     <data name="ConfirmClearInstalledPlugins" xml:space="preserve">
         <value>Are you sure you want to clear the installed plugins?</value>
