@@ -81,9 +81,15 @@ public class SettingsTabTroubleshooting : SettingsTab
 
         if (ImGui.Button(Strings.ClearDalamudTroubleshootingButton))
         {
-            this.App.ShowConfirm(Strings.ConfirmClearDalamud, () => Program.ClearPlugins(true));
+            this.App.ShowConfirm(Strings.ConfirmClearDalamud, () => Program.ClearDalamud(true));
         }
         ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearDalamudTroubleshooting);
+
+        if (ImGui.Button(Strings.ClearInstalledPluginsTroubleshootingButton))
+        {
+            this.App.ShowConfirm(Strings.ConfirmClearInstalledPlugins, () => Program.ClearInstalledPlugins());
+        }
+        ImGui.TextColored(ImGuiColors.DalamudGrey, Strings.ClearInstalledPluginsTroubleshooting);
 
         if (ImGui.Button(Strings.ClearAllLogsTroubleshootingButton))
         {

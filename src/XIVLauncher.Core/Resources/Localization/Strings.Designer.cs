@@ -1100,5 +1100,23 @@ namespace XIVLauncher.Core.Resources.Localization {
                 return ResourceManager.GetString("ConfirmClearEverything", resourceCulture);
             }
         }
+        
+        internal static string ClearInstalledPluginsTroubleshootingButton {
+            get {
+                return ResourceManager.GetString("ClearInstalledPluginsTroubleshootingButton", resourceCulture);
+            }
+        }
+        
+        internal static string ClearInstalledPluginsTroubleshooting {
+            get {
+                return ResourceManager.GetString("ClearInstalledPluginsTroubleshooting", resourceCulture);
+            }
+        }
+        
+        internal static string ConfirmClearInstalledPlugins {
+            get {
+                return ResourceManager.GetString("ConfirmClearInstalledPlugins", resourceCulture);
+            }
+        }
     }
 }
